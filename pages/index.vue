@@ -8,9 +8,13 @@ useHead({
 <template>
   <section>
     <NuxtLayout name="custom">
-      <div>
+      <!-- <div>
         {{ title }}
-      </div>
+      </div> -->
+      <TrendingContents>Trending Articles</TrendingContents>
+      <TrendingContents :is-author="true">
+        Trending Authors
+      </TrendingContents>
     </NuxtLayout>
   </section>
 </template>
