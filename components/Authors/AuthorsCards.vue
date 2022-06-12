@@ -19,7 +19,7 @@ import { ContentPreviewType } from "@/types/ContentPreviewType";
 
 const title = "Nick";
 const description =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus ante vel nisl consequat tincidunt. Vestibulum et diam nisi. Proin a justo sit amet libero cursus porttitor. Nam lectus enim, volutpat vitae tellus suscipit, dapibus sollicitudin nibh. Maecenas accumsan.";
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus ante vel nisl consequat tincidunt. Vestibulum et diam nisi. Proin a justo sit amet libero cursus porttitor.";
 const image = "/img/author_pic.png";
 
 const content: ContentPreviewType = { title, description, image };

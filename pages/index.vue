@@ -11,8 +11,10 @@ useHead({
       <!-- <div>
         {{ title }}
       </div> -->
-      <TrendingContents>Trending Articles</TrendingContents>
-      <TrendingContents :is-author="true">
+      <TrendingContents class="py-10">
+        Trending Articles
+      </TrendingContents>
+      <TrendingContents :is-author="true" class="py-10">
         Trending Authors
       </TrendingContents>
     </NuxtLayout>

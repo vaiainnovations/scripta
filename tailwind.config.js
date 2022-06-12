@@ -2,6 +2,15 @@ module.exports = {
   content: [],
   theme: {
     colors: {
+      brand: "",
+      primary: "#004CAD",
+      "primary-light": "#3E86E1",
+      background: "#FCF4E8",
+      "primary-text": "#000000",
+      "primary-text-light": "#696969",
+      "background-alt": "#FFFCF9",
+      danger: "#EE9898",
+      success: "#75FF83",
       blue: "#1fb6ff",
       purple: "#7e5bef",
       pink: "#ff49db",

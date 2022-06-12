@@ -1,16 +1,16 @@
 <template>
-  <div class="bg-[#FCF4E8] shadow-lg overflow-hidden flex flex-col items-center rounded-3xl border border-solid max-w-xs">
+  <div class="bg-background shadow-md overflow-hidden flex flex-col items-center rounded-3xl  max-w-xs mb-10">
     <div class="bg-[#B4FFFF]/20 w-60">
       <img
-        class="object-cover h-36 object-center"
+        class="object-cover h-36 object-center mx-auto"
         :src="props.content.image"
       >
     </div>
-    <div class="space-y-4 py-4 px-6 text-center">
-      <p class="text-xl font-extrabold font-sans">
+    <div class="space-y-1 py-4 px-4 text-center">
+      <p class="text-2xl font-medium">
         {{ props.content.title }}
       </p>
-      <p class="text-xs font-sans">
+      <p class="text-sm">
         {{ props.content.description }}
       </p>
     </div>

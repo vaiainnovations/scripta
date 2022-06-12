@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#FFFCF9] shadow-lg overflow-hidden flex flex-col items-center rounded-3xl border border-solid md:grid md:grid-cols-4 md:max-h-64 md:gap-x-12">
+  <div class="bg-background-alt shadow-md overflow-hidden flex flex-col items-center rounded-3xl md:grid md:grid-cols-4 md:max-h-64 md:gap-x-12 m-2">
     <div class="bg-[#B4FFFF]/20 md:col-span-1 w-80 md:w-full md:h-full">
       <img
         class="object-cover h-36 md:object-contain md:w-full md:h-64"

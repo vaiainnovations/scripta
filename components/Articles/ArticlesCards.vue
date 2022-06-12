@@ -1,5 +1,5 @@
 <template>
-  <div class="md:gap-y-14 md:gap-x-20 md:grid md:grid-cols-2">
+  <div class="md:gap-y-14 md:gap-x-20 md:grid md:grid-cols-2 p-2">
     <div class="md:col-span-2">
       <ArticlesPreview
         :content="content"
