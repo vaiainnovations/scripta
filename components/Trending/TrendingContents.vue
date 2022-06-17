@@ -4,7 +4,7 @@
       <slot />
     </TrendingTitle>
     <div class="flex overflow-x-scroll md:overflow-x-auto">
-      <AuthorsCards v-if="prop.isAuthor" :class="container" />
+      <AuthorsCards v-if="props.isAuthor" :class="container" />
       <ArticlesCards v-else :class="container" />
     </div>
   </div>
@@ -17,5 +17,5 @@ interface Props {
   isAuthor?: boolean;
 }
 
-const prop = defineProps<Props>();
+const props = defineProps<Props>();
 </script>

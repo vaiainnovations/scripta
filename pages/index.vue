@@ -8,9 +8,6 @@ useHead({
 <template>
   <section>
     <NuxtLayout name="custom">
-      <!-- <div>
-        {{ title }}
-      </div> -->
       <TrendingContents class="py-10">
         Trending Articles
       </TrendingContents>
