@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center rounded-lg py-1 px-14">
+  <div class="flex flex-col items-center rounded-lg py-2 px-14 cursor-pointer">
     <p class="text-[#FFFFFF] text-base">
       <slot />
     </p>

@@ -10,9 +10,9 @@
     </AuthDescription>
     <AuthStatusCard>
       <img src="/svg/wallet/walletconnect/logo.svg" class="object-fill h-32">
-      <AuthStatusButton class="bg-[#177AFD]">
+      <!-- <AuthStatusButton class="bg-[#177AFD]">
         Download
-      </AuthStatusButton>
+      </AuthStatusButton> -->
     </AuthStatusCard>
   </AuthContentCard>
 </template>

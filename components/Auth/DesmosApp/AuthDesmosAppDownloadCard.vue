@@ -10,9 +10,15 @@
     </AuthDescription>
     <AuthStatusCard>
       <img src="/svg/wallet/dpm/logo.svg" class="object-fill h-24 md:h-32">
-      <AuthStatusButton class="bg-[#FFA756]">
+      <AuthStatusButton class="bg-[#FFA756]" @click="onDownloadAction()">
         Download
       </AuthStatusButton>
     </AuthStatusCard>
   </AuthContentCard>
 </template>
+
+<script setup lang="ts">
+function onDownloadAction () {
+  window.open("https://dpm.desmos.network/");
+}
+</script>

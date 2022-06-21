@@ -3,13 +3,13 @@
     <NuxtLink :to="props.wallet.route" class="w-full">
       <div class="flex flex-row justify-between items-center">
         <div class="flex flex-row justify-start items-center gap-x-4">
-          <img :src="props.wallet.img" class="object-fill h-8">
-          <p class="text-primary-text">
+          <img :src="props.wallet.img" class="object-fill h-10 rounded-full">
+          <p class="text-primary-text xl:text-lg">
             {{ props.wallet.name }}
           </p>
         </div>
         <div v-if="props.wallet.isSuggested" class="bg-primary rounded-md p-1">
-          <p class="text-[6px] tracking-widest text-[#FFFFFF]">
+          <p class="text-[0.6rem] tracking-widest text-[#FFFFFF]">
             Suggested
           </p>
         </div>
