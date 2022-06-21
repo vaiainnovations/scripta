@@ -1,5 +1,8 @@
 <template>
   <NuxtLink>
-    &#9664; <span class="font-bold">Back</span>
+    <div class="flex">
+      <img :src="'/icons/bold/arrow-left.svg'">
+      <span class="font-semibold">Back</span>
+    </div>
   </NuxtLink>
 </template>

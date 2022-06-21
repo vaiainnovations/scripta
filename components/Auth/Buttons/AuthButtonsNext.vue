@@ -2,7 +2,10 @@
   <div>
     <slot>
       <button @click="$emit('editPage', 1)">
-        <span class="font-bold">Next</span> &#9654;
+        <div class="flex">
+          <span class="font-semibold">Next</span>
+          <img :src="'/icons/bold/arrow-right.svg'">
+        </div>
       </button>
     </slot>
   </div>
