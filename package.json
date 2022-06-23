@@ -1,16 +1,21 @@
 {
   "name": "scripta",
   "private": true,
-  "main": "index.mjs",
+  "main": "./output/server/index.mjs",
   "scripts": {
     "dev": "nuxt dev",
     "build": "nuxt build",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "cf-live": "wrangler pages dev -- npm run cf-serve",
+    "cf-serve": "NITRO_PRESET=cloudflare yarn dev",
+    "cf-build": "NITRO_PRESET=cloudflare yarn build"
   },
   "devDependencies": {
-    "@nuxt/test-utils": "^3.0.0-rc.3",
-    "@nuxt/test-utils-edge": "^3.0.0-rc.3-27567768.c1f728e",
+    "@cloudflare/workers-types": "^3.13.0",
+    "@miniflare/storage-redis": "^2.5.1",
+    "@nuxt/test-utils": "^3.0.0-rc.4",
+    "@nuxt/test-utils-edge": "^3.0.0-rc.4-27599640.2db154f",
     "@nuxtjs/eslint-config-typescript": "^10.0.0",
     "@nuxtjs/tailwindcss": "^5.1.2",
     "@tailwindcss/typography": "^0.5.2",
@@ -19,6 +24,7 @@
     "c8": "^7.11.3",
     "eslint": "^8.16.0",
     "eslint-plugin-vue": "^9.0.1",
+    "miniflare": "^2.5.1",
     "nuxt": "3.0.0-rc.3",
     "playwright": "^1.22.2",
     "typescript": "^4.7.2",
