@@ -7,13 +7,13 @@
     "build": "nuxt build",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "cf-live": "wrangler pages dev -- npm run cf-serve",
     "cf-serve": "NITRO_PRESET=cloudflare yarn dev",
-    "cf-build": "NITRO_PRESET=cloudflare yarn build"
+    "cf-build": "NITRO_PRESET=cloudflare yarn build",
+    "mf-populate": "node ./scripts/miniflare-kv-populate.js",
+    "mf-dev": "node ./scripts/miniflare-dev.js"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.13.0",
-    "@miniflare/storage-redis": "^2.5.1",
     "@nuxt/test-utils": "^3.0.0-rc.4",
     "@nuxt/test-utils-edge": "^3.0.0-rc.4-27599640.2db154f",
     "@nuxtjs/eslint-config-typescript": "^10.0.0",
