@@ -34,7 +34,6 @@
   "dependencies": {
     "@nuxtjs/composition-api": "^0.32.0",
     "@pinia/nuxt": "^0.1.9",
-    "bootstrap-icons": "^1.8.3",
     "pinia": "^2.0.14"
   }
 }

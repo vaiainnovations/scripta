@@ -1,7 +1,7 @@
 import { PostPreview } from "./PostPreview";
 declare const KV_TRENDING_POSTS: KVNamespace;
 
-export class TrendingPostKv {
+export class TrendingPostsKv {
   /**
    * Retrieve a Trending Post from the Cloudflare Cache
    * @param id Trending Post id
@@ -11,7 +11,6 @@ export class TrendingPostKv {
     try {
       return JSON.parse(await KV_TRENDING_POSTS.get(id)) as PostPreview[];
     } catch (e) {
-      console.warn(`[cf-cache] Trending Post ${id} miss`);
       return false;
     }
   }
