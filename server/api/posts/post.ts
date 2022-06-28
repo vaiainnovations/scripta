@@ -1,5 +1,5 @@
 import { PostKv } from "@/types/PostKv";
 
 export default defineEventHandler(async () => {
-  return await PostKv.get("test");
+  return await PostKv.get("1");
 });
