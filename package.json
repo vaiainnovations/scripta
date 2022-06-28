@@ -9,8 +9,7 @@
     "coverage": "vitest run --coverage",
     "cf-serve": "NITRO_PRESET=cloudflare yarn dev",
     "cf-build": "NITRO_PRESET=cloudflare yarn build",
-    "mf-populate": "node ./scripts/miniflare-kv-populate.js",
-    "mf-dev": "node ./scripts/miniflare-dev.js"
+    "mf-dev": "npx ts-node --esm ./scripts/miniflare-simulate.ts"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.13.0",
@@ -27,6 +26,7 @@
     "miniflare": "^2.5.1",
     "nuxt": "3.0.0-rc.3",
     "playwright": "^1.22.2",
+    "ts-node": "^10.8.1",
     "typescript": "^4.7.2",
     "vite-plugin-eslint": "^1.6.1",
     "vitest": "^0.13.1"
