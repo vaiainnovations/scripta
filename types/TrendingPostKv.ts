@@ -7,9 +7,9 @@ export class TrendingPostKv {
    * @param id Trending Post id
    * @returns Cached post if the cache hits, false otherwise.
    */
-  public static async get (id: string): Promise<PostPreview | false> {
+  public static async get (id: string): Promise<PostPreview[] | false> {
     try {
-      return JSON.parse(await KV_TRENDING_POSTS.get(id)) as PostPreview;
+      return JSON.parse(await KV_TRENDING_POSTS.get(id)) as PostPreview[];
     } catch (e) {
       console.warn(`[cf-cache] Trending Post ${id} miss`);
       return false;

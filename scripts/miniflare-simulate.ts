@@ -4,7 +4,7 @@ import { PostPreview } from "../types/PostPreview";
 let miniflare;
 
 class Simulator {
-  static updateMiniflareInstance(buildCommand = "") {
+  static updateMiniflareInstance (buildCommand = "") {
     miniflare = new Miniflare({
       kvPersist: "./.mf/",
       kvNamespaces: ["KV_POSTS", "KV_TRENDING_POSTS"],
@@ -18,23 +18,25 @@ class Simulator {
   }
 
   // Create and populate local Miniflare KV namespaces & test values
-  static async populateKv() {
+  static async populateKv () {
     // Generate sample Posts
-    const posts = await miniflare.getKVNamespace("KV_POSTS");
-    const postSample = new PostPreview("Post", "Description of the post", "", "Content of the post");
+    const postsKV = await miniflare.getKVNamespace("KV_POSTS");
+    const postSample = new PostPreview("Post", "Description of the post", "/img/author_pic.png", "Content of the post");
     for (let i = 0; i < 10; i++) {
-      await posts.put(i.toString(), JSON.stringify(postSample));
+      await postsKV.put(i.toString(), JSON.stringify(postSample));
     }
 
     // generate sample Trending Posts
-    const postsTrending = await miniflare.getKVNamespace("KV_TRENDING_POSTS");
-    const postTrendingSample = new PostPreview("Trending Post", "Description of the trending post", "", "Content of the trending post");
-    for (let i = 0; i < 10; i++) {
-      await postsTrending.put(i.toString(), JSON.stringify(postTrendingSample));
+    const postsTrendingKV = await miniflare.getKVNamespace("KV_TRENDING_POSTS");
+    const postTrendingSample = new PostPreview("Trending Post", "Description of the trending post", "/img/author_pic.png", "Content of the trending post");
+    const postsTrending = [];
+    for (let i = 0; i < 7; i++) {
+      postsTrending.push(postTrendingSample);
     }
+    await postsTrendingKV.put("1", JSON.stringify(postsTrending));
   }
 
-  static async run() {
+  static async run () {
     miniflare.addEventListener("reload", () => {
       console.log("Worker reloaded!");
     });
