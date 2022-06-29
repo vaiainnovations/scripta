@@ -7,8 +7,6 @@
     "build": "nuxt build",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "cf-serve": "NITRO_PRESET=cloudflare yarn dev",
-    "cf-build": "NITRO_PRESET=cloudflare yarn build",
     "mf-dev": "npx ts-node --esm ./scripts/miniflare-simulate.ts"
   },
   "devDependencies": {
