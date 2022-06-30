@@ -1,0 +1,18 @@
+account_id = "ACCOUNT_ID"
+compatibility_date = "2022-06-23"
+main = ".output/server/index.mjs"
+name = "scripta"
+workers_dev = true
+
+kv_namespaces = [
+  {binding = "KV_NAME", id = "ID", preview_id = "PREVIEW_ID"},
+]
+
+[site]
+bucket = "/public"
+
+[build]
+command = ""
+
+[miniflare]
+kv_persist = "./mf/" # Defaults to ./.mf/kv

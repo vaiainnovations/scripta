@@ -6,6 +6,8 @@ export default defineNuxtConfig({
   vite: {
     plugins: [eslintPlugin()]
   },
-  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
-  css: ["bootstrap-icons/font/bootstrap-icons.css"]
+  alias: {
+    "@vue/devtools-api": "@vue/devtools-api"
+  },
+  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"]
 });

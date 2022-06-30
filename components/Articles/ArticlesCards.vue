@@ -1,34 +1,25 @@
 <template>
   <div class="md:gap-y-14 md:gap-x-20 md:grid md:grid-cols-2 p-2">
-    <div class="md:col-span-2">
-      <ArticlesPreview
-        :content="content"
-      />
+    <div v-if="trendingPosts.length > 0" class="md:col-span-2">
+      <ArticlesPreview :content="trendingPosts[0]" />
     </div>
     <ArticlesSmallPreview
-      v-for="article in articles"
-      :key="article.id"
-      :content="article.content"
+      v-for="(post, i) in trendingPosts.slice(0, trendingPosts.length - 1)"
+      :key="i"
+      :content="post"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ContentPreviewType } from "@/types/ContentPreviewType";
+import { PostPreview } from "~~/types/PostPreview";
+import { TrendingPostsKv } from "~~/types/TrendingPostsKv";
+const trendingPosts = useState("trendingPosts", () => [] as PostPreview[]);
 
-const title = "Introducing Scripta.network";
-const description =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus ante vel nisl consequat tincidunt. Vestibulum et diam nisi. Proin a justo sit amet libero cursus porttitor. Nam lectus enim, volutpat vitae tellus suscipit, dapibus sollicitudin nibh. Maecenas accumsan.";
-const image = "/img/author_pic.png";
+// Execute only by SSR
+if (!process.client) {
+  const trendingPostsRaw = await TrendingPostsKv.get("1");
+  trendingPosts.value = trendingPostsRaw !== false ? trendingPostsRaw : [];
+}
 
-const content: ContentPreviewType = { title, description, image };
-
-const articles = ref(
-  Array(6)
-    .fill(0)
-    .map((_, i) => ({ id: i, content }))
-);
-
-// const containerStyle = (style: string) =>
-//   "bg-[#FFFCF9] md:grid md:grid-cols-4 items-center " + style;
 </script>

@@ -1,16 +1,18 @@
 {
   "name": "scripta",
   "private": true,
-  "main": "index.mjs",
+  "main": "./output/server/index.mjs",
   "scripts": {
     "dev": "nuxt dev",
     "build": "nuxt build",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "mf-dev": "npx ts-node --esm ./scripts/miniflare-simulate.ts"
   },
   "devDependencies": {
-    "@nuxt/test-utils": "^3.0.0-rc.3",
-    "@nuxt/test-utils-edge": "^3.0.0-rc.3-27567768.c1f728e",
+    "@cloudflare/workers-types": "^3.13.0",
+    "@nuxt/test-utils": "^3.0.0-rc.4",
+    "@nuxt/test-utils-edge": "^3.0.0-rc.4-27599640.2db154f",
     "@nuxtjs/eslint-config-typescript": "^10.0.0",
     "@nuxtjs/tailwindcss": "^5.1.2",
     "@tailwindcss/typography": "^0.5.2",
@@ -19,8 +21,10 @@
     "c8": "^7.11.3",
     "eslint": "^8.16.0",
     "eslint-plugin-vue": "^9.0.1",
+    "miniflare": "^2.5.1",
     "nuxt": "3.0.0-rc.3",
     "playwright": "^1.22.2",
+    "ts-node": "^10.8.1",
     "typescript": "^4.7.2",
     "vite-plugin-eslint": "^1.6.1",
     "vitest": "^0.13.1"
@@ -28,7 +32,6 @@
   "dependencies": {
     "@nuxtjs/composition-api": "^0.32.0",
     "@pinia/nuxt": "^0.1.9",
-    "bootstrap-icons": "^1.8.3",
     "pinia": "^2.0.14"
   }
 }
