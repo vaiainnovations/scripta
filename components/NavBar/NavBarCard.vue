@@ -37,9 +37,9 @@
         <div class="hidden lg:block">
           <div class="h-10 w-44 flex flex-row items-center justify-center rounded-lg border border-primary-text-light">
             <!-- TODO change font color (from-to), button type -->
-            <button type="button" class="text-2xl font-semibold bg-clip-text text-white bg-gradient-to-r from-primary-light to-[#5BFF6C]">
+            <NuxtLink to="/auth" type="button" class="text-2xl font-semibold bg-clip-text text-white bg-gradient-to-r from-primary-light to-[#5BFF6C]">
               Write
-            </button>
+            </NuxtLink>
           </div>
         </div>
       </div>
