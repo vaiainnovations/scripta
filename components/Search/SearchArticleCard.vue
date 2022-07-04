@@ -9,7 +9,7 @@
     <div class="flex flex-row gap-x-1">
       <div class="bg-[#B4FFFF]/20 min-h-fit min-w-fit h-fit w-fit rounded-xl">
         <img
-          class="object-contain aspect-square w-14 lg:w-24 min-w-fit h-14 lg:h-24 min-h-fit"
+          class="object-contain aspect-square w-14 xl:w-24 min-w-fit h-14 xl:h-24 min-h-fit"
           :src="props.content.image"
         >
       </div>

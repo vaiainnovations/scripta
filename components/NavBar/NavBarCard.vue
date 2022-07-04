@@ -1,5 +1,6 @@
 <template>
-  <div class="fixed top-0 h-fit w-screen pt-6 xl:pt-0 bg-background-alt md:shadow-lg">
+  <!-- TODO fix breakpoints -->
+  <div class="fixed top-0 h-fit w-screen pt-6 md:pt-0 bg-background-alt md:shadow-lg">
     <div class="h-16 flex flex-row justify-between items-center md:gap-x-24 xl:gap-x-48 px-3 md:px-8 xl:px-16">
       <div class="flex flex-row justify-center items-center gap-x-6">
         <!-- TODO change svg (and fill color) -->
@@ -20,7 +21,7 @@
           </span>
           <input
             v-model="inputSearch"
-            class="block w-full h-full pl-9 bg-background-alt border border-primary-text-light rounded-lg text-sm align-middle placeholder:text-primary-text"
+            class="block w-full h-full pl-9 bg-background-alt border border-primary-text-light rounded-xl text-sm align-middle placeholder:text-primary-text"
             placeholder="Search"
             type="text"
             @blur.stop="$emit('handleSearchDisplay', false)"
@@ -31,10 +32,7 @@
       </div>
       <div class="w-fit">
         <div class="block lg:hidden">
-          <svg class="h-10 w-10" viewBox="0 0 16 16">
-            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-            <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-          </svg>
+          <img src="icons/linear/profile-circle.svg" class="h-10 w-10">
         </div>
         <div class="hidden lg:block">
           <div class="h-10 w-44 flex flex-row items-center justify-center rounded-lg border border-primary-text-light">
