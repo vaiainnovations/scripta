@@ -5,8 +5,12 @@
         {{ props.content.type }}
       </p>
     </div>
-    <div class="flex w-full flex-col items-center gap-y-4 md:gap-y-3">
-      <AuthLandingWalletCard v-for="wallet in props.content.wallets" :key="wallet.name" :wallet="wallet" />
+    <div class="flex flex-col items-center w-full gap-y-4 md:gap-y-3">
+      <AuthLandingWalletCard
+        v-for="wallet in props.content.wallets"
+        :key="wallet.name"
+        :wallet="wallet"
+      />
     </div>
   </div>
 </template>
