@@ -8,7 +8,7 @@
 <script setup lang="ts">
 const searchShown = ref(false);
 
-const handleSearchDisplay = (property:boolean) => {
+const handleSearchDisplay = (property: boolean) => {
   searchShown.value = property;
 };
 </script>
