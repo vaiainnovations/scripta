@@ -1,5 +1,5 @@
 <template>
-  <div class="md:gap-y-14 md:gap-x-20 md:grid md:grid-cols-2 p-2">
+  <div class="p-2 md:grid md:grid-cols-2 md:gap-y-14 md:gap-x-20">
     <div v-if="trendingPosts.length > 0" class="md:col-span-2">
       <ArticlesPreview :content="trendingPosts[0]" />
     </div>
@@ -21,5 +21,4 @@ if (!process.client) {
   const trendingPostsRaw = await TrendingPostsKv.get("1");
   trendingPosts.value = trendingPostsRaw !== false ? trendingPostsRaw : [];
 }
-
 </script>

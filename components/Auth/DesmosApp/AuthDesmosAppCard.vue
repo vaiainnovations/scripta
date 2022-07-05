@@ -17,7 +17,7 @@
 const maxPages = 1;
 const count = ref(0);
 
-function editCount (n:number) {
+function editCount (n: number) {
   if (n > 0 && count.value < maxPages) {
     count.value += n;
   } else if (n < 0 && count.value > 0) {

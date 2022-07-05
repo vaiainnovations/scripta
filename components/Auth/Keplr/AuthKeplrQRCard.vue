@@ -14,7 +14,7 @@
       </div>
     </AuthDescription>
     <AuthStatusCard>
-      <img src="/svg/wallet/keplr/logo.svg" class="object-fill h-32">
+      <img src="/svg/wallet/keplr/logo.svg" class="h-32 object-fill">
       <AuthStatusButton class="bg-[#8C53B2]">
         Connect
       </AuthStatusButton>

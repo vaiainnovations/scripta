@@ -1,6 +1,6 @@
 <template>
   <section>
-    <NuxtLayout name="custom">
+    <NuxtLayout name="article-custom">
       <ArticlesViewContainer />
     </NuxtLayout>
   </section>

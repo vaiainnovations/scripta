@@ -1,16 +1,15 @@
 <template>
-  <div class="bg-background-alt shadow-md overflow-hidden flex flex-col items-center rounded-3xl  md:max-h-40 md:gap-x-4 md:grid md:grid-cols-4 m-2">
-    <div class="bg-[#B4FFFF]/20 md:col-span-1 w-80 md:w-full md:h-full">
-      <img
-        class="object-cover h-36 md:object-contain md:w-full md:h-40"
-        :src="props.content.image"
-      >
+  <div
+    class="m-2 flex flex-col items-center overflow-hidden rounded-3xl bg-background-alt shadow-md md:grid md:max-h-40 md:grid-cols-4 md:gap-x-4"
+  >
+    <div class="w-80 bg-[#B4FFFF]/20 md:col-span-1 md:h-full md:w-full">
+      <img class="h-36 object-cover md:h-40 md:w-full md:object-contain" :src="props.content.image">
     </div>
-    <div class="space-y-4 text-center md:space-y-4 py-4 px-6 md:col-span-3 md:px-0 md:text-left">
-      <p class="text-lg font-extrabold font-sans md:text-xl">
+    <div class="space-y-4 py-4 px-6 text-center md:col-span-3 md:space-y-4 md:px-0 md:text-left">
+      <p class="font-sans text-lg font-extrabold md:text-xl">
         {{ props.content.title }}
       </p>
-      <p class="text-base font-sans md:text-xs">
+      <p class="font-sans text-base md:text-xs">
         {{ props.content.description }}
       </p>
     </div>

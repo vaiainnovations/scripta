@@ -1,15 +1,21 @@
 <template>
-  <div class="hidden w-1/6 overflow-y-auto 2xl:flex flex-col justify-start items-center">
+  <div class="hidden w-1/6 flex-col items-center justify-start overflow-y-auto 2xl:flex">
     <!-- TODO add border-divide-y -->
-    <div class="h-fit pt-2 pb-1 px-4 border-b border-primary-text-light">
+    <div class="h-fit border-b border-primary-text-light px-4 pt-2 pb-1">
       <p class="text-sm font-bold text-primary-text-light">
         Continue your reading
       </p>
     </div>
-    <ArticlesViewSuggested v-for="article in suggestedArticles" :key="article" />
+    <ArticlesViewSuggested v-for="result in props.suggestedArticles" :key="result.id" :content="result.content" />
   </div>
 </template>
 
 <script setup lang="ts">
-const suggestedArticles = (new Array(8)).fill(0).map((_, i) => i);
+import { ArticleSearch } from "~~/types/SearchResults";
+
+interface Props {
+  suggestedArticles: Array<{id: number, content: ArticleSearch}>
+}
+
+const props = defineProps<Props>();
 </script>

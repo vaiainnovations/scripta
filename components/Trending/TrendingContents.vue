@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col px-8 md:px-24 2xl:px-96 gap-y-12">
+  <div class="flex flex-col gap-y-12 px-8 md:px-24 2xl:px-96">
     <TrendingTitle>
       <slot />
     </TrendingTitle>

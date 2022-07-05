@@ -1,10 +1,11 @@
 <template>
-  <div class="h-screen">
+  <div>
     <NavBar />
-    <div class="h-screen w-screen flex flex-row justify-center items-center">
-      <div class="pt-12 md:py-2 bg-background-alt md:rounded-xl w-full md:w-1/2 xl:w-5/12 h-full md:h-fit px-2">
+    <main class="h-screen w-screen pt-24 md:pt-16">
+      <!-- Container for all components of path 'auth', width varies on different breakpoints -->
+      <div class="mx-auto bg-background-alt px-2 md:h-fit md:w-2/3 md:rounded-xl md:py-2 lg:w-1/2 xl:w-5/12">
         <slot />
       </div>
-    </div>
+    </main>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="text-4xl text-center tracking-tight font-extrabold font-sans">
+    <p class="text-center font-sans text-4xl font-extrabold tracking-tight">
       <slot />
     </p>
   </div>

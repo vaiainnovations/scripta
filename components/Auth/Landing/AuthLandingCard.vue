@@ -37,8 +37,6 @@ const mobile = {
 
 const desktop = {
   type: "Desktop",
-  wallets: [
-    new AuthWallet("Keplr", "svg/wallet/keplr/logo.svg", "/auth/keplr")
-  ]
+  wallets: [new AuthWallet("Keplr", "svg/wallet/keplr/logo.svg", "/auth/keplr")]
 };
 </script>

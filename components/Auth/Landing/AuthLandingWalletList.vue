@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-col items-center w-full gap-y-1">
+  <div class="flex w-full flex-col items-center gap-y-1">
     <div>
-      <p class="text-primary-text-light text-sm font-light text-center pb-1">
+      <p class="pb-1 text-center text-sm font-light text-primary-text-light">
         {{ props.content.type }}
       </p>
     </div>
-    <div class="flex flex-col items-center w-full gap-y-4 md:gap-y-3">
+    <div class="flex w-full flex-col items-center gap-y-4 md:gap-y-3">
       <AuthLandingWalletCard v-for="wallet in props.content.wallets" :key="wallet.name" :wallet="wallet" />
     </div>
   </div>
@@ -15,12 +15,12 @@
 import { AuthWalletType } from "@/types/AuthWalletType";
 
 interface PlatformWallets {
-  type: string,
-  wallets: Array<AuthWalletType>
+  type: string;
+  wallets: Array<AuthWalletType>;
 }
 
 interface Props {
-  content: PlatformWallets
+  content: PlatformWallets;
 }
 
 const props = defineProps<Props>();

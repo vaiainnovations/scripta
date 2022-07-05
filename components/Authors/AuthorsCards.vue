@@ -6,11 +6,7 @@
       :content="author.content"
       class="md:max-w-32 items-center bg-[#FCF4E8]"
     /> -->
-    <AuthorsPreview
-      v-for="author in authors"
-      :key="author.id"
-      :content="author.content"
-    />
+    <AuthorsPreview v-for="author in authors" :key="author.id" :content="author.content" />
   </div>
 </template>
 

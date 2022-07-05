@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-primary-light w-20 rounded-xl flex flex-col justify-center py-0.5">
-    <p class="text-background-alt text-xs text-center">
+  <div class="flex w-20 flex-col justify-center rounded-xl bg-primary-light py-0.5">
+    <p class="text-center text-xs text-background-alt">
       {{ props.content }}
     </p>
   </div>
@@ -8,9 +8,8 @@
 
 <script setup lang="ts">
 interface Props {
-  content: string
+  content: string;
 }
 
 const props = defineProps<Props>();
-
 </script>

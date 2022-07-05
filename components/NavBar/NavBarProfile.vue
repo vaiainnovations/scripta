@@ -3,7 +3,7 @@
     <!-- The profile icon is showed only on mobile screens (< 768 px) -->
     <!--  TODO if better md of lg breakpoint to show the name-->
     <div class="block md:hidden">
-      <img src="icons/linear/profile-circle.svg" class="w-11 object-fill">
+      <img src="/icons/linear/profile-circle.svg" class="w-11 object-fill">
     </div>
     <!-- The button to write new article appears on larger screen (>= 768 px) -->
     <!--  TODO if better md of lg breakpoint to show the name-->

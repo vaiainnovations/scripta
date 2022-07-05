@@ -4,7 +4,7 @@
     <label class="block h-full">
       <!-- Search icon on the left of the searchbar -->
       <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-        <img src="icons/linear/search-normal.svg" class="h-5 w-5">
+        <img src="/icons/linear/search-normal.svg" class="h-5 w-5">
       </span>
       <!-- Input for searching; activates the search tooltip on the blur/focus event -->
       <input

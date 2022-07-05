@@ -14,7 +14,10 @@
       </div>
     </AuthDescription>
     <AuthStatusCard>
-      <img class="object-fill h-44" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/QR_icon.svg/240px-QR_icon.svg.png">
+      <img
+        class="h-44 object-fill"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/QR_icon.svg/240px-QR_icon.svg.png"
+      >
       <AuthStatusButton class="bg-[#FFA756]">
         Connect
       </AuthStatusButton>
