@@ -1,31 +1,38 @@
 <template>
   <!-- TODO same padding as authorcard -->
-  <div class="bg-background-alt overflow-hidden flex flex-col items-start justify-center rounded-2xl h-fit py-2 px-2 w-full">
-    <div class="self-start">
-      <p class="text-sm font-semibold">
+  <!-- Grid container with 6 columns -->
+  <div
+    class="grid h-fit w-full grid-cols-5 items-start justify-center gap-x-2 gap-y-0.5 overflow-hidden rounded-2xl bg-background-alt py-2 px-4 md:rounded-xl"
+  >
+    <!-- Title of the article, large the entire container -->
+    <div class="col-span-5">
+      <p class="text-sm font-semibold text-primary-text">
         {{ props.content.title }}
       </p>
     </div>
-    <div class="flex flex-row gap-x-1">
-      <div class="bg-[#B4FFFF]/20 min-h-fit min-w-fit h-fit w-fit rounded-xl">
-        <img
-          class="object-contain aspect-square w-14 xl:w-24 min-w-fit h-14 xl:h-24 min-h-fit"
-          :src="props.content.image"
-        >
+    <!-- Image of the article -->
+    <!-- TODO probably the bg should be removed with real images -->
+    <div class="col-span-1 rounded-xl bg-[#B4FFFF]/20 py-1 px-1">
+      <img class="aspect-square h-full object-contain" :src="props.content.image">
+    </div>
+    <!-- Description of the article and author as flex container -->
+    <div class="col-span-4 flex flex-col">
+      <!-- Description of the article -->
+      <div class="max-h-12 overflow-clip lg:max-h-20">
+        <!-- TODO add 8px to xxs in tailwind config -->
+        <p class="text-[8px] text-primary-text 2xl:text-sm">
+          {{ props.content.description }}
+        </p>
       </div>
-      <div class="flex flex-col">
-        <div class="max-h-12 lg:max-h-20 overflow-clip">
-          <!-- TODO add 8px to xxs in tailwind config -->
-          <p class="text-[8px] lg:text-sm">
-            {{ props.content.description }}
-          </p>
-        </div>
-        <div class="self-end flex flex-row items-center gap-x-1">
-          <p class="text-[9px] text-primary-text-light xl:text-sm">
-            {{ props.content.author.name }}
-          </p>
-          <img :src="props.content.author.image" class="w-3 h-3 lg:w-4 lg:h-4 xl:w-5 xl:h-5 object-contain">
-        </div>
+      <!-- Author of the article -->
+      <div class="flex flex-row items-center gap-x-1 self-end">
+        <!-- TODO add 9px in tailwind config -->
+        <!-- Author name -->
+        <p class="text-[9px] text-primary-text-light 2xl:text-sm">
+          {{ props.content.author.name }}
+        </p>
+        <!-- Author profile picture -->
+        <img :src="props.content.author.image" class="h-3 w-3 object-contain lg:h-4 lg:w-4 2xl:h-5 2xl:w-5">
       </div>
     </div>
   </div>

@@ -10,10 +10,7 @@
     <div class="hidden md:block">
       <div class="flex h-10 w-44 flex-row items-center justify-center rounded-lg border border-primary-text-light">
         <!-- TODO gradient color doesn't work even though it seems correct -->
-        <button
-          type="button"
-          class="text-white bg-gradient-to-r from-primary-light to-[#5BFF6C] bg-clip-text text-2xl font-semibold"
-        >
+        <button type="button" class="text-white bg-gradient-to-r from-primary-light to-[#5BFF6C] bg-clip-text text-2xl font-semibold">
           Write
         </button>
       </div>

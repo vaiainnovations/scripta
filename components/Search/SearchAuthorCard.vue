@@ -1,7 +1,8 @@
 <template>
-  <div class="bg-background-alt flex flex-row justify-start items-center gap-x-1 w-full h-fit rounded-2xl py-2 md:rounded-xl px-1 md:gap-x-3 md:px-2">
-    <img :src="props.content.image" class="object-fill h-8 rounded-full">
-    <p class="text-primary-text text-xs md:text-base">
+  <!-- Flex container on a row -->
+  <div class="flex h-fit w-full flex-row items-center justify-start gap-x-1 rounded-xl bg-background-alt py-2 px-1 md:gap-x-3 md:px-2">
+    <img :src="props.content.image" class="h-8 rounded-full object-fill">
+    <p class="text-xs text-primary-text md:text-base">
       {{ props.content.name }}
     </p>
   </div>
@@ -11,7 +12,7 @@
 import { AuthorSearch } from "@/types/SearchResults";
 
 interface Props {
-  content: AuthorSearch
+  content: AuthorSearch;
 }
 
 // TODO props redeclared block scoped

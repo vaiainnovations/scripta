@@ -1,14 +1,12 @@
 <template>
   <div>
-    <NavBarCard @handle-search-display="handleSearchDisplay" />
+    <NavBarCard />
     <SearchToolTip v-show="searchShown" />
   </div>
 </template>
 
 <script setup lang="ts">
+// TODO make it false
 const searchShown = ref(false);
-
-const handleSearchDisplay = (property: boolean) => {
-  searchShown.value = property;
-};
+provide("search-shown", searchShown);
 </script>

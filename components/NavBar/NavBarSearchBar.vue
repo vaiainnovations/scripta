@@ -12,8 +12,8 @@
         class="block h-full w-full rounded-xl border border-primary-text-light bg-background-alt pl-10 align-middle text-sm text-primary-text placeholder:text-primary-text"
         placeholder="Search"
         type="text"
-        @blur.stop="$emit('handleSearchDisplay', false)"
-        @focus.stop="$emit('handleSearchDisplay', true)"
+        @blur.stop="() => handleSearchDisplay(false)"
+        @focus.stop="() => handleSearchDisplay(true)"
         @change.stop="onInputChange"
       >
     </label>
@@ -22,6 +22,11 @@
 
 <script setup lang="ts">
 const inputSearch = ref("");
+const searchShown: Ref<boolean> = inject("search-shown");
+
+const handleSearchDisplay = (property: boolean) => {
+  searchShown.value = property;
+};
 
 async function onInputChange () {
   if (inputSearch.value.length > 0) {
