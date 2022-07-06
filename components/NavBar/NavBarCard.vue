@@ -2,7 +2,7 @@
   <!-- TODO fix breakpoints -->
   <div class="fixed top-0 h-fit w-screen pt-6 md:pt-0 bg-background-alt md:shadow-lg">
     <div class="h-16 flex flex-row justify-between items-center md:gap-x-24 xl:gap-x-48 px-3 md:px-8 xl:px-16">
-      <div class="flex flex-row justify-center items-center gap-x-6">
+      <NuxtLink to="/" class="flex flex-row justify-center items-center gap-x-6">
         <!-- TODO change svg (and fill color) -->
         <svg class="w-10 h-10" viewBox="0 0 100 100">
           <circle cx="50" cy="50" r="50" />
@@ -10,7 +10,7 @@
         <p class="hidden lg:block font-medium text-2xl">
           Scripta
         </p>
-      </div>
+      </NuxtLink>
       <div class="relative h-10 w-56 md:w-full">
         <label class="block h-full">
           <span class="absolute inset-y-0 left-0 flex items-center pl-2">
