@@ -20,7 +20,7 @@
       <!-- Description of the article -->
       <div class="max-h-12 overflow-clip lg:max-h-20">
         <!-- TODO add 8px to xxs in tailwind config -->
-        <p class="text-[8px] text-primary-text 2xl:text-sm">
+        <p class="text-xs text-primary-text 2xl:text-sm">
           {{ props.content.description }}
         </p>
       </div>
@@ -28,7 +28,7 @@
       <div class="flex flex-row items-center gap-x-1 self-end">
         <!-- TODO add 9px in tailwind config -->
         <!-- Author name -->
-        <p class="text-[9px] text-primary-text-light 2xl:text-sm">
+        <p class="text-xs text-primary-text-light 2xl:text-sm">
           {{ props.content.author.name }}
         </p>
         <!-- Author profile picture -->

@@ -1,6 +1,6 @@
 <template>
   <!-- Container for reading an article, with a sidebar on larger screens (>= 1536 px)  -->
-  <div class="h-full 2xl:flex 2xl:flex-row 2xl:overflow-hidden">
+  <div class="2xl:flex 2xl:flex-row h-full">
     <ArticlesViewSidebar :suggested-articles="articleResults" />
     <ArticlesViewCard :suggested-articles="articleResults" />
   </div>

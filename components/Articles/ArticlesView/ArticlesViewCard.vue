@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-y-6 overflow-y-scroll bg-background px-4 py-5 md:px-32 lg:py-20 2xl:w-5/6 2xl:px-14">
+  <div class="flex h-full flex-col gap-y-6 overflow-y-scroll bg-background px-4 py-5 md:px-32 lg:py-20 2xl:w-5/6 2xl:px-14">
     <div class="flex h-6 flex-row items-center justify-start gap-x-4 py-0.5">
       <ArticlesViewTag v-for="tag in tags" :key="tag.i" :content="tag.content" />
       <!-- <svg
@@ -36,10 +36,10 @@
     </div>
     <div class="h-11 w-full bg-primary" />
     <div class="flex flex-row">
-      <div class="w-full">
+      <div class="w-full lg:w-7/12 2xl:w-full">
         <p>Comments</p>
       </div>
-      <div class="hidden lg:flex lg:w-5/12 lg:flex-col items-center gap-y-2 2xl:hidden">
+      <div class="hidden items-center gap-y-2 lg:flex lg:w-5/12 lg:flex-col 2xl:hidden">
         <p class="text-sm font-bold text-primary-text-light">
           Continue reading
         </p>
