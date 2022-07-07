@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { DesmosClient, NoOpSigner, Signer, SignerStatus } from "@desmoslabs/desmjs";
 import { registerModuleHMR } from "..";
-import { AuthLevel, useAuthStore } from "../AuthStore";
+import { useAuthStore } from "../AuthStore";
 import { useWalletConnectStore } from "./WalletConnectStore";
 
 export enum SupportedSigner {
@@ -99,9 +99,6 @@ export const useWalletStore = defineStore({
         return;
       }
 
-      // TODO: here?
-      authStore.authLevel = AuthLevel.Wallet;
-
       // get Wallet account
       const account = (await this.wallet.signer.getAccounts())[0];
 
@@ -118,6 +115,9 @@ export const useWalletStore = defineStore({
       // authStore.authenticate();
 
       // await accountStore.loadAccount(true);
+
+      // Start the final step of the login process
+      await authStore.login();
     },
 
     onWalletNotConnected () {
