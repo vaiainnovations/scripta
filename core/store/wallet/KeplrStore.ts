@@ -48,7 +48,7 @@ export const useKeplrStore = defineStore({
       const isLedgerKeplrUser = (await window.keplr.getKey("morpheus-apollo-2")).isNanoLedger;
       if (isLedgerKeplrUser) {
         alert("Keplr does not support Desmos when used with a Ledger. You can use the Desmos App with your Ledger instead.");
-        useAuthStore().logout();
+        await useAuthStore().logout();
         navigateTo("/auth/desmos-app");
       }
     }

@@ -3,7 +3,7 @@ export default defineNuxtRouteMiddleware(() => {
   if (process.client) {
     // Re-route to home if the AuthLevel is None
     if (useAuthStore().authLevel === AuthLevel.None) {
-      return navigateTo("/");
+      return navigateTo("/auth");
     }
     // Allow authenticated user
   }
