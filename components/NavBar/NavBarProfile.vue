@@ -1,5 +1,5 @@
 <template>
-  <div class="w-fit">
+  <NuxtLink to="/profile" class="w-fit">
     <!-- The profile icon is showed only on mobile screens (< 768 px) -->
     <!--  TODO if better md of lg breakpoint to show the name-->
     <div class="block md:hidden">
@@ -17,7 +17,7 @@
         </button>
       </div>
     </div>
-  </div>
+  </NuxtLink>
 </template>
 
 <style>
