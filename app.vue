@@ -1,10 +1,14 @@
 <script lang="ts" setup>
 // Globally executed on every page load
 import { Buffer } from "buffer";
+import { useAuthStore } from "./core/store/AuthStore";
 
 // Client Buffer polyfills.
 if (process.client) {
   window.Buffer = Buffer;
+}
+if (process.client) {
+  useAuthStore().init();
 }
 
 </script>

@@ -31,5 +31,6 @@ import { useKeplrStore } from "~~/core/store/wallet/KeplrStore";
  */
 async function connect () {
   await useKeplrStore().connect();
+  navigateTo("/auth/success");
 }
 </script>

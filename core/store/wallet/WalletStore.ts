@@ -3,6 +3,7 @@ import { DesmosClient, NoOpSigner, Signer, SignerStatus } from "@desmoslabs/desm
 import { registerModuleHMR } from "..";
 import { useAuthStore } from "../AuthStore";
 import { useWalletConnectStore } from "./WalletConnectStore";
+import { useKeplrStore } from "./KeplrStore";
 
 export enum SupportedSigner {
     Noop = "noop",
@@ -15,6 +16,9 @@ class Wallet {
   public signer: Signer = new NoOpSigner();
 }
 
+/**
+ * Store used to manage the integration with all the different supported Wallets
+ */
 export const useWalletStore = defineStore({
   id: "WalletStore",
   state: () => ({
@@ -28,11 +32,11 @@ export const useWalletStore = defineStore({
     /**
     * Check if there is a wallet connected, and try to reconnect
     */
-    async retrieveCurrentWallet () {
+    async retrieveCurrentWallet (signerId: string = this.signerId) {
       // Attempt to retrieve the client
-      switch (this.signerId) {
+      switch (signerId) {
       case SupportedSigner.Keplr:
-        // await useKeplrStore().connect();
+        await useKeplrStore().connect();
         break;
       case SupportedSigner.WalletConnect:
         await useWalletConnectStore().connect();
@@ -67,17 +71,17 @@ export const useWalletStore = defineStore({
       this.onWalletUpdate();
     },
 
-    onWalletUpdate () {
+    async onWalletUpdate () {
       switch (this.wallet.signer.status) {
       case SignerStatus.Connected:
-        this.onWalletConnected();
+        await this.onWalletConnected();
         break;
       case SignerStatus.Connecting:
         break;
       case SignerStatus.Disconnecting:
         break;
       case SignerStatus.NotConnected:
-        this.onWalletNotConnected();
+        await this.onWalletNotConnected();
         break;
       }
     },
@@ -106,15 +110,6 @@ export const useWalletStore = defineStore({
       if (!account) {
         // return;
       }
-
-      // get account desmos profile, if exists
-      // const walletClient = await this.wallet.client;
-      // const profile = await walletClient.getProfile(account.address);
-      // save authentication data
-      // authStore.saveAuthAccount({ account: new AuthAccount(profile?.dtag || "", account.address, this.signerId === SupportedSigner.KEPLR, this.signerId === SupportedSigner.WALLETCONNECT) });
-      // authStore.authenticate();
-
-      // await accountStore.loadAccount(true);
 
       // Start the final step of the login process
       await authStore.login();

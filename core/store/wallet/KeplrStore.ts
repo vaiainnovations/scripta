@@ -26,6 +26,7 @@ export const useKeplrStore = defineStore({
     * Get the Keplr Signer from the window, and connect it to the wallet
     */
     async connect (): Promise<void> {
+      console.log("keplr connect");
       if (!window.keplr) {
         return;
       }

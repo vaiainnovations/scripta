@@ -573,6 +573,14 @@
     long "^4.0.0"
     protobufjs "^6.11.2"
 
+"@desmoslabs/desmjs-types@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-types/-/desmjs-types-4.0.0.tgz#d3c9e0a4603a07cb8d86c3812b6f4a8be416b48b"
+  integrity sha512-viqFa+7Q+v0mU9M7JC59PJInOWl7w7mLtGFjHVI6ZF1k5yCXmGr2FfzCD5Ai03SBxW6dKY/dNlNXQ3AQ6ee8bg==
+  dependencies:
+    long "^4.0.0"
+    protobufjs "^6.11.2"
+
 "@desmoslabs/desmjs-walletconnect@^4.0.0-alpha.1":
   version "4.0.0-alpha.1"
   resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-walletconnect/-/desmjs-walletconnect-4.0.0-alpha.1.tgz#4cdf51c6938339c940085f04a1a36aa28b4d7ad7"

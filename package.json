@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@desmoslabs/desmjs": "4.0.0-alpha.2",
+    "@desmoslabs/desmjs-types": "^4.0.0",
     "@desmoslabs/desmjs-walletconnect": "^4.0.0-alpha.1",
     "@nuxtjs/composition-api": "^0.32.0",
     "@pinia/nuxt": "^0.1.9",
