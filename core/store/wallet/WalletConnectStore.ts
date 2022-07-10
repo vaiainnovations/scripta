@@ -27,7 +27,7 @@ export const useWalletConnectStore = defineStore({
       await signer.connect();
 
       // Connect to the wallet with the WalletConnect signer
-      walletStore.connect(signer, SupportedSigner.WalletConnect);
+      await walletStore.connect(signer, SupportedSigner.WalletConnect);
     }
   }
 });

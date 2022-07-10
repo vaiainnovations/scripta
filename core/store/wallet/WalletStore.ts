@@ -68,7 +68,7 @@ export const useWalletStore = defineStore({
         this.onWalletUpdate();
       });
 
-      this.onWalletUpdate();
+      await this.onWalletUpdate();
     },
 
     async onWalletUpdate () {

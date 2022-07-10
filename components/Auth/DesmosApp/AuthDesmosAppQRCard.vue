@@ -24,6 +24,7 @@
 import QrcodeVue from "qrcode.vue";
 import { SigningMode } from "@desmoslabs/desmjs";
 import { WalletConnect, WalletConnectSigner } from "@desmoslabs/desmjs-walletconnect";
+import { SupportedSigner, useWalletStore } from "~~/core/store/wallet/WalletStore";
 
 // Create and initializer the WalletConnect signer
 const signer = new WalletConnectSigner(new WalletConnect({
@@ -33,6 +34,7 @@ const signer = new WalletConnectSigner(new WalletConnect({
 });
 await signer.connect();
 const wcUrl = ref(getWalletConnectUrl(signer));
+await useWalletStore().connect(signer, SupportedSigner.WalletConnect);
 
 /**
  * Generate WalletConnect socket URL to display as QR code.

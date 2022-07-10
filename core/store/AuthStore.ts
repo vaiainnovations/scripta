@@ -109,6 +109,10 @@ export const useAuthStore = defineStore({
           signer: useWalletStore().signerId
         };
         AuthStorage.set(storedAuthData);
+
+        if (useRouter().currentRoute.value.path.includes("auth")) {
+          navigateTo("/auth/success");
+        }
       }
     }
   }
