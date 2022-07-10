@@ -129,6 +129,11 @@ export const useWalletStore = defineStore({
 
         // disconnect the client
         (await this.wallet.client).disconnect();
+
+        this.wallet = {
+          wallet: new Wallet(),
+          signerId: SupportedSigner.Noop
+        };
       }
     }
   }

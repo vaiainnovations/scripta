@@ -18,19 +18,29 @@ interface StoredAuthData {
 }
 
 export class AuthStorage {
+  static STORAGE_KEY = "auth";
+
   /**
    * Store locally auth data
    * @param value auth struct
    */
   static set (value: StoredAuthData): void {
-    localStorage.setItem("auth", JSON.stringify(value));
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(value));
   }
 
   /**
    * Retrieve locally stored auth data
    */
   static get (): StoredAuthData {
-    return JSON.parse(localStorage.getItem("auth"));
+    return JSON.parse(localStorage.getItem(this.STORAGE_KEY));
+  }
+
+  /**
+   * Delete local stored auth data
+   */
+  static delete (): void {
+    console.log("delete");
+    localStorage.removeItem(this.STORAGE_KEY);
   }
 }
 
@@ -51,7 +61,9 @@ export const useAuthStore = defineStore({
       if (storedAuth && storedAuth.version && storedAuth.signer && storedAuth.address) {
         this.authLevel = AuthLevel.Local;
         await useWalletStore().retrieveCurrentWallet(storedAuth.signer);
-        this.login();
+        if (this.authLevel !== AuthLevel.None) {
+          this.login();
+        }
       }
     },
 
@@ -59,8 +71,10 @@ export const useAuthStore = defineStore({
      * Sign out
      */
     async logout (): Promise<void> {
+      AuthStorage.delete();
       await useWalletStore().disconnect(); // disconnect the wallet (signer and client)
       this.authLevel = AuthLevel.None;
+      useAccountStore().$reset();
     },
     /**
      * Sign in
