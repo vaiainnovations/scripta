@@ -112,6 +112,7 @@ export const useWalletStore = defineStore({
       }
 
       // Start the final step of the login process
+      console.log("called WalletStore onWalletConnected");
       await authStore.login();
     },
 

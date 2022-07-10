@@ -6,7 +6,7 @@ import { registerModuleHMR } from ".";
 
 export enum AuthLevel {
     None = "none",
-    Local = "local",
+    Memory = "memory",
     Wallet = "wallet",
     Authz = "authz",
 }
@@ -57,14 +57,22 @@ export const useAuthStore = defineStore({
   },
   actions: {
     async init (): Promise<void> {
+      console.log("called AuthStore init");
       const storedAuth = AuthStorage.get();
       if (storedAuth && storedAuth.version && storedAuth.signer && storedAuth.address) {
-        this.authLevel = AuthLevel.Local;
+        this.authLevel = AuthLevel.Memory;
         await useWalletStore().retrieveCurrentWallet(storedAuth.signer);
         if (this.authLevel !== AuthLevel.None) {
           this.login();
         }
       }
+    },
+    hasAuthStorage (): boolean {
+      const storedAuth = AuthStorage.get();
+      if (storedAuth && storedAuth.version && storedAuth.signer && storedAuth.address) {
+        return true;
+      }
+      return false;
     },
 
     /**
@@ -75,13 +83,19 @@ export const useAuthStore = defineStore({
       await useWalletStore().disconnect(); // disconnect the wallet (signer and client)
       this.authLevel = AuthLevel.None;
       useAccountStore().$reset();
+      localStorage.removeItem("walletconnect");
     },
     /**
      * Sign in
      */
     async login (): Promise<void> {
+      console.log("called login");
       if (useWalletStore().signerId !== SupportedSigner.Noop) {
         this.authLevel = AuthLevel.Wallet; // Wallet is connected
+
+        if (useRouter().currentRoute.value.path.includes("auth")) {
+          navigateTo("/auth/loading");
+        }
 
         // Get the user address
         const account = await useWalletStore().wallet.signer.getCurrentAccount();
