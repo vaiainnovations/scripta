@@ -14,7 +14,8 @@ export default defineNuxtConfig({
       alias: {
         "@": path.resolve(__dirname, "/src"),
         process: "process/browser",
-        stream: "stream-browserify"
+        stream: "stream-browserify",
+        buffer: "buffer"
       }
     },
     optimizeDeps: {
@@ -25,7 +26,9 @@ export default defineNuxtConfig({
         },
         // Enable esbuild polyfill plugins
         plugins: [
-          NodeGlobalsPolyfillPlugin()
+          NodeGlobalsPolyfillPlugin({
+            buffer: true
+          })
         ]
       }
     }
