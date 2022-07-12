@@ -11,7 +11,7 @@
         Tags
       </p>
       <div class="grid grid-cols-10 w-full gap-y-2">
-        <ArticlesCreateTag v-for="tag in tags" :key="tag.id" :content="tag.content" @remove-tag="() => removeTag(tag.id)" />
+        <ArticlesCreateTag v-for="tag in tags" :key="tag.id" v-model="tag.content.value" :content="tag.content" @remove-tag="() => removeTag(tag.id)" />
         <button v-if="tags.length < 6" class="col-span-1 rounded-full text-center bg-primary-text h-5 w-5 text-[#FFFFFF]" @click="addTag">
           +
         </button>
@@ -62,7 +62,7 @@ interface Tag {
   content: TagType;
 }
 
-const tags : Ref<Array<Tag>> = ref([]);
+const tags: Ref<Array<Tag>> = ref([]);
 
 function addTag () {
   if (tags.value.length < 6) {

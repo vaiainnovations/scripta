@@ -1,12 +1,13 @@
 <template>
   <div class="block relative h-fit w-20 col-span-3">
-    <ArticlesViewTag class="justify-start py-0" :content="props.content">
+    <ArticlesViewTag class="justify-start py-0" :content="content">
       <input
-        v-model="inputTag"
+        :value="modelValue"
         type="text"
         class="bg-primary-light text-left text-xs text-background-alt w-full h-full rounded-xl pl-0.5"
         maxlength="5"
         :readonly="!enableEdit"
+        @input="handleInput"
         @focus.stop="() => switchInput(true)"
         @blur.stop="() => switchInput(false)"
       >
@@ -21,16 +22,20 @@
 import { TagType } from "~~/types/TagType";
 
 interface Props {
+  modelValue: string,
   content: TagType
 }
 
-const props = defineProps<Props>();
-
-const inputTag = ref(props.content.value || "");
+defineProps<Props>();
+const emit = defineEmits(["update:modelValue", "removeTag"]);
 
 const enableEdit = ref(false);
 // Enable/disable input field to edit tag
 function switchInput (enable: boolean) {
   enableEdit.value = enable;
+}
+
+function handleInput (event: Event) {
+  emit("update:modelValue", (event.target as HTMLInputElement).value);
 }
 </script>
