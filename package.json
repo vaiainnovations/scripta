@@ -11,6 +11,12 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.13.0",
+    "@milkdown/core": "^6.2.0",
+    "@milkdown/plugin-menu": "^6.2.0",
+    "@milkdown/preset-commonmark": "^6.2.0",
+    "@milkdown/preset-gfm": "^6.2.0",
+    "@milkdown/prose": "^6.2.0",
+    "@milkdown/vue": "^6.2.0",
     "@nuxt/test-utils": "^3.0.0-rc.4",
     "@nuxt/test-utils-edge": "^3.0.0-rc.4-27599640.2db154f",
     "@nuxtjs/eslint-config-typescript": "^10.0.0",
@@ -30,6 +36,7 @@
     "vitest": "^0.13.1"
   },
   "dependencies": {
+    "@milkdown/theme-nord": "^6.2.0",
     "@nuxtjs/composition-api": "^0.32.0",
     "@pinia/nuxt": "^0.1.9",
     "pinia": "^2.0.14"

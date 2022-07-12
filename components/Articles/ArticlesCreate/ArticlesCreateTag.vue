@@ -1,5 +1,5 @@
 <template>
-  <div class="block relative h-fit w-20 col-span-3">
+  <div class="block relative h-fit w-20 col-span-3 lg:col-span-1">
     <ArticlesViewTag class="justify-start py-0" :content="content">
       <input
         :value="modelValue"
