@@ -1,7 +1,7 @@
 import { SigningMode } from "@desmoslabs/desmjs";
 import { defineStore } from "pinia";
 import { registerModuleHMR } from "..";
-import { useAuthStore } from "../AuthStore";
+// import { useAuthStore } from "../AuthStore";
 import { DESMOS_TESTNET_CHAIN_INFO, KeplrSigner } from "./KeplrSigner";
 import { SupportedSigner, useWalletStore } from "./WalletStore";
 
@@ -32,8 +32,17 @@ export const useKeplrStore = defineStore({
       }
       this.isInstalled = true;
 
+      console.log(useRuntimeConfig().desmos);
       // const chainInfo = (truncateSync) ? DESMOS_TESTNET_CHAIN_INFO : DESMOS_MAINNET_CHAIN_INFO;
       const chainInfo = DESMOS_TESTNET_CHAIN_INFO;
+
+      // If Keplr + Ledger, sign out the user
+      const isLedgerKeplrUser = (await window.keplr.getKey("morpheus-apollo-2")).isNanoLedger;
+      if (isLedgerKeplrUser) {
+        console.log("routing to /auth/error");
+        navigateTo("/auth/error");
+        return;
+      }
 
       // Create the Keplr Signer with the currrent configuration
       const keplrSigner = new KeplrSigner(window.keplr!, {
@@ -42,16 +51,9 @@ export const useKeplrStore = defineStore({
         preferNoSetMemo: true,
         chainInfo
       });
+
       const walletStore = useWalletStore();
       await walletStore.connect(keplrSigner, SupportedSigner.Keplr);
-
-      // If Keplr + Ledger, sign out the user
-      const isLedgerKeplrUser = (await window.keplr.getKey("morpheus-apollo-2")).isNanoLedger;
-      if (isLedgerKeplrUser) {
-        alert("Keplr does not support Desmos when used with a Ledger. You can use the Desmos App with your Ledger instead.");
-        await useAuthStore().logout();
-        navigateTo("/auth/desmos-app");
-      }
     }
   }
 });

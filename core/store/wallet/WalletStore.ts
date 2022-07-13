@@ -64,8 +64,9 @@ export const useWalletStore = defineStore({
       }
 
       // listen for signer status changes
-      this.wallet.signer.addStatusListener(() => {
-        this.onWalletUpdate();
+      this.wallet.signer.addStatusListener(async () => {
+        console.log("onConnect listener");
+        await this.onWalletUpdate();
       });
 
       await this.onWalletUpdate();
@@ -116,8 +117,8 @@ export const useWalletStore = defineStore({
       await authStore.login();
     },
 
-    onWalletNotConnected () {
-      this.disconnect();
+    async onWalletNotConnected () {
+      await this.disconnect();
     },
 
     /**

@@ -5,10 +5,10 @@ import { useAccountStore } from "./AccountStore";
 import { registerModuleHMR } from ".";
 
 export enum AuthLevel {
-    None = "none",
-    Memory = "memory",
-    Wallet = "wallet",
-    Authz = "authz",
+  None = "none",
+  Memory = "memory",
+  Wallet = "wallet",
+  Authz = "authz",
 }
 
 interface StoredAuthData {
@@ -77,13 +77,19 @@ export const useAuthStore = defineStore({
 
     /**
      * Sign out
+     * @param route New route after the logout. Don't re-route if omitted
      */
-    async logout (): Promise<void> {
+    async logout (route?: string): Promise<void> {
       AuthStorage.delete();
       await useWalletStore().disconnect(); // disconnect the wallet (signer and client)
-      this.authLevel = AuthLevel.None;
       useAccountStore().$reset();
+      useAuthStore().$reset();
+      useWalletStore().$reset();
       localStorage.removeItem("walletconnect");
+      console.log("logged out");
+      if (route) {
+        navigateTo(route);
+      }
     },
     /**
      * Sign in
@@ -101,8 +107,18 @@ export const useAuthStore = defineStore({
         const account = await useWalletStore().wallet.signer.getCurrentAccount();
         useAccountStore().address = account.address;
 
+        console.log("Auth?");
+        console.log(account);
+
+        // TODO: Auth Backend call
+        /* const authSuccess = false;
+        if (!authSuccess) {
+          navigateTo("/auth/error");
+          return;
+        } */
+
         // Retrieve the Desmos profile, if exxists
-        const profile = await (await useWalletStore().wallet.client).getProfile(account.address);
+        /*  const profile = await (await useWalletStore().wallet.client).getProfile(account.address);
         if (!profile) {
           // TODO: to consider accounts without profile
         }
@@ -114,7 +130,7 @@ export const useAuthStore = defineStore({
 
         // update the store
         useAccountStore().profile = profile;
-        useAccountStore().balance = Number(balance.amount) / 1_000_000;
+        useAccountStore().balance = Number(balance.amount) / 1_000_000; */
 
         // Store the auth data locally
         const storedAuthData: StoredAuthData = {
@@ -124,7 +140,9 @@ export const useAuthStore = defineStore({
         };
         AuthStorage.set(storedAuthData);
 
+        // Route to the profile page only if coming from auth
         if (useRouter().currentRoute.value.path.includes("auth")) {
+          console.log("routing to success");
           navigateTo("/auth/success");
         }
       }
