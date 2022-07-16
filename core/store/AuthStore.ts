@@ -50,7 +50,8 @@ export class AuthStorage {
 export const useAuthStore = defineStore({
   id: "AuthStore",
   state: () => ({
-    authLevel: AuthLevel.None
+    authLevel: AuthLevel.None,
+    authErrorMessage: ""
   }),
   getters: {
 
@@ -107,9 +108,6 @@ export const useAuthStore = defineStore({
         const account = await useWalletStore().wallet.signer.getCurrentAccount();
         useAccountStore().address = account.address;
 
-        console.log("Auth?");
-        console.log(account);
-
         // TODO: Auth Backend call
         /* const authSuccess = false;
         if (!authSuccess) {
@@ -118,7 +116,7 @@ export const useAuthStore = defineStore({
         } */
 
         // Retrieve the Desmos profile, if exxists
-        /*  const profile = await (await useWalletStore().wallet.client).getProfile(account.address);
+        const profile = await (await useWalletStore().wallet.client).getProfile(account.address);
         if (!profile) {
           // TODO: to consider accounts without profile
         }
@@ -130,7 +128,7 @@ export const useAuthStore = defineStore({
 
         // update the store
         useAccountStore().profile = profile;
-        useAccountStore().balance = Number(balance.amount) / 1_000_000; */
+        useAccountStore().balance = Number(balance.amount) / 1_000_000;
 
         // Store the auth data locally
         const storedAuthData: StoredAuthData = {

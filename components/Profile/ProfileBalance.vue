@@ -9,9 +9,17 @@
         {{ useAccountStore().balance }} DSM
       </p>
     </div>
+    <button class="px-1 py-0.5 bg-danger rounded-2xl" @click="logout()">
+      Logout
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useAccountStore } from "~~/core/store/AccountStore";
+import { useAuthStore } from "~~/core/store/AuthStore";
+
+function logout () {
+  useAuthStore().logout("/auth");
+}
 </script>
