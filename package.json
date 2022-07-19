@@ -7,10 +7,13 @@
     "build": "nuxt build",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "mf-dev": "npx ts-node --esm ./scripts/miniflare-simulate.ts"
+    "mf-dev": "NODE_OPTIONS='--max-old-space-size=8192' npx ts-node --esm ./scripts/miniflare-simulate.ts"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.14.1",
+    "@desmoslabs/desmjs": "4.0.0-alpha.2",
+    "@desmoslabs/desmjs-types": "^4.0.0",
+    "@desmoslabs/desmjs-walletconnect": "^4.0.0-alpha.1",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@keplr-wallet/types": "^0.10.12",
     "@nuxt/test-utils": "^3.0.0-rc.6",
@@ -32,9 +35,6 @@
     "vitest": "^0.13.1"
   },
   "dependencies": {
-    "@desmoslabs/desmjs": "4.0.0-alpha.2",
-    "@desmoslabs/desmjs-types": "^4.0.0",
-    "@desmoslabs/desmjs-walletconnect": "^4.0.0-alpha.1",
     "@nuxtjs/composition-api": "^0.33.0",
     "@pinia/nuxt": "^0.3.0",
     "buffer": "^6.0.3",

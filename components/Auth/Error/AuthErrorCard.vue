@@ -12,9 +12,6 @@
           <p class="text-2xl font-bold tracking-widest text-primary-text-light">
             Ops, something went wrong
           </p>
-          <p>
-            {{ props.errorMessage }}
-          </p>
           <AuthStatusButton class="bg-primary" @click="onErrorAction">
             Go Back
           </AuthStatusButton>
@@ -25,14 +22,7 @@
 </template>
 
 <script setup lang="ts">
-function onErrorAction () {
-  navigateTo(props.errorRoutingPath);
+async function onErrorAction () {
+  await navigateTo("");
 }
-
-interface Props {
-  errorMessage?: string;
-  errorRoutingPath?: string;
-}
-
-const props = defineProps<Props>();
 </script>

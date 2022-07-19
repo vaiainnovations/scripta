@@ -2,6 +2,7 @@ import { SigningMode } from "@desmoslabs/desmjs";
 import { defineStore } from "pinia";
 import { registerModuleHMR } from "..";
 // import { useAuthStore } from "../AuthStore";
+// import { useAuthStore } from "../AuthStore";
 import { DESMOS_TESTNET_CHAIN_INFO, KeplrSigner } from "./KeplrSigner";
 import { SupportedSigner, useWalletStore } from "./WalletStore";
 
@@ -40,7 +41,10 @@ export const useKeplrStore = defineStore({
       const isLedgerKeplrUser = (await window.keplr.getKey("morpheus-apollo-2")).isNanoLedger;
       if (isLedgerKeplrUser) {
         console.log("routing to /auth/error");
-        navigateTo("/auth/error");
+        /* useAuthStore().authErrorMessage = "Ledger is not supppported with Keplr, please use the Desmos App instead"; */
+        await navigateTo({
+          path: "/auth/error"
+        });
         return;
       }
 

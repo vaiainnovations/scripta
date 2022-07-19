@@ -89,7 +89,7 @@ export const useAuthStore = defineStore({
       localStorage.removeItem("walletconnect");
       console.log("logged out");
       if (route) {
-        navigateTo(route);
+        await navigateTo(route);
       }
     },
     /**
@@ -101,7 +101,7 @@ export const useAuthStore = defineStore({
         this.authLevel = AuthLevel.Wallet; // Wallet is connected
 
         if (useRouter().currentRoute.value.path.includes("auth")) {
-          navigateTo("/auth/loading");
+          await navigateTo("/auth/loading");
         }
 
         // Get the user address
@@ -141,7 +141,7 @@ export const useAuthStore = defineStore({
         // Route to the profile page only if coming from auth
         if (useRouter().currentRoute.value.path.includes("auth")) {
           console.log("routing to success");
-          navigateTo("/auth/success");
+          await navigateTo("/auth/success");
         }
       }
     }
