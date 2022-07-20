@@ -23,7 +23,8 @@ module.exports = {
     },
     fontFamily: {
       sans: ["Poppins", "sans-serif"],
-      serif: ["Poppins", "serif"]
+      serif: ["Poppins", "serif"],
+      milkdown: ["MilkdownIcons", "serif"]
     },
     extend: {
       spacing: {

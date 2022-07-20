@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "MilkdownIcons";
+  src: url("~/assets/fonts/MilkdownIcons.eot?jhilie");
+  src: url("~/assets/fonts/MilkdownIcons.eot?jhilie#iefix") format("embedded-opentype"),
+    url("~/assets/fonts/MilkdownIcons.ttf?jhilie") format("truetype"), url("~/assets/fonts/MilkdownIcons.woff?jhilie") format("woff"),
+    url("~/assets/fonts/MilkdownIcons.svg?jhilie#MilkdownIcons") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.milkdown-icons {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "MilkdownIcons" !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-code-circle:before {
+  content: "\e900";
+}
+.icon-link:before {
+  content: "\e901";
+}
+.icon-paperclip-2:before {
+  content: "\e902";
+}
+.icon-task:before {
+  content: "\e903";
+}
+.icon-text-bold:before {
+  content: "\e904";
+}
+.icon-text-italic:before {
+  content: "\e905";
+}
+.icon-text-underline:before {
+  content: "\e906";
+}

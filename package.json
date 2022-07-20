@@ -18,6 +18,14 @@
     "@keplr-wallet/types": "^0.10.12",
     "@nuxt/test-utils": "^3.0.0-rc.6",
     "@nuxt/test-utils-edge": "^3.0.0-rc.6-27635653.88f4525",
+    "@milkdown/core": "^6.2.0",
+    "@milkdown/plugin-listener": "^6.2.0",
+    "@milkdown/plugin-menu": "^6.2.0",
+    "@milkdown/plugin-tooltip": "^6.3.0",
+    "@milkdown/preset-commonmark": "^6.2.0",
+    "@milkdown/preset-gfm": "^6.2.0",
+    "@milkdown/prose": "^6.2.0",
+    "@milkdown/vue": "^6.2.0",
     "@nuxtjs/eslint-config-typescript": "^10.0.0",
     "@nuxtjs/tailwindcss": "^5.3.0",
     "@tailwindcss/typography": "^0.5.4",
@@ -35,6 +43,7 @@
     "vitest": "^0.13.1"
   },
   "dependencies": {
+    "@milkdown/theme-nord": "^6.2.0",
     "@nuxtjs/composition-api": "^0.33.0",
     "@pinia/nuxt": "^0.3.0",
     "buffer": "^6.0.3",

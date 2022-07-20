@@ -6,9 +6,13 @@
       <NavBarLogo />
       <!-- Search bar in the middle of the navbar -->
       <!-- TODO missing blur focus handler for search tooltip -->
-      <NavBarSearchBar />
+      <slot name="central">
+        <NavBarSearchBar />
+      </slot>
       <!-- Link to profile settings on the right of the navbar -->
-      <NavBarProfile />
+      <slot name="right">
+        <NavBarProfile />
+      </slot>
     </div>
   </div>
 </template>
