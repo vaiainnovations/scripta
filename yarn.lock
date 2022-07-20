@@ -586,6 +586,13 @@
   dependencies:
     tslib "^2.3.1"
 
+"@milkdown/exception@6.3.0":
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/@milkdown/exception/-/exception-6.3.0.tgz#16e81352fb663e9fbd0091ef3b096378b8f304fb"
+  integrity sha512-usgm547vKFV6wtzZ5Xx5zNZKzZ8PqGlvp6RiJCuZzdsFa1u346fBug6Jd25MraBJDcuYcyu51f+Jqjb0pMBLMg==
+  dependencies:
+    tslib "^2.4.0"
+
 "@milkdown/plugin-listener@^6.2.0":
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-listener/-/plugin-listener-6.2.0.tgz#b7079be478dfccd4e8e75f116f340c6dc94fc30c"
@@ -601,6 +608,15 @@
   dependencies:
     "@milkdown/utils" "6.2.0"
     tslib "^2.3.1"
+
+"@milkdown/plugin-tooltip@^6.3.0":
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/@milkdown/plugin-tooltip/-/plugin-tooltip-6.3.0.tgz#87906c63f762be6dacc06b3124272ed9ed8162b4"
+  integrity sha512-Ox0wsPHjuIcNcGOxlg+H5N4t0PcRqjjSC+B4Hr3IVoNdGUCir2VjrjI9rbxwA/tw/vfHho/Uc0qq323k4v/ULw==
+  dependencies:
+    "@milkdown/exception" "6.3.0"
+    "@milkdown/utils" "6.3.0"
+    tslib "^2.4.0"
 
 "@milkdown/preset-commonmark@^6.2.0":
   version "6.2.0"
@@ -673,6 +689,15 @@
     "@milkdown/exception" "6.2.0"
     nanoid "^4.0.0"
     tslib "^2.3.1"
+
+"@milkdown/utils@6.3.0":
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/@milkdown/utils/-/utils-6.3.0.tgz#dae6c61441113e2636da3bdefb40e569f499b676"
+  integrity sha512-FvPWowFGh/CIOJ5u/gRT5lo/gDM7IJLPYXsWYX6JOfTJAVnLoWG7mLqKpCHVTZAMJ4otDQfaeRwitIIG+Vk4kQ==
+  dependencies:
+    "@milkdown/exception" "6.3.0"
+    nanoid "^4.0.0"
+    tslib "^2.4.0"
 
 "@milkdown/vue@^6.2.0":
   version "6.2.0"
@@ -7451,7 +7476,7 @@ tslib@^1.8.1:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.1.0, tslib@^2.3.1:
+tslib@^2.1.0, tslib@^2.3.1, tslib@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
   integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==

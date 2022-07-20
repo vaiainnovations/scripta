@@ -6,8 +6,9 @@
 import { defaultValueCtx, Editor, rootCtx } from "@milkdown/core";
 import { VueEditor, useEditor } from "@milkdown/vue";
 // import { commonmark } from "@milkdown/preset-commonmark";
-import { gfm } from "@milkdown/preset-gfm";
+import { gfm, link } from "@milkdown/preset-gfm";
 import { listenerCtx, listener } from "@milkdown/plugin-listener";
+import { tooltip, tooltipPlugin } from "@milkdown/plugin-tooltip";
 import { customTheme } from "@/types/MilkDown/index";
 import { customMenu } from "@/types/MilkDown/menu";
 
@@ -25,7 +26,15 @@ const { editor } = useEditor(root =>
         });
     })
     .use(customTheme)
-    .use(gfm)
+    .use(gfm.configure(link, {
+      input: {
+        placeholder: "link",
+        buttonText: "Apply"
+      }
+    }))
+    .use(tooltip.configure(tooltipPlugin, {
+      bottom: true
+    }))
     .use(customMenu)
     .use(listener)
 );

@@ -1,22 +1,12 @@
 <template>
   <div class="flex flex-col gap-y-3">
     <p class="text-3xl font-bold text-primary-text lg:text-5xl xl:text-6xl">
-      Introducing Scripta.network
+      {{ props.title }}
     </p>
     <p class="text-xl font-medium text-primary-text-light lg:text-2xl xl:text-3xl">
       A decentralized censorship-resistant blog platform running on blockchain.
     </p>
-    <div class="flex flex-row gap-x-3 pt-2 lg:gap-x-2.5">
-      <img src="/svg/wallet/dpm/logo.svg" class="h-12 w-10 object-contain">
-      <div class="flex flex-col">
-        <p class="text-lg font-medium text-primary-text">
-          Nickname
-        </p>
-        <p class="text-sm font-medium text-primary-text-light">
-          May 20 - 2022
-        </p>
-      </div>
-    </div>
+    <ArticlesViewUser :user="props.user" />
     <div class="pt-7">
       <p class="text-xl font-medium text-primary-text">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus ante vel nisl consequat tincidunt. Vestibulum et diam nisi. Proin a
@@ -35,3 +25,18 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+interface UserType {
+  name: string,
+  date: string,
+  image: string
+}
+
+interface Props {
+  title: string
+  user: UserType
+}
+
+const props = defineProps<Props>();
+</script>

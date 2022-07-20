@@ -7,5 +7,5 @@ export interface ArticleSearch {
   title: string;
   description: string;
   image: string;
-  author: Author;
+  author: AuthorSearch;
 }

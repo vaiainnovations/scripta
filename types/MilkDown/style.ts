@@ -11,7 +11,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   const neutral = palette("neutral", 0.87);
   const surface = palette("surface");
   const line = palette("line");
-  const highlight = palette("secondary", 0.38);
+  //   const highlight = palette("secondary", 0.38);
 
   const selection = css`
         .ProseMirror-selectednode {
@@ -25,14 +25,10 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
         li.ProseMirror-selectednode::after {
             ${manager.get(ThemeBorder, undefined)};
         }
-
-        & ::selection {
-            background: ${highlight};
-        }
     `;
 
   const editorLayout = css`
-        height: 300px;
+        height: 100%;
         overflow-y: hidden;
         padding: 1.75rem;
         outline: none;
@@ -43,8 +39,8 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
 
   const paragraph = css`
         p {
-            font-size: 16px;
-            line-height: 1.5;
+            font-size: 1.25rem;
+            line-height: 1.75rem;
             letter-spacing: 0.5px;
         }
         .strike-through {
@@ -120,7 +116,6 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
         .list-item .paragraph {
             margin: 0;
         }
-
         .list-item {
             display: flex;
 
@@ -136,7 +131,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
             height: 24px;
             font-size: 16px;
             line-height: 1.5;
-            color: ${palette("primary")};
+            color: #FF0000;
         }
 
         .list-item[data-list-type='bullet'] {
@@ -353,7 +348,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   
           .milkdown {
             width: 100%;
-            height: 360px;
+            height: 632px;
     
             margin-left: auto;
             margin-right: auto;
