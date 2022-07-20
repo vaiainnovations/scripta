@@ -9,8 +9,8 @@ import { VueEditor, useEditor } from "@milkdown/vue";
 import { gfm, link } from "@milkdown/preset-gfm";
 import { listenerCtx, listener } from "@milkdown/plugin-listener";
 import { tooltip, tooltipPlugin } from "@milkdown/plugin-tooltip";
-import { customTheme } from "@/types/MilkDown/index";
-import { customMenu } from "@/types/MilkDown/menu";
+import { customTheme } from "~~/types/MilkDown";
+import { customMenu } from "~~/types/MilkDown/menu";
 
 const editorValue = ref("");
 
@@ -41,5 +41,4 @@ const { editor } = useEditor(root =>
 </script>
 
 <style>
-
 </style>
