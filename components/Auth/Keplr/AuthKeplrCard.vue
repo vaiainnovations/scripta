@@ -2,18 +2,20 @@
   <AuthCard>
     <template #card>
       <AuthKeplrDownloadCard v-if="count == 0" />
-      <AuthKeplrQRCard v-else />
+      <AuthKeplrConnectCard v-else />
     </template>
     <template #buttons>
       <AuthButtonsBack @edit-page="editCount">
         <AuthButtonsBackRouting v-if="count == 0" to="/auth" />
       </AuthButtonsBack>
-      <AuthButtonsNext v-if="count < maxPages" @edit-page="editCount" />
+      <!-- Let the user proceed only if Keplr is installed -->
+      <AuthButtonsNext v-if="count < maxPages && useKeplrStore().isInstalled" @edit-page="editCount" />
     </template>
   </AuthCard>
 </template>
 
 <script setup lang="ts">
+import { useKeplrStore } from "~~/core/store/wallet/KeplrStore";
 const maxPages = 1;
 const count = ref(0);
 

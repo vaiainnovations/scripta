@@ -1,6 +1,6 @@
 <template>
-  <div class="flex cursor-pointer flex-col items-center rounded-lg py-2 px-14">
-    <p class="text-base text-[#FFFFFF]">
+  <div class="flex flex-col items-center rounded-lg py-2 px-14 cursor-pointer">
+    <p class="text-[#FFFFFF] text-base select-none">
       <slot />
     </p>
   </div>

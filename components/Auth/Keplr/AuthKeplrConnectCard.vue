@@ -2,21 +2,21 @@
   <AuthContentCard>
     <AuthDescription>
       <p class="text-2xl font-extrabold">
-        Open and Scan.
+        Connect
       </p>
       <div>
         <p class="text-lg">
-          Open your WalletConnect App, and scan the QR code.
+          Click Continue and approve the authorization
         </p>
         <p class="text-sm text-gray">
-          Always make sure to scan QR codes from
+          Always make sure to connect from
           <b><a class="text-green">https://</a>scripta.network</b>
         </p>
       </div>
     </AuthDescription>
     <AuthStatusCard>
-      <img src="/svg/wallet/walletconnect/logo.svg" class="object-fill h-32">
-      <AuthStatusButton class="bg-[#177AFD]" @click="connect()">
+      <img src="/svg/wallet/keplr/logo.svg" class="object-fill h-32">
+      <AuthStatusButton class="bg-[#8C53B2]" @click="connect()">
         Connect
       </AuthStatusButton>
     </AuthStatusCard>
@@ -24,9 +24,12 @@
 </template>
 
 <script setup lang="ts">
-import { useWalletConnectStore } from "~~/core/store/wallet/WalletConnectStore";
+import { useKeplrStore } from "~~/core/store/wallet/KeplrStore";
 
+/**
+ * Keplr Connection
+ */
 async function connect () {
-  await useWalletConnectStore().connect();
+  await useKeplrStore().connect();
 }
 </script>

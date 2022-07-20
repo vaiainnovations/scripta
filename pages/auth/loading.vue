@@ -1,6 +1,6 @@
 <template>
   <section>
-    <AuthDesmosAppCard />
+    <AuthLoadingCard />
   </section>
 </template>
 

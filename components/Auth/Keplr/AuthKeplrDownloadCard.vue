@@ -5,7 +5,7 @@
         Browser Wallet
       </p>
       <p class="text-lg">
-        With Keplr you can access Web3 apps from Chrome Browser desktop.
+        With Keplr you can access Web3 apps from Chrome.
       </p>
     </AuthDescription>
     <AuthStatusCard>
@@ -18,6 +18,16 @@
 </template>
 
 <script setup lang="ts">
+import { useKeplrStore } from "~~/core/store/wallet/KeplrStore";
+await initKeplr();
+
+/**
+ * Start Keplr detection
+ */
+async function initKeplr () {
+  await useKeplrStore().init();
+}
+
 function onDownloadAction () {
   window.open("https://www.keplr.app/");
 }

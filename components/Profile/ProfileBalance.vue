@@ -6,12 +6,20 @@
     <div class="flex flex-row gap-x-3">
       <img src="/svg/wallet/dpm/logo.svg" class="h-5 w-5 object-contain">
       <p class="text-xl font-medium">
-        {{ accountBalance }} DSM
+        {{ useAccountStore().balance }} DSM
       </p>
     </div>
+    <button class="px-1 py-0.5 bg-danger rounded-2xl" @click="logout()">
+      Logout
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
-const accountBalance = 130;
+import { useAccountStore } from "~~/core/store/AccountStore";
+import { useAuthStore } from "~~/core/store/AuthStore";
+
+function logout () {
+  useAuthStore().logout("/auth");
+}
 </script>

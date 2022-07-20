@@ -5,15 +5,15 @@
         <div class="flex flex-col items-center justify-center gap-y-8">
           <div class="px-8">
             <img
-              src="/icons/linear/tick-circle.svg"
+              src="/icons/linear/close-circle.svg"
               class="h-32 object-contain"
             >
           </div>
           <p class="text-2xl font-bold tracking-widest text-primary-text-light">
-            Success
+            Ops, something went wrong
           </p>
-          <AuthStatusButton class="bg-primary" @click="onContinueAction">
-            Continue
+          <AuthStatusButton class="bg-primary" @click="onErrorAction">
+            Go Back
           </AuthStatusButton>
         </div>
       </AuthContentCard>
@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-function onContinueAction () {
-  navigateTo("/profile");
+async function onErrorAction () {
+  await navigateTo("");
 }
 </script>

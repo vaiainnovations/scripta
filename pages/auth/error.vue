@@ -1,6 +1,6 @@
 <template>
   <section>
-    <AuthDesmosAppCard />
+    <AuthErrorCard />
   </section>
 </template>
 

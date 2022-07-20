@@ -18,11 +18,12 @@ module.exports = {
   plugins: ["vue", "@typescript-eslint"],
   rules: {
     quotes: ["error", "double"],
+    "no-console": ["warn"],
     semi: ["error", "always"],
     indent: ["error", 2],
     "no-multi-spaces": ["error"],
     "no-unused-vars": [
-      "error",
+      "warn",
       {
         vars: "all",
         args: "after-used",

@@ -1,5 +1,10 @@
 <script lang="ts" setup>
 // Globally executed on every page load
+import { useAuthStore } from "./core/store/AuthStore";
+if (process.client) {
+  useAuthStore().init();
+}
+
 </script>
 
 <template>
