@@ -324,7 +324,6 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
 
   injectProsemirrorView(emotion);
 
-  // TODO Import css outside in a .css file (for tailwind) or viceversa, importing the icon css into this
   /* .milkdown is the container of the whole editor */
   /* .editor is the editable part, wrapped in the container  */
   injectGlobal`

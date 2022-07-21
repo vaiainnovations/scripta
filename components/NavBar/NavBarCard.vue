@@ -5,7 +5,6 @@
       <!-- Logo on the left of the navbar -->
       <NavBarLogo />
       <!-- Search bar in the middle of the navbar -->
-      <!-- TODO missing blur focus handler for search tooltip -->
       <slot name="central">
         <NavBarSearchBar />
       </slot>

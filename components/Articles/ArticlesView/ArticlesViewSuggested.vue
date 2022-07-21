@@ -3,7 +3,6 @@
     <p class="text-xs font-bold">
       {{ props.content.title }}
     </p>
-    <!-- TODO clip paragraph -->
     <p class="block h-8 overflow-hidden text-xs font-light">
       {{ props.content.description }}
     </p>

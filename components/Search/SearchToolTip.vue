@@ -31,7 +31,6 @@
 </template>
 
 <script setup lang="ts">
-// TODO add fetch request to db
 import { AuthorSearch, ArticleSearch } from "@/types/SearchResults";
 
 // content of the author

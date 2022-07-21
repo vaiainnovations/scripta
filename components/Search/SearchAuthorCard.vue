@@ -15,6 +15,5 @@ interface Props {
   content: AuthorSearch;
 }
 
-// TODO props redeclared block scoped
 const props = defineProps<Props>();
 </script>

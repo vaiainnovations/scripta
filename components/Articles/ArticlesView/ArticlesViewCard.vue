@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full flex-col gap-y-6 overflow-y-scroll bg-background px-4 py-5 md:px-32 lg:py-20 2xl:w-5/6 2xl:px-14" @scroll="handleNavbarChange">
+  <div class="flex h-full flex-col gap-y-6 overflow-y-scroll bg-background px-4 py-5 md:px-32 lg:py-20 2xl:w-5/6 2xl:px-14 2xl:border border-primary-text-light" @scroll="handleNavbarChange">
     <div class="flex h-6 flex-row items-center justify-start gap-x-4 py-0.5">
       <ArticlesViewTag v-for="tag in tags" :key="tag.i" :content="tag.content" />
       <!-- <svg

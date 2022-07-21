@@ -10,7 +10,7 @@
     </AuthDescription>
     <AuthStatusCard>
       <img src="/svg/wallet/dpm/logo.svg" class="h-24 object-fill md:h-32">
-      <AuthStatusButton class="bg-[#FFA756]" @click="onDownloadAction()">
+      <AuthStatusButton class="bg-orange-light" @click="onDownloadAction()">
         Download
       </AuthStatusButton>
     </AuthStatusCard>
