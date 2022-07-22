@@ -17,9 +17,9 @@ export const useKeplrStore = defineStore({
     /**
      * Init Keplr & check requirements
      */
-    async init (): Promise<void> {
+    init (): void {
       if (process.client) {
-        this.isInstalled = await window.keplr.version !== "";
+        this.isInstalled = window.keplr && window.keplr.version !== "";
       }
     },
     /**
