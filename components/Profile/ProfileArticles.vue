@@ -4,7 +4,9 @@
       <p class="text-2xl font-semibold">
         Your Articles
       </p>
-      <img src="/icons/bold/add-circle.svg" class="w-7 h-7 object-contain">
+      <NuxtLink to="/newarticle">
+        <img src="/icons/bold/add-circle.svg" class="w-7 h-7 object-contain">
+      </NuxtLink>
     </div>
     <div class="flex flex-col gap-y-9 w-4/5 justify-start items-center lg:w-full lg:gap-y-4">
       <ArticlesSmallPreview
