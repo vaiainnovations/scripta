@@ -25,6 +25,14 @@ export const iconsMapping = {
     label: "code",
     icon: "code-circle"
   },
+  bulletList: {
+    label: "bulletList",
+    icon: "task-dots"
+  },
+  orderedList: {
+    label: "orderedList",
+    icon: "task-numbered"
+  },
   paperclip: {
     label: "//",
     icon: "paperclip-2"

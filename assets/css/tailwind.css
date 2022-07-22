@@ -1,0 +1,6 @@
+@import "./milkdown.css";
+@import "./katex.min.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

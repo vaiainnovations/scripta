@@ -1,7 +1,16 @@
 import { menu, menuPlugin } from "@milkdown/plugin-menu";
-import { ToggleStrikeThrough, TurnIntoTaskList, ToggleItalic, ToggleBold, ToggleLink, ToggleInlineCode } from "@milkdown/preset-gfm";
+import {
+  ToggleStrikeThrough,
+  TurnIntoTaskList,
+  ToggleItalic,
+  ToggleBold,
+  ToggleLink,
+  ToggleInlineCode,
+  WrapInBulletList,
+  WrapInOrderedList
+} from "@milkdown/preset-gfm";
 import { EditorState } from "@milkdown/prose/state";
-import { MarkType } from "@milkdown/prose/model";
+import { MarkType, NodeType } from "@milkdown/prose/model";
 import { wrapIn } from "@milkdown/prose/commands";
 
 const hasMark = (state: EditorState, type: MarkType | undefined): boolean => {
@@ -15,6 +24,13 @@ const hasMark = (state: EditorState, type: MarkType | undefined): boolean => {
   return state.doc.rangeHasMark(from, to, type);
 };
 
+const notWrapped = (state: EditorState, node: NodeType | undefined): boolean => {
+  if (!node) {
+    return true;
+  }
+  return !wrapIn(node)(state);
+};
+
 export const customMenu = menu.configure(menuPlugin, {
   config: [
     [
@@ -23,7 +39,9 @@ export const customMenu = menu.configure(menuPlugin, {
         icon: "link",
         key: ToggleLink,
         active: view => hasMark(view.state, view.state.schema.marks.link)
-      },
+      }
+    ],
+    [
       {
         type: "button",
         icon: "bold",
@@ -44,22 +62,35 @@ export const customMenu = menu.configure(menuPlugin, {
         key: ToggleItalic,
         active: view => hasMark(view.state, view.state.schema.marks.em),
         disabled: view => !view.state.schema.marks.em
-      },
+      }
+    ],
+    [
       {
         type: "button",
         icon: "taskList",
         key: TurnIntoTaskList,
-        disabled: (view) => {
-          const { state } = view;
-          const node = state.schema.nodes.task_list_item;
-          if (!node) { return true; }
-          return !wrapIn(node)(state);
-        }
+        disabled: view => notWrapped(view.state, view.state.schema.nodes.task_list_item)
       },
       {
         type: "button",
+        icon: "bulletList",
+        key: WrapInBulletList,
+        disabled: view => notWrapped(view.state, view.state.schema.nodes.bullet_list)
+      },
+      {
+        type: "button",
+        icon: "orderedList",
+        key: WrapInOrderedList,
+        disabled: view => notWrapped(view.state, view.state.schema.nodes.ordered_list)
+      }
+    ],
+    [
+      {
+        type: "button",
         icon: "code",
-        key: ToggleInlineCode
+        key: ToggleInlineCode,
+        active: view => hasMark(view.state, view.state.schema.marks.code_inline),
+        disabled: view => !view.state.schema.marks.code_inline
       }
     ]
   ]

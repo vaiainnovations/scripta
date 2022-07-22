@@ -9,6 +9,12 @@ import { VueEditor, useEditor } from "@milkdown/vue";
 import { gfm, link } from "@milkdown/preset-gfm";
 import { listenerCtx, listener } from "@milkdown/plugin-listener";
 import { tooltip, tooltipPlugin } from "@milkdown/plugin-tooltip";
+import { upload } from "@milkdown/plugin-upload";
+import { math } from "@milkdown/plugin-math";
+import { diagram } from "@milkdown/plugin-diagram";
+import { emoji } from "@milkdown/plugin-emoji";
+import { block } from "@milkdown/plugin-block";
+
 import { customTheme } from "~~/types/MilkDown";
 import { customMenu } from "~~/types/MilkDown/menu";
 
@@ -35,6 +41,11 @@ const { editor } = useEditor(root =>
     .use(tooltip.configure(tooltipPlugin, {
       bottom: true
     }))
+    .use(upload)
+    .use(math)
+    .use(diagram)
+    .use(emoji)
+    .use(block)
     .use(customMenu)
     .use(listener)
 );

@@ -39,8 +39,8 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
 
   const paragraph = css`
         p {
-            font-size: 1.25rem;
-            line-height: 1.75rem;
+            font-size: 18px;
+            line-height: 28px;
             letter-spacing: 0.5px;
         }
         .strike-through {
@@ -131,7 +131,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
             height: 24px;
             font-size: 16px;
             line-height: 1.5;
-            color: #FF0000;
+            color: ${neutral};
         }
 
         .list-item[data-list-type='bullet'] {
@@ -367,6 +367,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
             }
               
             .editor {
+              position: relative;
               ${editorLayout};
 
               ${paragraph};
