@@ -1,5 +1,7 @@
 
 import { defineStore } from "pinia";
+import { generateUsername } from "unique-username-generator";
+import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v2/models_profile";
 import { SupportedSigner, useWalletStore } from "./wallet/WalletStore";
 import { useAccountStore } from "./AccountStore";
 import { registerModuleHMR } from ".";
@@ -115,10 +117,36 @@ export const useAuthStore = defineStore({
           return;
         } */
 
-        // Retrieve the Desmos profile, if exxists
+        // Retrieve the Desmos profile, if exists
         const profile = await (await useWalletStore().wallet.client).getProfile(account.address);
-        if (!profile) {
-          // TODO: to consider accounts without profile
+
+        if (profile) {
+          useAccountStore().profile = profile;
+          useAccountStore().isNewProfile = false;
+        }
+
+        if (!profile && (!useAccountStore().isNewProfile)) { // If no profile or if the new profile has been already generated
+          useAccountStore().isNewProfile = true;
+          // generate a new empty profile with a random username/nickname if the profile does not exists
+
+          // Generate a new valid random username
+          let username = "";
+          while (!/^[A-Za-z0-9_]+$/.test(username)) {
+            username = generateUsername("_", 0, 26).concat("" + Math.floor(Math.random() * 10000).toString());
+          }
+          // generate the nickname from the username
+          const nickname = (username.split("_").map(word => word[0].toUpperCase() + word.slice(1)).join(" ")).replace(/[0-9]/g, "");
+          const newProfile: Profile = {
+            dtag: username,
+            nickname,
+            bio: "",
+            pictures: {
+              cover: "",
+              profile: ""
+            },
+            creationDate: new Date(Date.now())
+          };
+          useAccountStore().profile = newProfile;
         }
 
         // TODO: to consider accounts with no balance
@@ -127,7 +155,6 @@ export const useAuthStore = defineStore({
         // TODO: call Backend for authz/grants
 
         // update the store
-        useAccountStore().profile = profile;
         useAccountStore().balance = Number(balance.amount) / 1_000_000;
 
         // Store the auth data locally

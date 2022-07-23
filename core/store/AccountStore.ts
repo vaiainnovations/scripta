@@ -7,7 +7,8 @@ export const useAccountStore = defineStore({
   state: () => ({
     address: "",
     profile: null as Profile,
-    balance: 0
+    balance: 0,
+    isNewProfile: false
   }),
   getters: {
 
