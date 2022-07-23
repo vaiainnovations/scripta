@@ -1,21 +1,21 @@
 <template>
   <ClientOnly v-if="useTransactionStore().queue.length>0">
-    <div class="absolute top-28 md:top-20 right-8 bg-background-alt border-2 border-gray-dark py-2 px-2 rounded-2xl text-xl shadow-xl">
+    <div class="absolute top-28 md:top-20 right-8 bg-background-alt border-2 border-gray-dark py-2 px-2 rounded-2xl text-xl shadow-xl max-w-[85%] md:max-w-[30%] z-30">
       <div class="">
         <div v-if="useTransactionStore().status==='waiting'">
           <TransactionsQueueOverlayWaiting />
         </div>
         <div v-if="useTransactionStore().status==='signing'">
-          Signing
+          <TransactionsQueueOverlaySigning />
         </div>
         <div v-if="useTransactionStore().status==='pending'">
-          Pending
+          <TransactionsQueueOverlayPending />
         </div>
         <div v-if="useTransactionStore().status==='success'">
-          Success
+          <TransactionsQueueOverlaySuccess />
         </div>
         <div v-if="useTransactionStore().status==='failed'">
-          Failed
+          <TransactionsQueueOverlayFailed />
         </div>
       </div>
     </div>

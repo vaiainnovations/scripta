@@ -7,6 +7,7 @@ export const useDesmosStore = defineStore({
     chainId: "morpheus-apollo-2",
     rpc: "https://rpc-testnet.go-find.me/",
     lcd: "https://lcd-testnet.go-find.me/",
+    explorer: "https://morpheus.desmos.network/",
     // eslint-disable-next-line prefer-regex-literals
     usernameRegexp: new RegExp("^[A-Za-z0-9_]{6,30}$")
   })

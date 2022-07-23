@@ -1,6 +1,10 @@
 /* eslint-disable no-unused-vars */
 import { defineStore } from "pinia";
 import { EncodeObject } from "@cosmjs/proto-signing";
+import { StdFee } from "@cosmjs/stargate";
+import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
+import { useWalletStore } from "./wallet/WalletStore";
+import { useAccountStore } from "./AccountStore";
 import { registerModuleHMR } from ".";
 
 export enum QueueStatus {
@@ -15,13 +19,64 @@ export const useTransactionStore = defineStore({
   id: "TransactionStore",
   state: () => ({
     queue: [] as EncodeObject[],
-    status: QueueStatus.WAITING
+    status: QueueStatus.WAITING,
+    errorText: "",
+    hash: ""
   }),
   actions: {
     push (message: EncodeObject): void {
       // check if the draft is not empty
-      // TODO: add controls to prevent pushing same message twice, and same operations (ex. 2 profile updates)
+      // TODO: add controls to prevent pushing same message twice, and same operations (ex. 2 profile updates, works but is not ideal)
+      if (this.status === QueueStatus.FAILED) {
+        this.$reset();
+      }
       this.queue.push(message);
+    },
+    async execute (): Promise<void> {
+      // check if the draft is not empty
+      try {
+        this.status = QueueStatus.SIGNING;
+        const client = (await useWalletStore().wallet.client);
+        const address = useAccountStore().address;
+        const defaultFee: StdFee = {
+          amount: [{
+            amount: "1000",
+            denom: "udaric"
+          }],
+          gas: "200000"
+        };
+
+        // sign the messages
+        const signed = await client.sign(address, this.queue, defaultFee, "Signed from Scripta.network");
+        const txBytes = TxRaw.encode(signed).finish();
+
+        // broadcast the messages
+        this.status = QueueStatus.PENDING;
+        const broadcastResult = await client.broadcastTx(txBytes, 8000, 2000);
+
+        // parse the result
+        if (broadcastResult.code !== 0) {
+          this.status = QueueStatus.FAILED;
+          this.errorText = `${broadcastResult.rawLog}`;
+          this.hash = broadcastResult.transactionHash;
+          // this.resetQueueWithTimer(8);
+        } else {
+          this.status = QueueStatus.SUCCESS;
+          this.resetQueueWithTimer(5);
+        }
+        this.hash = broadcastResult.transactionHash;
+
+        // TODO: ask for a profile refresh
+      } catch (e) {
+        this.status = QueueStatus.FAILED;
+        this.errorText = `${e}`;
+      }
+    },
+    resetQueueWithTimer (s: number): void {
+      setTimeout(() => {
+        this.$reset();
+        console.log("TransactionModule reset");
+      }, s * 1000);
     }
   }
 });
