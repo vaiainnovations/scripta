@@ -19,17 +19,14 @@ import { customTheme } from "~~/types/MilkDown";
 import { customMenu } from "~~/types/MilkDown/menu";
 import { useDraftStore } from "~~/core/store/DraftStore";
 
-const editorValue = ref("# Hello, Milkdown! \n ## ***a nice post***");
-
 const { editor } = useEditor(root =>
   Editor
     .make()
     .config((ctx) => {
       ctx.set(rootCtx, root);
-      ctx.set(defaultValueCtx, editorValue.value);
+      ctx.set(defaultValueCtx, useDraftStore().content);
       ctx.get(listenerCtx)
         .markdownUpdated((_, markdown) => {
-          editorValue.value = markdown;
           useDraftStore().content = markdown;
         });
     })
