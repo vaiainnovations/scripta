@@ -1,10 +1,10 @@
 <template>
-  <div class="block relative h-5 w-20 col-span-3 lg:col-span-1">
+  <div class="block relative h-5 w-11/12 col-span-12 sm:col-span-4 md:col-span-3 lg:col-span-2">
     <ArticlesViewTag class="justify-start py-0" :content="content">
       <input
         :value="modelValue"
         type="text"
-        class="bg-primary-light text-left text-xs text-background-alt w-full h-5 rounded-xl pl-0.5"
+        class="bg-primary-light text-left text-background-alt w-full rounded-xl px-2"
         maxlength="15"
         :readonly="!enableEdit"
         @input="handleInput"

@@ -17,8 +17,9 @@ import { block } from "@milkdown/plugin-block";
 
 import { customTheme } from "~~/types/MilkDown";
 import { customMenu } from "~~/types/MilkDown/menu";
+import { useDraftStore } from "~~/core/store/DraftStore";
 
-const editorValue = ref("");
+const editorValue = ref("# Hello, Milkdown! \n ## ***a nice post***");
 
 const { editor } = useEditor(root =>
   Editor
@@ -29,6 +30,7 @@ const { editor } = useEditor(root =>
       ctx.get(listenerCtx)
         .markdownUpdated((_, markdown) => {
           editorValue.value = markdown;
+          useDraftStore().content = markdown;
         });
     })
     .use(customTheme)
