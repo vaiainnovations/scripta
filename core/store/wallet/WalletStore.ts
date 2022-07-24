@@ -3,7 +3,7 @@ import { DesmosClient, NoOpSigner, Signer, SignerStatus } from "@desmoslabs/desm
 import { registerModuleHMR } from "..";
 import { useAuthStore } from "../AuthStore";
 import { useDesmosStore } from "../DesmosStore";
-import { useWalletConnectStore } from "./WalletConnectStore";
+/* import { useWalletConnectStore } from "./WalletConnectStore"; */
 import { useKeplrStore } from "./KeplrStore";
 
 export enum SupportedSigner {
@@ -39,9 +39,10 @@ export const useWalletStore = defineStore({
       case SupportedSigner.Keplr:
         await useKeplrStore().connect();
         break;
-      case SupportedSigner.WalletConnect:
+        // TODO: NEED TO FIND A FIX FOR WALLETCONNECT
+        /* case SupportedSigner.WalletConnect:
         await useWalletConnectStore().connect();
-        break;
+        break; */
 
       default:
         break;

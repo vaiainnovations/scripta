@@ -10,19 +10,13 @@ const mode = process.env.NODE_ENV === "production" ? "production" : "development
 let nitro = {};
 if (mode === "production") {
   nitro = {
-    entry: null,
-    node: false,
-    minify: true,
-    noExternals: true,
     rollupConfig: {
       output: {
-        format: "iife",
         generatedCode: {
           symbols: true
         }
       }
-    },
-    inlineDynamicImports: true
+    }
   };
 }
 
