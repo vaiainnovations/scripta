@@ -1,12 +1,12 @@
 import { defineStore } from "pinia";
-import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v2/models_profile";
+/* import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v2/models_profile"; */
 import { registerModuleHMR } from ".";
 
 export const useAccountStore = defineStore({
   id: "AccountStore",
   state: () => ({
     address: "",
-    profile: null as Profile,
+    profile: null /* as Profile */,
     balance: 0,
     isNewProfile: false
   }),

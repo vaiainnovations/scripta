@@ -85,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import { MsgSaveProfileEncodeObject } from "@desmoslabs/desmjs";
+/* import { MsgSaveProfileEncodeObject } from "@desmoslabs/desmjs"; */
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDesmosStore } from "~~/core/store/DesmosStore";
 import { useTransactionStore } from "~~/core/store/TransactionStore";
@@ -101,7 +101,7 @@ const isValidUsername = ref(true);
 function saveProfile () {
   const doNotModify = "[do-not-modify]";
   const oldProfile = useAccountStore().profile;
-  const msgSaveProfile: MsgSaveProfileEncodeObject = {
+  const msgSaveProfile/* : MsgSaveProfileEncodeObject */ = {
     typeUrl: "/desmos.profiles.v2.MsgSaveProfile",
     value: {
       dtag:

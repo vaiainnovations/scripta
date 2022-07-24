@@ -1,7 +1,9 @@
 <template>
   <section>
     <NuxtLayout name="custom">
-      <ArticlesCreate />
+      <ClientOnly>
+        <ArticlesCreate />
+      </ClientOnly>
     </NuxtLayout>
   </section>
 </template>

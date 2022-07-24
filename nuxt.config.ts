@@ -4,9 +4,31 @@ import eslintPlugin from "vite-plugin-eslint";
 
 import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
 const path = require("path");
+const mode = process.env.NODE_ENV === "production" ? "production" : "development";
+
+// Use a custom Nitro configuration on production mode for Cloudflare SSR, otherwise use the default
+let nitro = {};
+if (mode === "production") {
+  nitro = {
+    entry: null,
+    node: false,
+    minify: true,
+    noExternals: true,
+    rollupConfig: {
+      output: {
+        format: "iife",
+        generatedCode: {
+          symbols: true
+        }
+      }
+    },
+    inlineDynamicImports: true
+  };
+}
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
+  nitro,
   tailwindcss: {
     cssPath: "@/assets/css/tailwind.css",
     configPath: "tailwind.config.js",
@@ -43,5 +65,8 @@ export default defineNuxtConfig({
   alias: {
     "@vue/devtools-api": "@vue/devtools-api"
   },
-  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"]
+  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
+  experimental: {
+    treeshakeClientOnly: true
+  }
 });

@@ -1,7 +1,7 @@
 <template>
-  <section>
+  <ClientOnly>
     <AuthDesmosAppCard />
-  </section>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
