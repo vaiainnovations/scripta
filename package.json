@@ -38,6 +38,7 @@
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
     "c8": "^7.11.3",
+    "cosmjs-types": "^0.5.0",
     "eslint": "^8.20.0",
     "eslint-plugin-vue": "^9.2.0",
     "katex": "^0.16.0",

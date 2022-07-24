@@ -3166,6 +3166,14 @@ cosmjs-types@^0.4.0, cosmjs-types@^0.4.1:
     long "^4.0.0"
     protobufjs "~6.11.2"
 
+cosmjs-types@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/cosmjs-types/-/cosmjs-types-0.5.0.tgz#2497a2c5ddf62a8e8dea03e0725b8cd763d4ab4f"
+  integrity sha512-Qy2yxDp5HasBUnBV5OL9EOuTJw94LAbCWfiRb5QcW1sqh93KSSY5PpNMB3rTsxwuPcf/k3CNRY02DeQMjrsJuA==
+  dependencies:
+    long "^4.0.0"
+    protobufjs "~6.11.2"
+
 cosmos-wallet@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/cosmos-wallet/-/cosmos-wallet-1.2.0.tgz#1243066fe933cf5482de1aec0b96169cebe867c6"
@@ -9395,6 +9403,11 @@ unimport@^0.6.1:
     strip-literal "^0.4.0"
     unplugin "^0.7.2"
 
+unique-username-generator@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/unique-username-generator/-/unique-username-generator-1.1.1.tgz#7434bd3e9b53110342a752de18ae715d56e1b254"
+  integrity sha512-0FOgI/8T7czM9d7OmDLLTf/DrmsGKYgz6+AmgTEwV61ydbtr7NWmROKV+vY68e/V9xtIpidIY3hYiwEJB6Tg6Q==
+
 unist-util-is@^5.0.0:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/unist-util-is/-/unist-util-is-5.1.1.tgz#e8aece0b102fa9bc097b0fef8f870c496d4a6236"
@@ -9515,6 +9528,11 @@ util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
+
+uuid@^8.3.2:
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 uvu@^0.5.0:
   version "0.5.6"
