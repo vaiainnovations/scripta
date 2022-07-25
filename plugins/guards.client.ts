@@ -1,5 +1,4 @@
 import { useAuthStore } from "~~/core/store/AuthStore";
-console.log("Defining Client guards");
 export default defineNuxtPlugin(() => {
   /**
    * Override default `authenticated` guard

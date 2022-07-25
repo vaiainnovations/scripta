@@ -32,7 +32,7 @@ export const useTransactionStore = defineStore({
       }
       this.queue.push(message);
     },
-    async execute (): Promise<void> {
+    async execute (): Promise<Uint8Array> {
       // check if the draft is not empty
       try {
         this.status = QueueStatus.SIGNING;
@@ -65,11 +65,53 @@ export const useTransactionStore = defineStore({
           this.resetQueueWithTimer(5);
         }
         this.hash = broadcastResult.transactionHash;
-
+        return txBytes;
         // TODO: ask for a profile refresh
       } catch (e) {
         this.status = QueueStatus.FAILED;
         this.errorText = `${e}`;
+        this.resetQueueWithTimer(10);
+      }
+    },
+    async directSign (): Promise<Uint8Array> {
+      // check if the draft is not empty
+      try {
+        this.status = QueueStatus.SIGNING;
+        const client = (await useWalletStore().wallet.client);
+        const address = useAccountStore().address;
+        const defaultFee: StdFee = {
+          amount: [{
+            amount: "1000",
+            denom: "udaric"
+          }],
+          gas: "200000"
+        };
+
+        // sign the messages
+        const signed = await client.sign(address, this.queue, defaultFee, "Signed from Scripta.network");
+        const txBytes = TxRaw.encode(signed).finish();
+
+        // broadcast the messages
+        this.status = QueueStatus.PENDING;
+        /* const broadcastResult = await client.broadcastTx(txBytes, 8000, 2000);
+
+        // parse the result
+        if (broadcastResult.code !== 0) {
+          this.status = QueueStatus.FAILED;
+          this.errorText = `${broadcastResult.rawLog}`;
+          this.hash = broadcastResult.transactionHash;
+          // this.resetQueueWithTimer(8);
+        } else {
+          this.status = QueueStatus.SUCCESS;
+          this.resetQueueWithTimer(5);
+        }
+        this.hash = broadcastResult.transactionHash; */
+        return txBytes;
+        // TODO: ask for a profile refresh
+      } catch (e) {
+        this.status = QueueStatus.FAILED;
+        this.errorText = `${e}`;
+        this.resetQueueWithTimer(10);
       }
     },
     resetQueueWithTimer (s: number): void {

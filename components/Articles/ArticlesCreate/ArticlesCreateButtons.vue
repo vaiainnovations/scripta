@@ -1,24 +1,37 @@
 <template>
   <div class="grid grid-cols-2 lg:grid-cols-6 w-full gap-y-4 gap-x-6 lg:gap-x-4 xl:gap-x-10">
     <button
+      v-if="!isPublishing"
       type="button"
       class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-primary-text text-xl font-medium"
     >
       Save Draft
     </button>
     <button
+      v-if="!isPublishing"
       type="button"
       class="col-span-1 rounded-xl text-[#FFFFFF] bg-danger text-xl font-medium"
     >
       Delete
     </button>
-    <button
-      type="button"
-      class="col-span-2 lg:col-start-5 rounded-xl text-[#FFFFFF] bg-primary text-xl font-medium"
-      @click="publish()"
-    >
-      Publish
-    </button>
+    <div class="col-span-2 lg:col-start-5">
+      <span v-if="!isPublishing">
+        <button
+          v-if="useDraftStore().title && useDraftStore().subtitle && useDraftStore().content"
+          type="button"
+          class="w-full h-full rounded-xl text-[#FFFFFF] bg-primary text-xl font-medium"
+          @click="publish()"
+        >
+          Publish
+        </button>
+      </span>
+      <span v-else>
+        <img
+          src="/svg/spinner/dots.svg"
+          class="mx-auto h-4 object-contain fill-white"
+        >
+      </span>
+    </div>
   </div>
 </template>
 
@@ -32,8 +45,11 @@ import { useDraftStore } from "~~/core/store/DraftStore";
 import { useTransactionStore } from "~~/core/store/TransactionStore";
 import { useIpfsStore } from "~~/core/store/IpfsStore";
 
+const isPublishing = ref(false);
+
 async function publish () {
   const draftStore = useDraftStore();
+  isPublishing.value = true;
   const extId = uuidv4();
 
   const msgCreatePost: MsgCreatePostEncodeObject = {
@@ -45,14 +61,14 @@ async function publish () {
       author: useAccountStore().address,
       text: draftStore.title,
       sectionId: 2,
-      tags: [],
+      tags: useDraftStore().tags.map(tag => tag.content.value),
       conversationId: Long.fromNumber(0),
       referencedPosts: [],
       replySettings: 1
     }
   };
 
-  // upload the post (without CID attachment) to IPFS, get the CID
+  // craft a custom object for IPFS
   const ipfsPost: any = {
     ...msgCreatePost.value,
     text: {
@@ -61,15 +77,21 @@ async function publish () {
       content: draftStore.content
     }
   };
+
+  // upload the post to IPFS (without CID attachment), get the returned CID
   const postCid = await useIpfsStore().uploadPost(JSON.stringify(ipfsPost));
+
   const postIpfsUrl = `https://cloudflare-ipfs.com/ipfs/${postCid}`;
+
+  // attach the CID to the Post
   msgCreatePost.value.attachments = [{
     typeUrl: "/desmos.posts.v2.Media",
     value: Media.encode({
-      mimeType: "text/plain",
+      mimeType: "text/json",
       uri: postIpfsUrl
     }).finish()
   }];
+
   useTransactionStore().push(msgCreatePost);
   const signedBytes = await useTransactionStore().execute();
 
@@ -89,5 +111,6 @@ async function publish () {
     })
   ).json(); */
   console.log(signedBytes);
+  isPublishing.value = false;
 }
 </script>
