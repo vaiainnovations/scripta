@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { defineNuxtConfig } from "nuxt";
 import eslintPlugin from "vite-plugin-eslint";
-
 import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
+import { NodeModulesPolyfillPlugin } from "@esbuild-plugins/node-modules-polyfill";
+import inject from "@rollup/plugin-inject";
 const path = require("path");
 const mode = process.env.NODE_ENV === "production" ? "production" : "development";
 
@@ -22,6 +23,20 @@ if (mode === "production") {
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
+  alias: {
+    "@": path.resolve(__dirname, "/src"),
+    process: "process/browser",
+    stream: "stream-browserify",
+    buffer: "buffer",
+    Buffer: "buffer"
+  },
+  build: {
+    plugins: [
+      NodeGlobalsPolyfillPlugin({
+        buffer: true
+      })
+    ]
+  },
   nitro,
   tailwindcss: {
     cssPath: "@/assets/css/tailwind.css",
@@ -31,6 +46,12 @@ export default defineNuxtConfig({
     viewer: true
   },
   vite: {
+    build: {
+      rollupOptions: {
+        plugins: [
+          inject({ Buffer: ["buffer", "Buffer"] })]
+      }
+    },
     plugins: [eslintPlugin()],
     resolve: {
       extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
@@ -38,7 +59,8 @@ export default defineNuxtConfig({
         "@": path.resolve(__dirname, "/src"),
         process: "process/browser",
         stream: "stream-browserify",
-        buffer: "buffer"
+        buffer: "buffer",
+        Buffer: "buffer"
       }
     },
     optimizeDeps: {
@@ -50,9 +72,16 @@ export default defineNuxtConfig({
         // Enable esbuild polyfill plugins
         plugins: [
           NodeGlobalsPolyfillPlugin({
+            process: true,
             buffer: true
-          })
+          }),
+          NodeModulesPolyfillPlugin()
         ]
+      }
+    },
+    esbuild: {
+      define: {
+        global: "globalThis"
       }
     }
   },

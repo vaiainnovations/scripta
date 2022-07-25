@@ -1,5 +1,6 @@
 import { useAuthStore } from "~~/core/store/AuthStore";
 export default defineNuxtPlugin(() => {
+  console.log("Loaded Client plugins");
   /**
    * Override default `authenticated` guard
    * Ensure user is authenticated, otherwise redirect to auth page
