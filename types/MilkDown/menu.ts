@@ -1,17 +1,20 @@
 import { menu, menuPlugin } from "@milkdown/plugin-menu";
 import {
   ToggleStrikeThrough,
-  TurnIntoTaskList,
+  // TurnIntoTaskList,
   ToggleItalic,
   ToggleBold,
   ToggleLink,
-  ToggleInlineCode,
+  TurnIntoCodeFence,
   WrapInBulletList,
-  WrapInOrderedList
+  WrapInOrderedList,
+  ToggleInlineCode,
+  InsertHr
 } from "@milkdown/preset-gfm";
+
 import { EditorState } from "@milkdown/prose/state";
 import { MarkType, NodeType } from "@milkdown/prose/model";
-import { wrapIn } from "@milkdown/prose/commands";
+import { wrapIn, setBlockType } from "@milkdown/prose/commands";
 
 const hasMark = (state: EditorState, type: MarkType | undefined): boolean => {
   if (!type) {
@@ -24,6 +27,13 @@ const hasMark = (state: EditorState, type: MarkType | undefined): boolean => {
   return state.doc.rangeHasMark(from, to, type);
 };
 
+const notBlockType = (state: EditorState, node: NodeType | undefined): boolean => {
+  if (!node) {
+    return true;
+  }
+  return !setBlockType(node)(state);
+};
+
 const notWrapped = (state: EditorState, node: NodeType | undefined): boolean => {
   if (!node) {
     return true;
@@ -31,67 +41,83 @@ const notWrapped = (state: EditorState, node: NodeType | undefined): boolean => 
   return !wrapIn(node)(state);
 };
 
-export const customMenu = menu.configure(menuPlugin, {
-  config: [
-    [
-      {
-        type: "button",
-        icon: "link",
-        key: ToggleLink,
-        active: view => hasMark(view.state, view.state.schema.marks.link)
-      }
-    ],
-    [
-      {
-        type: "button",
-        icon: "bold",
-        key: ToggleBold,
-        active: view => hasMark(view.state, view.state.schema.marks.strong),
-        disabled: view => !view.state.schema.marks.strong
-      },
-      {
-        type: "button",
-        icon: "strikeThrough",
-        key: ToggleStrikeThrough,
-        active: view => hasMark(view.state, view.state.schema.marks.strike_through),
-        disabled: view => !view.state.schema.marks.strike_through
-      },
-      {
-        type: "button",
-        icon: "italic",
-        key: ToggleItalic,
-        active: view => hasMark(view.state, view.state.schema.marks.em),
-        disabled: view => !view.state.schema.marks.em
-      }
-    ],
-    [
-      {
-        type: "button",
-        icon: "taskList",
-        key: TurnIntoTaskList,
-        disabled: view => notWrapped(view.state, view.state.schema.nodes.task_list_item)
-      },
-      {
-        type: "button",
-        icon: "bulletList",
-        key: WrapInBulletList,
-        disabled: view => notWrapped(view.state, view.state.schema.nodes.bullet_list)
-      },
-      {
-        type: "button",
-        icon: "orderedList",
-        key: WrapInOrderedList,
-        disabled: view => notWrapped(view.state, view.state.schema.nodes.ordered_list)
-      }
-    ],
-    [
-      {
-        type: "button",
-        icon: "code",
-        key: ToggleInlineCode,
-        active: view => hasMark(view.state, view.state.schema.marks.code_inline),
-        disabled: view => !view.state.schema.marks.code_inline
-      }
+export const customMenu = menu
+  .configure(menuPlugin, {
+    config: [
+      [
+        {
+          type: "button",
+          icon: "link",
+          key: ToggleLink,
+          active: view => hasMark(view.state, view.state.schema.marks.link),
+          disabled: view => !view.state.schema.marks.link
+        }
+      ],
+      [
+        {
+          type: "button",
+          icon: "bold",
+          key: ToggleBold,
+          active: view => hasMark(view.state, view.state.schema.marks.strong),
+          disabled: view => !view.state.schema.marks.strong
+        },
+        {
+          type: "button",
+          icon: "strikeThrough",
+          key: ToggleStrikeThrough,
+          active: view => hasMark(view.state, view.state.schema.marks.strike_through),
+          disabled: view => !view.state.schema.marks.strike_through
+        },
+        {
+          type: "button",
+          icon: "italic",
+          key: ToggleItalic,
+          active: view => hasMark(view.state, view.state.schema.marks.em),
+          disabled: view => !view.state.schema.marks.em
+        },
+        {
+          type: "button",
+          icon: "inlineCode",
+          key: ToggleInlineCode,
+          active: view => hasMark(view.state, view.state.schema.marks.code_inline),
+          disabled: view => !view.state.schema.marks.code_inline
+        }
+      ],
+      [
+        {
+          type: "button",
+          icon: "divider",
+          key: InsertHr,
+          disabled: view => notBlockType(view.state, view.state.schema.nodes.hr)
+        }
+      ],
+      [
+      // {
+      //   type: "button",
+      //   icon: "taskList",
+      //   key: TurnIntoTaskList,
+      //   disabled: view => notWrapped(view.state, view.state.schema.nodes.task_list_item)
+      // },
+        {
+          type: "button",
+          icon: "bulletList",
+          key: WrapInBulletList,
+          disabled: view => notWrapped(view.state, view.state.schema.nodes.bullet_list)
+        },
+        {
+          type: "button",
+          icon: "orderedList",
+          key: WrapInOrderedList,
+          disabled: view => notWrapped(view.state, view.state.schema.nodes.ordered_list)
+        }
+      ],
+      [
+        {
+          type: "button",
+          icon: "code",
+          key: TurnIntoCodeFence,
+          disabled: view => notBlockType(view.state, view.state.schema.nodes.fence)
+        }
+      ]
     ]
-  ]
-});
+  });

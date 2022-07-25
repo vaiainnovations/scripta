@@ -6,384 +6,387 @@ import { injectProsemirrorView } from "@milkdown/theme-pack-helper";
 
 export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   const { injectGlobal, css } = emotion;
+
+  // colors
   const palette = getPalette(manager);
-  const radius = manager.get(ThemeSize, "radius");
-  const neutral = palette("neutral", 0.87);
-  const surface = palette("surface");
-  const line = palette("line");
+  // const primaryColor = palette("primary");
+  const secondaryColor = palette("secondary");
+  const neutralColor = palette("neutral");
+  const neutralAltColor = palette("neutral", 0.87);
   //   const highlight = palette("secondary", 0.38);
+  const solidColor = palette("solid");
+  const solidColorAlt = palette("solid", 0.4);
+  const lineColor = palette("line");
+  const surfaceColor = palette("surface");
+  const backgroundColor = palette("background");
 
+  // sizes
+  const radius = manager.get(ThemeSize, "radius");
+  const lineWidth = manager.get(ThemeSize, "lineWidth");
+
+  // borders
+  const borderAll = manager.get(ThemeBorder, undefined);
+  // const borderTop = manager.get(ThemeBorder, "top");
+
+  // fonts
+  const codeFont = manager.get(ThemeFont, "code");
+  const typographyFont = manager.get(ThemeFont, "typography");
+
+  // scrollbar
+  const scrollBarX = manager.get(ThemeScrollbar, ["x"]);
+  const scrollBarY = manager.get(ThemeScrollbar, ["y", "thin"]);
+
+  // shadow
+  const shadow = manager.get(ThemeShadow, undefined);
+
+  // text properties
+  const textFontSize = "1.125rem";
+  const textLineHeight = "1.75rem";
+
+  // Code style
+  const codeStyle = css`
+    .code-fence {
+      ${borderAll};
+
+      pre {
+        font-family: ${codeFont};
+        margin: 0 1.2em !important;
+        white-space: pre;
+        overflow: auto;
+        padding: 0.5rem;
+        ${scrollBarX}
+
+        background-color: ${backgroundColor};
+        color: ${neutralColor};
+        font-size: 1rem;
+        border-radius: ${radius};
+
+        code {
+          line-height: 1.5;
+          font-family: ${codeFont};
+        }
+      }
+    }
+  `;
+
+  const inlineStyle = css`
+    .code-inline {
+      background-color: ${solidColor};
+      color: ${backgroundColor};
+      border-radius: ${radius};
+      font-weight: 500;
+      font-family: ${codeFont};
+      padding: 0 0.2em;
+    }
+
+    .strong {
+      font-weight: 600;
+    }
+
+    .link,
+    a {
+      color: ${secondaryColor};
+      cursor: pointer;
+      transition: all 0.4s ease-in-out;
+      font-weight: 500;
+      &:hover {
+        background-color: ${lineColor};
+        box-shadow: 0 0.2em ${lineColor}, 0 -0.2em ${lineColor};
+      }
+    }
+
+    .strike-through {
+      text-decoration-color: ${secondaryColor};
+    }
+  `;
+
+  // Horizontal line style
+  const hrStyle = css`
+    hr {
+      height: ${lineWidth};
+      background-color: ${lineColor};
+      border-width: 0;
+    }
+  `;
+
+  // Blockquote style
+  /* const blockquoteStyle = css`
+    blockquote {
+      padding-left: 1.875em;
+      line-height: 1.75em;
+      border-left: 4px solid ${primaryColor};
+      margin-left: 0;
+      margin-right: 0;
+      * {
+        font-size: 1rem;
+        line-height: 1.5rem;
+      }
+    }
+  `; */
+
+  // Heading style
+  /* const headingStyle = css`
+    h1 {
+      font-size: 3em;
+      line-height: 1.167;
+    }
+    h2 {
+      font-size: 2.5em;
+      line-height: 1.2;
+    }
+    h3 {
+      font-size: 2.125em;
+      line-height: 1.05;
+    }
+    h4 {
+      font-size: 1.75em;
+      line-height: 1.14;
+    }
+    h5 {
+      font-size: 1.5em;
+      line-height: 1;
+    }
+    h6 {
+      font-size: 1.25em;
+      line-height: 1;
+    }
+    .heading {
+      margin: 40px 0;
+      font-weight: 400;
+    }
+  `; */
+
+  // Paragraph style
+  const paragraphStyle = css`
+    p {
+      font-size: ${textFontSize};
+      line-height: ${textLineHeight};
+      letter-spacing: 0.5px;
+    }
+  `;
+
+  // Strike through style
+  const strikeThroughStyle = css`
+    .strike-through {
+      text-decoration: underline;
+    }
+  `;
+
+  const listStyle = css`
+    ul,
+    ol {
+      padding: 0;
+    }
+
+    .list-item,
+    .task-list-item {
+      margin: 8px 0;
+    }
+
+    .list-item_label,
+    .list-item .paragraph {
+      margin: 0;
+    }
+    .list-item {
+      display: flex;
+      align-items: center;
+
+      &_body {
+        flex: 1;
+      }
+    }
+
+    .list-item_label {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      justify-items: center;
+      width: 24px;
+      height: 24px;
+
+      font-size: ${textFontSize}
+      line-height: ${textLineHeight};
+      color: ${neutralAltColor};
+    }
+
+    .list-item[data-list-type="bullet"] {
+      & > .list-item_label {
+        font-size: ${textFontSize};
+        line-height: ${textLineHeight};
+      }
+    }
+
+    li {
+      &::marker {
+        display: none;
+      }
+    }
+
+    .task-list-item {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      &_checkbox {
+        margin: 0.5em 0.5em 0.5em 0;
+        height: 1em;
+      }
+      & .paragraph {
+        margin: 0;
+      }
+    }
+  `;
+
+  // Image style
+  /* const imgStyle = css`
+    .image {
+      display: inline-block;
+      margin: 0 auto;
+      object-fit: contain;
+      width: 100%;
+      position: relative;
+      height: auto;
+      text-align: center;
+    }
+  `; */
+
+  // Editor style
+  // TODO add img, heading, blockquote, footnote and table
+  const editorStyle = css`
+    .editor {
+      height: 100%;
+      overflow-y: auto;
+      padding: 1.75rem;
+      outline: none;
+      position: relative;
+
+      & > * {
+        margin: 0.75em 0;
+      }
+
+      ${paragraphStyle}
+      ${strikeThroughStyle}
+
+      ${hrStyle}
+
+      ${listStyle}
+
+      ${codeStyle}
+      ${inlineStyle}
+    }
+  `;
+
+  // Tooltip style
+  const tooltipStyle = css`
+    .tooltip.hide {
+      display: none;
+    }
+    .tooltip {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      justify-items: center;
+      column-gap: 0.75rem;
+
+      padding: 0.25rem;
+
+      .milkdown-icons {
+        font-size: 1.125rem;
+      }
+    }
+  `;
+
+  const tooltipInputStyle = css`
+    .tooltip-input {
+      input::placeholder {
+        color: ${solidColorAlt};
+      }
+      button {
+        color: ${solidColor};
+      }
+    }
+  `;
+
+  // Prosemirror selection style
   const selection = css`
-        .ProseMirror-selectednode {
-            outline: ${manager.get(ThemeSize, "lineWidth")} solid ${line};
-        }
+    .ProseMirror-selectednode {
+      outline: ${lineWidth} solid ${lineColor};
+    }
 
-        li.ProseMirror-selectednode {
-            outline: none;
-        }
+    li.ProseMirror-selectednode {
+      outline: none;
+    }
 
-        li.ProseMirror-selectednode::after {
-            ${manager.get(ThemeBorder, undefined)};
-        }
-    `;
+    li.ProseMirror-selectednode::after {
+      ${borderAll};
+    }
+  `;
 
-  const editorLayout = css`
-        height: 100%;
-        overflow-y: hidden;
-        padding: 1.75rem;
-        outline: none;
-        & > * {
-            margin: 1.875em 0;
-        }
-    `;
+  // Editor container style
+  const containerStyle = css`
+    .milkdown {
+      width: 100%;
+      height: 632px;
 
-  const paragraph = css`
-        p {
-            font-size: 18px;
-            line-height: 28px;
-            letter-spacing: 0.5px;
-        }
-        .strike-through {
-          text-decoration: underline;
-        }
-    `;
+      margin-left: auto;
+      margin-right: auto;
+      box-sizing: border-box;
 
-  const blockquote = css`
-        blockquote {
-            padding-left: 1.875em;
-            line-height: 1.75em;
-            border-left: 4px solid ${palette("primary")};
-            margin-left: 0;
-            margin-right: 0;
-            * {
-                font-size: 1em;
-                line-height: 1.5em;
-            }
-        }
-    `;
+      position: relative;
 
-  const heading = css`
-        h1 {
-            font-size: 3em;
-            line-height: 1.167;
-        }
-        h2 {
-            font-size: 2.5em;
-            line-height: 1.2;
-        }
-        h3 {
-            font-size: 2.125em;
-            line-height: 1.05;
-        }
-        h4 {
-            font-size: 1.75em;
-            line-height: 1.14;
-        }
-        h5 {
-            font-size: 1.5em;
-            line-height: 1;
-        }
-        h6 {
-            font-size: 1.25em;
-            line-height: 1;
-        }
-        .heading {
-            margin: 40px 0;
-            font-weight: 400;
-        }
-    `;
+      color: ${neutralAltColor};
+      background: ${surfaceColor};
+      font-family: ${typographyFont};
 
-  const hr = css`
-        hr {
-            height: ${manager.get(ThemeSize, "lineWidth")};
-            background-color: ${line};
-            border-width: 0;
-        }
-    `;
+      .resize-cursor {
+        cursor: ew-resize;
+        cursor: col-resize;
+      }
 
-  const list = css`
-        ul,
-        ol {
-            padding: 0;
-        }
+      ${shadow}
+      ${scrollBarY}
 
-        .list-item,
-        .task-list-item {
-            margin: 8px 0;
-        }
+      ${selection}
 
-        .list-item_label,
-        .list-item .paragraph {
-            margin: 0;
-        }
-        .list-item {
-            display: flex;
+      ${tooltipStyle}
+      ${tooltipInputStyle}
 
-            &_body {
-                flex: 1;
-            }
-        }
+      ${editorStyle}
+    }
+  `;
 
-        .list-item_label {
-            display: flex;
-            justify-content: center;
-            width: 24px;
-            height: 24px;
-            font-size: 16px;
-            line-height: 1.5;
-            color: ${neutral};
-        }
+  // Menu style
+  const menuStyle = css`
+    .milkdown-menu {
+      flex-direction: row;
+      justify-content: center;
+      justify-items: center;
+      width: 100%;
+      border: 0;
+      box-sizing: border-box;
 
-        .list-item[data-list-type='bullet'] {
-            & > .list-item_label {
-                font-size: 24px;
-                line-height: 1;
-            }
-        }
-
-        li {
-            &::marker {
-                display: none;
-            }
-        }
-
-        .task-list-item {
-            display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-            &_checkbox {
-                margin: 0.5em 0.5em 0.5em 0;
-                height: 1em;
-            }
-            & .paragraph {
-                margin: 0;
-            }
-        }
-    `;
-
-  const code = css`
-        .code-fence {
-            pre {
-                font-family: ${manager.get(ThemeFont, "code")};
-                margin: 0 1.2em !important;
-                white-space: pre;
-                overflow: auto;
-                ${manager.get(ThemeScrollbar, ["x"])}
-
-                background-color: ${palette("background")};
-                color: ${palette("neutral")};
-                font-size: 0.875em;
-                border-radius: ${radius};
-
-                code {
-                    line-height: 1.5;
-                    font-family: ${manager.get(ThemeFont, "code")};
-                }
-            }
-        }
-    `;
-
-  const img = css`
-        .image {
-            display: inline-block;
-            margin: 0 auto;
-            object-fit: contain;
-            width: 100%;
-            position: relative;
-            height: auto;
-            text-align: center;
-        }
-    `;
-
-  const inline = css`
-        .code-inline {
-            background-color: ${palette("neutral")};
-            color: ${palette("background")};
-            border-radius: ${radius};
-            font-weight: 500;
-            font-family: ${code};
-            padding: 0 0.2em;
-        }
-
-        .strong {
-            font-weight: 600;
-        }
-
-        .link,
-        a {
-            color: ${palette("secondary")};
-            cursor: pointer;
-            transition: all 0.4s ease-in-out;
-            font-weight: 500;
-            &:hover {
-                background-color: ${palette("line")};
-                box-shadow: 0 0.2em ${palette("line")}, 0 -0.2em ${palette("line")};
-            }
-        }
-
-        .strike-through {
-            text-decoration-color: ${palette("secondary")};
-        }
-    `;
-
-  const footnote = css`
-        .footnote-definition {
-            ${manager.get(ThemeBorder, undefined)};
-            border-radius: ${manager.get(ThemeSize, "radius")};
-            background-color: ${palette("background")};
-            padding: 1em;
-            display: flex;
-            flex-direction: row;
-            & > .footnote-definition_content {
-                flex: 1;
-                width: calc(100% - 1em);
-                & > dd {
-                    margin-inline-start: 1em;
-                }
-                & > dt {
-                    color: ${palette("secondary")};
-                    font-weight: 500;
-                }
-            }
-            & > .footnote-definition_anchor {
-                width: 1em;
-            }
-        }
-    `;
-
-  const table = css`
-        /* copy from https://github.com/ProseMirror/prosemirror-tables/blob/master/style/tables.css */
-        .tableWrapper {
-            overflow-x: auto;
-            margin: 0;
-            ${manager.get(ThemeScrollbar, ["x"])}
-            width: 100%;
-            * {
-                margin: 0;
-                box-sizing: border-box;
-                font-size: 1em;
-            }
-        }
-        table {
-            border-collapse: collapse;
-            table-layout: fixed;
-            width: 100%;
-            overflow: auto;
-            border-radius: ${manager.get(ThemeSize, "radius")};
-        }
-        tr {
-            ${manager.get(ThemeBorder, "bottom")};
-        }
-        td,
-        th {
-            padding: 0 16px;
-            vertical-align: top;
-            box-sizing: border-box;
-            position: relative;
-
-            min-width: 100px;
-            ${manager.get(ThemeBorder, undefined)};
-            text-align: left;
-            line-height: 3;
-            height: 48px;
-            vertical-align: middle;
-        }
-        th {
-            background: ${palette("background", 0.5)};
-            font-weight: 400;
-        }
-        .column-resize-handle {
-            position: absolute;
-            right: -2px;
-            top: 0;
-            bottom: 0;
-            z-index: 20;
-            pointer-events: none;
-            background: ${palette("secondary")};
-            width: ${manager.get(ThemeSize, "lineWidth")};
-        }
-
-        .selectedCell {
-            &::after {
-                z-index: 2;
-                position: absolute;
-                content: '';
-                left: 0;
-                right: 0;
-                top: 0;
-                bottom: 0;
-                background: ${palette("secondary", 0.38)};
-                pointer-events: none;
-            }
-
-            & ::selection {
-                background: transparent;
-            }
-        }
-    `;
+      .milkdown-icons {
+        font-size: 1.5rem;
+      }
+    }
+  `;
 
   injectProsemirrorView(emotion);
 
   /* .milkdown is the container of the whole editor */
   /* .editor is the editable part, wrapped in the container  */
   injectGlobal`
-        .milkdown-menu-wrapper {
-          display: flex;
-          flex-direction: column-reverse;
-          ${manager.get(ThemeBorder, undefined)}
-          background-color: ${surface};
-          padding: 0.25rem;
+    .milkdown-menu-wrapper {
+      display: flex;
+      flex-direction: column-reverse;
+      justify-items: center;
+      padding: 0.5rem;
+      row-gap: 0.5rem;
 
-          .milkdown-menu {
-            justify-items: center;
-            column-gap: 2rem;
-            border: 0;
+      ${borderAll}
+      background-color: ${surfaceColor};
 
-            .milkdown-icons {
-              font-size: 1.5rem;
-            }
-
-          }
-  
-          .milkdown {
-            width: 100%;
-            height: 632px;
-    
-            margin-left: auto;
-            margin-right: auto;
-            box-sizing: border-box;
-    
-            color: ${neutral};
-            background: ${surface};
-            font-family: ${manager.get(ThemeFont, "typography")};
-  
-            ${manager.get(ThemeShadow, undefined)}
-            ${manager.get(ThemeScrollbar, undefined)}
-            ${selection};
-  
-            .resize-cursor {
-              cursor: ew-resize;
-              cursor: col-resize;
-            }
-              
-            .editor {
-              position: relative;
-              ${editorLayout};
-
-              ${paragraph};
-              ${blockquote};
-              ${hr};
-              ${list};
-              ${code};
-              ${img};
-              ${heading};
-
-              ${table};
-              ${footnote};
-
-              ${inline};
-            }
-          }
-        }
-    `;
+      ${menuStyle}
+      ${containerStyle}
+    }
+  `;
 };

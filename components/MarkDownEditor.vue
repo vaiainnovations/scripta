@@ -1,11 +1,10 @@
 <template>
-  <VueEditor class="w-full h-fit" :editor="editor" />
+  <VueEditor class="w-full h-fit relative" :editor="editor.editor" />
 </template>
 
 <script setup lang="ts">
 import { defaultValueCtx, Editor, rootCtx } from "@milkdown/core";
 import { VueEditor, useEditor } from "@milkdown/vue";
-// import { commonmark } from "@milkdown/preset-commonmark";
 import { gfm, link } from "@milkdown/preset-gfm";
 import { listenerCtx, listener } from "@milkdown/plugin-listener";
 import { tooltip, tooltipPlugin } from "@milkdown/plugin-tooltip";
@@ -20,7 +19,7 @@ import { customMenu } from "~~/types/MilkDown/menu";
 
 const editorValue = ref("");
 
-const { editor } = useEditor(root =>
+const editor = useEditor(root =>
   Editor
     .make()
     .config((ctx) => {
@@ -31,22 +30,24 @@ const { editor } = useEditor(root =>
           editorValue.value = markdown;
         });
     })
-    .use(customTheme)
-    .use(gfm.configure(link, {
-      input: {
-        placeholder: "link",
-        buttonText: "Apply"
-      }
-    }))
-    .use(tooltip.configure(tooltipPlugin, {
-      bottom: true
-    }))
+    .use(gfm
+      .configure(link, {
+        input: {
+          placeholder: "link",
+          buttonText: "Apply"
+        }
+      }))
+    .use(tooltip
+      .configure(tooltipPlugin, {
+        bottom: false
+      }))
     .use(upload)
     .use(math)
     .use(diagram)
     .use(emoji)
     .use(block)
     .use(customMenu)
+    .use(customTheme)
     .use(listener)
 );
 </script>

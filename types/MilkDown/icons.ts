@@ -32,10 +32,6 @@ export const iconsMapping = {
   orderedList: {
     label: "orderedList",
     icon: "task-numbered"
-  },
-  paperclip: {
-    label: "//",
-    icon: "paperclip-2"
   }
 };
 
