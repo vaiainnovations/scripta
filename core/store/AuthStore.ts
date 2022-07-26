@@ -97,7 +97,11 @@ export const useAuthStore = defineStore({
     /**
      * Sign in
      */
-    async login (): Promise<void> {
+    async login (force = false): Promise<void> {
+      // prevent from multiple login attempts if the user is already logged in, unless forced (ex. Keplr wallet switch)
+      if (this.authLevel > AuthLevel.None && !force) {
+        return;
+      }
       console.log("called login");
       if (useWalletStore().signerId !== SupportedSigner.Noop) {
         this.authLevel = AuthLevel.Wallet; // Wallet is connected
@@ -111,6 +115,8 @@ export const useAuthStore = defineStore({
         useAccountStore().address = account.address;
 
         // TODO: Auth Backend call
+        const authInfo = await useAccountStore().getAuthInfo();
+        console.log(authInfo);
         /* const authSuccess = false;
         if (!authSuccess) {
           navigateTo("/auth/error");
