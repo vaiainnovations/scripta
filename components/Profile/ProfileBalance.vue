@@ -17,9 +17,9 @@
 
 <script setup lang="ts">
 import { useAccountStore } from "~~/core/store/AccountStore";
-import { useAuthStore } from "~~/core/store/AuthStore";
 
 function logout () {
-  useAuthStore().logout("/auth");
+  const { $useAuth } = useNuxtApp();
+  $useAuth().logout("/auth");
 }
 </script>

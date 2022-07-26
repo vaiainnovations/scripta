@@ -85,10 +85,9 @@
 </template>
 
 <script setup lang="ts">
-/* import { MsgSaveProfileEncodeObject } from "@desmoslabs/desmjs"; */
+import { MsgSaveProfileEncodeObject } from "@desmoslabs/desmjs";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDesmosStore } from "~~/core/store/DesmosStore";
-import { useTransactionStore } from "~~/core/store/TransactionStore";
 const emit = defineEmits(["userEdited"]);
 const newNickname = ref(useAccountStore().profile?.nickname || "");
 const newUsername = ref(useAccountStore().profile?.dtag || "");
@@ -99,9 +98,10 @@ const newProfilePicture = ref(
 const isValidUsername = ref(true);
 
 function saveProfile () {
+  const { $useTransaction } = useNuxtApp();
   const doNotModify = "[do-not-modify]";
   const oldProfile = useAccountStore().profile;
-  const msgSaveProfile/* : MsgSaveProfileEncodeObject */ = {
+  const msgSaveProfile: MsgSaveProfileEncodeObject = {
     typeUrl: "/desmos.profiles.v2.MsgSaveProfile",
     value: {
       dtag:
@@ -130,7 +130,7 @@ function saveProfile () {
       cover: oldProfile.pictures.cover
     }
   };
-  useTransactionStore().push(msgSaveProfile);
+  $useTransaction().push(msgSaveProfile);
   emit("userEdited");
 }
 

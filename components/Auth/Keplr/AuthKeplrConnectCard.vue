@@ -28,7 +28,7 @@
  * Keplr Connection
  */
 async function connect () {
-  /* const { $useKeplr } = useNuxtApp();
-  await $useKeplr().connect(); */
+  const { $useKeplr } = useNuxtApp();
+  await $useKeplr().connect();
 }
 </script>

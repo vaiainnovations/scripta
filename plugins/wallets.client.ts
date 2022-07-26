@@ -1,3 +1,4 @@
+import { useTransactionStore } from "~~/core/store/TransactionStore";
 import { KeplrSigner } from "~~/core/store/wallet/KeplrSigner";
 import { useKeplrStore } from "~~/core/store/wallet/KeplrStore";
 import { useWalletConnectStore } from "~~/core/store/wallet/WalletConnectStore";
@@ -9,6 +10,7 @@ export default defineNuxtPlugin(() => {
       useWallet: () => useWalletStore(),
       useWalletConnect: () => useWalletConnectStore(),
       useKeplr: () => useKeplrStore(),
+      useTransaction: () => useTransactionStore(),
       KeplrSigner
     }
   };

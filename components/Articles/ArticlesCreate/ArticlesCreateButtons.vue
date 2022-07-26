@@ -42,12 +42,12 @@ import { v4 as uuidv4 } from "uuid";
 import { Media } from "@desmoslabs/desmjs-types/desmos/posts/v2/models";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
-import { useTransactionStore } from "~~/core/store/TransactionStore";
-import { useIpfsStore } from "~~/core/store/IpfsStore";
 
 const isPublishing = ref(false);
 
 async function publish () {
+  const { $useTransaction, $useIpfs } = useNuxtApp();
+
   const draftStore = useDraftStore();
   isPublishing.value = true;
   const extId = uuidv4();
@@ -79,9 +79,10 @@ async function publish () {
   };
 
   // upload the post to IPFS (without CID attachment), get the returned CID
-  const postCid = await useIpfsStore().uploadPost(JSON.stringify(ipfsPost));
+  const postCid = await $useIpfs().uploadPost(JSON.stringify(ipfsPost));
 
   const postIpfsUrl = `https://cloudflare-ipfs.com/ipfs/${postCid}`;
+  console.log(postIpfsUrl);
 
   // attach the CID to the Post
   msgCreatePost.value.attachments = [{
@@ -92,10 +93,10 @@ async function publish () {
     }).finish()
   }];
 
-  useTransactionStore().push(msgCreatePost);
-  const signedBytes = await useTransactionStore().execute();
+  $useTransaction().push(msgCreatePost);
+  const signedBytes = await $useTransaction().execute();
 
-  /*  const res = await (
+  /* const res = await (
     await fetch("http://192.168.1.108:4000/v1/test3", {
       method: "POST",
       headers: {
