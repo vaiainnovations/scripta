@@ -32,6 +32,14 @@ export const iconsMapping = {
   orderedList: {
     label: "orderedList",
     icon: "task-numbered"
+  },
+  divider: {
+    label: "divider",
+    icon: "grid-10"
+  },
+  inlineCode: {
+    label: "inlineCode",
+    icon: "code-1"
   }
 };
 
