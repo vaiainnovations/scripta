@@ -1,7 +1,7 @@
 
 import { defineStore } from "pinia";
 import { generateUsername } from "unique-username-generator";
-/* import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v2/models_profile"; */
+import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v2/models_profile";
 import { SupportedSigner, useWalletStore } from "./wallet/WalletStore";
 import { useAccountStore } from "./AccountStore";
 import { registerModuleHMR } from ".";
@@ -137,7 +137,7 @@ export const useAuthStore = defineStore({
           }
           // generate the nickname from the username
           const nickname = (username.split("_").map(word => word[0].toUpperCase() + word.slice(1)).join(" ")).replace(/[0-9]/g, "");
-          const newProfile/* : Profile */ = {
+          const newProfile: Profile = {
             dtag: username,
             nickname,
             bio: "",

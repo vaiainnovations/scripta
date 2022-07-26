@@ -1,4 +1,4 @@
-/* import { SigningMode } from "@desmoslabs/desmjs"; */
+import { SigningMode } from "@desmoslabs/desmjs";
 import { QRCodeModal, WalletConnect, WalletConnectSigner } from "@desmoslabs/desmjs-walletconnect";
 import { defineStore } from "pinia";
 import { registerModuleHMR } from "..";
@@ -22,7 +22,7 @@ export const useWalletConnectStore = defineStore({
         bridge: "https://bridge.walletconnect.org",
         qrcodeModal: qr ? QRCodeModal : null
       }), {
-        signingMode: 1 // Direct
+        signingMode: SigningMode.DIRECT // Direct
       });
       await signer.connect();
 
