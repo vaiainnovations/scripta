@@ -2,7 +2,6 @@
 import { defineNuxtConfig } from "nuxt";
 import eslintPlugin from "vite-plugin-eslint";
 import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
-import { NodeModulesPolyfillPlugin } from "@esbuild-plugins/node-modules-polyfill";
 import inject from "@rollup/plugin-inject";
 const path = require("path");
 const mode = process.env.NODE_ENV === "production" ? "production" : "development";
@@ -65,8 +64,7 @@ export default defineNuxtConfig({
           NodeGlobalsPolyfillPlugin({
             process: true,
             buffer: true
-          }),
-          NodeModulesPolyfillPlugin()
+          })
         ]
       }
     },
