@@ -114,14 +114,9 @@ export const useAuthStore = defineStore({
         const account = await useWalletStore().wallet.signer.getCurrentAccount();
         useAccountStore().address = account.address;
 
-        // TODO: Auth Backend call
-        const authInfo = await useAccountStore().getAuthInfo();
+        const authInfo = await useAccountStore().getUserInfo(false); // TODO: force creation here?
         console.log(authInfo);
-        /* const authSuccess = false;
-        if (!authSuccess) {
-          navigateTo("/auth/error");
-          return;
-        } */
+        // TODO: handle error situation
 
         // Retrieve the Desmos profile, if exists
         const profile = await (await useWalletStore().wallet.client).getProfile(account.address);

@@ -47,9 +47,36 @@ const isPublishing = ref(false);
 
 async function publish () {
   const { $useTransaction, $useIpfs } = useNuxtApp();
+  isPublishing.value = true;
+
+  // check if the user has a sectionId
+  if (useAccountStore().sectionId <= 0) {
+    // if not, create one
+    if (useAccountStore().sectionId === -10) {
+      await useAccountStore().getUserInfo(true);
+      // TODO: handle failure?
+    }
+    let attempt = 0;
+    // wait 10 attempts to create a sectionId, create the group, and user join it
+    while (attempt < 10 && useAccountStore().sectionId <= 0) {
+      // update the sectionId from the user endpoint
+      await useAccountStore().getUserSection();
+
+      // if found, break the loop
+      if (useAccountStore().sectionId > 0) {
+        break;
+      }
+      // otherwise, wait 5s and try again
+      await new Promise(resolve => setTimeout(resolve, 5000));
+      attempt++;
+    }
+  }
+  if (useAccountStore().sectionId <= 0) {
+    this.isPublishing.value = false;
+    throw new Error("Could not get section id");
+  }
 
   const draftStore = useDraftStore();
-  isPublishing.value = true;
   const extId = uuidv4();
 
   const msgCreatePost: MsgCreatePostEncodeObject = {
@@ -60,7 +87,7 @@ async function publish () {
       attachments: [],
       author: useAccountStore().address,
       text: draftStore.title,
-      sectionId: 2,
+      sectionId: useAccountStore().sectionId,
       tags: useDraftStore().tags.map(tag => tag.content.value),
       conversationId: Long.fromNumber(0),
       referencedPosts: [],
@@ -85,13 +112,15 @@ async function publish () {
   console.log(postIpfsUrl);
 
   // attach the CID to the Post
-  msgCreatePost.value.attachments = [{
-    typeUrl: "/desmos.posts.v2.Media",
-    value: Media.encode({
-      mimeType: "text/json",
-      uri: postIpfsUrl
-    }).finish()
-  }];
+  msgCreatePost.value.attachments = [
+    {
+      typeUrl: "/desmos.posts.v2.Media",
+      value: Media.encode({
+        mimeType: "text/json",
+        uri: postIpfsUrl
+      }).finish()
+    }
+  ];
 
   $useTransaction().push(msgCreatePost);
   const signedBytes = await $useTransaction().execute();
