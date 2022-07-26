@@ -7,7 +7,9 @@
     "build": "nuxt build",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "mf-dev": "NODE_OPTIONS='--max-old-space-size=8192' npx ts-node --esm ./scripts/miniflare-simulate.ts"
+    "mf-dev": "NODE_OPTIONS='--max-old-space-size=8192' npx ts-node --esm ./scripts/miniflare-simulate.ts",
+    "mf-build": "NODE_OPTIONS='--max-old-space-size=8192' NITRO_PRESET=cloudflare yarn build",
+    "mf-publish": "wrnagler publish --site ./.output/public"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.14.1",
