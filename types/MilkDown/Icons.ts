@@ -21,8 +21,8 @@ export const iconsMapping = {
     label: "taskList",
     icon: "task"
   },
-  code: {
-    label: "code",
+  inlineCode: {
+    label: "inlineCode",
     icon: "code-circle"
   },
   bulletList: {
@@ -37,8 +37,8 @@ export const iconsMapping = {
     label: "divider",
     icon: "grid-10"
   },
-  inlineCode: {
-    label: "inlineCode",
+  code: {
+    label: "code",
     icon: "code-1"
   }
 };

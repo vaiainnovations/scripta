@@ -16,31 +16,32 @@ import { block } from "@milkdown/plugin-block";
 
 import { customTheme } from "~~/types/MilkDown";
 import { customMenu } from "~~/types/MilkDown/menu";
+// import { mathPlugin } from "~~/types/MilkDown/MathCommand";
 
 const editorValue = ref("");
 
 const editor = useEditor(root =>
-  Editor
-    .make()
+  Editor.make()
     .config((ctx) => {
       ctx.set(rootCtx, root);
       ctx.set(defaultValueCtx, editorValue.value);
-      ctx.get(listenerCtx)
-        .markdownUpdated((_, markdown) => {
-          editorValue.value = markdown;
-        });
+      ctx.get(listenerCtx).markdownUpdated((_, markdown) => {
+        editorValue.value = markdown;
+      });
     })
-    .use(gfm
-      .configure(link, {
+    .use(
+      gfm.configure(link, {
         input: {
           placeholder: "link",
           buttonText: "Apply"
         }
-      }))
-    .use(tooltip
-      .configure(tooltipPlugin, {
+      })
+    )
+    .use(
+      tooltip.configure(tooltipPlugin, {
         bottom: false
-      }))
+      })
+    )
     .use(upload)
     .use(math)
     .use(diagram)
@@ -52,5 +53,4 @@ const editor = useEditor(root =>
 );
 </script>
 
-<style>
-</style>
+<style></style>

@@ -11,6 +11,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   const palette = getPalette(manager);
   // const primaryColor = palette("primary");
   const secondaryColor = palette("secondary");
+  const secondaryColorAlt = palette("secondary", 0.5);
   const neutralColor = palette("neutral");
   const neutralAltColor = palette("neutral", 0.87);
   //   const highlight = palette("secondary", 0.38);
@@ -168,7 +169,8 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   // Strike through style
   const strikeThroughStyle = css`
     .strike-through {
-      text-decoration: underline;
+      text-decoration-line: underline;
+      text-decoration-thickness: 2px;
     }
   `;
 
@@ -187,10 +189,14 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
     .list-item .paragraph {
       margin: 0;
     }
+
+    .list-item[data-list-type="ordered"] {
+      align-items: baseline;
+    }
+
     .list-item {
       display: flex;
       align-items: center;
-
       &_body {
         flex: 1;
       }
@@ -366,6 +372,14 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
 
       .milkdown-icons {
         font-size: 1.5rem;
+      }
+
+      .button {
+        &.active,
+        &:hover {
+          background-color: ${secondaryColorAlt};
+          color: ${solidColor};
+        }
       }
     }
   `;

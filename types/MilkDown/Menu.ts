@@ -77,7 +77,7 @@ export const customMenu = menu
         },
         {
           type: "button",
-          icon: "inlineCode",
+          icon: "code",
           key: ToggleInlineCode,
           active: view => hasMark(view.state, view.state.schema.marks.code_inline),
           disabled: view => !view.state.schema.marks.code_inline
@@ -114,7 +114,7 @@ export const customMenu = menu
       [
         {
           type: "button",
-          icon: "code",
+          icon: "inlineCode",
           key: TurnIntoCodeFence,
           disabled: view => notBlockType(view.state, view.state.schema.nodes.fence)
         }
