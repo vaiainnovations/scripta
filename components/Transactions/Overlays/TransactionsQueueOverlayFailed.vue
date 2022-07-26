@@ -9,7 +9,7 @@
           Ops, an error!
         </div>
         <div class="text-center text-xs">
-          {{ useTransactionStore().errorText }}
+          {{ $useTransaction().errorText }}
         </div>
       </div>
     </div>
@@ -17,5 +17,5 @@
 </template>
 
 <script setup lang="ts">
-import { useTransactionStore } from "~~/core/store/TransactionStore";
+const { $useTransaction } = useNuxtApp();
 </script>

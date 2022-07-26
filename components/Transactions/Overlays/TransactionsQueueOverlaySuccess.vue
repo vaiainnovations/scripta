@@ -12,9 +12,9 @@
           <a
             class="text-gray-dark underline text-sm cursor-pointer"
             target="_blank"
-            :href="`${useDesmosStore().explorer}/transactions/${useTransactionStore().hash}`"
+            :href="`${useDesmosStore().explorer}/transactions/${$useTransaction().hash}`"
           >
-            {{ useTransactionStore().hash.slice(0,14) }}...
+            {{ $useTransaction().hash.slice(0,14) }}...
           </a>
         </div>
       </div>
@@ -24,5 +24,5 @@
 
 <script setup lang="ts">
 import { useDesmosStore } from "~~/core/store/DesmosStore";
-import { useTransactionStore } from "~~/core/store/TransactionStore";
+const { $useTransaction } = useNuxtApp();
 </script>

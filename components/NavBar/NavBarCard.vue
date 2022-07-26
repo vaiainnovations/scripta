@@ -12,7 +12,7 @@
       <slot name="right">
         <NavBarProfile />
       </slot>
+      <TransactionsQueueOverlay class="mt-20 mr-8" />
     </div>
-    <TransactionsQueueOverlay class="mt-20 mr-8" />
   </div>
 </template>

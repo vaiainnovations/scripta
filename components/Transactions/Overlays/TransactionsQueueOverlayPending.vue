@@ -6,8 +6,8 @@
       </div>
       <div class="flex-grow">
         <div class="font-medium text-center">
-          Broadcasting {{ useTransactionStore().queue.length }}
-          <span v-if="useTransactionStore().queue.length===1">
+          Broadcasting {{ $useTransaction().queue.length }}
+          <span v-if="$useTransaction().queue.length===1">
             tx
           </span>
           <span v-else>
@@ -20,5 +20,5 @@
 </template>
 
 <script setup lang="ts">
-import { useTransactionStore } from "~~/core/store/TransactionStore";
+const { $useTransaction } = useNuxtApp();
 </script>

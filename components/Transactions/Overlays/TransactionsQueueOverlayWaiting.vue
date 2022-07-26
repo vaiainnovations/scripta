@@ -6,8 +6,8 @@
       </div>
       <div class="flex-grow">
         <div class="font-medium text-center">
-          {{ useTransactionStore().queue.length }}
-          <span v-if="useTransactionStore().queue.length===1">
+          {{ $useTransaction().queue.length }}
+          <span v-if="$useTransaction().queue.length===1">
             action
           </span>
           <span v-else>
@@ -15,7 +15,7 @@
           </span>
           waiting
         </div>
-        <div class="text-center text-gray-dark text-sm underline pt-1 cursor-pointer" @click="useTransactionStore().execute()">
+        <div class="text-center text-gray-dark text-sm underline pt-1 cursor-pointer" @click="$useTransaction().execute()">
           Click to Approve
         </div>
       </div>
@@ -24,5 +24,5 @@
 </template>
 
 <script setup lang="ts">
-import { useTransactionStore } from "~~/core/store/TransactionStore";
+const { $useTransaction } = useNuxtApp();
 </script>

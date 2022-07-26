@@ -3,7 +3,6 @@ import { defineStore } from "pinia";
 import { EncodeObject } from "@cosmjs/proto-signing";
 import { StdFee } from "@cosmjs/stargate";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
-import { useWalletStore } from "./wallet/WalletStore";
 import { useAccountStore } from "./AccountStore";
 import { registerModuleHMR } from ".";
 
@@ -24,7 +23,7 @@ export const useTransactionStore = defineStore({
     hash: ""
   }),
   actions: {
-    push (message: EncodeObject): void {
+    push (message: any): void {
       // check if the draft is not empty
       // TODO: add controls to prevent pushing same message twice, and same operations (ex. 2 profile updates, works but is not ideal)
       if (this.status === QueueStatus.FAILED) {
@@ -33,10 +32,11 @@ export const useTransactionStore = defineStore({
       this.queue.push(message);
     },
     async execute (): Promise<Uint8Array> {
+      const { $useWallet } = useNuxtApp();
       // check if the draft is not empty
       try {
         this.status = QueueStatus.SIGNING;
-        const client = (await useWalletStore().wallet.client);
+        const client = (await $useWallet().wallet.client);
         const address = useAccountStore().address;
         const defaultFee: StdFee = {
           amount: [{
@@ -52,7 +52,7 @@ export const useTransactionStore = defineStore({
 
         // broadcast the messages
         this.status = QueueStatus.PENDING;
-        const broadcastResult = await client.broadcastTx(txBytes, 8000, 2000);
+        const broadcastResult = await client.broadcastTx(txBytes, 10000, 2000);
 
         // parse the result
         if (broadcastResult.code !== 0) {
@@ -74,10 +74,11 @@ export const useTransactionStore = defineStore({
       }
     },
     async directSign (): Promise<Uint8Array> {
+      const { $useWallet } = useNuxtApp();
       // check if the draft is not empty
       try {
         this.status = QueueStatus.SIGNING;
-        const client = (await useWalletStore().wallet.client);
+        const client = (await $useWallet().wallet.client);
         const address = useAccountStore().address;
         const defaultFee: StdFee = {
           amount: [{
@@ -92,22 +93,9 @@ export const useTransactionStore = defineStore({
         const txBytes = TxRaw.encode(signed).finish();
 
         // broadcast the messages
-        this.status = QueueStatus.PENDING;
-        /* const broadcastResult = await client.broadcastTx(txBytes, 8000, 2000);
-
-        // parse the result
-        if (broadcastResult.code !== 0) {
-          this.status = QueueStatus.FAILED;
-          this.errorText = `${broadcastResult.rawLog}`;
-          this.hash = broadcastResult.transactionHash;
-          // this.resetQueueWithTimer(8);
-        } else {
-          this.status = QueueStatus.SUCCESS;
-          this.resetQueueWithTimer(5);
-        }
-        this.hash = broadcastResult.transactionHash; */
+        this.status = QueueStatus.SUCCESS;
+        this.resetQueueWithTimer(5);
         return txBytes;
-        // TODO: ask for a profile refresh
       } catch (e) {
         this.status = QueueStatus.FAILED;
         this.errorText = `${e}`;
