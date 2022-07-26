@@ -1,9 +1,7 @@
 <template>
   <section>
     <NuxtLayout name="reading-custom">
-      <ClientOnly>
-        <ProfileContainer />
-      </ClientOnly>
+      <ProfileContainer />
     </NuxtLayout>
   </section>
 </template>

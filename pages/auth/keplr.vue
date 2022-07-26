@@ -1,7 +1,7 @@
 <template>
-  <ClientOnly>
+  <section>
     <AuthKeplrCard />
-  </ClientOnly>
+  </section>
 </template>
 
 <script setup lang="ts">

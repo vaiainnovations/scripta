@@ -21,8 +21,8 @@
 </template>
 
 <script setup lang="ts">
+import { WalletConnectSigner } from "@desmoslabs/desmjs-walletconnect";
 import QrcodeVue from "qrcode.vue";
-/* import { WalletConnect, WalletConnectSigner } from "@desmoslabs/desmjs-walletconnect"; */
 
 const { $useWalletConnect, $useWallet } = useNuxtApp();
 // Create and initializer the WalletConnect signer without QR modal

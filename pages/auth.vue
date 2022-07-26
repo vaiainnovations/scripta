@@ -1,8 +1,6 @@
 <template>
   <NuxtLayout name="auth-custom">
-    <ClientOnly>
-      <NuxtPage />
-    </ClientOnly>
+    <NuxtPage />
   </NuxtLayout>
 </template>
 
