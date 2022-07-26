@@ -24,12 +24,11 @@
 </template>
 
 <script setup lang="ts">
-import { useKeplrStore } from "~~/core/store/wallet/KeplrStore";
-
 /**
  * Keplr Connection
  */
 async function connect () {
-  await useKeplrStore().connect();
+  /* const { $useKeplr } = useNuxtApp();
+  await $useKeplr().connect(); */
 }
 </script>

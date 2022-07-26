@@ -30,13 +30,6 @@ export default defineNuxtConfig({
     buffer: "buffer",
     Buffer: "buffer"
   },
-  build: {
-    plugins: [
-      NodeGlobalsPolyfillPlugin({
-        buffer: true
-      })
-    ]
-  },
   nitro,
   tailwindcss: {
     cssPath: "@/assets/css/tailwind.css",
@@ -58,9 +51,7 @@ export default defineNuxtConfig({
       alias: {
         "@": path.resolve(__dirname, "/src"),
         process: "process/browser",
-        stream: "stream-browserify",
-        buffer: "buffer",
-        Buffer: "buffer"
+        stream: "stream-browserify"
       }
     },
     optimizeDeps: {

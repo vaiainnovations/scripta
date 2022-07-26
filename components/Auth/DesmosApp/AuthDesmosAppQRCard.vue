@@ -22,19 +22,14 @@
 
 <script setup lang="ts">
 import QrcodeVue from "qrcode.vue";
-import { SigningMode } from "@desmoslabs/desmjs";
-import { WalletConnect, WalletConnectSigner } from "@desmoslabs/desmjs-walletconnect";
-import { SupportedSigner, useWalletStore } from "~~/core/store/wallet/WalletStore";
+/* import { WalletConnect, WalletConnectSigner } from "@desmoslabs/desmjs-walletconnect"; */
 
-// Create and initializer the WalletConnect signer
-const signer = new WalletConnectSigner(new WalletConnect({
-  bridge: "https://bridge.walletconnect.org"
-}), {
-  signingMode: SigningMode.AMINO
-});
-await signer.connect();
+const { $useWalletConnect, $useWallet } = useNuxtApp();
+// Create and initializer the WalletConnect signer without QR modal
+const signer = await $useWalletConnect().connect();
+
 const wcUrl = ref(getWalletConnectUrl(signer));
-await useWalletStore().connect(signer, SupportedSigner.WalletConnect);
+await $useWallet().connect(signer, "walletconnect");
 
 /**
  * Generate WalletConnect socket URL to display as QR code.

@@ -1,7 +1,7 @@
 <template>
-  <ClientOnly>
+  <section>
     <AuthWalletConnectCard />
-  </ClientOnly>
+  </section>
 </template>
 
 <script setup lang="ts">
