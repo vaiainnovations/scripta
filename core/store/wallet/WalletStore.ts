@@ -1,7 +1,10 @@
 import { defineStore } from "pinia";
 import { DesmosClient, NoOpSigner, Signer, SignerStatus } from "@desmoslabs/desmjs";
 import { registerModuleHMR } from "..";
+import { useAuthStore } from "../AuthStore";
 import { useDesmosStore } from "../DesmosStore";
+import { useWalletConnectStore } from "./WalletConnectStore";
+import { useKeplrStore } from "./KeplrStore";
 
 export enum SupportedSigner {
     Noop = "noop",
@@ -32,13 +35,12 @@ export const useWalletStore = defineStore({
     */
     async retrieveCurrentWallet (signerId: string = this.signerId) {
       // Attempt to retrieve the client
-      const { $useWalletConnect, $useKeplr } = useNuxtApp();
       switch (signerId) {
       case SupportedSigner.Keplr:
-        await $useKeplr().connect();
+        await useKeplrStore().connect();
         break;
       case SupportedSigner.WalletConnect:
-        await $useWalletConnect().connect();
+        await useWalletConnectStore().connect();
         break;
 
       default:
@@ -91,7 +93,7 @@ export const useWalletStore = defineStore({
     */
     async onWalletConnected () {
       // const accountStore = useAccountStore();
-      const { $useAuth } = useNuxtApp();
+      const authStore = useAuthStore();
       // accountStore.reset();
 
       // create the Desmos Client
@@ -113,7 +115,7 @@ export const useWalletStore = defineStore({
 
       // Start the final step of the login process
       console.log("called WalletStore onWalletConnected");
-      await $useAuth.login();
+      await authStore.login();
     },
 
     async onWalletNotConnected () {
