@@ -21,8 +21,8 @@ export const iconsMapping = {
     label: "taskList",
     icon: "task"
   },
-  code: {
-    label: "code",
+  inlineCode: {
+    label: "inlineCode",
     icon: "code-circle"
   },
   bulletList: {
@@ -33,9 +33,21 @@ export const iconsMapping = {
     label: "orderedList",
     icon: "task-numbered"
   },
-  paperclip: {
-    label: "//",
-    icon: "paperclip-2"
+  divider: {
+    label: "divider",
+    icon: "grid-10"
+  },
+  code: {
+    label: "code",
+    icon: "code-1"
+  },
+  image: {
+    label: "image",
+    icon: "image"
+  },
+  table: {
+    label: "table",
+    icon: "hierarchy"
   }
 };
 

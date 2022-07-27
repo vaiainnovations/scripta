@@ -1,9 +1,10 @@
 @font-face {
   font-family: "MilkdownIcons";
-  src: url("~/assets/fonts/milkdown/MilkdownIcons.eot?yvpih5");
-  src: url("~/assets/fonts/milkdown/MilkdownIcons.eot?yvpih5#iefix") format("embedded-opentype"),
-    url("~/assets/fonts/milkdown/MilkdownIcons.ttf?yvpih5") format("truetype"), url("~/assets/fonts/milkdown/MilkdownIcons.woff?yvpih5") format("woff"),
-    url("~/assets/fonts/milkdown/MilkdownIcons.svg?yvpih5#MilkdownIcons") format("svg");
+  src: url("~/assets/fonts/milkdown/MilkdownIcons.eot?5khdzo");
+  src: url("~/assets/fonts/milkdown/MilkdownIcons.eot?5khdzo#iefix") format("embedded-opentype"),
+    url("~/assets/fonts/milkdown/MilkdownIcons.ttf?5khdzo") format("truetype"),
+    url("~/assets/fonts/milkdown/MilkdownIcons.woff?5khdzo") format("woff"),
+    url("~/assets/fonts/milkdown/MilkdownIcons.svg?5khdzo#MilkdownIcons") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -24,30 +25,42 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-code-circle:before {
+.icon-hierarchy:before {
+  content: "\e90c";
+}
+.icon-image:before {
+  content: "\e90b";
+}
+.icon-code-1:before {
   content: "\e900";
 }
-.icon-link:before {
+.icon-code-circle:before {
   content: "\e901";
 }
-.icon-paperclip-2:before {
+.icon-grid-10:before {
   content: "\e902";
 }
-.icon-task:before {
+.icon-link:before {
   content: "\e903";
 }
-.icon-task-dots:before {
+.icon-paperclip-2:before {
   content: "\e904";
 }
-.icon-task-numbered:before {
+.icon-task:before {
   content: "\e905";
 }
-.icon-text-bold:before {
+.icon-task-dots:before {
   content: "\e906";
 }
-.icon-text-italic:before {
+.icon-task-numbered:before {
   content: "\e907";
 }
-.icon-text-underline:before {
+.icon-text-bold:before {
   content: "\e908";
+}
+.icon-text-italic:before {
+  content: "\e909";
+}
+.icon-text-underline:before {
+  content: "\e90a";
 }

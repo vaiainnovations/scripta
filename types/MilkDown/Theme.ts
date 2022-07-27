@@ -1,3 +1,4 @@
+import { Color } from "@milkdown/design-system";
 // import resolveConfig from "tailwindcss/resolveConfig";
 // import tailwindConfig from "@/tailwind.config.js";
 
@@ -9,8 +10,8 @@
 //   "primary-text-light": typeof (fullConfig.theme?.colors) === "object" ? fullConfig.theme.colors(colors: prima) : "#0000FF"
 // };
 
-export const colors = {
-  primary: "#FFFCF9",
+export const colors: Record<Color, string> = {
+  primary: "#000000",
   secondary: "#3E86E1",
   neutral: "#000000",
   solid: "#696969",

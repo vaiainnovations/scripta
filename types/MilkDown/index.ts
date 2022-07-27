@@ -14,17 +14,17 @@ import {
 } from "@milkdown/core";
 import { useAllPresetRenderer } from "@milkdown/theme-pack-helper";
 
-import { getIcon } from "./icons";
-import { colors, sizes, fonts } from "./theme";
-import { getStyle } from "./style";
-import { getScrollbar } from "./scrollbar";
+import { getIcon } from "./Icons";
+import { colors, sizes, fonts } from "./Theme";
+import { getStyle } from "./Style";
+import { getScrollbar } from "./Scrollbar";
 
 export const createTheme = (emotion: Emotion, manager: ThemeManager) => {
   const { css } = emotion;
 
   /* Get a color by key and opacity
   Possible keys are: primary, secondary, neutral, solid, shadow, line, surface and background */
-  manager.set(ThemeColor, ([key]) => {
+  manager.set(ThemeColor, ([key, opacity]) => {
     const hex = colors[key];
     // convert the hex color to rgb
     const rgb = hex2rgb(hex);
@@ -33,7 +33,7 @@ export const createTheme = (emotion: Emotion, manager: ThemeManager) => {
     }
 
     // for now opacity is set to 1
-    return `rgba(${rgb?.join(", ")}, 1)`;
+    return `rgba(${rgb?.join(", ")}, ${opacity || 1})`;
   });
 
   /* Get a size by key
@@ -91,9 +91,9 @@ export const createTheme = (emotion: Emotion, manager: ThemeManager) => {
   // TODO inspect better the scrollbar theme
   /* Get scrollbar by direction and type */
   manager.set(ThemeScrollbar, ([direction = "y", type = "normal"] = ["y", "normal"] as never) => {
-    const main = manager.get(ThemeColor, ["secondary", 0.38]);
-    const bg = manager.get(ThemeColor, ["secondary", 0.12]);
-    const hover = manager.get(ThemeColor, ["secondary"]);
+    const main = manager.get(ThemeColor, ["solid", 0.38]);
+    const bg = manager.get(ThemeColor, ["solid", 0.12]);
+    const hover = manager.get(ThemeColor, ["solid"]);
     return css(getScrollbar(main, bg, hover, direction, type));
   });
 

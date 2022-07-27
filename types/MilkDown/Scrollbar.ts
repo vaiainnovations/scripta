@@ -1,6 +1,6 @@
 export const getScrollbar = (main: string, bg: string, hover: string, direction: string, type: string) => {
   return `
-    scrollbar-width: thin;
+    scrollbar-width: ${type};
     scrollbar-color: ${main} ${bg};
     -webkit-overflow-scrolling: touch;
     &::-webkit-scrollbar {
