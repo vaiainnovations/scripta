@@ -40,6 +40,14 @@ export const iconsMapping = {
   code: {
     label: "code",
     icon: "code-1"
+  },
+  image: {
+    label: "image",
+    icon: "image"
+  },
+  table: {
+    label: "table",
+    icon: "hierarchy"
   }
 };
 

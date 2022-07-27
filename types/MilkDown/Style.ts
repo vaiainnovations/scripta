@@ -243,7 +243,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   `;
 
   // Image style
-  /* const imgStyle = css`
+  const imgStyle = css`
     .image {
       display: inline-block;
       margin: 0 auto;
@@ -253,8 +253,30 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       height: auto;
       text-align: center;
     }
-  `; */
+    .image-container.ProseMirror-selectednode {
+      border: 0;
+      border-radius: 4px;
+    }
+    .image-container {
+      ${borderAll}
+    }
+  `;
 
+  const emojiStyle = css`
+    .emoji-wrapper {
+      .emoji {
+        display: inline-block;
+      }
+    }
+  `;
+
+  const diagramStyle = css`
+    .edgePath {
+      .path {
+        stroke-width: 1px !important;
+      }
+    }
+  `;
   // Editor style
   // TODO add img, heading, blockquote, footnote and table
   const editorStyle = css`
@@ -271,6 +293,9 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
 
       ${paragraphStyle}
       ${strikeThroughStyle}
+      ${emojiStyle}
+
+      ${diagramStyle}
 
       ${hrStyle}
 
@@ -278,6 +303,8 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
 
       ${codeStyle}
       ${inlineStyle}
+
+      ${imgStyle}
     }
   `;
 

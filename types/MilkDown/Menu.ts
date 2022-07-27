@@ -9,12 +9,15 @@ import {
   WrapInBulletList,
   WrapInOrderedList,
   ToggleInlineCode,
-  InsertHr
+  InsertHr,
+  InsertImage
 } from "@milkdown/preset-gfm";
 
 import { EditorState } from "@milkdown/prose/state";
-import { MarkType, NodeType } from "@milkdown/prose/model";
+import { NodeType, MarkType } from "@milkdown/prose/model";
 import { wrapIn, setBlockType } from "@milkdown/prose/commands";
+import { findParentNode } from "@milkdown/prose";
+import { TurnIntoDiagram } from "@milkdown/plugin-diagram";
 
 const hasMark = (state: EditorState, type: MarkType | undefined): boolean => {
   if (!type) {
@@ -26,6 +29,12 @@ const hasMark = (state: EditorState, type: MarkType | undefined): boolean => {
   }
   return state.doc.rangeHasMark(from, to, type);
 };
+
+const isInCodeFence = (editorState: EditorState): boolean =>
+  Boolean(findParentNode(node => !!node.type.spec.code)(editorState.selection));
+
+const isTextAndNotHasMark = (editorState: EditorState, mark?: MarkType): boolean =>
+  isInCodeFence(editorState) || hasMark(editorState, mark);
 
 const notBlockType = (state: EditorState, node: NodeType | undefined): boolean => {
   if (!node) {
@@ -50,7 +59,12 @@ export const customMenu = menu
           icon: "link",
           key: ToggleLink,
           active: view => hasMark(view.state, view.state.schema.marks.link),
-          disabled: view => !view.state.schema.marks.link
+          disabled: view => isTextAndNotHasMark(view.state, view.state.schema.marks.code_inline)
+        },
+        {
+          type: "button",
+          icon: "image",
+          key: InsertImage
         }
       ],
       [
@@ -59,21 +73,21 @@ export const customMenu = menu
           icon: "bold",
           key: ToggleBold,
           active: view => hasMark(view.state, view.state.schema.marks.strong),
-          disabled: view => !view.state.schema.marks.strong
+          disabled: view => isTextAndNotHasMark(view.state, view.state.schema.marks.code_inline)
         },
         {
           type: "button",
           icon: "strikeThrough",
           key: ToggleStrikeThrough,
           active: view => hasMark(view.state, view.state.schema.marks.strike_through),
-          disabled: view => !view.state.schema.marks.strike_through
+          disabled: view => isTextAndNotHasMark(view.state, view.state.schema.marks.code_inline)
         },
         {
           type: "button",
           icon: "italic",
           key: ToggleItalic,
           active: view => hasMark(view.state, view.state.schema.marks.em),
-          disabled: view => !view.state.schema.marks.em
+          disabled: view => isTextAndNotHasMark(view.state, view.state.schema.marks.code_inline)
         },
         {
           type: "button",
@@ -116,7 +130,12 @@ export const customMenu = menu
           type: "button",
           icon: "inlineCode",
           key: TurnIntoCodeFence,
-          disabled: view => notBlockType(view.state, view.state.schema.nodes.fence)
+          disabled: view => notBlockType(view.state, view.state.schema.nodes.fence) || isTextAndNotHasMark(view.state, view.state.schema.marks.code_inline)
+        },
+        {
+          type: "button",
+          icon: "table",
+          key: TurnIntoDiagram
         }
       ]
     ]
