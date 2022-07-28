@@ -5,8 +5,7 @@
         {{ navBarReading.title }}
       </template>
       <template #right>
-        {{ navBarReading.user.name }}
-        <ArticlesViewUser class="flex-row-reverse" :user="navBarReading.user" />
+        <ArticlesViewUser class="flex-row-reverse" :address="navBarReading.address" :date="navBarReading.date" />
       </template>
     </NavBarCard>
     <NavBar v-else />
@@ -18,19 +17,14 @@
 
 <script setup lang="ts">
 import { Ref } from "vue";
-interface UserType {
-  name: string,
-  date: string,
-  image: string
-}
 
-interface NavBarReadingType {
+export interface NavBarReadingType {
   show: boolean,
   title: string,
-  user: UserType
+  address: string,
+  date: Date
 }
-
-const navBarReading: Ref<NavBarReadingType> = ref({ show: false, title: "", user: { name: "", date: "", image: "" } });
+const navBarReading: Ref<NavBarReadingType> = ref({ show: false, title: "", address: "", date: new Date() });
 
 provide("navBarReading", navBarReading);
 </script>

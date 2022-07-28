@@ -52,6 +52,7 @@
 
 <script setup lang="ts">
 import { Ref } from "vue";
+import { NavBarReadingType } from "~~/layouts/readingCustom.vue";
 import { PostExtended } from "~~/types/PostExtended";
 import { ArticleSearch } from "~~/types/SearchResults";
 import { TagType } from "~~/types/TagType";
@@ -67,14 +68,16 @@ useHead({
 });
 
 const tags = (props.article.tags && props.article.tags.length > 0) ? new Array(props.article.tags.length).fill(0).map((_, i) => ({ i, content: { value: props.article.tags[i] } as TagType })) : [];
-const ipfsSourceUrl = (props.article.entities as any)?.urls[0]?.url || "";
-
-interface NavBarReadingType {
-  show: boolean,
-  title: string,
-  address: string
+let ipfsSourceUrl = "";
+if (props.article.entities && (props.article.entities as any).urls) {
+  ipfsSourceUrl = (props.article.entities as any)?.urls[0].url;
 }
+
 const navBarReading : Ref<NavBarReadingType> = inject("navBarReading");
+// eslint-disable-next-line vue/no-setup-props-destructure
+navBarReading.value.title = props.article.text;
+// eslint-disable-next-line vue/no-setup-props-destructure
+navBarReading.value.date = new Date(props.article.creation_date);
 
 function handleNavbarChange (event: Event) {
   const { scrollTop } = (event.target as HTMLDivElement);

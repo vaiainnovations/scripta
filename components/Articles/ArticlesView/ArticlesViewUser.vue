@@ -13,7 +13,9 @@
 </template>
 
 <script setup lang="ts">
+import { Ref } from "vue";
 import { useUserStore } from "~~/core/store/UserStore";
+import { NavBarReadingType } from "~~/layouts/readingCustom.vue";
 
 interface Props {
   address: string
@@ -21,6 +23,11 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-const author = await useUserStore().getUser(props.address);
-console.log(author);
+const author = await useUserStore().getUser(props.address, true);
+
+const navBarReading : Ref<NavBarReadingType> = inject("navBarReading");
+// eslint-disable-next-line vue/no-setup-props-destructure
+navBarReading.value.address = props.address;
+// eslint-disable-next-line vue/no-setup-props-destructure
+navBarReading.value.date = props.date;
 </script>
