@@ -36,12 +36,13 @@
 </template>
 
 <script setup lang="ts">
+import { Buffer } from "buffer";
 import { MsgCreatePostEncodeObject } from "@desmoslabs/desmjs";
 import Long from "long";
 import { v4 as uuidv4 } from "uuid";
-import { Media } from "@desmoslabs/desmjs-types/desmos/posts/v2/models";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
+import { useBackendStore } from "~~/core/store/BackendStore";
 
 const isPublishing = ref(false);
 
@@ -98,11 +99,8 @@ async function publish () {
   // craft a custom object for IPFS
   const ipfsPost: any = {
     ...msgCreatePost.value,
-    text: {
-      title: draftStore.title,
-      subtitle: draftStore.subtitle,
-      content: draftStore.content
-    }
+    subtitle: draftStore.subtitle,
+    content: draftStore.content
   };
 
   // upload the post to IPFS (without CID attachment), get the returned CID
@@ -111,22 +109,27 @@ async function publish () {
   const postIpfsUrl = `https://cloudflare-ipfs.com/ipfs/${postCid}`;
   console.log(postIpfsUrl);
 
-  // attach the CID to the Post
-  msgCreatePost.value.attachments = [
-    {
-      typeUrl: "/desmos.posts.v2.Media",
-      value: Media.encode({
-        mimeType: "text/json",
-        uri: postIpfsUrl
-      }).finish()
-    }
-  ];
+  const ipfsEntityUrl = {
+    displayUrl: "IPFS",
+    start: Long.fromNumber(0),
+    end: Long.fromNumber(1),
+    url: postIpfsUrl
+  };
 
-  $useTransaction().push(msgCreatePost);
-  const signedBytes = await $useTransaction().execute();
+  // attach the CID to the Post as an entity
+  msgCreatePost.value.entities = {
+    hashtags: [],
+    mentions: [],
+    urls: [ipfsEntityUrl]
+  };
 
-  /* const res = await (
-    await fetch("http://192.168.1.108:4000/v1/test3", {
+  /* $useTransaction().push(msgCreatePost);
+  const signedBytes = await $useTransaction().execute(); */
+
+  const signedBytes = await $useTransaction().directSign(msgCreatePost);
+
+  const res = await (
+    await fetch(`${useBackendStore().apiUrl}/posts/${extId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -135,12 +138,15 @@ async function publish () {
         signedPost: Buffer.from(signedBytes).toString("base64"),
         extId: msgCreatePost.value.externalId,
         author: msgCreatePost.value.author,
-        sectionId: msgCreatePost.value.sectionId,
-        text: msgCreatePost.value.text
+        section_id: msgCreatePost.value.sectionId,
+        text: msgCreatePost.value.text,
+        tags: msgCreatePost.value.tags,
+        subtitle: useDraftStore().subtitle,
+        content: useDraftStore().content
       })
     })
-  ).json(); */
-  console.log(signedBytes);
+  ).json();
+  console.log(res);
   isPublishing.value = false;
 }
 </script>

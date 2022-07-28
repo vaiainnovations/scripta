@@ -73,7 +73,7 @@ export const useTransactionStore = defineStore({
         this.resetQueueWithTimer(10);
       }
     },
-    async directSign (): Promise<Uint8Array> {
+    async directSign (message: EncodeObject): Promise<Uint8Array> {
       const { $useWallet } = useNuxtApp();
       // check if the draft is not empty
       try {
@@ -89,7 +89,7 @@ export const useTransactionStore = defineStore({
         };
 
         // sign the messages
-        const signed = await client.sign(address, this.queue, defaultFee, "Signed from Scripta.network");
+        const signed = await client.sign(address, [message], defaultFee, "Signed from Scripta.network");
         const txBytes = TxRaw.encode(signed).finish();
 
         // broadcast the messages

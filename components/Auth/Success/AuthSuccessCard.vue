@@ -12,7 +12,10 @@
           <p class="text-2xl font-bold tracking-widest text-primary-text-light">
             Success
           </p>
-          <AuthStatusButton class="bg-primary" @click="onContinueAction">
+          <AuthStatusButton
+            class="bg-primary"
+            @click="onContinueAction"
+          >
             Continue
           </AuthStatusButton>
         </div>
@@ -25,4 +28,11 @@
 function onContinueAction () {
   navigateTo("/profile");
 }
+onMounted(() => {
+  if (process.client) {
+    setTimeout(() => {
+      onContinueAction();
+    }, 3000);
+  }
+});
 </script>

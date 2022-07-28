@@ -30,7 +30,7 @@
       <p class="text-primary-text-light font-medium text-xs self-start lg:text-sm">
         Content
       </p>
-      <MarkDownEditor />
+      <MarkDownEditor :read-only="false" :content="''" />
     </div>
   </div>
 </template>
