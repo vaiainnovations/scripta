@@ -11,12 +11,12 @@
 import { useUserStore } from "~~/core/store/UserStore";
 
 interface Props {
-  address: string;
+  username: string;
 }
 
 const props = defineProps<Props>();
 
-const user = await useUserStore().getUser(props.address);
+const user = await useUserStore().getUser(props.username);
 let articles = [];
 if (process.client) {
   articles = await useUserStore().getUserArticles(user.account.address);

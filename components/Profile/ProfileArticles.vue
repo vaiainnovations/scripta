@@ -18,7 +18,7 @@
         class="w-full"
         :to="`/${useAccountStore().profile.dtag}/${article.external_id}`"
       >
-        <ArticlesSmallPreview :content="{description: article.external_id, title: article.text, image: ''}" />
+        <ArticlesSmallPreview :content="{description: article.subtitle, title: article.text, image: ''}" />
       </NuxtLink>
     </div>
   </div>

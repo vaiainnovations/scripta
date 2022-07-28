@@ -4,7 +4,7 @@
       <img class="h-36 object-cover md:h-32 md:w-full md:object-contain mx-auto" :src="props.content.image">
     </div>
     <div class="flex flex-col justify-start px-4 gap-y-1 md:gap-y-2 pb-2 md:w-4/5">
-      <p class="text-lg font-bold md:text-xl">
+      <p class="text-lg font-bold md:text-xl text-center md:text-left">
         {{ props.content.title }}
       </p>
       <p class="text-base md:text-xs">
