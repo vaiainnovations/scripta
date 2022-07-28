@@ -21,6 +21,7 @@ import { useDraftStore } from "~~/core/store/DraftStore";
 import { customUploader } from "~~/types/MilkDown/Uploader";
 // import { mathPlugin } from "~~/types/MilkDown/MathCommand";
 import { iframePlugin } from "~~/types/MilkDown/IFrame";
+import { videoPlugin } from "~~/types/MilkDown/Video";
 
 interface Props {
   readOnly: boolean
@@ -40,6 +41,7 @@ const { editor } = useEditor(root =>
       });
       ctx.set(editorViewOptionsCtx, { editable: () => !props.readOnly });
     })
+    .use(videoPlugin)
     .use(iframePlugin)
     .use(
       gfm

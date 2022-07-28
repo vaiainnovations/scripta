@@ -10,7 +10,7 @@ async function UploadAPI (image: File) {
 }
 
 export const customUploader: Uploader = async (files, schema) => {
-  const images: File[] = [];
+  const media: File[] = [];
 
   for (let i = 0; i < files.length; i++) {
     const file = files.item(i);
@@ -23,23 +23,25 @@ export const customUploader: Uploader = async (files, schema) => {
       continue;
     }
 
-    images.push(file);
+    media.push(file);
   }
 
   const nodes: Node[] = await Promise.all(
-    images.map(async (file) => {
+    media.map(async (file) => {
       const src = await UploadAPI(file);
-      const alt = file.name;
 
       if (file.type.includes("image")) {
+        const alt = file.name;
+
         return schema.nodes.image.createAndFill({
           src,
           alt
         }) as Node;
       } else if (file.type.includes("video")) {
-        return schema.nodes.iframe.createAndFill({
-          src
-        });
+        return schema.nodes.video.createAndFill({
+          file: src,
+          type: file.type
+        }) as Node;
       }
     })
   );
