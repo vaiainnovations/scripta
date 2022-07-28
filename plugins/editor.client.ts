@@ -4,7 +4,7 @@ import { gfm, link, image } from "@milkdown/preset-gfm";
 import { listenerCtx, listener } from "@milkdown/plugin-listener";
 import { tooltip, tooltipPlugin } from "@milkdown/plugin-tooltip";
 import { upload, uploadPlugin } from "@milkdown/plugin-upload";
-import { math } from "@milkdown/plugin-math";
+import { math, mathBlock } from "@milkdown/plugin-math";
 import { diagram } from "@milkdown/plugin-diagram";
 import { emoji } from "@milkdown/plugin-emoji";
 // import { block } from "@milkdown/plugin-block";
@@ -14,10 +14,9 @@ import { customTheme } from "~~/types/MilkDown";
 import { customMenu } from "~~/types/MilkDown/Menu";
 import { useDraftStore } from "~~/core/store/DraftStore";
 import { customUploader } from "~~/types/MilkDown/Uploader";
-// import { mathPlugin } from "~~/types/MilkDown/MathCommand";
 import { iframePlugin } from "~~/types/MilkDown/IFrame";
 import { videoPlugin } from "~~/types/MilkDown/Video";
-// import { mathPlugin } from "~~/types/MilkDown/MathCommand";
+import { extendedMathBlock } from "~~/types/MilkDown/MathCommand";
 
 export default defineNuxtPlugin(() => {
   return {
@@ -58,7 +57,7 @@ export default defineNuxtPlugin(() => {
             .use(upload.configure(uploadPlugin, {
               uploader: customUploader
             }))
-            .use(math)
+            .use(math.replace(mathBlock, extendedMathBlock()))
             .use(diagram)
             .use(emoji)
             // .use(block)
