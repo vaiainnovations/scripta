@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { defaultValueCtx, Editor, rootCtx } from "@milkdown/core";
+import { defaultValueCtx, editorViewOptionsCtx, Editor, rootCtx } from "@milkdown/core";
 import { VueEditor, useEditor } from "@milkdown/vue";
 import { gfm, link, image } from "@milkdown/preset-gfm";
 import { listenerCtx, listener } from "@milkdown/plugin-listener";
@@ -15,12 +15,20 @@ import { emoji } from "@milkdown/plugin-emoji";
 // import { block } from "@milkdown/plugin-block";
 
 import { customTheme } from "~~/types/MilkDown";
+
 import { customMenu } from "~~/types/MilkDown/Menu";
+import { useDraftStore } from "~~/core/store/DraftStore";
 import { customUploader } from "~~/types/MilkDown/Uploader";
 // import { mathPlugin } from "~~/types/MilkDown/MathCommand";
 import { iframePlugin } from "~~/types/MilkDown/IFrame";
 
-const editorValue = ref("");
+interface Props {
+  readOnly: boolean
+  content: string
+}
+const props = defineProps<Props>();
+
+const editorValue = ref(props.content || useDraftStore().content);
 
 const { editor } = useEditor(root =>
   Editor.make()
@@ -28,8 +36,9 @@ const { editor } = useEditor(root =>
       ctx.set(rootCtx, root);
       ctx.set(defaultValueCtx, editorValue.value);
       ctx.get(listenerCtx).markdownUpdated((_, markdown) => {
-        editorValue.value = markdown;
+        useDraftStore().content = markdown;
       });
+      ctx.set(editorViewOptionsCtx, { editable: () => !props.readOnly });
     })
     .use(iframePlugin)
     .use(

@@ -4,6 +4,8 @@ import { generateUsername } from "unique-username-generator";
 import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v2/models_profile";
 import { SupportedSigner, useWalletStore } from "./wallet/WalletStore";
 import { useAccountStore } from "./AccountStore";
+import { useUserStore } from "./UserStore";
+import { usePostStore } from "./PostStore";
 import { registerModuleHMR } from ".";
 
 export enum AuthLevel {
@@ -115,6 +117,9 @@ export const useAuthStore = defineStore({
         useAccountStore().address = account.address;
 
         const authInfo = await useAccountStore().getUserInfo(false); // TODO: force creation here?
+        const articles = await useUserStore().getUserArticles(account.address);
+        usePostStore().userPosts = articles;
+
         console.log(authInfo);
         // TODO: handle error situation
 

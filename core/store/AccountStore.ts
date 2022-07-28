@@ -10,7 +10,7 @@ export const useAccountStore = defineStore({
     profile: null as Profile,
     balance: 0,
     isNewProfile: false,
-    sectionId: -10
+    sectionId: 0
   }),
   getters: {
 

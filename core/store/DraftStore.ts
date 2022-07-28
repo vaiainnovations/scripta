@@ -25,7 +25,7 @@ export const useDraftStore = defineStore({
         return;
       }
 
-      // generate a new externalId if it is not set
+      // generate a new externalId if not set
       if (!this.externalId) {
         this.externalId = uuidv4();
       }
