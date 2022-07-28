@@ -18,6 +18,7 @@ import { NodeType, MarkType } from "@milkdown/prose/model";
 import { wrapIn, setBlockType } from "@milkdown/prose/commands";
 import { findParentNode } from "@milkdown/prose";
 import { TurnIntoDiagram } from "@milkdown/plugin-diagram";
+import { TurnIntoMathBlock } from "./MathCommand";
 
 const hasMark = (state: EditorState, type: MarkType | undefined): boolean => {
   if (!type) {
@@ -136,6 +137,11 @@ export const customMenu = menu
           type: "button",
           icon: "table",
           key: TurnIntoDiagram
+        },
+        {
+          type: "button",
+          icon: "redo",
+          key: TurnIntoMathBlock
         }
       ]
     ]

@@ -257,9 +257,6 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       border: 0;
       border-radius: 4px;
     }
-    .image-container {
-      ${borderAll}
-    }
   `;
 
   const emojiStyle = css`
@@ -278,7 +275,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
     }
   `;
   // Editor style
-  // TODO add img, heading, blockquote, footnote and table
+  // TODO add heading, blockquote, footnote and table
   const editorStyle = css`
     .editor {
       height: 100%;
