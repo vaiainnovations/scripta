@@ -1,27 +1,26 @@
 <template>
   <div class="flex flex-row gap-x-3 pt-2 lg:gap-x-2.5">
-    <img :src="props.user.image" class="h-12 w-10 object-contain">
+    <img :src="author.pictures.profile" class="h-12 w-12 object-cover rounded-full">
     <div class="flex flex-col">
       <p class="text-lg font-medium text-primary-text">
-        {{ props.user.name }}
+        {{ author.nickname || author.dtag }}
       </p>
       <p class="text-sm font-medium text-primary-text-light">
-        {{ props.user.date }}
+        {{ new Date(props.date).toLocaleString() }}
       </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-interface UserType {
-  name: string,
-  date: string,
-  image: string
-}
+import { useUserStore } from "~~/core/store/UserStore";
 
 interface Props {
-  user: UserType
+  address: string
+  date: Date
 }
 
 const props = defineProps<Props>();
+const author = await useUserStore().getUser(props.address);
+console.log(author);
 </script>

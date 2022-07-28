@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-full flex-col gap-y-6 overflow-y-scroll bg-background px-4 py-5 md:px-32 lg:py-20 2xl:w-5/6 2xl:px-14 2xl:border border-primary-text-light" @scroll="handleNavbarChange">
     <div class="flex h-6 flex-row items-center justify-start gap-x-4 py-0.5">
-    <!--  <ArticlesViewTag v-for="tag in tags" :key="tag.i" :content="tag.content" class="w-36" /> -->
+      <ArticlesViewTag v-for="tag in tags" :key="tag.i" :content="tag.content" class="w-36" />
       <!-- <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
@@ -10,7 +10,8 @@
         <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
       </svg> -->
     </div>
-    <ArticlesViewContent :title="props.article.text" :subtitle="props.article.subtitle" :content="props.article.content" :user="navBarReading.user" />
+    <ArticlesViewContent :title="props.article.text" :subtitle="props.article.subtitle" :content="props.article.content" :address="props.article.author" :date="new Date(props.article.creation_date)" />
+    <a v-if="ipfsSourceUrl" :href="ipfsSourceUrl" target="_blank" class="text-xs">IPFS source</a>
     <div class="grid grid-cols-2 place-content-between gap-y-3 lg:grid-cols-4 lg:gap-x-2">
       <div class="flex flex-row gap-x-1.5 lg:col-span-1">
         <img src="/icons/outline/heart.svg" class="h-5 w-5">
@@ -53,7 +54,7 @@
 import { Ref } from "vue";
 import { PostExtended } from "~~/types/PostExtended";
 import { ArticleSearch } from "~~/types/SearchResults";
-/* import { TagType } from "~~/types/TagType"; */
+import { TagType } from "~~/types/TagType";
 
 interface Props {
   suggestedArticles: Array<{ id: number; content: ArticleSearch }>;
@@ -61,24 +62,19 @@ interface Props {
 }
 const props = defineProps<Props>();
 
-// const tags = (props.article.tags && props.article.tags.length > 0) ? new Array(props.article.tags.length).fill(0).map((_, i) => ({ i, content: { value: props.article.tags[i] } as TagType })) : [];
-/* const tags = []; */
+useHead({
+  title: props.article.text
+});
 
-interface UserType {
-  name: string,
-  date: string,
-  image: string
-}
+const tags = (props.article.tags && props.article.tags.length > 0) ? new Array(props.article.tags.length).fill(0).map((_, i) => ({ i, content: { value: props.article.tags[i] } as TagType })) : [];
+const ipfsSourceUrl = (props.article.entities as any)?.urls[0]?.url || "";
 
 interface NavBarReadingType {
   show: boolean,
   title: string,
-  user: UserType
+  address: string
 }
 const navBarReading : Ref<NavBarReadingType> = inject("navBarReading");
-// eslint-disable-next-line vue/no-setup-props-destructure
-navBarReading.value.title = props.article.text;
-navBarReading.value.user = { name: props.article.author, date: props.article.creation_date, image: "/svg/wallet/dpm/logo.svg" };
 
 function handleNavbarChange (event: Event) {
   const { scrollTop } = (event.target as HTMLDivElement);

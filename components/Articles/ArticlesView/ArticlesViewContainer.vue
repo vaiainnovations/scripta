@@ -9,7 +9,7 @@
 <script setup lang="ts">
 // content of the article
 import { usePostStore } from "~~/core/store/PostStore";
-/* import { AuthorSearch, ArticleSearch } from "~~/types/SearchResults"; */
+import { AuthorSearch, ArticleSearch } from "~~/types/SearchResults";
 
 interface Props {
   externalId: string;
@@ -28,7 +28,7 @@ const suggestedArticlesResults = ref(getSuggestedArticles());
 // content of the author
 
 function getSuggestedArticles () {
-  /* const contentAuthor: AuthorSearch = {
+  const contentAuthor: AuthorSearch = {
     name: "Nickname",
     image: "/svg/wallet/dpm/logo.svg"
   };
@@ -51,7 +51,6 @@ function getSuggestedArticles () {
 
   return Array(6)
     .fill(0)
-    .map((_, i) => ({ id: i, content: contentArticle })); */
-  return [];
+    .map((_, i) => ({ id: i, content: contentArticle }));
 }
 </script>

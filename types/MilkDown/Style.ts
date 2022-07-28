@@ -355,7 +355,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   const containerStyle = css`
     .milkdown {
       width: 100%;
-      height: 632px;
+      min-height: 632px;
 
       margin-left: auto;
       margin-right: auto;

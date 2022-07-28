@@ -102,7 +102,7 @@ function saveProfile () {
   const doNotModify = "[do-not-modify]";
   const oldProfile = useAccountStore().profile;
   const msgSaveProfile: MsgSaveProfileEncodeObject = {
-    typeUrl: "/desmos.profiles.v2.MsgSaveProfile",
+    typeUrl: "/desmos.profiles.v3.MsgSaveProfile",
     value: {
       dtag:
         oldProfile.dtag !== newUsername.value ? newUsername.value : doNotModify,

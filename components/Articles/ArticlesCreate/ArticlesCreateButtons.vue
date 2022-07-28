@@ -43,6 +43,8 @@ import { v4 as uuidv4 } from "uuid";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
 import { useBackendStore } from "~~/core/store/BackendStore";
+import { usePostStore } from "~~/core/store/PostStore";
+import { useUserStore } from "~~/core/store/UserStore";
 
 const isPublishing = ref(false);
 
@@ -142,11 +144,16 @@ async function publish () {
         text: msgCreatePost.value.text,
         tags: msgCreatePost.value.tags,
         subtitle: useDraftStore().subtitle,
-        content: useDraftStore().content
+        content: useDraftStore().content,
+        entities: JSON.stringify(msgCreatePost.value.entities)
       })
     })
-  ).json();
+  ).json() as any;
   console.log(res);
+  if (res.code === 0) {
+    usePostStore().userPosts = await useUserStore().getUserArticles(useAccountStore().address);
+    useRouter().push("/profile");
+  }
   isPublishing.value = false;
 }
 </script>

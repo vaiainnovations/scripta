@@ -6,7 +6,7 @@
     <p class="text-xl font-medium text-primary-text-light lg:text-2xl xl:text-3xl">
       {{ props.subtitle }}
     </p>
-    <ArticlesViewUser :user="props.user" />
+    <ArticlesViewUser :address="props.address" :date="props.date" />
     <div class="pt-7">
       <MarkDownEditor :read-only="true" :content="props.content" />
     </div>
@@ -14,17 +14,13 @@
 </template>
 
 <script setup lang="ts">
-interface UserType {
-  name: string,
-  date: string,
-  image: string
-}
 
 interface Props {
   title: string
   subtitle: string
   content: string
-  user: UserType
+  address: string
+  date: Date
 }
 
 const props = defineProps<Props>();

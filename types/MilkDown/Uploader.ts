@@ -1,10 +1,10 @@
 import { Uploader } from "@milkdown/plugin-upload";
 import type { Node } from "prosemirror-model";
-import { useIpfsStore } from "~/core/store/IpfsStore";
 
 // Fake iamge upload
 async function UploadAPI (image: File) {
-  const res = await useIpfsStore().client.add(image);
+  const { $useIpfs } = useNuxtApp();
+  const res = await $useIpfs().client.add(image);
   console.log(res);
   return `https://cloudflare-ipfs.com/ipfs/${res.path}`;
 }
