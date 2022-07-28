@@ -1,7 +1,7 @@
 /* import { SigningMode } from "@desmoslabs/desmjs"; */
 import { defineStore } from "pinia";
 import { registerModuleHMR } from "..";
-import { DESMOS_TESTNET_CHAIN_INFO, KeplrSigner } from "./KeplrSigner";
+import { DESMOS_TESTNET_CHAIN_INFO } from "./KeplrSigner";
 
 export const useKeplrStore = defineStore({
   id: "KeplrStore",
@@ -33,7 +33,7 @@ export const useKeplrStore = defineStore({
       console.log(useRuntimeConfig().desmos);
       // const chainInfo = (truncateSync) ? DESMOS_TESTNET_CHAIN_INFO : DESMOS_MAINNET_CHAIN_INFO;
       const chainInfo = DESMOS_TESTNET_CHAIN_INFO;
-      await KeplrSigner.setupChainNetwork(chainInfo);
+      await $KeplrSigner.setupChainNetwork(chainInfo);
 
       // If Keplr + Ledger, sign out the user
       const isLedgerKeplrUser = (await window.keplr.getKey("morpheus-apollo-2")).isNanoLedger;
