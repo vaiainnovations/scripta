@@ -48,19 +48,46 @@ export const iconsMapping = {
   table: {
     label: "table",
     icon: "hierarchy"
+  },
+  loading: {
+    label: "loading",
+    icon: "dots"
   }
 };
 
 export const getIcon = (key: Icon) => {
   const target = iconsMapping[key];
-  if (!target) { return; }
+  if (!target) {
+    return;
+  }
 
   const { icon, label } = target;
-  const span = document.createElement("span");
-  span.className = `milkdown-icons icon-${icon} `;
+
+  if (label === "loading") {
+    const element = document.createElement("label");
+    element.className = "flex flex-row items-center";
+
+    const spanForward = document.createElement("span");
+    spanForward.className = `forward-animated animated-icon milkdown-icons icon-${icon} `;
+
+    const spanBackward = document.createElement("span");
+    spanBackward.className = `back-animated animated-icon milkdown-icons icon-${icon} `;
+
+    element.appendChild(spanForward);
+    element.appendChild(spanBackward);
+    element.appendChild(spanForward.cloneNode(true));
+
+    return {
+      dom: element,
+      label
+    };
+  }
+
+  const element = document.createElement("span");
+  element.className = `milkdown-icons icon-${icon} `;
 
   return {
-    dom: span,
+    dom: element,
     label
   };
 };
