@@ -11,7 +11,7 @@ export const useUserStore = defineStore({
   }),
   actions: {
     async getUser (username: string): Promise<any> {
-      const res = (await (await fetch(`${useDesmosStore().lcd}desmos/profiles/v2/profiles/${username}`)).json() as any);
+      const res = (await (await fetch(`${useDesmosStore().lcd}desmos/profiles/v3/profiles/${username}`)).json() as any);
       if (res.profile) {
         const user = res.profile as any;
         this.users.set(username, res);

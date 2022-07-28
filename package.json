@@ -9,13 +9,13 @@
     "coverage": "vitest run --coverage",
     "mf-dev": "NODE_OPTIONS='--max-old-space-size=8192' npx ts-node --esm ./scripts/miniflare-simulate.ts",
     "mf-build": "NODE_OPTIONS='--max-old-space-size=8192' NITRO_PRESET=cloudflare yarn build",
-    "mf-publish": "wrnagler publish --site ./.output/public"
+    "mf-publish": "wrangler publish --site ./.output/public"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.14.1",
-    "@desmoslabs/desmjs": "4.1.0",
-    "@desmoslabs/desmjs-types": "^4.1.0",
-    "@desmoslabs/desmjs-walletconnect": "^4.1.0",
+    "@desmoslabs/desmjs": "4.2.0",
+    "@desmoslabs/desmjs-types": "^4.2.0",
+    "@desmoslabs/desmjs-walletconnect": "^4.2.0",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@keplr-wallet/types": "^0.10.12",
     "@milkdown/core": "^6.2.0",

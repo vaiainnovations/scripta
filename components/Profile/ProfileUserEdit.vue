@@ -147,7 +147,7 @@ async function checkUsername () {
   }
 
   try {
-    const res = await (await fetch(`${useDesmosStore().lcd}desmos/profiles/v2/profiles/${username}`)).json() as any;
+    const res = await (await fetch(`${useDesmosStore().lcd}desmos/profiles/v3/profiles/${username}`)).json() as any;
     if (res?.profile) {
       isValidUsername.value = false;
       return;

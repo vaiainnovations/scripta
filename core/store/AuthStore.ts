@@ -1,7 +1,7 @@
 
 import { defineStore } from "pinia";
 import { generateUsername } from "unique-username-generator";
-import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v2/models_profile";
+import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
 import { SupportedSigner, useWalletStore } from "./wallet/WalletStore";
 import { useAccountStore } from "./AccountStore";
 import { useUserStore } from "./UserStore";
