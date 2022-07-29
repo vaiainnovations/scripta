@@ -18,7 +18,7 @@ const props = defineProps<Props>();
 
 const user = await useUserStore().getUser(props.username);
 let articles = [];
-if (process.client) {
+if (user) {
   articles = await useUserStore().getUserArticles(user.account.address);
 }
 </script>

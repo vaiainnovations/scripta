@@ -22,6 +22,7 @@ class Simulator {
     // Generate sample Posts
     const postsKV = await miniflare.getKVNamespace("KV_POSTS");
     const postSample: PostExtended = {
+      external_id: "8a7b7cad-896f-4289-adf0-c49ec1556da2",
       text: "This is a sample Title",
       subtitle: "A subtitle for this sample post",
       content: "This is the *content* of the sample post",
@@ -31,7 +32,7 @@ class Simulator {
       creation_date: new Date(Date.now()).toString(),
       sectionId: 32,
       entities: [],
-      image: "",
+      image: "/img/author_pic.png",
       last_edited_date: new Date(Date.now()).toString()
 
     };

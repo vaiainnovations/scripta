@@ -70,7 +70,7 @@ useHead({
 const tags = (props.article.tags && props.article.tags.length > 0) ? new Array(props.article.tags.length).fill(0).map((_, i) => ({ i, content: { value: props.article.tags[i] } as TagType })) : [];
 let ipfsSourceUrl = "";
 if (props.article.entities && (props.article.entities as any).urls) {
-  ipfsSourceUrl = (props.article.entities as any)?.urls[0].url;
+  ipfsSourceUrl = (props.article.entities as any)?.urls[0]?.url;
 }
 
 const navBarReading : Ref<NavBarReadingType> = inject("navBarReading");

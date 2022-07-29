@@ -1,4 +1,5 @@
 export interface PostExtended {
+    external_id: string;
     text: string;
     subtitle: string;
     content: string;
