@@ -45,6 +45,7 @@ import { useDraftStore } from "~~/core/store/DraftStore";
 import { useBackendStore } from "~~/core/store/BackendStore";
 import { usePostStore } from "~~/core/store/PostStore";
 import { useUserStore } from "~~/core/store/UserStore";
+import { useDesmosStore } from "~~/core/store/DesmosStore";
 
 const isPublishing = ref(false);
 
@@ -85,7 +86,7 @@ async function publish () {
   const msgCreatePost: MsgCreatePostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgCreatePost",
     value: {
-      subspaceId: Long.fromNumber(8),
+      subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
       externalId: extId,
       attachments: [],
       author: useAccountStore().address,

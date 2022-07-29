@@ -6,7 +6,7 @@
     <div class="flex flex-row gap-x-3">
       <img src="/svg/wallet/dpm/logo.svg" class="h-5 w-5 object-contain">
       <p class="text-xl font-medium">
-        {{ useAccountStore().balance }} DSM
+        {{ useAccountStore().balance }} {{ useDesmosStore().coinDenom.toUpperCase() }}
       </p>
     </div>
     <button class="px-1 py-0.5 bg-danger rounded-2xl" @click="logout()">
@@ -17,6 +17,7 @@
 
 <script setup lang="ts">
 import { useAccountStore } from "~~/core/store/AccountStore";
+import { useDesmosStore } from "~~/core/store/DesmosStore";
 
 function logout () {
   const { $useAuth } = useNuxtApp();
