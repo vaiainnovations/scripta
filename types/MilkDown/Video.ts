@@ -1,15 +1,16 @@
 import { AtomList, createNode } from "@milkdown/utils";
 import { RemarkPlugin } from "@milkdown/core";
 import directive from "remark-directive";
+import { expectDomTypeError } from "@milkdown/exception";
 import { InputRule } from "prosemirror-inputrules";
 
 const id = "video";
 
-const video = createNode(() => ({
+const video = createNode<string>(utils => ({
   id,
   schema: () => ({
-    inline: true,
-    group: "inline",
+    // inline: true,
+    group: "block",
     marks: "",
     attrs: {
       file: { default: null },
@@ -20,7 +21,7 @@ const video = createNode(() => ({
         tag: "video",
         getAttrs: (dom) => {
           if (!(dom instanceof HTMLElement)) {
-            throw new TypeError("DOM not an instance");
+            throw expectDomTypeError(dom);
           }
           const sourceElement = dom.querySelector("source");
           return {
@@ -30,11 +31,23 @@ const video = createNode(() => ({
         }
       }
     ],
-    toDOM: node => ["video", { controls: "" }, ["source", { src: node.attrs.file, type: node.attrs.type }]],
+    toDOM: node => [
+      "video",
+      {
+        controls: "",
+        class: utils.getClassName(node.attrs, "video-container")
+      },
+      [
+        "source",
+        { src: node.attrs.file, type: node.attrs.type },
+        0
+      ]
+    ],
     parseMarkdown: {
-      match: node => node.type === "leafDirective" && node.name === "video",
+      match: node => node.type === "leafDirective" || node.name === "video",
       runner: (state, node, type) => {
-        state.addNode(type, { file: (node.attributes as { file: string }).file, type: (node.attributes as { type: string }).type });
+        const attrs = node.attributes as {file: string, type: string};
+        state.addNode(type, { file: attrs.file, type: attrs.type });
       }
     },
     toMarkdown: {
@@ -52,7 +65,7 @@ const video = createNode(() => ({
   }),
   remarkPlugins: () => [directive as RemarkPlugin],
   inputRules: nodeType => [
-    new InputRule(/::video\{(file="(?<file>[^"]+)?")?\W?(type="(?<type>[^"]+)?")?\}/, (state, match, start, end) => {
+    new InputRule(/::video\{(?:file="(?<file>[^"]+)?")?\s*(?:type="(?<type>[^"]+)?")?\}/, (state, match, start, end) => {
       const [okay, file = "", type = ""] = match;
       const { tr } = state;
       if (okay) {

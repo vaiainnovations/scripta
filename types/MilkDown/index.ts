@@ -1,3 +1,4 @@
+import { Color } from "@milkdown/design-system";
 import {
   themeFactory,
   ThemeIcon,
@@ -19,20 +20,22 @@ import { colors, sizes, fonts } from "./Theme";
 import { getStyle } from "./Style";
 import { getScrollbar } from "./Scrollbar";
 
+export const getColor = (key: Color): [number, number, number] => {
+  const hex = colors[key];
+  // convert the hex color to rgb
+  return hex2rgb(hex);
+};
+
 export const createTheme = (emotion: Emotion, manager: ThemeManager) => {
   const { css } = emotion;
-
   /* Get a color by key and opacity
   Possible keys are: primary, secondary, neutral, solid, shadow, line, surface and background */
   manager.set(ThemeColor, ([key, opacity]) => {
-    const hex = colors[key];
-    // convert the hex color to rgb
-    const rgb = hex2rgb(hex);
+    const rgb = getColor(key);
     if (!rgb) {
       return;
     }
 
-    // for now opacity is set to 1
     return `rgba(${rgb?.join(", ")}, ${opacity || 1})`;
   });
 

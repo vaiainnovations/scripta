@@ -243,20 +243,22 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   `;
 
   // Image style
-  const imgStyle = css`
-    .image {
-      display: inline-block;
-      margin: 0 auto;
+  const mediaStyle = css`
+    .image-container, .video-container {
+      display: flex;
+      margin: auto auto;
       object-fit: contain;
-      width: 100%;
+      width: fit-content;
       position: relative;
       height: auto;
       text-align: center;
+
+      &.ProseMirror-selectednode {
+          border: 0;
+          border-radius: 4px;
+      }
     }
-    .image-container.ProseMirror-selectednode {
-      border: 0;
-      border-radius: 4px;
-    }
+    .image-container 
   `;
 
   const emojiStyle = css`
@@ -301,7 +303,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       ${codeStyle}
       ${inlineStyle}
 
-      ${imgStyle}
+      ${mediaStyle}
     }
   `;
 
@@ -364,7 +366,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       position: relative;
 
       color: ${neutralAltColor};
-      background: ${surfaceColor};
+      background-color: ${surfaceColor};
       font-family: ${typographyFont};
 
       .resize-cursor {

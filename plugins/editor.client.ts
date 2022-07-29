@@ -7,6 +7,8 @@ import { upload, uploadPlugin } from "@milkdown/plugin-upload";
 import { math, mathBlock } from "@milkdown/plugin-math";
 import { diagram } from "@milkdown/plugin-diagram";
 import { emoji } from "@milkdown/plugin-emoji";
+// import { directiveFallback } from "@ezone-devops/milkdown-plugin-directive-fallback";
+import { extendedMathBlock } from "~~/types/MilkDown/MathCommand";
 // import { block } from "@milkdown/plugin-block";
 
 import { customTheme } from "~~/types/MilkDown";
@@ -14,9 +16,8 @@ import { customTheme } from "~~/types/MilkDown";
 import { customMenu } from "~~/types/MilkDown/Menu";
 import { useDraftStore } from "~~/core/store/DraftStore";
 import { customUploader } from "~~/types/MilkDown/Uploader";
-import { iframePlugin } from "~~/types/MilkDown/IFrame";
+// import { iframePlugin } from "~~/types/MilkDown/IFrame";
 import { videoPlugin } from "~~/types/MilkDown/Video";
-import { extendedMathBlock } from "~~/types/MilkDown/MathCommand";
 
 export default defineNuxtPlugin(() => {
   return {
@@ -24,16 +25,8 @@ export default defineNuxtPlugin(() => {
       useMarkDownEditor: (readOnly = false, content = "") => {
         return useEditor(root =>
           Editor.make()
-            .config((ctx) => {
-              ctx.set(rootCtx, root);
-              ctx.set(defaultValueCtx, content);
-              ctx.get(listenerCtx).markdownUpdated((_, markdown) => {
-                useDraftStore().content = markdown;
-              });
-              ctx.set(editorViewOptionsCtx, { editable: () => !readOnly });
-            })
-            .use(videoPlugin)
-            .use(iframePlugin)
+            // .use(iframePlugin)
+            // .use(directiveFallback)
             .use(
               gfm
                 .configure(link, {
@@ -49,21 +42,51 @@ export default defineNuxtPlugin(() => {
                   }
                 })
             )
+            .use(diagram)
+            .use(emoji)
+            .use(videoPlugin)
+
+            .use(upload.configure(uploadPlugin, {
+              uploader: customUploader
+            }))
+            .use(math
+              .replace(mathBlock, extendedMathBlock())
+              .configure(extendedMathBlock, { placeholder: { empty: "Insert Math Formula in TeX syntax", error: "Syntax Error" } }))
+            // .use(block)
+            .use(customMenu)
             .use(
               tooltip.configure(tooltipPlugin, {
                 bottom: false
               })
             )
-            .use(upload.configure(uploadPlugin, {
-              uploader: customUploader
-            }))
-            .use(math.replace(mathBlock, extendedMathBlock()))
-            .use(diagram)
-            .use(emoji)
-            // .use(block)
-            .use(customMenu)
+            /* .use(customTheme.override((_, manager) => {
+              manager.set(ThemeColor, ([key, opacity]) => {
+                if (opacity === undefined) {
+                  opacity = 1;
+                }
+                const rgb = getColor(key);
+
+                if (!rgb) {
+                  return;
+                }
+
+                if (readOnly && key === "surface") {
+                  opacity = 0;
+                }
+
+                return `rgba(${rgb?.join(", ")}, ${opacity})`;
+              });
+            })) */
             .use(customTheme)
             .use(listener)
+            .config((ctx) => {
+              ctx.set(rootCtx, root);
+              ctx.set(defaultValueCtx, content);
+              ctx.get(listenerCtx).markdownUpdated((_, markdown) => {
+                useDraftStore().content = markdown;
+              });
+              ctx.set(editorViewOptionsCtx, { editable: () => !readOnly });
+            })
         );
       }
     }

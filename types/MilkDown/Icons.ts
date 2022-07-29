@@ -52,6 +52,10 @@ export const iconsMapping = {
   loading: {
     label: "loading",
     icon: "dots"
+  },
+  redo: {
+    label: "redo",
+    icon: "math"
   }
 };
 

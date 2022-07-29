@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-math:before {
+  content: "\e90e";
+}
 .icon-dots:before {
   content: "\e902";
 }

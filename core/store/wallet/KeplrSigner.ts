@@ -67,8 +67,8 @@ export const DESMOS_MAINNET_CHAIN_INFO = {
 export const DESMOS_TESTNET_CHAIN_INFO = {
   chainId: "morpheus-apollo-2",
   chainName: "Desmos Testnet",
-  rpc: "https://rpc.morpheus.desmos.network",
-  rest: "https://lcd.morpheus.desmos.network",
+  rpc: "https://rpc-testnet.go-find.me",
+  rest: "https://lcd-testnet.go-find.me",
   bip44: {
     coinType: 852
   },

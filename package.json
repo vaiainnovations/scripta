@@ -17,6 +17,7 @@
     "@desmoslabs/desmjs-types": "^4.2.0",
     "@desmoslabs/desmjs-walletconnect": "^4.2.0",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
+    "@ezone-devops/milkdown-plugin-directive-fallback": "^6.2.2",
     "@keplr-wallet/types": "^0.10.12",
     "@milkdown/core": "^6.2.0",
     "@milkdown/plugin-block": "^6.3.0",
