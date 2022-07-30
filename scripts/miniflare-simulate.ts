@@ -1,3 +1,4 @@
+import Long = require("long");
 import { Miniflare } from "miniflare";
 import { PostExtended } from "../types/PostExtended";
 
@@ -22,18 +23,19 @@ class Simulator {
     // Generate sample Posts
     const postsKV = await miniflare.getKVNamespace("KV_POSTS");
     const postSample: PostExtended = {
-      external_id: "8a7b7cad-896f-4289-adf0-c49ec1556da2",
+      id: Long.fromNumber(1),
+      externalId: "8a7b7cad-896f-4289-adf0-c49ec1556da2",
       text: "This is a sample Title",
       subtitle: "A subtitle for this sample post",
       content: "This is the *content* of the sample post",
       author: "desmos16c60y8t8vra27zjg2arlcd58dck9cwn7p6fwtd",
       attachments: [],
       tags: ["tag1", "tag2"],
-      creation_date: new Date(Date.now()).toString(),
+      creationDate: new Date(Date.now()).toString(),
       sectionId: 32,
       entities: [],
       image: "/img/author_pic.png",
-      last_edited_date: new Date(Date.now()).toString()
+      lastEditedDate: new Date(Date.now()).toString()
 
     };
     for (let i = 0; i < 10; i++) {
