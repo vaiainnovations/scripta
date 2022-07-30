@@ -1,5 +1,6 @@
 export interface PostExtended {
-    external_id: string;
+    id: Long;
+    externalId: string;
     text: string;
     subtitle: string;
     content: string;
@@ -7,8 +8,8 @@ export interface PostExtended {
     image: string;
     sectionId: number;
     author: string;
-    creation_date: string;
-    last_edited_date: string;
+    creationDate: string;
+    lastEditedDate: string;
     attachments: any[];
     entities: any[];
 }

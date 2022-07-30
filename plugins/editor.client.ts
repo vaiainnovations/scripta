@@ -22,7 +22,7 @@ import { videoPlugin } from "~~/types/MilkDown/Video";
 export default defineNuxtPlugin(() => {
   return {
     provide: {
-      useMarkDownEditor: (readOnly = false, content = "") => {
+      useMarkDownEditor: (readOnly = false, content = useDraftStore().content) => {
         return useEditor(root =>
           Editor.make()
             // .use(iframePlugin)

@@ -3,18 +3,10 @@
     <button
       v-if="!isPublishing"
       type="button"
-      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-primary-text text-xl font-medium"
-      @click="useDraftStore().saveDraft()"
-    >
-      Save Draft
-    </button>
-    <button
-      v-if="!isPublishing"
-      type="button"
       class="col-span-1 rounded-xl text-[#FFFFFF] bg-danger text-xl font-medium"
-      @click="useDraftStore().deleteDraft()"
+      @click="deleteArticle()"
     >
-      Delete
+      Delete Article
     </button>
     <div class="col-span-2 lg:col-start-5">
       <span v-if="!isPublishing">
@@ -22,9 +14,9 @@
           v-if="useDraftStore().title && useDraftStore().subtitle && useDraftStore().content"
           type="button"
           class="w-full h-full rounded-xl text-[#FFFFFF] bg-primary text-xl font-medium"
-          @click="publish()"
+          @click="editArticle()"
         >
-          Publish
+          Publish Edit
         </button>
       </span>
       <span v-else>
@@ -39,9 +31,8 @@
 
 <script setup lang="ts">
 import { Buffer } from "buffer";
-import { MsgCreatePostEncodeObject } from "@desmoslabs/desmjs";
+import { MsgDeletePostEncodeObject, MsgEditPostEncodeObject } from "@desmoslabs/desmjs";
 import Long from "long";
-import { v4 as uuidv4 } from "uuid";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
 import { useBackendStore } from "~~/core/store/BackendStore";
@@ -51,59 +42,26 @@ import { useDesmosStore } from "~~/core/store/DesmosStore";
 
 const isPublishing = ref(false);
 
-async function publish () {
-  const { $useTransaction, $useIpfs } = useNuxtApp();
-  isPublishing.value = true;
+async function editArticle () {
+  this.isPublishing = true;
+  const { $useIpfs, $useTransaction } = useNuxtApp();
+  const draftStore = await useDraftStore();
+  const extId = draftStore.externalId;
 
-  // check if the user has a sectionId
-  if (useAccountStore().sectionId <= 0) {
-    // if not, create one
-    if (useAccountStore().sectionId === -10) {
-      await useAccountStore().getUserInfo(true);
-      // TODO: handle failure?
-    }
-    let attempt = 0;
-    // wait 10 attempts to create a sectionId, create the group, and user join it
-    while (attempt < 10 && useAccountStore().sectionId <= 0) {
-      // update the sectionId from the user endpoint
-      await useAccountStore().getUserSection();
-
-      // if found, break the loop
-      if (useAccountStore().sectionId > 0) {
-        break;
-      }
-      // otherwise, wait 5s and try again
-      await new Promise(resolve => setTimeout(resolve, 5000));
-      attempt++;
-    }
-  }
-  if (useAccountStore().sectionId <= 0) {
-    this.isPublishing.value = false;
-    throw new Error("Could not get section id");
-  }
-
-  const draftStore = useDraftStore();
-  const extId = uuidv4();
-
-  const msgCreatePost: MsgCreatePostEncodeObject = {
-    typeUrl: "/desmos.posts.v2.MsgCreatePost",
+  const msgEditPost: MsgEditPostEncodeObject = {
+    typeUrl: "/desmos.posts.v2.MsgEditPost",
     value: {
       subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
-      externalId: extId,
-      attachments: [],
-      author: useAccountStore().address,
-      text: draftStore.title,
-      sectionId: useAccountStore().sectionId,
-      tags: useDraftStore().tags.map(tag => tag.content.value),
-      conversationId: Long.fromNumber(0),
-      referencedPosts: [],
-      replySettings: 1
+      editor: useAccountStore().address,
+      postId: draftStore.id,
+      tags: draftStore.tags.map(tag => tag.content.value),
+      text: draftStore.title
     }
   };
 
   // craft a custom object for IPFS
   const ipfsPost: any = {
-    ...msgCreatePost.value,
+    ...msgEditPost.value,
     subtitle: draftStore.subtitle,
     content: draftStore.content
   };
@@ -122,7 +80,7 @@ async function publish () {
   };
 
   // attach the CID to the Post as an entity
-  msgCreatePost.value.entities = {
+  msgEditPost.value.entities = {
     hashtags: [],
     mentions: [],
     urls: [ipfsEntityUrl]
@@ -133,7 +91,7 @@ async function publish () {
 
   let signedBytes = new Uint8Array();
   try {
-    signedBytes = await $useTransaction().directSign(msgCreatePost);
+    signedBytes = await $useTransaction().directSign(msgEditPost);
   } catch (e) {
     console.log(e);
   }
@@ -144,27 +102,72 @@ async function publish () {
 
   const res = await (
     await fetch(`${useBackendStore().apiUrl}/posts/${extId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: draftStore.id,
+        signedPost: Buffer.from(signedBytes).toString("base64"),
+        externalId: extId,
+        author: useAccountStore().address,
+        sectionId: useAccountStore().sectionId,
+        text: draftStore.title,
+        tags: draftStore.tags.map(tag => tag.content.value),
+        subtitle: draftStore.subtitle,
+        content: draftStore.content,
+        entities: JSON.stringify(msgEditPost.value.entities)
+      })
+    })
+  ).json() as any;
+  console.log(res);
+  if (res.code === 0) {
+    usePostStore().userPosts = await useUserStore().getUserArticles(useAccountStore().address);
+    draftStore.$reset();
+    useRouter().push(`/@${useAccountStore().profile.dtag}/${extId}`);
+  }
+  isPublishing.value = false;
+}
+
+async function deleteArticle () {
+  isPublishing.value = true;
+  const { $useTransaction } = useNuxtApp();
+  const msgDeletePost: MsgDeletePostEncodeObject = {
+    typeUrl: "/desmos.posts.v2.MsgDeletePost",
+    value: {
+      subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
+      postId: useDraftStore().id,
+      signer: useAccountStore().address
+    }
+  };
+
+  let signedBytes = new Uint8Array();
+  try {
+    signedBytes = await $useTransaction().directSign(msgDeletePost);
+  } catch (e) {
+    console.log(e);
+  }
+
+  if (!signedBytes) {
+    return;
+  }
+
+  const res = await (
+    await fetch(`${useBackendStore().apiUrl}/posts/delete/${useDraftStore().externalId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        signedPost: Buffer.from(signedBytes).toString("base64"),
-        externalId: msgCreatePost.value.externalId,
-        author: msgCreatePost.value.author,
-        sectionId: msgCreatePost.value.sectionId,
-        text: msgCreatePost.value.text,
-        tags: msgCreatePost.value.tags,
-        subtitle: useDraftStore().subtitle,
-        content: useDraftStore().content,
-        entities: JSON.stringify(msgCreatePost.value.entities)
+        signedPost: Buffer.from(signedBytes).toString("base64")
       })
     })
   ).json() as any;
+  console.log(res);
   if (res.code === 0) {
     usePostStore().userPosts = await useUserStore().getUserArticles(useAccountStore().address);
-    draftStore.$reset();
-    useRouter().push(`/@${useAccountStore().profile.dtag}/${extId}`);
+    useDraftStore().$reset();
+    useRouter().push("/profile");
   }
   isPublishing.value = false;
 }

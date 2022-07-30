@@ -20,5 +20,8 @@ const user = await useUserStore().getUser(props.username);
 let articles = [];
 if (user) {
   articles = await useUserStore().getUserArticles(user.account.address);
+  if (articles) {
+    articles = articles.slice().reverse();
+  }
 }
 </script>
