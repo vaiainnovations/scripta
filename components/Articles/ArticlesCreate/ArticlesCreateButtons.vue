@@ -78,7 +78,7 @@ async function publish () {
     }
   }
   if (useAccountStore().sectionId <= 0) {
-    this.isPublishing.value = false;
+    isPublishing.value = false;
     throw new Error("Could not get section id");
   }
 

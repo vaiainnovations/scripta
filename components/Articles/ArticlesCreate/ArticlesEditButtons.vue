@@ -43,7 +43,7 @@ import { useDesmosStore } from "~~/core/store/DesmosStore";
 const isPublishing = ref(false);
 
 async function editArticle () {
-  this.isPublishing = true;
+  isPublishing.value = true;
   const { $useIpfs, $useTransaction } = useNuxtApp();
   const draftStore = await useDraftStore();
   const extId = draftStore.externalId;
