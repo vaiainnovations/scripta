@@ -39,9 +39,8 @@ export const useKeplrStore = defineStore({
       const isLedgerKeplrUser = (await window.keplr.getKey("morpheus-apollo-2")).isNanoLedger;
       if (isLedgerKeplrUser) {
         await $useAuth().logout();
-        console.log("routing to /auth/error");
         await navigateTo({
-          path: "/auth/error"
+          path: "/auth/desmos-app"
         });
         return;
       }
