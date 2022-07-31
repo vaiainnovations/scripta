@@ -42,9 +42,13 @@
       </div>
       <div class="hidden items-center gap-y-2 lg:flex lg:w-5/12 lg:flex-col 2xl:hidden">
         <p class="text-sm font-bold text-primary-text-light">
-          Continue reading
+          Continue your reading
         </p>
-        <!-- <SearchArticleCard v-for="result in props.suggestedArticles" :key="result.id" :content="result.content" /> -->
+        <span v-for="post in (usePostStore().trendings)" :key="post.externalId">
+          <NuxtLink :to="`/@${post.author}/${post.externalId}`">
+            <SearchArticleCard :post="post" />
+          </NuxtLink>
+        </span>
       </div>
     </div>
   </div>
@@ -52,6 +56,7 @@
 
 <script setup lang="ts">
 import { Ref } from "vue";
+import { usePostStore } from "~~/core/store/PostStore";
 import { NavBarReadingType } from "~~/layouts/readingCustom.vue";
 import { PostExtended } from "~~/types/PostExtended";
 import { ArticleSearch } from "~~/types/SearchResults";

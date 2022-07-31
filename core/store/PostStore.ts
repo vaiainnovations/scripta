@@ -3,10 +3,12 @@ import { useBackendStore } from "./BackendStore";
 import { registerModuleHMR } from ".";
 import { PostKv } from "~~/types/PostKv";
 import { PostExtended } from "~~/types/PostExtended";
+import { TrendingPostsKv } from "~~/types/TrendingPostsKv";
 
 export const usePostStore = defineStore({
   id: "PostStore",
   state: () => ({
+    trendings: [] as PostExtended[],
     userPosts: [] as any[],
     cachedPosts: new Map<string, any>()
   }),
@@ -44,6 +46,10 @@ export const usePostStore = defineStore({
       } catch (e) {
         console.log(e);
       }
+    },
+    async loadTrendings (): Promise<void> {
+      const trendingPostsRaw = await TrendingPostsKv.get("1");
+      this.trendings = trendingPostsRaw !== false ? trendingPostsRaw.slice(0, trendingPostsRaw.length - 1) : [];
     }
   }
 });

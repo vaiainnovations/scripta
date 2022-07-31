@@ -1,24 +1,24 @@
 <template>
-  <div class="p-2 md:grid md:grid-cols-2 md:gap-y-14 md:gap-x-10 w-full">
-    <div v-if="trendingPosts.length > 0" class="md:col-span-2">
-      <ArticlesPreview :content="{title: trendingPosts[0].text, description: trendingPosts[0].subtitle, image: trendingPosts[0].image}" />
+  <div class="p-2 md:grid md:grid-cols-2 md:gap-y-14 md:gap-x-10 w-full" :set="trendingPosts = usePostStore().trendings">
+    <div
+      v-if="trendingPosts.length > 0"
+      class="md:col-span-2"
+    >
+      <NuxtLink :to="`/@${trendingPosts[0].author}/${trendingPosts[0].externalId}`">
+        <ArticlesPreview :content="{title: trendingPosts[0].text, description: trendingPosts[0].subtitle, image: trendingPosts[0].image}" />
+      </NuxtLink>
     </div>
-    <ArticlesSmallPreview
+    <span
       v-for="(post, i) in trendingPosts"
       :key="i"
-      :content="{title: post.text, description: post.subtitle, image: post.image}"
-    />
+    >
+      <NuxtLink :to="`/@${post.author}/${post.externalId}`">
+        <ArticlesSmallPreview :content="{title: post.text, description: post.subtitle, image: post.image}" />
+      </NuxtLink>
+    </span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { PostExtended } from "~~/types/PostExtended";
-import { TrendingPostsKv } from "~~/types/TrendingPostsKv";
-const trendingPosts = useState("trendingPosts", () => [] as PostExtended[]);
-
-// Executed only by SSR
-if (!process.client) {
-  const trendingPostsRaw = await TrendingPostsKv.get("1");
-  trendingPosts.value = trendingPostsRaw !== false ? trendingPostsRaw.slice(0, trendingPostsRaw.length - 1) : [];
-}
+import { usePostStore } from "~~/core/store/PostStore";
 </script>
