@@ -47,7 +47,7 @@ export const useDraftStore = defineStore({
           subtitle: this.subtitle,
           content: this.content,
           author: useAccountStore().address,
-          sectionId: 0, // TODO: which value????
+          sectionId: 0,
           entities: {},
           creationDate: new Date(Date.now()),
           lastEditedDate: new Date(Date.now()),
@@ -65,10 +65,10 @@ export const useDraftStore = defineStore({
 
     async loadDraft (): Promise<void> {
       // load the draft
+      useDraftStore().$reset(); // remove previous draft
       const localExternalId = localStorage.getItem("drafts") || "";
       if (localExternalId) {
-        const draft = await (await fetch(`${useBackendStore().apiUrl}posts/${localExternalId}`)).json() as any; // TODO: implement call
-        console.log(draft);
+        const draft = await (await fetch(`${useBackendStore().apiUrl}posts/${localExternalId}`)).json() as any;
         if (!draft) {
           return; // no drafts found
         }
@@ -87,7 +87,6 @@ export const useDraftStore = defineStore({
           };
           this.tags.push(tag);
         });
-        console.log(draft);
       }
     },
     async deleteDraft () {

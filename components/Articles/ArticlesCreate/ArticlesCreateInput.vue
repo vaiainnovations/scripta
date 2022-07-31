@@ -9,7 +9,7 @@
         :value="useDraftStore().title"
         type="text"
         class="rounded-xl h-20 w-full border-primary-text-light border bg-background-alt font-bold text-xl text-primary-text px-7 lg:text-3xl"
-        @change="(evt)=> useDraftStore().title = evt.target.value"
+        @keypress="(evt)=> useDraftStore().title = evt.target.value"
       >
     </div>
     <!-- Subtitle -->
@@ -22,7 +22,7 @@
         maxlength="160"
         type="text"
         class="rounded-xl h-32 w-full border border-primary-text-light bg-background-alt font-medium text-lg text-primary-text align-middle resize-none px-7 lg:text-2xl py-2"
-        @change="(evt)=> useDraftStore().subtitle = evt.target.value"
+        @keypress="(evt)=> useDraftStore().subtitle = evt.target.value"
       />
     </div>
     <!-- Content -->
@@ -30,7 +30,7 @@
       <p class="text-primary-text-light font-medium text-xs self-start lg:text-sm">
         Content
       </p>
-      <MarkDownEditor :read-only="false" :content="''" />
+      <MarkDownEditor :read-only="false" :content="useDraftStore().content" />
     </div>
   </div>
 </template>

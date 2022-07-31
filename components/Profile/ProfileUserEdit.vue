@@ -210,7 +210,7 @@ async function uploadProfilePic () {
   isUploadingProfilePic.value = true;
 
   // upload the file to IPFS
-  let cid = "";
+  let cid = {};
   try {
     cid = await useNuxtApp().$useIpfs().client.add(file);
   } catch (e) {

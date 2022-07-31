@@ -13,7 +13,8 @@
     <!-- Tags -->
     <ArticlesCreateTags />
     <!-- Input form -->
-    <ArticlesCreateInput />
+    <!-- TODO: implement loading skeleton -->
+    <ArticlesCreateInput v-if="isDraftLoaded" />
     <!-- Submit buttons -->
     <ArticlesCreateButtons :draft="true" />
   </div>
@@ -21,7 +22,10 @@
 
 <script setup lang="ts">
 import { useDraftStore } from "~~/core/store/DraftStore";
+const isDraftLoaded = ref(false);
+
 if (process.client) {
-  useDraftStore().loadDraft();
+  await useDraftStore().loadDraft();
+  isDraftLoaded.value = true;
 }
 </script>
