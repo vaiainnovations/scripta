@@ -13,3 +13,11 @@ export interface PostExtended {
     attachments: any[];
     entities: any[];
 }
+
+export function searchFirstContentImage (content: string): string {
+  const match = /!\[[^\]]*\]\((?<filename>.*?)(?="|\))(?<optionalpart>".*")?\)/.exec(content);
+  if (match) {
+    return match[1];
+  }
+  return "";
+}

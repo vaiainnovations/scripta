@@ -44,7 +44,7 @@
         <p class="text-sm font-bold text-primary-text-light">
           Continue reading
         </p>
-        <SearchArticleCard v-for="result in props.suggestedArticles" :key="result.id" :content="result.content" />
+        <!-- <SearchArticleCard v-for="result in props.suggestedArticles" :key="result.id" :content="result.content" /> -->
       </div>
     </div>
   </div>
