@@ -1,15 +1,15 @@
 <template>
-  <div class="flex w-fit">
+  <div class="flex flex-row w-fit items-center">
     <!-- The button to write new article appears on larger screen (>= 768 px) -->
     <NuxtLink
       to="/new"
-      class="flex-1 w-fit mr-4 my-auto"
+      class="w-fit mr-4"
     >
       <div class="hidden md:block">
         <div class="gradient-text flex h-10 flex-row items-center justify-center rounded-lg border border-primary-text-light sm:px-5 md:px-10 mr-3">
           <button
             type="button"
-            class="bg-gradient-to-r from-primary-light to-[#5BFF6C] bg-clip-text text-2xl font-semibold"
+            class="bg-gradient-to-r from-primary-light to-green-light bg-clip-text text-2xl font-semibold"
           >
             Write
           </button>
@@ -19,12 +19,12 @@
 
     <NuxtLink
       to="/profile"
-      class="flex-none"
+      class="w-fit"
     >
       <div class="">
         <img
           :src="userPic"
-          class="w-11 h-11 object-cover rounded-full"
+          class="max-w-11 w-11 h-11 object-cover rounded-full"
         >
       </div>
     </NuxtLink>

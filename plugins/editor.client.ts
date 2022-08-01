@@ -7,7 +7,7 @@ import { upload, uploadPlugin } from "@milkdown/plugin-upload";
 import { math, mathBlock } from "@milkdown/plugin-math";
 import { diagram } from "@milkdown/plugin-diagram";
 import { emoji } from "@milkdown/plugin-emoji";
-// import { directiveFallback } from "@ezone-devops/milkdown-plugin-directive-fallback";
+import { directiveFallback } from "@ezone-devops/milkdown-plugin-directive-fallback";
 import { extendedMathBlock } from "~~/types/MilkDown/MathCommand";
 // import { block } from "@milkdown/plugin-block";
 
@@ -25,8 +25,6 @@ export default defineNuxtPlugin(() => {
       useMarkDownEditor: (readOnly = false, content = useDraftStore().content) => {
         return useEditor(root =>
           Editor.make()
-            // .use(iframePlugin)
-            // .use(directiveFallback)
             .use(
               gfm
                 .configure(link, {
@@ -45,22 +43,24 @@ export default defineNuxtPlugin(() => {
             .use(diagram)
             .use(emoji)
             .use(videoPlugin)
-
-            .use(upload.configure(uploadPlugin, {
-              uploader: customUploader
-            }))
+            .use(upload
+              .configure(uploadPlugin, {
+                uploader: customUploader
+              }))
             .use(math
               .replace(mathBlock, extendedMathBlock())
               .configure(extendedMathBlock, { placeholder: { empty: "Insert Math Formula in TeX syntax", error: "Syntax Error" } }))
             // .use(block)
             .use(customMenu)
             .use(
-              tooltip.configure(tooltipPlugin, {
-                bottom: false
-              })
+              tooltip
+                .configure(tooltipPlugin, {
+                  bottom: false
+                })
             )
             .use(customTheme(readOnly))
             .use(listener)
+            .use(directiveFallback)
             .config((ctx) => {
               ctx.set(rootCtx, root);
               ctx.set(defaultValueCtx, content);
