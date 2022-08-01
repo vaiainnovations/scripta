@@ -39,9 +39,10 @@
 
 <script setup lang="ts">
 import { Buffer } from "buffer";
-import { MsgCreatePostEncodeObject } from "@desmoslabs/desmjs";
+import { MsgCreatePostEncodeObject, MsgSaveProfileEncodeObject } from "@desmoslabs/desmjs";
 import Long from "long";
 import { v4 as uuidv4 } from "uuid";
+import { EncodeObject } from "@cosmjs/proto-signing";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
 import { useBackendStore } from "~~/core/store/BackendStore";
@@ -131,9 +132,29 @@ async function publish () {
   /* $useTransaction().push(msgCreatePost);
   const signedBytes = await $useTransaction().execute(); */
 
+  const msgs = [] as EncodeObject[];
+
+  // if is a new user and has no profile, create one with the randomly generated username
+  if (useAccountStore().isNewProfile) {
+    const msgSaveProfile: MsgSaveProfileEncodeObject = {
+      typeUrl: "/desmos.profiles.v3.MsgSaveProfile",
+      value: {
+        dtag: useAccountStore().profile.dtag,
+        nickname: useAccountStore().profile.nickname,
+        bio: useAccountStore().profile.bio,
+        profilePicture: useAccountStore().profile.pictures.profile,
+        coverPicture: useAccountStore().profile.pictures.cover,
+        creator: useAccountStore().address
+      }
+    };
+    msgs.push(msgSaveProfile);
+  }
+  // push the post message
+  msgs.push(msgCreatePost);
+
   let signedBytes = new Uint8Array();
   try {
-    signedBytes = await $useTransaction().directSign(msgCreatePost);
+    signedBytes = await $useTransaction().directSign(msgs);
   } catch (e) {
     console.log(e);
   }
