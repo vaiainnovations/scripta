@@ -19,7 +19,7 @@
 
     <NuxtLink
       to="/profile"
-      class="w-fit"
+      class="w-11"
     >
       <div class="">
         <img
