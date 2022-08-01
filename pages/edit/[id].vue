@@ -7,6 +7,7 @@
 </template>
 
 <script setup lang="ts">
+import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
 import { usePostStore } from "~~/core/store/PostStore";
 
@@ -19,6 +20,10 @@ const externalId = route.params.id as string;
 const article = await usePostStore().getPost(externalId);
 if (!article) {
   useRouter().replace("/profile");
+}
+// prevent to open edit page of other user's article
+if (useAccountStore().address !== article.author && useAccountStore().profile?.dtag !== article.author) {
+  useRouter().push("/profile");
 }
 useDraftStore().$reset();
 
