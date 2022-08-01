@@ -59,25 +59,7 @@ export default defineNuxtPlugin(() => {
                 bottom: false
               })
             )
-            /* .use(customTheme.override((_, manager) => {
-              manager.set(ThemeColor, ([key, opacity]) => {
-                if (opacity === undefined) {
-                  opacity = 1;
-                }
-                const rgb = getColor(key);
-
-                if (!rgb) {
-                  return;
-                }
-
-                if (readOnly && key === "surface") {
-                  opacity = 0;
-                }
-
-                return `rgba(${rgb?.join(", ")}, ${opacity})`;
-              });
-            })) */
-            .use(customTheme)
+            .use(customTheme(readOnly))
             .use(listener)
             .config((ctx) => {
               ctx.set(rootCtx, root);
