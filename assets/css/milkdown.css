@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-video-play:before {
+  content: "\e90f";
+}
 .icon-math:before {
   content: "\e90e";
 }

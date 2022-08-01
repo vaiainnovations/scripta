@@ -45,17 +45,21 @@ export const iconsMapping = {
     label: "image",
     icon: "image"
   },
-  table: {
-    label: "table",
+  diagram: {
+    label: "diagram",
     icon: "hierarchy"
   },
   loading: {
     label: "loading",
     icon: "dots"
   },
-  redo: {
-    label: "redo",
+  math: {
+    label: "math",
     icon: "math"
+  },
+  video: {
+    label: "video",
+    icon: "video-play"
   }
 };
 

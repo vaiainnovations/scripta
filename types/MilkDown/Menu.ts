@@ -19,6 +19,7 @@ import { wrapIn, setBlockType } from "@milkdown/prose/commands";
 import { findParentNode } from "@milkdown/prose";
 import { TurnIntoDiagram } from "@milkdown/plugin-diagram";
 import { TurnIntoMathBlock } from "./MathCommand";
+import { InsertVideo } from "./Video";
 
 const hasMark = (state: EditorState, type: MarkType | undefined): boolean => {
   if (!type) {
@@ -66,6 +67,11 @@ export const customMenu = menu
           type: "button",
           icon: "image",
           key: InsertImage
+        },
+        {
+          type: "button",
+          icon: "video",
+          key: InsertVideo
         }
       ],
       [
@@ -135,12 +141,12 @@ export const customMenu = menu
         },
         {
           type: "button",
-          icon: "table",
+          icon: "diagram",
           key: TurnIntoDiagram
         },
         {
           type: "button",
-          icon: "redo",
+          icon: "math",
           key: TurnIntoMathBlock
         }
       ]
