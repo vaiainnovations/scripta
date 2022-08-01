@@ -198,6 +198,7 @@ async function checkUsername () {
 }
 
 async function uploadProfilePic () {
+  const { $useIpfs } = useNuxtApp();
   const file: File = (fileUploadProfilePic.value as any).files[0];
 
   // support only image files
@@ -223,7 +224,7 @@ async function uploadProfilePic () {
   }
 
   // set as image the ipfs url
-  newProfilePicture.value = `https://ipfs.infura.io/ipfs/${cid.path}`;
+  newProfilePicture.value = `${$useIpfs().gateway}${cid.path}`;
   isUploadingProfilePic.value = false;
 }
 </script>

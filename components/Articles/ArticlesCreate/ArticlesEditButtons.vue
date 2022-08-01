@@ -69,7 +69,7 @@ async function editArticle () {
   // upload the post to IPFS (without CID attachment), get the returned CID
   const postCid = await $useIpfs().uploadPost(JSON.stringify(ipfsPost));
 
-  const postIpfsUrl = `https://cloudflare-ipfs.com/ipfs/${postCid}`;
+  const postIpfsUrl = `https://ipfs.infura.io/ipfs/${postCid}`;
   console.log(postIpfsUrl);
 
   const ipfsEntityUrl = {

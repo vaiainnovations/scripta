@@ -5,6 +5,7 @@ import { registerModuleHMR } from ".";
 export const useIpfsStore = defineStore({
   id: "IpfsStore",
   state: () => ({
+    gateway: "https://ipfs.infura.io/ipfs/",
     client: create({ url: "https://ipfs.infura.io:5001" })
   }),
   actions: {

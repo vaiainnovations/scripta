@@ -5,7 +5,7 @@ import type { Node } from "prosemirror-model";
 async function UploadAPI (image: File) {
   const { $useIpfs } = useNuxtApp();
   const res = await $useIpfs().client.add(image);
-  return `https://cloudflare-ipfs.com/ipfs/${res.path}`;
+  return `${$useIpfs().gateway}${res.path}`;
 }
 
 export const customUploader: Uploader = async (files, schema) => {
