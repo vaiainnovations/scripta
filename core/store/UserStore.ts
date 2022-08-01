@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { useDesmosStore } from "./DesmosStore";
 import { useBackendStore } from "./BackendStore";
 import { registerModuleHMR } from ".";
-import { PostExtended } from "~~/types/PostExtended";
+import { PostExtended, searchFirstContentImage } from "~~/types/PostExtended";
 
 export const useUserStore = defineStore({
   id: "UserStore",
@@ -31,6 +31,9 @@ export const useUserStore = defineStore({
         },
         body: JSON.stringify({ q: "", address })
       })).json() as PostExtended [];
+      for (let i = 0; i < posts.length; i++) {
+        posts[i].image = searchFirstContentImage(posts[i].content) || "/img/author_pic.png";
+      }
       return (posts.length > 0 ? posts : null);
     }
   }

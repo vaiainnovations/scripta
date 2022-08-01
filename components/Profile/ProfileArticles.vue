@@ -18,7 +18,7 @@
         class="w-full"
         :to="`/edit/${article.externalId}`"
       >
-        <ArticlesSmallPreview :content="{description: article.subtitle, title: article.text, image: ''}" />
+        <ArticlesSmallPreview :content="{description: article.subtitle, title: article.text, image: article.image}" />
       </NuxtLink>
     </div>
     <div v-else>
