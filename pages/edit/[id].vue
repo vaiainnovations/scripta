@@ -10,6 +10,10 @@
 import { useDraftStore } from "~~/core/store/DraftStore";
 import { usePostStore } from "~~/core/store/PostStore";
 
+definePageMeta({
+  middleware: ["authenticated"]
+});
+
 const route = useRoute();
 const externalId = route.params.id as string;
 const article = await usePostStore().getPost(externalId);
