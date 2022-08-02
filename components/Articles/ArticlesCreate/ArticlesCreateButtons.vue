@@ -11,17 +11,17 @@
     <button
       v-if="!isPublishing"
       type="button"
-      class="col-span-1 rounded-xl text-[#FFFFFF] bg-danger text-xl font-medium"
-      @click="useDraftStore().deleteDraft()"
+      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-danger text-xl font-medium"
+      @click="deleteDraft()"
     >
-      Delete
+      Delete Draft
     </button>
     <div class="col-span-2 lg:col-start-5">
       <span v-if="!isPublishing">
         <button
           v-if="useDraftStore().title && useDraftStore().subtitle && useDraftStore().content"
           type="button"
-          class="w-full h-full rounded-xl text-[#FFFFFF] bg-primary text-xl font-medium"
+          class="p-1 w-full h-full rounded-xl text-[#FFFFFF] bg-primary text-xl font-medium"
           @click="publish()"
         >
           Publish
@@ -51,6 +51,24 @@ import { useUserStore } from "~~/core/store/UserStore";
 import { useDesmosStore } from "~~/core/store/DesmosStore";
 
 const isPublishing = ref(false);
+
+// Auto save draft (if there is some content) every 30s
+const saveDraftInterval = setInterval(() => {
+  if (!useDraftStore().id && (useDraftStore().title || useDraftStore().subtitle || useDraftStore().content || useDraftStore().tags.length > 0)) {
+    useDraftStore().saveDraft();
+  }
+}, 30 * 1000);
+
+onBeforeUnmount(() => {
+  clearInterval(saveDraftInterval);
+});
+
+async function deleteDraft () {
+  if (useDraftStore().externalId) {
+    await useDraftStore().deleteDraft();
+  }
+  useRouter().push("/profile");
+}
 
 async function publish () {
   const { $useTransaction, $useIpfs } = useNuxtApp();

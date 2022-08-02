@@ -14,7 +14,7 @@
     <ArticlesCreateTags />
     <!-- Input form -->
     <!-- TODO: implement loading skeleton -->
-    <ArticlesCreateInput v-if="isDraftLoaded" />
+    <ArticlesCreateInput />
     <!-- Submit buttons -->
     <ArticlesCreateButtons :draft="true" />
   </div>

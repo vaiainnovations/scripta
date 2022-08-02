@@ -3,7 +3,7 @@
     <button
       v-if="!isPublishing"
       type="button"
-      class="col-span-1 rounded-xl text-[#FFFFFF] bg-danger text-xl font-medium"
+      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-danger text-xl font-medium"
       @click="deleteArticle()"
     >
       Delete Article
@@ -13,7 +13,7 @@
         <button
           v-if="useDraftStore().title && useDraftStore().subtitle && useDraftStore().content"
           type="button"
-          class="w-full h-full rounded-xl text-[#FFFFFF] bg-primary text-xl font-medium"
+          class="p-1 w-full h-full rounded-xl text-[#FFFFFF] bg-primary text-xl font-medium"
           @click="editArticle()"
         >
           Publish Edit
@@ -91,7 +91,7 @@ async function editArticle () {
 
   let signedBytes = new Uint8Array();
   try {
-    signedBytes = await $useTransaction().directSign(msgEditPost);
+    signedBytes = await $useTransaction().directSign([msgEditPost]);
   } catch (e) {
     console.log(e);
   }
