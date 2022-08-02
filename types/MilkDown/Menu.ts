@@ -10,7 +10,9 @@ import {
   WrapInOrderedList,
   ToggleInlineCode,
   InsertHr,
-  InsertImage
+  InsertImage,
+  TurnIntoHeading,
+  TurnIntoText
 } from "@milkdown/preset-gfm";
 
 import { EditorState } from "@milkdown/prose/state";
@@ -52,8 +54,17 @@ const notWrapped = (state: EditorState, node: NodeType | undefined): boolean => 
   return !wrapIn(node)(state);
 };
 
+const headingBlock = (state: EditorState): boolean => {
+  const setToHeading = (level: number) =>
+    setBlockType(state.schema.nodes.heading, { level })(state);
+  return !(setToHeading(1) || setToHeading(2) || setToHeading(3));
+};
+
 export const customMenu = menu
   .configure(menuPlugin, {
+    domHandler: ({ menu, menuWrapper, milkdownDOM }) => {
+      menuWrapper.insertBefore(menu, milkdownDOM.nextSibling);
+    },
     config: [
       [
         {
@@ -72,6 +83,35 @@ export const customMenu = menu
           type: "button",
           icon: "video",
           key: InsertVideo
+        }
+      ],
+      [
+        {
+          type: "button",
+          icon: "h1",
+          key: TurnIntoHeading,
+          options: 1,
+          disabled: view => headingBlock(view.state)
+        },
+        {
+          type: "button",
+          icon: "h2",
+          key: TurnIntoHeading,
+          options: 2,
+          disabled: view => headingBlock(view.state)
+        },
+        {
+          type: "button",
+          icon: "h3",
+          key: TurnIntoHeading,
+          options: 3,
+          disabled: view => headingBlock(view.state)
+        },
+        {
+          type: "button",
+          icon: "text",
+          key: TurnIntoText,
+          disabled: view => headingBlock(view.state)
         }
       ],
       [

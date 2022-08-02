@@ -60,6 +60,22 @@ export const iconsMapping = {
   video: {
     label: "video",
     icon: "video-play"
+  },
+  h1: {
+    label: "h1",
+    icon: "text"
+  },
+  h2: {
+    label: "h2",
+    icon: "text"
+  },
+  h3: {
+    label: "h3",
+    icon: "text"
+  },
+  text: {
+    label: "text",
+    icon: "text"
   }
 };
 
@@ -92,7 +108,10 @@ export const getIcon = (key: Icon) => {
   }
 
   const element = document.createElement("span");
-  element.className = `milkdown-icons icon-${icon} `;
+
+  if (icon === "text") {
+    element.className = `milkdown-icons icon-${icon} heading-${label}`;
+  } else { element.className = `milkdown-icons icon-${icon} `; }
 
   return {
     dom: element,

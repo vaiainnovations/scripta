@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-text:before {
+  content: "\e910";
+}
 .icon-video-play:before {
   content: "\e90f";
 }
