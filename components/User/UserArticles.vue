@@ -7,7 +7,7 @@
         class="w-full"
         :to="`/@${article.author}/${article.externalId}`"
       >
-        <ArticlesSmallPreview :content="{description: article.subtitle, title: article.text, image: article.image}" />
+        <ArticlesSmallPreview v-if="article" :content="{description: article.subtitle, title: article.text, image: article.image, content: article.content, tags: article.tags}"/>
       </NuxtLink>
     </div>
     <div v-else>

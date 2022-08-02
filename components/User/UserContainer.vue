@@ -18,7 +18,7 @@ const props = defineProps<Props>();
 
 const user = await useUserStore().getUser(props.username);
 let articles = [];
-if (user) {
+if (user && process.client) {
   articles = await useUserStore().getUserArticles(user.account.address);
   if (articles) {
     articles = articles.slice().reverse();
