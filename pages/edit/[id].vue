@@ -11,6 +11,9 @@ import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
 import { usePostStore } from "~~/core/store/PostStore";
 
+useHead({
+  title: "Edit Article - Scripta"
+});
 definePageMeta({
   middleware: ["authenticated"]
 });

@@ -69,7 +69,7 @@ interface Props {
 const props = defineProps<Props>();
 
 useHead({
-  title: props.article.text
+  title: `${props.article.text} - ${props.article.author} on Scripta`
 });
 
 const tags = (props.article.tags && props.article.tags.length > 0) ? new Array(props.article.tags.length).fill(0).map((_, i) => ({ i, content: { value: props.article.tags[i] } as TagType })) : [];

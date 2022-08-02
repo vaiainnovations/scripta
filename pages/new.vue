@@ -7,6 +7,9 @@
 </template>
 
 <script setup lang="ts">
+useHead({
+  title: "New Article - Scripta"
+});
 definePageMeta({
   middleware: ["authenticated"]
 });

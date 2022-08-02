@@ -1,7 +1,6 @@
 <script setup lang="ts">
-const title = "Hello Scripta";
 useHead({
-  title
+  title: "Scripta"
 });
 </script>
 
