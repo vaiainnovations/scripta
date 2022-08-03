@@ -1,17 +1,29 @@
 <template>
-  <div class="max-h-fit overflow-hidden border-b border-b-primary-text-light pt-2 pb-2 pl-2.5 pr-14">
-    <p class="text-xs font-bold">
-      {{ props.post.text }}
-    </p>
-    <p class="block h-8 overflow-hidden text-xs font-light">
-      {{ props.post.subtitle }}
-    </p>
-
-    <div class="flex flex-row gap-x-3 pt-2 lg:gap-x-2.5">
-      <img :src="authorImage" class="h-7 w-7 object-cover rounded-full">
-      <p class="text-sm font-medium text-primary-text-light">
-        {{ authorNickname }}
-      </p>
+  <div class="max-h-fit overflow-hidden border-b border-b-primary-text-light pt-2 pb-2 pl-2.5">
+    <div class="w-full flex">
+      <div class="w-1/4">
+        <img
+          :src="props.post.image"
+          class="w-full p-0.5 my-auto mx-auto object-contain max-h-14"
+        >
+        <div class="flex flex-row gap-x-3 pt-2 lg:gap-x-2.5">
+          <img
+            :src="authorImage"
+            class="h-6 w-6 object-cover rounded-full"
+          >
+          <p class="text-sm font-medium text-primary-text-light my-auto">
+            {{ authorNickname }}
+          </p>
+        </div>
+      </div>
+      <div class="w-3/4">
+        <p class="text-[1.07rem] font-bold">
+          {{ props.post.text }}
+        </p>
+        <p class="block h-full max-h-14 overflow-hidden text-sm font-light">
+          {{ props.post.subtitle }}
+        </p>
+      </div>
     </div>
   </div>
 </template>

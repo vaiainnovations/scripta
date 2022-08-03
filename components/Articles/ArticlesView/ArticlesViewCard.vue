@@ -38,7 +38,7 @@
     <div class="h-11 w-full bg-primary" />
     <div class="flex flex-row">
       <div class="w-full lg:w-7/12 2xl:w-full">
-        <p>Comments</p>
+        <!-- <p>Comments</p> -->
       </div>
       <div class="hidden items-center gap-y-2 lg:flex lg:w-5/12 lg:flex-col 2xl:hidden">
         <p class="text-sm font-bold text-primary-text-light">

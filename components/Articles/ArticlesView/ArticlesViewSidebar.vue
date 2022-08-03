@@ -1,5 +1,5 @@
 <template>
-  <div class="hidden w-1/6 flex-col items-center justify-start 2xl:flex">
+  <div class="hidden w-[22%] flex-col items-center justify-start 2xl:flex">
     <div class="h-fit border-b border-primary-text-light px-4 pt-2 pb-1">
       <p class="text-sm font-bold text-primary-text-light">
         Continue your reading

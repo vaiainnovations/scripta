@@ -1,17 +1,67 @@
 <template>
-  <div
-    class="m-2 flex flex-col items-center overflow-hidden rounded-3xl bg-background-alt shadow-md md:grid md:max-h-64 md:grid-cols-4 md:gap-x-12 border border-primary-text-light"
-  >
-    <div class="w-80 bg-[#B4FFFF]/20 md:col-span-1 md:h-full md:w-full">
-      <img class="h-36 object-cover md:h-64 md:w-full md:object-contain mx-auto" :src="props.content.image">
+  <div v-if="props.content" class="w-full py-4 mx-auto">
+    <!-- Desktop -->
+    <div class="w-full hidden md:block">
+      <div class="flex max-w-full mx-auto overflow-hidden bg-background-alt rounded-3xl shadow-md dark:bg-gray-800">
+        <div class="w-1/3 h-40 md:h-56">
+          <img
+            alt="Article cover picture"
+            :src="props.content.image"
+            class="w-full h-full object-cover bg-[#FFFF]"
+          >
+        </div>
+
+        <div class="w-2/3 p-4 md:p-4">
+          <p class="mb-2 text-lg text-gray-600 dark:text-gray-400">
+            <a
+              v-for="tag in props.content.tags"
+              :key="tag"
+              class="text-sm mr-2 text-primary-text/70"
+            >
+              #{{ tag }}
+            </a>
+          </p>
+          <h1 class="text-3xl font-bold text-gray-800 dark:text-white">
+            {{ props.content.title }}
+          </h1>
+
+          <p class="mt-2 text-lg text-gray-600 dark:text-gray-400">
+            {{ props.content.description }}
+          </p>
+        </div>
+      </div>
     </div>
-    <div class="space-y-4 py-4 px-6 text-center md:col-span-3 md:space-y-4 md:px-0 md:text-left">
-      <p class="text-lg font-extrabold md:text-3xl">
-        {{ props.content.title }}
-      </p>
-      <p class="text-base md:text-xl">
-        {{ props.content.description }}
-      </p>
+
+    <!-- Mobile -->
+    <div class="w-fit mx-auto block md:hidden">
+      <div class="overflow-hidden shadow-lg rounded-3xl w-80 cursor-pointer m-auto">
+        <div class="w-full h-full">
+          <img
+            alt="Article cover picture"
+            :src="props.content.image"
+            class="max-h-56 w-full object-cover"
+          >
+          <div class="bg-background-alt dark:bg-gray-800 w-full p-4">
+            <p class="text-primary-text dark:text-white text-xl font-medium mb-2">
+              {{ props.content.title }}
+            </p>
+            <p class="text-primary-text/80 dark:text-gray-300 font-light text-md">
+              {{ props.content.description }}
+            </p>
+            <div class="flex items-center mt-4">
+              <div class="flex flex-wrap justify-starts items-center mt-4">
+                <div
+                  v-for="tag in props.content.tags"
+                  :key="tag"
+                  class="text-xs mr-2 py-1.5 px-4 text-gray-600 bg-blue-100 rounded-2xl"
+                >
+                  #{{ tag }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
