@@ -2,7 +2,6 @@ import { defaultValueCtx, editorViewOptionsCtx, Editor, rootCtx } from "@milkdow
 import { useEditor } from "@milkdown/vue";
 import { gfm, link, image } from "@milkdown/preset-gfm";
 import { listenerCtx, listener } from "@milkdown/plugin-listener";
-import { tooltip, tooltipPlugin } from "@milkdown/plugin-tooltip";
 import { upload, uploadPlugin } from "@milkdown/plugin-upload";
 import { math, mathBlock } from "@milkdown/plugin-math";
 import { diagram } from "@milkdown/plugin-diagram";
@@ -18,6 +17,7 @@ import { useDraftStore } from "~~/core/store/DraftStore";
 import { customUploader } from "~~/types/MilkDown/Uploader";
 // import { iframePlugin } from "~~/types/MilkDown/IFrame";
 import { videoPlugin } from "~~/types/MilkDown/Video";
+import { customTooltip } from "~~/types/MilkDown/Tooltip";
 
 export default defineNuxtPlugin(() => {
   return {
@@ -52,12 +52,7 @@ export default defineNuxtPlugin(() => {
               .configure(extendedMathBlock, { placeholder: { empty: "Insert Math Formula in TeX syntax", error: "Syntax Error" } }))
             // .use(block)
             .use(customMenu)
-            .use(
-              tooltip
-                .configure(tooltipPlugin, {
-                  bottom: false
-                })
-            )
+            .use(customTooltip)
             .use(customTheme(readOnly))
             .use(listener)
             .use(directiveFallback)

@@ -23,7 +23,7 @@ export const iconsMapping = {
   },
   inlineCode: {
     label: "inlineCode",
-    icon: "code-circle"
+    icon: "code-1"
   },
   bulletList: {
     label: "bulletList",
@@ -39,7 +39,7 @@ export const iconsMapping = {
   },
   code: {
     label: "code",
-    icon: "code-1"
+    icon: "code-circle"
   },
   image: {
     label: "image",
@@ -110,7 +110,7 @@ export const getIcon = (key: Icon) => {
   const element = document.createElement("span");
 
   if (icon === "text") {
-    element.className = `milkdown-icons icon-${icon} heading-${label}`;
+    element.className = `milkdown-icons icon-${icon} heading-${label} icon-hidden-mobile`;
   } else { element.className = `milkdown-icons icon-${icon} `; }
 
   return {
