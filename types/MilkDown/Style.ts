@@ -320,11 +320,28 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       justify-content: center;
       justify-items: center;
       column-gap: 0.75rem;
+      align-items: flex-end;
 
       padding: 0.25rem;
 
       .milkdown-icons {
         font-size: 1.125rem;
+
+        &.heading-h1 {
+          font-size: 1.125em;
+        }
+
+        &.heading-h2 {
+          font-size: 1rem;
+        }
+
+        &.heading-h3 {
+          font-size: 0.875rem;
+        }
+
+        &.heading-text {
+          font-size: 0.75rem;
+        }
       }
     }
   `;
