@@ -6,15 +6,6 @@
           :src="props.post.image"
           class="w-full p-1 my-auto mx-auto object-contain max-h-14 rounded-xl"
         >
-        <div class="flex flex-row gap-x-3 pt-2 lg:gap-x-2.5">
-          <img
-            :src="authorImage"
-            class="h-6 w-6 object-cover rounded-full"
-          >
-          <p class="text-sm font-medium text-primary-text-light my-auto">
-            {{ authorNickname }}
-          </p>
-        </div>
       </div>
       <div class="w-3/4">
         <p class="text-[1.07rem] font-bold">
@@ -24,6 +15,15 @@
           {{ props.post.subtitle }}
         </p>
       </div>
+    </div>
+    <div class="w-full flex">
+      <img
+        :src="authorImage"
+        class="h-6 w-6 object-cover rounded-full mx-1"
+      >
+      <p class="text-sm font-medium text-primary-text-light my-auto truncate mx-2">
+        {{ authorNickname }}
+      </p>
     </div>
   </div>
 </template>
