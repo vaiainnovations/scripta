@@ -4,7 +4,7 @@
       <div class="w-1/4">
         <img
           :src="props.post.image"
-          class="w-full p-0.5 my-auto mx-auto object-contain max-h-14"
+          class="w-full p-1 my-auto mx-auto object-contain max-h-14 rounded-xl"
         >
         <div class="flex flex-row gap-x-3 pt-2 lg:gap-x-2.5">
           <img

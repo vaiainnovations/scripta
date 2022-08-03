@@ -2,7 +2,9 @@
   <div>
     <NavBarCard v-if="navBarReading.show">
       <template #central>
-        {{ navBarReading.title }}
+        <span class="text-lg font-bold">
+          {{ navBarReading.title }}
+        </span>
       </template>
       <template #right>
         <ArticlesViewUser class="flex-row-reverse" :address="navBarReading.address" :date="navBarReading.date" />
