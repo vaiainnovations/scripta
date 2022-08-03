@@ -1,5 +1,5 @@
 <template>
-  <div v-if="props.content" class="w-full py-4 mx-auto">
+  <div v-if="props.content" class="w-full mx-auto">
     <!-- Desktop -->
     <div class="w-full hidden md:block">
       <div class="flex max-w-full mx-auto overflow-hidden bg-background-alt rounded-3xl shadow-md dark:bg-gray-800">

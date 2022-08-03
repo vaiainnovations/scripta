@@ -1,5 +1,7 @@
 <template>
-  <div class="bg-[#FFFFFF] flex flex-col gap-y-7 items-center lg:w-2/3 lg:bg-background lg:overflow-y-auto lg:px-32 lg:py-9">
+  <div
+    class="bg-[#FFFFFF] flex flex-col gap-y-7 items-center lg:w-2/3 lg:bg-background lg:overflow-y-auto lg:px-32 lg:py-9"
+  >
     <div class="h-24 flex flex-row justify-between px-6 w-full items-center bg-background">
       <p class="text-2xl md:text-4xl font-semibold">
         Your Articles
@@ -18,24 +20,22 @@
       <NuxtLink
         v-for="article in usePostStore().userPosts"
         :key="article.externalId"
-        class="w-full bg-background-alt rounded-2xl"
+        class="w-full"
         :to="`/edit/${article.externalId}`"
       >
         <ArticlesSmallPreview :content="{description: article.subtitle, title: article.text, image: article.image, content: article.content, tags: article.tags}" />
       </NuxtLink>
     </div>
-    <span
-      v-else
-      class="w-full bg-background-alt py-10 text-center rounded-2xl"
-    >
+    <div v-else class="w-full bg-background-alt p-4 py-8 rounded-2xl">
       <NuxtLink
         to="/new"
+        class="w-full bg-background-alt py-10 text-center rounded-2xl"
       >
         <h1 class="text-xl my-auto hover:underline">
           Create your first article!
         </h1>
       </NuxtLink>
-    </span>
+    </div>
   </div>
 </template>
 

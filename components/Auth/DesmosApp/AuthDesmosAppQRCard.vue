@@ -29,6 +29,7 @@ const { $useWalletConnect, $useWallet } = useNuxtApp();
 const signer = await $useWalletConnect().connect();
 
 const wcUrl = ref(getWalletConnectUrl(signer));
+console.log(wcUrl.value);
 await $useWallet().connect(signer, "walletconnect");
 
 /**
