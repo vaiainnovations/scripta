@@ -109,7 +109,9 @@ export const getIcon = (key: Icon) => {
 
   const element = document.createElement("span");
 
-  element.className = `milkdown-icons icon-${icon} `;
+  if (icon === "text") {
+    element.className = `milkdown-icons icon-${icon} heading-${label}`;
+  } else { element.className = `milkdown-icons icon-${icon} `; }
 
   return {
     dom: element,

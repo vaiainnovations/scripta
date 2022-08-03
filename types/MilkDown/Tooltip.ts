@@ -30,8 +30,7 @@ const customButtons = (ctx: Ctx) => {
     createToggleIcon("link", "ToggleLink", marks.link, marks.code_inline),
     createNodeIcon("h1", nodes.heading, "TurnIntoHeading", 1),
     createNodeIcon("h2", nodes.heading, "TurnIntoHeading", 2),
-    createNodeIcon("h3", nodes.heading, "TurnIntoHeading", 3),
-    createNodeIcon("text", nodes.text, "TurnIntoText")
+    createNodeIcon("h3", nodes.heading, "TurnIntoHeading", 3)
   ];
 };
 

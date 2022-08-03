@@ -11,8 +11,7 @@ import {
   ToggleInlineCode,
   InsertHr,
   InsertImage,
-  TurnIntoHeading,
-  TurnIntoText
+  TurnIntoHeading
 } from "@milkdown/preset-gfm";
 
 import { TurnIntoDiagram } from "@milkdown/plugin-diagram";
@@ -53,12 +52,6 @@ export const customMenu = menu.configure(menuPlugin, {
         icon: "h3",
         key: TurnIntoHeading,
         options: 3,
-        disabled: view => mobileEditorSize(view, undefined) || headingBlock(view.state)
-      },
-      {
-        type: "button",
-        icon: "text",
-        key: TurnIntoText,
         disabled: view => mobileEditorSize(view, undefined) || headingBlock(view.state)
       }
     ],
