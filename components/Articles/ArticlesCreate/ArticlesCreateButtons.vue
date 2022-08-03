@@ -1,15 +1,21 @@
 <template>
   <div class="grid grid-cols-2 lg:grid-cols-6 w-full gap-y-4 gap-x-6 lg:gap-x-4 xl:gap-x-10">
     <button
-      v-if="!isPublishing"
+      v-if="!isPublishing && (useDraftStore().title || useDraftStore().subtitle || useDraftStore().content || useDraftStore().tags.length>0)"
+      :disabled="isSavingDraft"
       type="button"
-      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-primary-text text-xl font-medium"
-      @click="useDraftStore().saveDraft()"
+      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-primary-text text-xl font-medium hover:bg-primary-text/50"
+      @click="saveDraft()"
     >
-      Save Draft
+      <span v-if="!isSavingDraft">
+        Save Draft
+      </span>
+      <span v-else>
+        Saving...
+      </span>
     </button>
     <button
-      v-if="!isPublishing"
+      v-if="!isPublishing && (useDraftStore().title || useDraftStore().subtitle || useDraftStore().content || useDraftStore().tags.length>0)"
       type="button"
       class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-danger text-xl font-medium"
       @click="deleteDraft()"
@@ -51,15 +57,17 @@ import { useUserStore } from "~~/core/store/UserStore";
 import { useDesmosStore } from "~~/core/store/DesmosStore";
 
 const isPublishing = ref(false);
+const isSavingDraft = ref(false);
 
 // Auto save draft (if there is some content) every 30s
 const saveDraftInterval = setInterval(() => {
   if (!useDraftStore().id && (useDraftStore().title || useDraftStore().subtitle || useDraftStore().content || useDraftStore().tags.length > 0)) {
-    useDraftStore().saveDraft();
+    saveDraft();
   }
 }, 30 * 1000);
 
 onBeforeUnmount(() => {
+  saveDraft();
   clearInterval(saveDraftInterval);
 });
 
@@ -68,6 +76,13 @@ async function deleteDraft () {
     await useDraftStore().deleteDraft();
   }
   useRouter().push("/profile");
+}
+
+function saveDraft () {
+  isSavingDraft.value = true;
+  useDraftStore().saveDraft().then(() => {
+    isSavingDraft.value = false;
+  });
 }
 
 async function publish () {
