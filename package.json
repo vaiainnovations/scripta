@@ -13,9 +13,9 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.14.1",
-    "@desmoslabs/desmjs": "4.2.0",
-    "@desmoslabs/desmjs-types": "^4.2.0",
-    "@desmoslabs/desmjs-walletconnect": "^4.2.0",
+    "@desmoslabs/desmjs": "4.3.2",
+    "@desmoslabs/desmjs-types": "^4.3.2",
+    "@desmoslabs/desmjs-walletconnect": "^4.3.2",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@ezone-devops/milkdown-plugin-directive-fallback": "^6.2.2",
     "@keplr-wallet/types": "^0.10.12",
