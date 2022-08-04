@@ -10,6 +10,6 @@ describe("example", async () => {
   });
 
   it("Renders Index", async () => {
-    expect(await $fetch("/")).toMatch("Hello Scripta");
+    expect(await $fetch("/")).toMatch("Scripta");
   });
 });
