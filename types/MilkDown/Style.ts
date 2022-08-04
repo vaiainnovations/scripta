@@ -126,36 +126,36 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   `; */
 
   // Heading style
-  /* const headingStyle = css`
+  const headingStyle = css`
     h1 {
-      font-size: 3em;
-      line-height: 1.167;
+      font-size: 3rem;
+      line-height: 1;
     }
     h2 {
-      font-size: 2.5em;
-      line-height: 1.2;
+      font-size: 2.25rem;
+      line-height: 2.5rem;
     }
     h3 {
-      font-size: 2.125em;
-      line-height: 1.05;
+      font-size: 1.875rem;
+      line-height: 2.25rem;
     }
-    h4 {
-      font-size: 1.75em;
-      line-height: 1.14;
+    /* h4 {
+      font-size: 1.5rem;
+      line-height: 2rem;
     }
     h5 {
-      font-size: 1.5em;
-      line-height: 1;
+      font-size: 1.25rem;
+      line-height: 1.75rem;
     }
     h6 {
-      font-size: 1.25em;
-      line-height: 1;
-    }
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+    }*/
     .heading {
       margin: 40px 0;
       font-weight: 400;
     }
-  `; */
+  `;
 
   // Paragraph style
   const paragraphStyle = css`
@@ -243,22 +243,21 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   `;
 
   // Image style
-  const imgStyle = css`
-    .image {
-      display: inline-block;
-      margin: 0 auto;
+  const mediaStyle = css`
+    .image-container,
+    .video-container {
+      display: flex;
+      margin: auto auto;
       object-fit: contain;
-      width: 100%;
+      width: fit-content;
       position: relative;
       height: auto;
       text-align: center;
-    }
-    .image-container.ProseMirror-selectednode {
-      border: 0;
-      border-radius: 4px;
-    }
-    .image-container {
-      ${borderAll}
+
+      &.ProseMirror-selectednode {
+        border: 0;
+        border-radius: 4px;
+      }
     }
   `;
 
@@ -278,7 +277,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
     }
   `;
   // Editor style
-  // TODO add img, heading, blockquote, footnote and table
+  // TODO add blockquote, footnote and table
   const editorStyle = css`
     .editor {
       height: 100%;
@@ -304,7 +303,9 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       ${codeStyle}
       ${inlineStyle}
 
-      ${imgStyle}
+      ${mediaStyle}
+
+      ${headingStyle}
     }
   `;
 
@@ -319,11 +320,28 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       justify-content: center;
       justify-items: center;
       column-gap: 0.75rem;
+      align-items: flex-end;
 
       padding: 0.25rem;
 
       .milkdown-icons {
         font-size: 1.125rem;
+
+        &.heading-h1 {
+          font-size: 1.125em;
+        }
+
+        &.heading-h2 {
+          font-size: 1rem;
+        }
+
+        &.heading-h3 {
+          font-size: 0.875rem;
+        }
+
+        &.heading-text {
+          font-size: 0.75rem;
+        }
       }
     }
   `;
@@ -358,7 +376,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   const containerStyle = css`
     .milkdown {
       width: 100%;
-      height: 632px;
+      min-height: 632px;
 
       margin-left: auto;
       margin-right: auto;
@@ -367,7 +385,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       position: relative;
 
       color: ${neutralAltColor};
-      background: ${surfaceColor};
+      background-color: ${surfaceColor};
       font-family: ${typographyFont};
 
       .resize-cursor {
@@ -391,6 +409,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   const menuStyle = css`
     .milkdown-menu {
       flex-direction: row;
+      flex-wrap: wrap;
       justify-content: center;
       justify-items: center;
       width: 100%;
@@ -399,9 +418,27 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
 
       .milkdown-icons {
         font-size: 1.5rem;
+
+        &.heading-h1 {
+          font-size: 1.5rem;
+        }
+
+        &.heading-h2 {
+          font-size: 1.25rem;
+        }
+
+        &.heading-h3 {
+          font-size: 1.125rem;
+        }
+
+        &.heading-text {
+          font-size: 1rem;
+        }
       }
 
       .button {
+        align-items: flex-end;
+
         &.active,
         &:hover {
           background-color: ${secondaryColorAlt};
@@ -418,7 +455,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   injectGlobal`
     .milkdown-menu-wrapper {
       display: flex;
-      flex-direction: column-reverse;
+      flex-direction: column;
       justify-items: center;
       padding: 0.5rem;
       row-gap: 0.5rem;
@@ -428,6 +465,13 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
 
       ${menuStyle}
       ${containerStyle}
+
+      .menu-selector-wrapper {
+        .menu-selector-list {
+          left: 0px !important;
+          top: calc(#{height}) !important;
+        }
+      }
     }
   `;
 };

@@ -1,7 +1,0 @@
-<template>
-  <section>
-    <NuxtLayout name="reading-custom">
-      <ArticlesViewContainer />
-    </NuxtLayout>
-  </section>
-</template>

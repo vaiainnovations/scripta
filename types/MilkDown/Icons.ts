@@ -23,7 +23,7 @@ export const iconsMapping = {
   },
   inlineCode: {
     label: "inlineCode",
-    icon: "code-circle"
+    icon: "code-1"
   },
   bulletList: {
     label: "bulletList",
@@ -39,28 +39,82 @@ export const iconsMapping = {
   },
   code: {
     label: "code",
-    icon: "code-1"
+    icon: "code-circle"
   },
   image: {
     label: "image",
     icon: "image"
   },
-  table: {
-    label: "table",
+  diagram: {
+    label: "diagram",
     icon: "hierarchy"
+  },
+  loading: {
+    label: "loading",
+    icon: "dots"
+  },
+  math: {
+    label: "math",
+    icon: "math"
+  },
+  video: {
+    label: "video",
+    icon: "video-play"
+  },
+  h1: {
+    label: "h1",
+    icon: "text"
+  },
+  h2: {
+    label: "h2",
+    icon: "text"
+  },
+  h3: {
+    label: "h3",
+    icon: "text"
+  },
+  text: {
+    label: "text",
+    icon: "text"
   }
 };
 
 export const getIcon = (key: Icon) => {
   const target = iconsMapping[key];
-  if (!target) { return; }
+  if (!target) {
+    return;
+  }
 
   const { icon, label } = target;
-  const span = document.createElement("span");
-  span.className = `milkdown-icons icon-${icon} `;
+
+  if (label === "loading") {
+    const element = document.createElement("label");
+    element.className = "flex flex-row items-center";
+
+    const spanForward = document.createElement("span");
+    spanForward.className = `forward-animated animated-icon milkdown-icons icon-${icon} `;
+
+    const spanBackward = document.createElement("span");
+    spanBackward.className = `back-animated animated-icon milkdown-icons icon-${icon} `;
+
+    element.appendChild(spanForward);
+    element.appendChild(spanBackward);
+    element.appendChild(spanForward.cloneNode(true));
+
+    return {
+      dom: element,
+      label
+    };
+  }
+
+  const element = document.createElement("span");
+
+  if (icon === "text") {
+    element.className = `milkdown-icons icon-${icon} heading-${label}`;
+  } else { element.className = `milkdown-icons icon-${icon} `; }
 
   return {
-    dom: span,
+    dom: element,
     label
   };
 };

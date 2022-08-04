@@ -14,20 +14,21 @@ export const useWalletConnectStore = defineStore({
     /**
     * Inizialize WalletConenct connection & listeners
     */
-    async connect (): Promise<void> {
+    async connect (qr = false): Promise<WalletConnectSigner> {
       const walletStore = useWalletStore();
 
       // create WalletConnect Signer
       const signer = new WalletConnectSigner(new WalletConnect({
         bridge: "https://bridge.walletconnect.org",
-        qrcodeModal: QRCodeModal
+        qrcodeModal: qr ? QRCodeModal : null
       }), {
-        signingMode: SigningMode.DIRECT
+        signingMode: SigningMode.AMINO // Direct
       });
       await signer.connect();
 
       // Connect to the wallet with the WalletConnect signer
       await walletStore.connect(signer, SupportedSigner.WalletConnect);
+      return signer;
     }
   }
 });

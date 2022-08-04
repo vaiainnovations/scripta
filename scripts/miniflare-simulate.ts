@@ -1,5 +1,6 @@
+import Long = require("long");
 import { Miniflare } from "miniflare";
-import { PostPreview } from "../types/PostPreview";
+import { PostExtended } from "../types/PostExtended";
 
 let miniflare;
 
@@ -21,14 +22,29 @@ class Simulator {
   static async populateKv () {
     // Generate sample Posts
     const postsKV = await miniflare.getKVNamespace("KV_POSTS");
-    const postSample = new PostPreview("Post", "Description of the post", "/img/author_pic.png", "Content of the post");
+    const postSample: PostExtended = {
+      id: Long.fromNumber(1),
+      externalId: "8a7b7cad-896f-4289-adf0-c49ec1556da2",
+      text: "This is a sample Title",
+      subtitle: "A subtitle for this sample post",
+      content: "This is the *content* of the sample post",
+      author: "desmos16c60y8t8vra27zjg2arlcd58dck9cwn7p6fwtd",
+      attachments: [],
+      tags: ["tag1", "tag2"],
+      creationDate: new Date(Date.now()).toString(),
+      sectionId: 32,
+      entities: [],
+      image: "/img/author_pic.png",
+      lastEditedDate: new Date(Date.now()).toString()
+
+    };
     for (let i = 0; i < 10; i++) {
       await postsKV.put(i.toString(), JSON.stringify(postSample));
     }
 
     // generate sample Trending Posts
     const postsTrendingKV = await miniflare.getKVNamespace("KV_TRENDING_POSTS");
-    const postTrendingSample = new PostPreview("Trending Post", "Description of the trending post", "/img/author_pic.png", "Content of the trending post");
+    const postTrendingSample = postSample;
     const postsTrending = [];
     for (let i = 0; i < 7; i++) {
       postsTrending.push(postTrendingSample);

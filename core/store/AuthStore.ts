@@ -1,7 +1,11 @@
 
 import { defineStore } from "pinia";
+import { generateUsername } from "unique-username-generator";
+import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
 import { SupportedSigner, useWalletStore } from "./wallet/WalletStore";
 import { useAccountStore } from "./AccountStore";
+import { useUserStore } from "./UserStore";
+import { usePostStore } from "./PostStore";
 import { registerModuleHMR } from ".";
 
 export enum AuthLevel {
@@ -95,7 +99,11 @@ export const useAuthStore = defineStore({
     /**
      * Sign in
      */
-    async login (): Promise<void> {
+    async login (force = false): Promise<void> {
+      // prevent from multiple login attempts if the user is already logged in, unless forced (ex. Keplr wallet switch)
+      if (this.authLevel > AuthLevel.None && !force) {
+        return;
+      }
       console.log("called login");
       if (useWalletStore().signerId !== SupportedSigner.Noop) {
         this.authLevel = AuthLevel.Wallet; // Wallet is connected
@@ -108,17 +116,43 @@ export const useAuthStore = defineStore({
         const account = await useWalletStore().wallet.signer.getCurrentAccount();
         useAccountStore().address = account.address;
 
-        // TODO: Auth Backend call
-        /* const authSuccess = false;
-        if (!authSuccess) {
-          navigateTo("/auth/error");
-          return;
-        } */
+        const authInfo = await useAccountStore().getUserInfo(false); // TODO: force creation here?
+        const articles = await useUserStore().getUserArticles(account.address);
+        usePostStore().userPosts = articles;
 
-        // Retrieve the Desmos profile, if exxists
+        console.log(authInfo);
+        // TODO: handle error situation
+
+        // Retrieve the Desmos profile, if exists
         const profile = await (await useWalletStore().wallet.client).getProfile(account.address);
-        if (!profile) {
-          // TODO: to consider accounts without profile
+
+        if (profile) {
+          useAccountStore().profile = profile;
+          useAccountStore().isNewProfile = false;
+        }
+
+        if (!profile && (!useAccountStore().isNewProfile)) { // If no profile or if the new profile has been already generated
+          useAccountStore().isNewProfile = true;
+          // generate a new empty profile with a random username/nickname if the profile does not exists
+
+          // Generate a new valid random username
+          let username = "";
+          while (!/^[A-Za-z0-9_]+$/.test(username)) {
+            username = generateUsername("_", 0, 26).concat("" + Math.floor(Math.random() * 10000).toString());
+          }
+          // generate the nickname from the username
+          const nickname = (username.split("_").map(word => word[0].toUpperCase() + word.slice(1)).join(" ")).replace(/[0-9]/g, "");
+          const newProfile: Profile = {
+            dtag: username,
+            nickname,
+            bio: "",
+            pictures: {
+              cover: "",
+              profile: ""
+            },
+            creationDate: new Date(Date.now())
+          };
+          useAccountStore().profile = newProfile;
         }
 
         // TODO: to consider accounts with no balance
@@ -127,7 +161,6 @@ export const useAuthStore = defineStore({
         // TODO: call Backend for authz/grants
 
         // update the store
-        useAccountStore().profile = profile;
         useAccountStore().balance = Number(balance.amount) / 1_000_000;
 
         // Store the auth data locally

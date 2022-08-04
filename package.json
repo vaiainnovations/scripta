@@ -7,14 +7,17 @@
     "build": "nuxt build",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "mf-dev": "NODE_OPTIONS='--max-old-space-size=8192' npx ts-node --esm ./scripts/miniflare-simulate.ts"
+    "mf-dev": "NODE_OPTIONS='--max-old-space-size=8192' npx ts-node --esm ./scripts/miniflare-simulate.ts",
+    "mf-build": "NODE_OPTIONS='--max-old-space-size=8192' NITRO_PRESET=cloudflare yarn build",
+    "mf-publish": "wrangler publish --site ./.output/public"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.14.1",
-    "@desmoslabs/desmjs": "4.0.0-alpha.2",
-    "@desmoslabs/desmjs-types": "^4.0.0",
-    "@desmoslabs/desmjs-walletconnect": "^4.0.0-alpha.1",
+    "@desmoslabs/desmjs": "4.3.2",
+    "@desmoslabs/desmjs-types": "^4.3.2",
+    "@desmoslabs/desmjs-walletconnect": "^4.3.2",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
+    "@ezone-devops/milkdown-plugin-directive-fallback": "^6.2.2",
     "@keplr-wallet/types": "^0.10.12",
     "@milkdown/core": "^6.2.0",
     "@milkdown/plugin-block": "^6.3.0",
@@ -38,13 +41,16 @@
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
     "c8": "^7.11.3",
+    "cosmjs-types": "^0.5.0",
     "eslint": "^8.20.0",
     "eslint-plugin-vue": "^9.2.0",
+    "ipfs-http-client": "^57.0.3",
     "katex": "^0.16.0",
     "miniflare": "^2.6.0",
     "nuxt": "^3.0.0-rc.6",
     "playwright": "^1.23.4",
     "prosemirror-model": "^1.18.1",
+    "remark-directive": "^2.0.1",
     "ts-node": "^10.9.1",
     "typescript": "^4.7.4",
     "vite-plugin-eslint": "^1.6.1",
@@ -53,11 +59,14 @@
   "dependencies": {
     "@nuxtjs/composition-api": "^0.33.0",
     "@pinia/nuxt": "^0.3.0",
+    "@rollup/plugin-inject": "^4.0.4",
     "buffer": "^6.0.3",
     "bufferutil": "^4.0.6",
     "pinia": "^2.0.16",
     "qrcode.vue": "^3.3.3",
     "stream-browserify": "^3.0.0",
-    "utf-8-validate": "^5.0.9"
+    "unique-username-generator": "^1.1.1",
+    "utf-8-validate": "^5.0.9",
+    "uuid": "^8.3.2"
   }
 }

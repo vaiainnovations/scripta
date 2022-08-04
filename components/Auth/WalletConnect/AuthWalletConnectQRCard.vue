@@ -24,9 +24,8 @@
 </template>
 
 <script setup lang="ts">
-import { useWalletConnectStore } from "~~/core/store/wallet/WalletConnectStore";
-
 async function connect () {
-  await useWalletConnectStore().connect();
+  const { $useWalletConnect } = useNuxtApp();
+  await $useWalletConnect().connect(true);
 }
 </script>

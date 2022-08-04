@@ -1,10 +1,10 @@
 @font-face {
   font-family: "MilkdownIcons";
-  src: url("~/assets/fonts/milkdown/MilkdownIcons.eot?5khdzo");
-  src: url("~/assets/fonts/milkdown/MilkdownIcons.eot?5khdzo#iefix") format("embedded-opentype"),
-    url("~/assets/fonts/milkdown/MilkdownIcons.ttf?5khdzo") format("truetype"),
-    url("~/assets/fonts/milkdown/MilkdownIcons.woff?5khdzo") format("woff"),
-    url("~/assets/fonts/milkdown/MilkdownIcons.svg?5khdzo#MilkdownIcons") format("svg");
+  src: url("~/assets/fonts/milkdown/MilkdownIcons.eot?xafdqd");
+  src: url("~/assets/fonts/milkdown/MilkdownIcons.eot?xafdqd#iefix") format("embedded-opentype"),
+    url("~/assets/fonts/milkdown/MilkdownIcons.ttf?xafdqd") format("truetype"),
+    url("~/assets/fonts/milkdown/MilkdownIcons.woff?xafdqd") format("woff"),
+    url("~/assets/fonts/milkdown/MilkdownIcons.svg?xafdqd#MilkdownIcons") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,11 +25,17 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-hierarchy:before {
-  content: "\e90c";
+.icon-text:before {
+  content: "\e910";
 }
-.icon-image:before {
-  content: "\e90b";
+.icon-video-play:before {
+  content: "\e90f";
+}
+.icon-math:before {
+  content: "\e90e";
+}
+.icon-dots:before {
+  content: "\e902";
 }
 .icon-code-1:before {
   content: "\e900";
@@ -38,29 +44,85 @@
   content: "\e901";
 }
 .icon-grid-10:before {
-  content: "\e902";
-}
-.icon-link:before {
   content: "\e903";
 }
-.icon-paperclip-2:before {
+.icon-hierarchy:before {
   content: "\e904";
 }
-.icon-task:before {
+.icon-image:before {
   content: "\e905";
 }
-.icon-task-dots:before {
+.icon-link:before {
   content: "\e906";
 }
-.icon-task-numbered:before {
+.icon-paperclip-2:before {
   content: "\e907";
 }
-.icon-text-bold:before {
+.icon-task:before {
   content: "\e908";
 }
-.icon-text-italic:before {
+.icon-task-dots:before {
   content: "\e909";
 }
-.icon-text-underline:before {
+.icon-task-numbered:before {
   content: "\e90a";
+}
+.icon-text-bold:before {
+  content: "\e90b";
+}
+.icon-text-italic:before {
+  content: "\e90c";
+}
+.icon-text-underline:before {
+  content: "\e90d";
+}
+
+@keyframes animForward {
+  from {
+    font-size: 1.5rem;
+    opacity: 1;
+  }
+
+  50% {
+    font-size: 1rem;
+    opacity: 0.5;
+  }
+
+  to {
+    font-size: 1.5rem;
+    opacity: 1;
+  }
+}
+
+@keyframes animBackward {
+  from {
+    font-size: 1rem;
+    opacity: 0.5;
+  }
+
+  50% {
+    font-size: 1.5rem;
+    opacity: 1;
+  }
+
+  to {
+    font-size: 1rem;
+    opacity: 0.5;
+  }
+}
+
+.icon-dots.back-animated {
+  opacity: 0.5 !important;
+  animation-name: animBackward !important;
+}
+
+.icon-dots.forward-animated {
+  opacity: 1 !important;
+  animation-name: animForward !important;
+}
+
+.icon-dots.animated-icon {
+  display: inline-block !important;
+  animation-duration: 0.8s !important;
+  animation-iteration-count: infinite !important;
 }

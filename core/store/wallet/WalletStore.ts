@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { DesmosClient, NoOpSigner, Signer, SignerStatus } from "@desmoslabs/desmjs";
 import { registerModuleHMR } from "..";
 import { useAuthStore } from "../AuthStore";
+import { useDesmosStore } from "../DesmosStore";
 import { useWalletConnectStore } from "./WalletConnectStore";
 import { useKeplrStore } from "./KeplrStore";
 
@@ -12,7 +13,7 @@ export enum SupportedSigner {
 }
 
 class Wallet {
-  public client = DesmosClient.connectWithSigner("https://rpc.morpheus.desmos.network", new NoOpSigner());
+  public client = DesmosClient.connectWithSigner(useDesmosStore().rpc, new NoOpSigner());
   public signer: Signer = new NoOpSigner();
 }
 
@@ -97,15 +98,14 @@ export const useWalletStore = defineStore({
 
       // create the Desmos Client
       try {
-        this.wallet.client = DesmosClient.connectWithSigner("https://rpc.morpheus.desmos.network", this.wallet.signer as Signer);
+        this.wallet.client = DesmosClient.connectWithSigner(useDesmosStore().rpc, this.wallet.signer as Signer);
       } catch (e) {
         console.log(e);
         // abort if the client fails to connect
         return;
       }
-
       // get Wallet account
-      const account = (await this.wallet.signer.getAccounts())[0];
+      const account = await this.wallet.signer.getCurrentAccount();
 
       // if the account does not exists, abort
       if (!account) {
@@ -114,7 +114,7 @@ export const useWalletStore = defineStore({
 
       // Start the final step of the login process
       console.log("called WalletStore onWalletConnected");
-      await authStore.login();
+      await authStore.login(true);
     },
 
     async onWalletNotConnected () {
