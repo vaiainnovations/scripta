@@ -104,9 +104,8 @@ export const useWalletStore = defineStore({
         // abort if the client fails to connect
         return;
       }
-
       // get Wallet account
-      const account = (await this.wallet.signer.getAccounts())[0];
+      const account = await this.wallet.signer.getCurrentAccount();
 
       // if the account does not exists, abort
       if (!account) {
