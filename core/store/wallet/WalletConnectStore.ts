@@ -22,7 +22,7 @@ export const useWalletConnectStore = defineStore({
         bridge: "https://bridge.walletconnect.org",
         qrcodeModal: qr ? QRCodeModal : null
       }), {
-        signingMode: SigningMode.DIRECT // Direct
+        signingMode: SigningMode.AMINO // Direct
       });
       await signer.connect();
 
