@@ -139,16 +139,16 @@ function saveProfile () {
     typeUrl: "/desmos.profiles.v3.MsgSaveProfile",
     value: {
       dtag:
-        oldProfile.dtag !== newUsername.value ? newUsername.value : doNotModify,
+        (oldProfile.dtag !== newUsername.value || useAccountStore().isNewProfile) ? newUsername.value : doNotModify,
       nickname:
-        oldProfile.nickname !== newNickname.value
-          ? newNickname.value
-          : doNotModify,
-      bio: oldProfile.bio !== newBio.value ? newBio.value : doNotModify,
+       (oldProfile.nickname !== newNickname.value || useAccountStore().isNewProfile)
+         ? newNickname.value
+         : doNotModify,
+      bio: (oldProfile.bio !== newBio.value || useAccountStore().isNewProfile) ? newBio.value : doNotModify,
       profilePicture:
-        oldProfile.pictures.profile !== newProfilePicture.value
-          ? newProfilePicture.value
-          : doNotModify,
+       (oldProfile.pictures.profile !== newProfilePicture.value || useAccountStore().isNewProfile)
+         ? newProfilePicture.value
+         : doNotModify,
       coverPicture: doNotModify,
       creator: useAccountStore().address
     }
