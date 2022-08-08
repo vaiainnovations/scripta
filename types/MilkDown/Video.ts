@@ -27,7 +27,6 @@ const video = createNode<string, VideoOptions>((utils, options) => ({
     group: "block",
     marks: "",
     selectable: true,
-    draggable: true,
     defining: true,
     isolating: true,
     attrs: {

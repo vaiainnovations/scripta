@@ -76,7 +76,6 @@ export const createTheme = (emotion: Emotion, manager: ThemeManager, readOnly: b
     `;
   });
 
-  // TODO inspect better the border theme
   manager.set(ThemeBorder, (direction) => {
     // if the editor is in readOnly mode then no border is applied
     const lineWidth = readOnly ? 0 : manager.get(ThemeSize, "lineWidth");
@@ -93,7 +92,6 @@ export const createTheme = (emotion: Emotion, manager: ThemeManager, readOnly: b
     `;
   });
 
-  // TODO inspect better the scrollbar theme
   /* Get scrollbar by direction and type */
   manager.set(ThemeScrollbar, ([direction = "y", type = "normal"] = ["y", "normal"] as never) => {
     const main = manager.get(ThemeColor, ["solid", 0.38]);

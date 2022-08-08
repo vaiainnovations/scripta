@@ -15,7 +15,7 @@ import {
 } from "@milkdown/preset-gfm";
 
 import { TurnIntoDiagram } from "@milkdown/plugin-diagram";
-import { TurnIntoMathBlock } from "./MathCommand";
+import { TurnIntoMathBlock, TurnIntoFootnoteDef } from "./CustomCommands";
 import { InsertVideo } from "./Video";
 
 import { hasMark, isTextAndNotHasMark, notBlockType, notWrapped, headingBlock, mobileEditorSize } from "./Utilities";
@@ -152,6 +152,13 @@ export const customMenu = menu.configure(menuPlugin, {
         type: "button",
         icon: "math",
         key: TurnIntoMathBlock
+      }
+    ],
+    [
+      {
+        type: "button",
+        icon: "footnote",
+        key: TurnIntoFootnoteDef
       }
     ]
   ]

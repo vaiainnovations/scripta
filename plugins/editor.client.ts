@@ -1,17 +1,16 @@
 import { defaultValueCtx, editorViewOptionsCtx, Editor, rootCtx } from "@milkdown/core";
 import { useEditor } from "@milkdown/vue";
-import { gfm, link, image } from "@milkdown/preset-gfm";
+import { gfm, link, image, footnoteDefinition } from "@milkdown/preset-gfm";
 import { listenerCtx, listener } from "@milkdown/plugin-listener";
 import { upload, uploadPlugin } from "@milkdown/plugin-upload";
 import { math, mathBlock } from "@milkdown/plugin-math";
 import { diagram } from "@milkdown/plugin-diagram";
 import { emoji } from "@milkdown/plugin-emoji";
 import { directiveFallback } from "@ezone-devops/milkdown-plugin-directive-fallback";
-import { extendedMathBlock } from "~~/types/MilkDown/MathCommand";
-// import { block } from "@milkdown/plugin-block";
+import { customBlock } from "~~/types/MilkDown/Block";
+import { extendedMathBlock, extendedFootnoteDef } from "~~/types/MilkDown/CustomCommands";
 
 import { customTheme } from "~~/types/MilkDown";
-
 import { customMenu } from "~~/types/MilkDown/Menu";
 import { useDraftStore } from "~~/core/store/DraftStore";
 import { customUploader } from "~~/types/MilkDown/Uploader";
@@ -27,6 +26,7 @@ export default defineNuxtPlugin(() => {
           Editor.make()
             .use(
               gfm
+                .replace(footnoteDefinition, extendedFootnoteDef())
                 .configure(link, {
                   input: {
                     placeholder: "link",
@@ -50,15 +50,15 @@ export default defineNuxtPlugin(() => {
             .use(math
               .replace(mathBlock, extendedMathBlock())
               .configure(extendedMathBlock, { placeholder: { empty: "Insert Math Formula in TeX syntax", error: "Syntax Error" } }))
-            // .use(block)
             .use(customMenu)
             .use(customTooltip)
             .use(customTheme(readOnly))
             .use(listener)
             .use(directiveFallback)
+            .use(customBlock)
             .config((ctx) => {
               ctx.set(rootCtx, root);
-              ctx.set(defaultValueCtx, content);
+              ctx.set(defaultValueCtx, content || "");
               ctx.get(listenerCtx).markdownUpdated((_, markdown) => {
                 useDraftStore().content = markdown;
               });

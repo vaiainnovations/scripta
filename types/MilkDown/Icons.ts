@@ -76,6 +76,18 @@ export const iconsMapping = {
   text: {
     label: "text",
     icon: "text"
+  },
+  quote: {
+    label: "quote",
+    icon: "quote-down"
+  },
+  footnote: {
+    label: "footnote",
+    icon: "quote-down"
+  },
+  dragHandle: {
+    label: "dragHandle",
+    icon: "category"
   }
 };
 

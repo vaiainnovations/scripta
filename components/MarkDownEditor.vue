@@ -3,7 +3,7 @@
     v-if="editor"
     class="w-full h-fit relative"
   >
-    <VueEditor :editor="editor" />
+    <VueEditor :editor="editor.editor" />
   </section>
 </template>
 
@@ -18,6 +18,6 @@ const props = defineProps<Props>();
 let editor: any = ref(null);
 if (process.client) {
   const { $useMarkDownEditor } = useNuxtApp();
-  editor = $useMarkDownEditor(props.readOnly, props.content).editor;
+  editor = $useMarkDownEditor(props.readOnly, props.content);
 }
 </script>

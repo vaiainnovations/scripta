@@ -9,7 +9,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
 
   // colors
   const palette = getPalette(manager);
-  // const primaryColor = palette("primary");
+  const primaryColor = palette("primary");
   const secondaryColor = palette("secondary");
   const secondaryColorAlt = palette("secondary", 0.5);
   const neutralColor = palette("neutral");
@@ -111,7 +111,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   `;
 
   // Blockquote style
-  /* const blockquoteStyle = css`
+  const blockquoteStyle = css`
     blockquote {
       padding-left: 1.875em;
       line-height: 1.75em;
@@ -123,7 +123,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
         line-height: 1.5rem;
       }
     }
-  `; */
+  `;
 
   // Heading style
   const headingStyle = css`
@@ -276,8 +276,35 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       }
     }
   `;
+
+  // footnote
+  const footnoteStyle = css`
+  .footnote-definition {
+    ${borderAll}
+    border-radius: ${radius}
+    background-color: ${backgroundColor};
+    padding: 16px;
+    display: flex;
+    flex-direction: row;
+    & > .footnote-definition_content {
+        flex: 1;
+        width: calc(100% - 16px);
+        & > dd {
+            margin-inline-start: 16px;
+        }
+        & > dt {
+            color: ${secondaryColor};
+            font-weight: 500;
+        }
+    }
+    & > .footnote-definition_anchor {
+        width: 16px;
+    }
+}
+  `;
+
   // Editor style
-  // TODO add blockquote, footnote and table
+  // TODO add table
   const editorStyle = css`
     .editor {
       height: 100%;
@@ -306,6 +333,10 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       ${mediaStyle}
 
       ${headingStyle}
+
+      ${footnoteStyle}
+
+      ${blockquoteStyle}
     }
   `;
 
@@ -465,13 +496,6 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
 
       ${menuStyle}
       ${containerStyle}
-
-      .menu-selector-wrapper {
-        .menu-selector-list {
-          left: 0px !important;
-          top: calc(#{height}) !important;
-        }
-      }
     }
   `;
 };
