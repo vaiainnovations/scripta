@@ -495,7 +495,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       background-color: ${surfaceColor};
 
       ${menuStyle}
-      ${containerStyle}
     }
+    ${containerStyle}
   `;
 };
