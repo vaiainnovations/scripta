@@ -47,7 +47,7 @@ export const useKeplrStore = defineStore({
 
       // Create the Keplr Signer with the currrent configuration
       const keplrSigner = new $KeplrSigner(window.keplr!, {
-        signingMode: 1,
+        signingMode: 0,
         preferNoSetFee: true,
         preferNoSetMemo: true,
         chainInfo

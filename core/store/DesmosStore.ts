@@ -12,7 +12,14 @@ export const useDesmosStore = defineStore({
     ucoinDenom: "udaric",
     subspaceId: 8,
     // eslint-disable-next-line prefer-regex-literals
-    usernameRegexp: new RegExp("^[A-Za-z0-9_]{6,30}$")
+    usernameRegexp: new RegExp("^[A-Za-z0-9_]{6,30}$"),
+    defaultFee: {
+      amount: [{
+        amount: "1000",
+        denom: "udaric"
+      }],
+      gas: "200000"
+    }
   })
 });
 

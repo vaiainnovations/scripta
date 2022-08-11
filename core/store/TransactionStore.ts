@@ -4,6 +4,7 @@ import { EncodeObject } from "@cosmjs/proto-signing";
 import { StdFee } from "@cosmjs/stargate";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { useAccountStore } from "./AccountStore";
+import { useDesmosStore } from "./DesmosStore";
 import { registerModuleHMR } from ".";
 
 export enum QueueStatus {
@@ -73,23 +74,16 @@ export const useTransactionStore = defineStore({
         this.resetQueueWithTimer(10);
       }
     },
-    async directSign (messages: EncodeObject[]): Promise<Uint8Array> {
+    async directSign (messages: EncodeObject[], memo = "Signed from Scripta.network", fees = useDesmosStore().defaultFee): Promise<Uint8Array> {
       const { $useWallet } = useNuxtApp();
       // check if the draft is not empty
       try {
         this.status = QueueStatus.SIGNING;
         const client = (await $useWallet().wallet.client);
         const address = useAccountStore().address;
-        const defaultFee: StdFee = {
-          amount: [{
-            amount: "1000",
-            denom: "udaric"
-          }],
-          gas: "200000"
-        };
 
         // sign the messages
-        const signed = await client.sign(address, messages, defaultFee, "Signed from Scripta.network");
+        const signed = await client.sign(address, messages, fees, memo);
         const txBytes = TxRaw.encode(signed).finish();
 
         // broadcast the messages

@@ -12,7 +12,7 @@ export enum AuthLevel {
   None = "none",
   Memory = "memory",
   Wallet = "wallet",
-  Authz = "authz",
+  Session = "session",
 }
 
 interface StoredAuthData {
@@ -174,7 +174,7 @@ export const useAuthStore = defineStore({
         // Route to the profile page only if coming from auth
         if (useRouter().currentRoute.value.path.includes("auth")) {
           console.log("routing to success");
-          await navigateTo("/auth/success");
+          await navigateTo("/auth/session");
         }
       }
     }
