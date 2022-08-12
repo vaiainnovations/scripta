@@ -81,9 +81,16 @@ export const useTransactionStore = defineStore({
         this.status = QueueStatus.SIGNING;
         const client = (await $useWallet().wallet.client);
         const address = useAccountStore().address;
+        const accountInfo = await client.getAccount(address).catch(() => { return null; });
 
         // sign the messages
-        const signed = await client.sign(address, messages, fees, memo);
+        const signed = await client.sign(address, messages, fees, memo, accountInfo === null
+          ? {
+            accountNumber: 0,
+            chainId: "morpheus-apollo-2",
+            sequence: 0
+          }
+          : null);
         const txBytes = TxRaw.encode(signed).finish();
 
         // broadcast the messages
@@ -91,6 +98,7 @@ export const useTransactionStore = defineStore({
         this.resetQueueWithTimer(5);
         return txBytes;
       } catch (e) {
+        console.log(e);
         this.status = QueueStatus.FAILED;
         this.errorText = `${e}`;
         this.resetQueueWithTimer(10);
