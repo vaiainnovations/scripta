@@ -31,7 +31,10 @@
 
 <script setup lang="ts">
 import { Buffer } from "buffer";
-import { MsgDeletePostEncodeObject, MsgEditPostEncodeObject } from "@desmoslabs/desmjs";
+import {
+  MsgDeletePostEncodeObject,
+  MsgEditPostEncodeObject
+} from "@desmoslabs/desmjs";
 import Long from "long";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
@@ -100,13 +103,14 @@ async function editArticle () {
     return;
   }
 
-  const res = await (
-    await fetch(`${useBackendStore().apiUrl}/posts/${extId}`, {
-      method: "PUT",
-      headers: {
+  const res = (await (
+    await useBackendStore().fetch(
+      `${useBackendStore().apiUrl}/posts/${extId}`,
+      "PUT",
+      {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
+      JSON.stringify({
         id: draftStore.id,
         signedPost: Buffer.from(signedBytes).toString("base64"),
         externalId: extId,
@@ -118,11 +122,13 @@ async function editArticle () {
         content: draftStore.content,
         entities: JSON.stringify(msgEditPost.value.entities)
       })
-    })
-  ).json() as any;
+    )
+  ).json()) as any;
   console.log(res);
   if (res.code === 0) {
-    usePostStore().userPosts = await useUserStore().getUserArticles(useAccountStore().address);
+    usePostStore().userPosts = await useUserStore().getUserArticles(
+      useAccountStore().address
+    );
     draftStore.$reset();
     useRouter().push(`/@${useAccountStore().profile.dtag}/${extId}`);
   }
@@ -143,7 +149,7 @@ async function deleteArticle () {
 
   let signedBytes = new Uint8Array();
   try {
-    signedBytes = await $useTransaction().directSign(msgDeletePost);
+    signedBytes = await $useTransaction().directSign([msgDeletePost]);
   } catch (e) {
     console.log(e);
   }
@@ -152,20 +158,23 @@ async function deleteArticle () {
     return;
   }
 
-  const res = await (
-    await fetch(`${useBackendStore().apiUrl}/posts/delete/${useDraftStore().externalId}`, {
-      method: "POST",
-      headers: {
+  const res = (await (
+    await useBackendStore().fetch(
+      `${useBackendStore().apiUrl}/posts/delete/${useDraftStore().externalId}`,
+      "POST",
+      {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
+      JSON.stringify({
         signedPost: Buffer.from(signedBytes).toString("base64")
       })
-    })
-  ).json() as any;
+    )
+  ).json()) as any;
   console.log(res);
   if (res.code === 0) {
-    usePostStore().userPosts = await useUserStore().getUserArticles(useAccountStore().address);
+    usePostStore().userPosts = await useUserStore().getUserArticles(
+      useAccountStore().address
+    );
     useDraftStore().$reset();
     useRouter().push("/profile");
   }

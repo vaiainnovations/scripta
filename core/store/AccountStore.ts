@@ -18,15 +18,11 @@ export const useAccountStore = defineStore({
   actions: {
     async getUserInfo (forceCreateSection = false) {
       try {
-        const res = await (await fetch(`${useBackendStore().apiUrl}user/get/${this.address}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            forceCreateSection
-          })
-        })).json() as any; // TODO: wrap response as type/obj
+        const res = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}user/get/${this.address}`, "POST", {
+          "Content-Type": "application/json"
+        }, JSON.stringify({
+          forceCreateSection
+        }))).json() as any; // TODO: wrap response as type/obj
         if (res) {
           this.sectionId = Number(res.sectionId);
           // TODO: store also the other infos
@@ -38,7 +34,7 @@ export const useAccountStore = defineStore({
     },
     async getUserSection () {
       try {
-        const res = await (await fetch(`${useBackendStore().apiUrl}user/get/${this.address}`, { method: "POST" })).json() as any;
+        const res = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}user/get/${this.address}`, "POST", {}, "")).json() as any;
         if (res) {
           this.sectionId = Number(res.sectionId);
         }

@@ -82,6 +82,9 @@ export const useAuthStore = defineStore({
       }
       return false;
     },
+    getAuthStorage (): StoredAuthData {
+      return AuthStorage.get();
+    },
 
     /**
      * Sign out

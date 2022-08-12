@@ -11,6 +11,25 @@ export const useBackendStore = defineStore({
 
   },
   actions: {
+    fetch (url: string, method: "GET" | "POST" | "PUT" | "DELETE", headersRaw: HeadersInit, body: string): Promise<Response> {
+      const headers = new Headers(headersRaw);
+
+      // if logged, set authorization and accountNumber (as an) headers
+      const { $useAuth } = useNuxtApp();
+      const authStorage = $useAuth().getAuthStorage();
+      if (authStorage.authorization) {
+        headers.append("Authorization", authStorage.authorization);
+      }
+      if (authStorage.accountNumber) {
+        headers.append("an", authStorage.accountNumber.toString());
+      }
+
+      return fetch(url, {
+        method,
+        headers,
+        body
+      });
+    }
   }
 });
 

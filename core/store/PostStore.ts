@@ -25,7 +25,7 @@ export const usePostStore = defineStore({
         return cachedPost as any;
       }
       try {
-        return await (await fetch(`${useBackendStore().apiUrl}posts/${externalID}`)).json() as PostExtended;
+        return await (await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${externalID}`, "GET", {}, "")).json() as PostExtended;
       } catch (e) {
         console.log(e);
         // TODO: handle the error properly

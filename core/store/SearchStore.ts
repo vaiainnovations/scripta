@@ -11,13 +11,11 @@ export const useSearchStore = defineStore({
   }),
   actions: {
     async search (query: string): Promise<PostExtended []> {
-      const res = (await (await fetch(`${useBackendStore().apiUrl}search`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ q: query })
-      })).json() as PostExtended[]);
+      const res = (await (await useBackendStore().fetch(`${useBackendStore().apiUrl}search`, "POST", {
+        "Content-Type": "application/json"
+      },
+      JSON.stringify({ q: query })
+      )).json() as PostExtended[]);
       if (res && res.length >= 0) {
         this.articleResults = res;
         this.articleResults.forEach((article) => {
