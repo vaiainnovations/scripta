@@ -1,4 +1,5 @@
 
+import { Buffer } from "buffer";
 import { defineStore } from "pinia";
 import { generateUsername } from "unique-username-generator";
 import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
@@ -18,7 +19,9 @@ export enum AuthLevel {
 interface StoredAuthData {
   version: number,
   address: string,
-  signer: SupportedSigner
+  signer: SupportedSigner,
+  authorization: string,
+  accountNumber: number,
 }
 
 export class AuthStorage {
@@ -163,20 +166,54 @@ export const useAuthStore = defineStore({
         // update the store
         useAccountStore().balance = Number(balance.amount) / 1_000_000;
 
-        // Store the auth data locally
+        // Route to the profile page only if coming from auth
+        if (useRouter().currentRoute.value.path.includes("auth")) {
+          await navigateTo("/auth/session");
+        }
+      }
+    },
+
+    async authorize (): Promise<boolean> {
+      const { $useTransaction } = useNuxtApp();
+      let signedBytes = new Uint8Array();
+      try {
+        signedBytes = await $useTransaction().directSign(
+          [],
+          JSON.stringify({
+            exp: +new Date() + 1000 * 60 * 60 * 24 * 3 // issued by default for 3 days
+          }),
+          {
+            gas: "0",
+            amount: [
+              {
+                denom: "udaric",
+                amount: "0"
+              }
+            ]
+          }
+        );
+        const address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+        const token = Buffer.from(signedBytes).toString("base64");// Store the auth data locally
+        const accountInfo = await (await useWalletStore().wallet.client).getAccount(address).catch(() => { return null; });
         const storedAuthData: StoredAuthData = {
           version: 1,
-          address: account.address,
-          signer: useWalletStore().signerId
+          address,
+          signer: useWalletStore().signerId,
+          authorization: token,
+          accountNumber: accountInfo?.accountNumber || 0
         };
         AuthStorage.set(storedAuthData);
 
         // Route to the profile page only if coming from auth
         if (useRouter().currentRoute.value.path.includes("auth")) {
           console.log("routing to success");
-          await navigateTo("/auth/session");
+          await navigateTo("/profile");
         }
+        return true;
+      } catch (e) {
+        console.log(e);
       }
+      return false;
     }
   }
 });

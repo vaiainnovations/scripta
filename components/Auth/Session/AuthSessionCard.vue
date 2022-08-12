@@ -59,11 +59,13 @@
 </template>
 
 <script setup lang="ts">
-import { Buffer } from "buffer";
 import { AuthLevel } from "~~/core/store/AuthStore";
 
 const isGeneratingToken = ref(false);
-init();
+
+if (process.client) {
+  init();
+}
 
 function init () {
   const { $useAuth } = useNuxtApp();
@@ -90,30 +92,8 @@ function logout () {
 
 async function continueWithoutAuthz () {
   isGeneratingToken.value = true;
-  const { $useTransaction } = useNuxtApp();
-  let signedBytes = new Uint8Array();
-  try {
-    signedBytes = await $useTransaction().directSign(
-      [],
-      JSON.stringify({
-        exp: +new Date() + 1000 * 60 * 60 * 24 * 3 // issued by default for 3 days
-      }),
-      {
-        gas: "0",
-        amount: [
-          {
-            denom: "udaric",
-            amount: "0"
-          }
-        ]
-      }
-    );
-    const token = Buffer.from(signedBytes).toString("base64");
-    console.log(token);
-  } catch (e) {
-    console.log(e);
-  }
-
+  const { $useAuth } = useNuxtApp();
+  await $useAuth().authorize();
   isGeneratingToken.value = false;
 }
 </script>
