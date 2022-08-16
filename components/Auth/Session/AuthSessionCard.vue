@@ -1,7 +1,7 @@
 <template>
   <AuthCard>
     <template #card>
-      <spam v-if="!isGeneratingToken">
+      <span v-if="!isGeneratingToken">
         <AuthContentCard>
           <AuthDescription class="p-5">
             <p class="text-3xl font-extrabold leading-normal text-center pt-5">
@@ -38,7 +38,7 @@
             </div>
           </AuthDescription>
         </AuthContentCard>
-      </spam>
+      </span>
       <span v-else>
         <AuthContentCard class="flex-row items-center justify-center py-32 md:py-16 xl:py-36">
           <div class="flex flex-col items-center justify-center gap-y-8">

@@ -2,6 +2,7 @@
 import { Buffer } from "buffer";
 import { defineStore } from "pinia";
 import { generateUsername } from "unique-username-generator";
+import { decodeTxRaw } from "@cosmjs/proto-signing";
 import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
 import { SupportedSigner, useWalletStore } from "./wallet/WalletStore";
 import { useAccountStore } from "./AccountStore";
@@ -75,6 +76,10 @@ export const useAuthStore = defineStore({
         }
       }
     },
+    /**
+     * Check if there is an auth storage
+     * @returns true if there is an auth data stored locally
+     */
     hasAuthStorage (): boolean {
       const storedAuth = AuthStorage.get();
       if (storedAuth && storedAuth.version && storedAuth.signer && storedAuth.address) {
@@ -82,8 +87,37 @@ export const useAuthStore = defineStore({
       }
       return false;
     },
+    /**
+     * Get the Auth local storage
+     * @returns StoredAuthData
+     */
     getAuthStorage (): StoredAuthData {
       return AuthStorage.get();
+    },
+    /**
+     * Check if the user has a valid authorization
+     * @returns true if the authorization is valid
+     */
+    hasValidAuthAuthorization (): boolean {
+      const authStorage = AuthStorage.get();
+
+      try {
+        const authorization = authStorage.authorization;
+        const decoded = decodeTxRaw(Buffer.from(authorization, "base64"));
+        const authorizationExp = JSON.parse(decoded.body.memo).exp;
+
+        // Check if the authorization is expired
+        if (+new Date() < authorizationExp) {
+          // TODO: check if the authorization signature is valid?
+          return true;
+        }
+
+        // Authorization is expired, continue and return false
+        console.log("authorization expired");
+      } catch (e) {
+        // continue, will return false
+      }
+      return false;
     },
 
     /**

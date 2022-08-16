@@ -6,9 +6,16 @@ export default defineNuxtPlugin(() => {
    * Ensure user is authenticated, otherwise redirect to auth page
    */
   addRouteMiddleware("authenticated", async (to) => {
+    // check if user is authenticated
     if (!useAuthStore().hasAuthStorage()) {
       console.log(`[Guard] ${to.path} not authenticated, re-routing`);
       return await navigateTo("/auth");
+    }
+
+    // check if user has an authorized session
+    if (!useAuthStore().hasValidAuthAuthorization()) {
+      console.log(`[Guard] ${to.path} not valid authorization, re-routing`);
+      return await navigateTo("/auth/session");
     }
   });
 

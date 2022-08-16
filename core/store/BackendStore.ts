@@ -17,11 +17,14 @@ export const useBackendStore = defineStore({
       // if logged, set authorization and accountNumber (as an) headers
       const { $useAuth } = useNuxtApp();
       const authStorage = $useAuth().getAuthStorage();
-      if (authStorage.authorization) {
-        headers.append("Authorization", authStorage.authorization);
-      }
-      if (authStorage.accountNumber) {
-        headers.append("an", authStorage.accountNumber.toString());
+
+      if (authStorage) {
+        if (authStorage.authorization) {
+          headers.append("Authorization", authStorage.authorization);
+        }
+        if (authStorage.accountNumber) {
+          headers.append("an", authStorage.accountNumber.toString());
+        }
       }
 
       return fetch(url, {
