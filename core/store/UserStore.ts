@@ -27,7 +27,7 @@ export const useUserStore = defineStore({
       const posts = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}search`, "POST", {
         "Content-Type": "application/json"
       },
-      JSON.stringify({ q: "", address })
+      JSON.stringify({ q: "", author: address })
       )).json() as PostExtended [];
       for (let i = 0; i < posts.length; i++) {
         posts[i].image = searchFirstContentImage(posts[i].content) || "/img/author_pic.png";
