@@ -14,7 +14,10 @@
 
             <div class="pt-12">
               <div class="text-center p-4">
-                <button class="rounded-xl py-2 px-4 text-xl bg-primary text-background-alt hover:bg-primary/70">
+                <button
+                  class="rounded-xl py-2 px-4 text-xl bg-primary text-background-alt hover:bg-primary/70"
+                  @click="continueWithAuthz()"
+                >
                   Try the experience
                 </button>
               </div>
@@ -59,31 +62,12 @@
 </template>
 
 <script setup lang="ts">
-import { AuthLevel } from "~~/core/store/AuthStore";
+import { Buffer } from "buffer";
+import { MsgGrantEncodeObject } from "@desmoslabs/desmjs";
+import Long from "long";
+import { useBackendStore } from "~~/core/store/BackendStore";
 
 const isGeneratingToken = ref(false);
-
-if (process.client) {
-  init();
-}
-
-function init () {
-  const { $useAuth } = useNuxtApp();
-  const authLevel = $useAuth().authLevel;
-
-  switch (authLevel) {
-  case AuthLevel.Wallet:
-    // ask session token or authz creation
-    break;
-
-  case AuthLevel.Session:
-    // handle session token
-    break;
-
-  default:
-    break;
-  }
-}
 
 function logout () {
   const { $useAuth } = useNuxtApp();
@@ -93,7 +77,57 @@ function logout () {
 async function continueWithoutAuthz () {
   isGeneratingToken.value = true;
   const { $useAuth } = useNuxtApp();
-  await $useAuth().authorize();
+  const success = await $useAuth().authorize();
+  isGeneratingToken.value = false;
+
+  if (success) {
+    await navigateTo("/profile");
+  }
+}
+async function continueWithAuthz () {
+  isGeneratingToken.value = true;
+  const { $useAuth, $useTransaction } = useNuxtApp();
+  const authorized = await $useAuth().authorize();
+
+  if (!authorized) {
+    isGeneratingToken.value = false;
+    return false;
+  }
+  const msgGrant: MsgGrantEncodeObject = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
+    value: {
+      grantee: "desmos16c60y8t8vra27zjg2arlcd58dck9cwn7p6fwtd",
+      granter: "",
+      grant: {
+        authorization: {
+          typeUrl: "/cosmos.auth.v1beta1.Authorization",
+          value: new Uint8Array()
+        },
+        expiration: {
+          nanos: +new Date() + 1000 * 60 * 60 * 24 * 3,
+          seconds: Long.fromNumber(new Date().getTime() / 1000)
+        }
+      }
+    }
+  };
+  const signed = await $useTransaction().directSign([msgGrant]);
+  if (signed) {
+    try {
+      const res = (await (
+        await useBackendStore().fetch(
+          `${useBackendStore().apiUrl}user/authz`,
+          "POST",
+          {
+            "Content-Type": "application/json"
+          },
+          JSON.stringify({
+            grant: Buffer.from(signed).toString("base64")
+          })
+        )
+      ).json()) as any; // TODO: wrap response as type/obj
+      console.log(res);
+    } catch (e) {}
+  }
   isGeneratingToken.value = false;
 }
 </script>

@@ -6,8 +6,6 @@ import { decodeTxRaw } from "@cosmjs/proto-signing";
 import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
 import { SupportedSigner, useWalletStore } from "./wallet/WalletStore";
 import { useAccountStore } from "./AccountStore";
-import { useUserStore } from "./UserStore";
-import { usePostStore } from "./PostStore";
 import { registerModuleHMR } from ".";
 
 export enum AuthLevel {
@@ -156,11 +154,6 @@ export const useAuthStore = defineStore({
         const account = await useWalletStore().wallet.signer.getCurrentAccount();
         useAccountStore().address = account.address;
 
-        const authInfo = await useAccountStore().getUserInfo(false); // TODO: force creation here?
-        const articles = await useUserStore().getUserArticles(account.address);
-        usePostStore().userPosts = articles;
-
-        console.log(authInfo);
         // TODO: handle error situation
 
         // Retrieve the Desmos profile, if exists
@@ -197,8 +190,6 @@ export const useAuthStore = defineStore({
 
         // TODO: to consider accounts with no balance
         const balance = await (await useWalletStore().wallet.client).getBalance(account.address, "udaric");
-
-        // TODO: call Backend for authz/grants
 
         // update the store
         useAccountStore().balance = Number(balance.amount) / 1_000_000;
@@ -240,12 +231,6 @@ export const useAuthStore = defineStore({
           accountNumber: accountInfo?.accountNumber || 0
         };
         AuthStorage.set(storedAuthData);
-
-        // Route to the profile page only if coming from auth
-        if (useRouter().currentRoute.value.path.includes("auth")) {
-          console.log("routing to success");
-          await navigateTo("/profile");
-        }
         return true;
       } catch (e) {
         console.log(e);
