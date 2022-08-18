@@ -3,7 +3,7 @@
     <!-- Desktop -->
     <div class="max-w-7xl lg:max-w-2xl mx-auto hidden md:block">
       <div class="flex max-w-full mx-auto overflow-hidden bg-background-alt rounded-3xl shadow-md dark:bg-gray-800">
-        <div class="w-1/3 h-40">
+        <div class="w-1/3 h-48">
           <img
             alt="Article cover picture"
             :src="props.content.image"
