@@ -44,8 +44,11 @@
     </div> -->
     <div class="h-11 w-full bg-primary" />
     <div class="flex flex-row">
-      <div class="w-full lg:w-7/12 2xl:w-full">
-        <!-- <p>Comments</p> -->
+      <div v-if="showComments" class="w-full lg:w-7/12 2xl:w-full">
+        <h3 class="text-2xl">
+          Comments
+        </h3>
+        <ArticlesCommentsViewContainer />
       </div>
       <div class="hidden items-center gap-y-2 lg:flex lg:w-5/12 lg:flex-col 2xl:hidden">
         <p class="text-sm font-bold text-primary-text-light">
@@ -74,6 +77,11 @@ interface Props {
   article: PostExtended;
 }
 const props = defineProps<Props>();
+
+const showComments = ref(false);
+if (process.client) {
+  showComments.value = true;
+}
 
 useHead({
   title: `${props.article.text} - ${props.article.author} on Scripta`
