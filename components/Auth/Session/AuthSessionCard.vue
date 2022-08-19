@@ -64,8 +64,11 @@
 <script setup lang="ts">
 import { Buffer } from "buffer";
 import { MsgGrantEncodeObject } from "@desmoslabs/desmjs";
-import Long from "long";
+import { Timestamp } from "cosmjs-types/google/protobuf/timestamp";
+import { GenericAuthorization } from "cosmjs-types/cosmos/authz/v1beta1/authz";
 import { useBackendStore } from "~~/core/store/BackendStore";
+import { useAccountStore } from "~~/core/store/AccountStore";
+import { useDesmosStore } from "~~/core/store/DesmosStore";
 
 const isGeneratingToken = ref(false);
 
@@ -93,41 +96,66 @@ async function continueWithAuthz () {
     isGeneratingToken.value = false;
     return false;
   }
+
+  // retrieve the Authz Scripta configuration from the backend
+  let authzConfig = null as {
+    grantee: string
+  } | null;
+
+  try {
+    authzConfig = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}authz`, "GET", {
+      "Content-Type": "application/json"
+    })).json();
+  } catch (e) {
+    console.log(e);
+  }
+
+  if (!authzConfig) {
+    isGeneratingToken.value = false;
+    return false;
+  }
+
+  const authorization = GenericAuthorization.encode(GenericAuthorization.fromPartial({
+    msg: "/desmos.posts.v2.MsgCreatePost"
+  })).finish();
+  // build the authorization message
   const msgGrant: MsgGrantEncodeObject = {
     typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
     value: {
-      grantee: "desmos16c60y8t8vra27zjg2arlcd58dck9cwn7p6fwtd",
-      granter: "",
+      grantee: authzConfig.grantee,
+      granter: useAccountStore().address,
       grant: {
         authorization: {
-          typeUrl: "/cosmos.auth.v1beta1.Authorization",
-          value: new Uint8Array()
+          typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
+          value: authorization
         },
-        expiration: {
-          nanos: +new Date() + 1000 * 60 * 60 * 24 * 3,
-          seconds: Long.fromNumber(new Date().getTime() / 1000)
-        }
+        expiration: Timestamp.fromPartial({
+          nanos: 0,
+          seconds: (+new Date() / 1000) + 60 * 60 * 24 // + 1 day
+        })
       }
     }
   };
-  const signed = await $useTransaction().directSign([msgGrant]);
-  if (signed) {
-    try {
-      const res = (await (
-        await useBackendStore().fetch(
-          `${useBackendStore().apiUrl}user/authz`,
-          "POST",
-          {
-            "Content-Type": "application/json"
-          },
-          JSON.stringify({
-            grant: Buffer.from(signed).toString("base64")
-          })
-        )
-      ).json()) as any; // TODO: wrap response as type/obj
-      console.log(res);
-    } catch (e) {}
+  const signed = await $useTransaction().directSign([msgGrant], "Signed from Scripta", useDesmosStore().defaultFee, 1);
+  if (!signed) {
+    $useAuth().logout();
   }
+
+  try {
+    const res = (await (
+      await useBackendStore().fetch(
+        `${useBackendStore().apiUrl}authz`,
+        "POST",
+        {
+          "Content-Type": "application/json"
+        },
+        JSON.stringify({
+          grant: Buffer.from(signed).toString("base64")
+        })
+      )
+    ).json()) as any; // TODO: wrap response as type/obj
+    console.log(res);
+  } catch (e) {}
   isGeneratingToken.value = false;
 }
 </script>

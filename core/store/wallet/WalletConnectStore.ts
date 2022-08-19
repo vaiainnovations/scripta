@@ -18,16 +18,22 @@ export const useWalletConnectStore = defineStore({
       const walletStore = useWalletStore();
 
       // create WalletConnect Signer
+      const aminoSigner = new WalletConnectSigner(new WalletConnect({
+        bridge: "https://bridge.walletconnect.org",
+        qrcodeModal: qr ? QRCodeModal : null
+      }), {
+        signingMode: SigningMode.AMINO // Direct
+      });
       const signer = new WalletConnectSigner(new WalletConnect({
         bridge: "https://bridge.walletconnect.org",
         qrcodeModal: qr ? QRCodeModal : null
       }), {
         signingMode: SigningMode.AMINO // Direct
       });
-      await signer.connect();
+      await aminoSigner.connect();
 
       // Connect to the wallet with the WalletConnect signer
-      await walletStore.connect(signer, SupportedSigner.WalletConnect);
+      await walletStore.connect(signer, aminoSigner, SupportedSigner.WalletConnect);
       return signer;
     }
   }

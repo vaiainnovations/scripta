@@ -15,6 +15,7 @@ export enum SupportedSigner {
 class Wallet {
   public client = DesmosClient.connectWithSigner(useDesmosStore().rpc, new NoOpSigner());
   public signer: Signer = new NoOpSigner();
+  public aminoSigner: Signer = new NoOpSigner();
 }
 
 /**
@@ -52,14 +53,16 @@ export const useWalletStore = defineStore({
     * Connect to the wallet with the requested signer
     * @param signer Wallet Signer
     */
-    async connect (signer: Signer, signerId: SupportedSigner) {
+    async connect (signer: Signer, aminoSigner: Signer, signerId: SupportedSigner) {
       // update the signer
       this.wallet.signer = signer;
+      this.wallet.aminoSigner = aminoSigner;
       this.signerId = signerId;
 
       // connect the signer
       try {
         await this.wallet.signer.connect();
+        await this.wallet.aminoSigner.connect();
       } catch (e) {
         console.log(e);
       }

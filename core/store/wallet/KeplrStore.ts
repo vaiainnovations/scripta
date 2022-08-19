@@ -46,14 +46,20 @@ export const useKeplrStore = defineStore({
       }
 
       // Create the Keplr Signer with the currrent configuration
-      const keplrSigner = new $KeplrSigner(window.keplr!, {
+      const keplrAminoSigner = new $KeplrSigner(window.keplr!, {
         signingMode: 0,
         preferNoSetFee: true,
         preferNoSetMemo: true,
         chainInfo
       });
+      const keplrSigner = new $KeplrSigner(window.keplr!, {
+        signingMode: 1,
+        preferNoSetFee: true,
+        preferNoSetMemo: true,
+        chainInfo
+      });
 
-      await $useWallet().connect(keplrSigner, "keplr");
+      await $useWallet().connect(keplrSigner, keplrAminoSigner, "keplr");
     }
   }
 });

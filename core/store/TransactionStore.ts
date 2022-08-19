@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { EncodeObject } from "@cosmjs/proto-signing";
 import { StdFee } from "@cosmjs/stargate";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
+import { Signer } from "@desmoslabs/desmjs";
 import { useAccountStore } from "./AccountStore";
 import { useDesmosStore } from "./DesmosStore";
 import { registerModuleHMR } from ".";
@@ -74,12 +75,13 @@ export const useTransactionStore = defineStore({
         this.resetQueueWithTimer(10);
       }
     },
-    async directSign (messages: EncodeObject[], memo = "Signed from Scripta.network", fees = useDesmosStore().defaultFee): Promise<Uint8Array> {
+    async directSign (messages: EncodeObject[], memo = "Signed from Scripta.network", fees = useDesmosStore().defaultFee, signMode: 0 | 1 = 0): Promise<Uint8Array> {
       const { $useWallet } = useNuxtApp();
       // check if the draft is not empty
       try {
         this.status = QueueStatus.SIGNING;
-        const client = (await $useWallet().wallet.client);
+        const client = await $useWallet().wallet.client;
+        client.setSigner(signMode === 0 ? $useWallet().wallet.aminoSigner as Signer : $useWallet().wallet.signer as Signer);
         const address = useAccountStore().address;
         const accountInfo = await client.getAccount(address).catch(() => { return null; });
 
