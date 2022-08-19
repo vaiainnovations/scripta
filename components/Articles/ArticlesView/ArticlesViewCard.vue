@@ -10,7 +10,14 @@
         <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
       </svg> -->
     </div>
-    <ArticlesViewContent :title="props.article.text" :subtitle="props.article.subtitle" :content="props.article.content" :address="props.article.author" :date="new Date(props.article.creationDate)" />
+    <ArticlesViewContent
+      :external-id="props.article.externalId"
+      :title="props.article.text"
+      :subtitle="props.article.subtitle"
+      :content="props.article.content"
+      :address="props.article.author"
+      :date="new Date(props.article.creationDate)"
+    />
     <a v-if="ipfsSourceUrl" :href="ipfsSourceUrl" target="_blank" class="text-xs">IPFS source</a>
     <!--  <div class="grid grid-cols-2 place-content-between gap-y-3 lg:grid-cols-4 lg:gap-x-2">
       <div class="flex flex-row gap-x-1.5 lg:col-span-1">
