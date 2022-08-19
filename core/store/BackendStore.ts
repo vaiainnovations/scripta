@@ -11,7 +11,7 @@ export const useBackendStore = defineStore({
 
   },
   actions: {
-    fetch (url: string, method: "GET" | "POST" | "PUT" | "DELETE", headersRaw: HeadersInit, body: string): Promise<Response> {
+    fetch (url: string, method: "GET" | "POST" | "PUT" | "DELETE", headersRaw: HeadersInit, body = ""): Promise<Response> {
       const headers = new Headers(headersRaw);
 
       // if logged, set authorization and accountNumber (as an) headers
