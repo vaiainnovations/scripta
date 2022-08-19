@@ -15,7 +15,7 @@
         class="flex flex-col gap-y-9 w-4/5 justify-start items-center lg:w-full lg:gap-y-4"
       >
         <NuxtLink
-          v-for="article in articles.slice().reverse()"
+          v-for="article in articles"
           :key="article.externalId"
           class="w-full"
           :to="`/@${article.author}/${article.externalId}`"
