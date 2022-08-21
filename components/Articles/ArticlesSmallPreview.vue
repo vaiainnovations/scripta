@@ -34,7 +34,7 @@
 
     <!-- Mobile -->
     <div class="w-fit mx-auto block md:hidden">
-      <div class="overflow-hidden shadow-lg rounded-3xl w-80 cursor-pointer m-auto">
+      <div class="overflow-hidden shadow-lg rounded-3xl md:w-80 cursor-pointer m-auto">
         <div class="w-full h-full">
           <img
             alt="Article cover picture"

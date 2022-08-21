@@ -14,7 +14,7 @@
     <span v-if="isLoadingArticles" class="flex flex-col gap-y-9 w-4/5 justify-start items-center lg:w-full lg:gap-y-4">
       <SkeletonArticle v-for="n in 4" :key="n" />
     </span>
-    <span v-else>
+    <span v-else class="w-2/3 lg:w-full">
       <div
         v-if="usePostStore().userPosts && usePostStore().userPosts.length>0"
         class="flex flex-col gap-y-9 justify-start items-center lg:w-full lg:gap-y-4 w-full"
