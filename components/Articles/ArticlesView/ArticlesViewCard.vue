@@ -48,7 +48,7 @@
         <h3 class="text-2xl">
           Comments
         </h3>
-        <ArticlesCommentsViewContainer />
+        <ArticlesCommentsContainer :referenced-post="article.id" :section-id="article.sectionId" />
       </div>
       <div class="hidden items-center gap-y-2 lg:flex lg:w-5/12 lg:flex-col 2xl:hidden">
         <p class="text-sm font-bold text-primary-text-light">
