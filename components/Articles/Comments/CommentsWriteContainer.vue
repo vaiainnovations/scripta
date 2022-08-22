@@ -11,6 +11,7 @@ interface Props {
   sectionId: number;
 }
 const props = defineProps<Props>();
+const emit = defineEmits(["newComment"]);
 
 const comment = ref("");
 const isCommentPublishing = ref(false);
@@ -51,6 +52,7 @@ function postComment () {
       // comment published
       comment.value = "";
       isCommentPublishing.value = false;
+      emit("newComment");
     }
   });
 }

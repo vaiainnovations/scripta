@@ -4,6 +4,7 @@
       class="w-full lg:w-2/3"
       :referenced-post="props.referencedPost"
       :section-id="props.sectionId"
+      @new-comment="updateArticleComments()"
     />
     <div class="pt-4 w-full lg:w-2/4">
       <ArticlesCommentsViewComment
@@ -27,7 +28,10 @@ interface Props {
 const props = defineProps<Props>();
 const comments = ref([] as PostComment[]);
 
-const query = `query getPostComments {
+updateArticleComments();
+
+async function updateArticleComments () {
+  const query = `query getPostComments {
   post(where: {references: {reference_id:{_eq: ${props.referencedPost.toString()} }}}, order_by:{creation_date:desc}){
     id
     text
@@ -41,27 +45,25 @@ const query = `query getPostComments {
   }
 }
 `;
-
-useBackendStore()
-  .fetch(
-    `${useBackendStore().apiUrl}graphql`,
-    "POST",
-    {
-      "Content-Type": "application/json"
-    },
-    JSON.stringify({ q: query, type: "" })
-  )
-  .then(async (response) => {
-    const commentsResponse = (await response.json()) as {
-      data: { post: PostComment[] };
-    };
-    if (
-      !commentsResponse ||
-      !commentsResponse.data ||
-      !commentsResponse.data.post
-    ) {
-      // TODO: handle error?
-    }
-    comments.value = commentsResponse.data.post;
-  });
+  const commentsResponse = (await (
+    await useBackendStore().fetch(
+      `${useBackendStore().apiUrl}graphql`,
+      "POST",
+      {
+        "Content-Type": "application/json"
+      },
+      JSON.stringify({ q: query, type: "" })
+    )
+  ).json()) as {
+    data: { post: PostComment[] };
+  };
+  if (
+    !commentsResponse ||
+    !commentsResponse.data ||
+    !commentsResponse.data.post
+  ) {
+    // TODO: handle error?
+  }
+  comments.value = commentsResponse.data.post;
+}
 </script>
