@@ -115,28 +115,45 @@ async function continueWithAuthz () {
     return false;
   }
 
-  const authorization = GenericAuthorization.encode(GenericAuthorization.fromPartial({
+  // TODO: implement the custom subspace authorization
+  const authorizations = [] as Uint8Array[];
+  authorizations.push(GenericAuthorization.encode(GenericAuthorization.fromPartial({
     msg: "/desmos.posts.v2.MsgCreatePost"
-  })).finish();
+  })).finish());
+  authorizations.push(GenericAuthorization.encode(GenericAuthorization.fromPartial({
+    msg: "/desmos.posts.v2.MsgEditPost"
+  })).finish());
+  authorizations.push(GenericAuthorization.encode(GenericAuthorization.fromPartial({
+    msg: "/desmos.posts.v2.MsgDeletePost"
+  })).finish());
+  authorizations.push(GenericAuthorization.encode(GenericAuthorization.fromPartial({
+    msg: "/desmos.profiles.v3.MsgSaveProfile"
+  })).finish());
+
   // build the authorization message
-  const msgGrant: MsgGrantEncodeObject = {
-    typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
-    value: {
-      grantee: authzConfig.grantee,
-      granter: useAccountStore().address,
-      grant: {
-        authorization: {
-          typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
-          value: authorization
-        },
-        expiration: Timestamp.fromPartial({
-          nanos: 0,
-          seconds: (+new Date() / 1000) + 60 * 60 * 24 // + 1 day
-        })
+  const grants = [] as MsgGrantEncodeObject[];
+
+  authorizations.forEach((authorization) => {
+    grants.push({
+      typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
+      value: {
+        grantee: authzConfig.grantee,
+        granter: useAccountStore().address,
+        grant: {
+          authorization: {
+            typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
+            value: authorization
+          },
+          expiration: Timestamp.fromPartial({
+            nanos: 0,
+            seconds: (+new Date() / 1000) + 60 * 60 * 24 * 3 // + 1 day
+          })
+        }
       }
     }
-  };
-  const signed = await $useTransaction().directSign([msgGrant], "Signed from Scripta", useDesmosStore().defaultFee, 1);
+    );
+  });
+  const signed = await $useTransaction().directSign(grants, "Signed from Scripta", useDesmosStore().defaultFee, 1);
   if (!signed) {
     $useAuth().logout();
   }
