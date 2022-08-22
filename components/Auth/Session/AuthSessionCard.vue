@@ -78,6 +78,7 @@ function logout () {
 }
 
 async function continueWithoutAuthz () {
+  useAccountStore().authz.wantsAuthz = false;
   isGeneratingToken.value = true;
   const { $useAuth } = useNuxtApp();
   const success = await $useAuth().authorize();
@@ -88,6 +89,7 @@ async function continueWithoutAuthz () {
   }
 }
 async function continueWithAuthz () {
+  useAccountStore().authz.wantsAuthz = true;
   isGeneratingToken.value = true;
   const { $useAuth, $useTransaction } = useNuxtApp();
   const authorized = await $useAuth().authorize();

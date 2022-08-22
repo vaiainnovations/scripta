@@ -10,13 +10,24 @@ export const useAccountStore = defineStore({
     profile: null as Profile,
     balance: 0,
     isNewProfile: false,
-    sectionId: 0
+    sectionId: 0,
+    settings: {
+      hasAcceptedPrivacy: true,
+      hasAcceptedAdvertisement: false,
+      hasAcceptedCookies: false,
+      hasAuthzAuthorization: false
+    },
+    authz: {
+      wantsAuthz: false,
+      grantExpiration: null as Date || null,
+      grantGrantee: ""
+    }
   }),
   getters: {
 
   },
   actions: {
-    async getUserInfo (forceCreateSection = false) {
+    async getUserSection (forceCreateSection = false) {
       try {
         const res = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}user/get/${this.address}`, "POST", {
           "Content-Type": "application/json"
@@ -32,11 +43,14 @@ export const useAccountStore = defineStore({
         console.log(e);
       }
     },
-    async getUserSection () {
+    async getUserInfo () {
       try {
-        const res = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}user/get/${this.address}`, "POST", {}, "")).json() as any;
+        const res = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}user/${this.address}`, "GET", {})).json() as any;
+        console.log(res);
         if (res) {
           this.sectionId = Number(res.sectionId);
+          this.authz.grantExpiration = (res?.grantExpiration) ? new Date(res?.grantExpiration) : null;
+          this.authz.grantGrantee = res?.grantGrantee || "";
         }
       } catch (e) {
         console.log(e);

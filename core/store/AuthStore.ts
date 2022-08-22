@@ -69,6 +69,7 @@ export const useAuthStore = defineStore({
       if (storedAuth && storedAuth.version && storedAuth.signer && storedAuth.address) {
         this.authLevel = AuthLevel.Memory;
         await useWalletStore().retrieveCurrentWallet(storedAuth.signer);
+        await useAccountStore().getUserInfo();
         if (this.authLevel !== AuthLevel.None) {
           this.login();
         }
@@ -142,7 +143,6 @@ export const useAuthStore = defineStore({
       if (this.authLevel > AuthLevel.None && !force) {
         return;
       }
-      console.log("called login");
       if (useWalletStore().signerId !== SupportedSigner.Noop) {
         this.authLevel = AuthLevel.Wallet; // Wallet is connected
 
@@ -153,8 +153,6 @@ export const useAuthStore = defineStore({
         // Get the user address
         const account = await useWalletStore().wallet.signer.getCurrentAccount();
         useAccountStore().address = account.address;
-
-        // TODO: handle error situation
 
         // Retrieve the Desmos profile, if exists
         const profile = await (await useWalletStore().wallet.client).getProfile(account.address);
@@ -231,6 +229,7 @@ export const useAuthStore = defineStore({
           accountNumber: accountInfo?.accountNumber || 0
         };
         AuthStorage.set(storedAuthData);
+        await useAccountStore().getUserInfo();
         return true;
       } catch (e) {
         console.log(e);

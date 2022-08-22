@@ -93,7 +93,7 @@ async function publish () {
   if (useAccountStore().sectionId <= 0) {
     // if not, create one
     if (useAccountStore().sectionId === -10) {
-      await useAccountStore().getUserInfo(true);
+      await useAccountStore().getUserSection(true);
       // TODO: handle failure?
     }
     let attempt = 0;
