@@ -33,6 +33,6 @@ import { useDesmosStore } from "~~/core/store/DesmosStore";
 
 function logout () {
   const { $useAuth } = useNuxtApp();
-  $useAuth().logout("/auth");
+  $useAuth().logout("/");
 }
 </script>

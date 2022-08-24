@@ -13,12 +13,25 @@ export default defineNuxtPlugin(() => {
       return await navigateTo("/auth");
     }
 
-    // check if the wallet connected user is authenticated
-    await useWalletStore().retrieveCurrentWallet(authStorage.signer);
-    const address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+    // check if the user has already a connected address (if first page load, the address is not set yet)
+    // Note: call useWalletStore().retrieveCurrentWallet every time is slow!
+    let address = "";
+    try {
+      address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+    } catch (e) {
+      // signer not connected, not already connected
+    }
+
+    // connect to the wallet if the user is not connected
+    if (!address) {
+      await useWalletStore().retrieveCurrentWallet(authStorage.signer);
+      address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+    }
+
+    // check if the user is authenticated
     const storedAuthAccount = useAuthStore().getAuthStorageAccount(address);
     if (!storedAuthAccount) {
-      return await navigateTo("/auth");
+      return await navigateTo("/auth/session");
     }
 
     // check if user has an authorized session
@@ -35,8 +48,23 @@ export default defineNuxtPlugin(() => {
   addRouteMiddleware("not-authenticated", async () => {
     if (useAuthStore().hasAuthStorage()) {
       const authStorage = useAuthStore().getAuthStorage();
-      await useWalletStore().retrieveCurrentWallet(authStorage.signer);
-      const address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+
+      // check if the user has already a connected address (if first page load, the address is not set yet)
+      // Note: call useWalletStore().retrieveCurrentWallet every time is slow!
+      let address = "";
+      try {
+        address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+      } catch (e) {
+      // signer not connected, not already connected
+      }
+
+      // connect to the wallet if the user is not connected
+      if (!address) {
+        await useWalletStore().retrieveCurrentWallet(authStorage.signer);
+        address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+      }
+
+      // check if the user is authenticated
       const storedAuthAccount = useAuthStore().getAuthStorageAccount(address);
 
       if (storedAuthAccount) {
