@@ -15,38 +15,72 @@ export enum AuthLevel {
   Session = "session",
 }
 
-interface StoredAuthData {
-  version: number,
+interface StoreAuthAccount {
   address: string,
   signer: SupportedSigner,
   authorization: string,
   accountNumber: number,
+  useAuthz: boolean,
+}
+
+interface StoredAuthData {
+  version: number,
+  accounts: StoreAuthAccount[],
+  signer: SupportedSigner,
 }
 
 export class AuthStorage {
   static STORAGE_KEY = "auth";
+  static STORAGE_VERSION = 2;
 
   /**
    * Store locally auth data
    * @param value auth struct
    */
-  static set (value: StoredAuthData): void {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(value));
+  static set (value: StoreAuthAccount): void {
+    let storedAuthData = JSON.parse(localStorage.getItem(AuthStorage.STORAGE_KEY)) as StoredAuthData;
+    if (!storedAuthData || !storedAuthData.accounts || storedAuthData.accounts?.length === 0) {
+      storedAuthData = { accounts: [value], version: this.STORAGE_VERSION, signer: value.signer };
+    } else {
+      storedAuthData.accounts.push(value);
+      storedAuthData.signer = value.signer;
+    }
+    localStorage.setItem(AuthStorage.STORAGE_KEY, JSON.stringify(storedAuthData));
   }
 
   /**
    * Retrieve locally stored auth data
+   * @param address - address of the account
    */
-  static get (): StoredAuthData {
-    return JSON.parse(localStorage.getItem(this.STORAGE_KEY));
+  static get (address = ""): StoreAuthAccount | null {
+    let res = null as StoreAuthAccount | null;
+    const storedAuthData = JSON.parse(localStorage.getItem(AuthStorage.STORAGE_KEY)) as StoredAuthData;
+    if (storedAuthData && storedAuthData.version === this.STORAGE_VERSION && storedAuthData.accounts && storedAuthData?.accounts?.length > 0) {
+      if (address) {
+        res = storedAuthData.accounts.find(account => account.address === address) || null;
+      } else {
+        res = storedAuthData.accounts[0];
+      }
+    }
+    return res;
   }
 
   /**
    * Delete local stored auth data
    */
-  static delete (): void {
-    console.log("delete");
-    localStorage.removeItem(this.STORAGE_KEY);
+  static delete (address = ""): void {
+    if (address) {
+      const storedAuthData = JSON.parse(localStorage.getItem(AuthStorage.STORAGE_KEY)) as StoredAuthData;
+      if (storedAuthData && storedAuthData.version === this.STORAGE_VERSION && storedAuthData.accounts && storedAuthData?.accounts?.length > 0) {
+        const index = storedAuthData.accounts.findIndex(account => account.address === address);
+        if (index !== -1) {
+          storedAuthData.accounts.splice(index, 1);
+          localStorage.setItem(AuthStorage.STORAGE_KEY, JSON.stringify(storedAuthData));
+        }
+      }
+    } else {
+      // localStorage.removeItem(AuthStorage.STORAGE_KEY);
+    }
   }
 }
 
@@ -64,11 +98,14 @@ export const useAuthStore = defineStore({
   },
   actions: {
     async init (): Promise<void> {
-      console.log("called AuthStore init");
-      const storedAuth = AuthStorage.get();
-      if (storedAuth && storedAuth.version && storedAuth.signer && storedAuth.address) {
+      const storedAuth = AuthStorage.get(); // just check if there is any stored auth data
+      if (storedAuth && storedAuth.signer) {
         this.authLevel = AuthLevel.Memory;
         await useWalletStore().retrieveCurrentWallet(storedAuth.signer);
+        const storedAuthAccount = AuthStorage.get((await useWalletStore().wallet.signer.getCurrentAccount()).address);
+        if (!storedAuthAccount) {
+          this.logout("/auth");
+        }
         await useAccountStore().getUserInfo();
         if (this.authLevel !== AuthLevel.None) {
           this.login();
@@ -81,7 +118,7 @@ export const useAuthStore = defineStore({
      */
     hasAuthStorage (): boolean {
       const storedAuth = AuthStorage.get();
-      if (storedAuth && storedAuth.version && storedAuth.signer && storedAuth.address) {
+      if (storedAuth && storedAuth.signer) {
         return true;
       }
       return false;
@@ -91,14 +128,22 @@ export const useAuthStore = defineStore({
      * @returns StoredAuthData
      */
     getAuthStorage (): StoredAuthData {
-      return AuthStorage.get();
+      return JSON.parse(localStorage.getItem(AuthStorage.STORAGE_KEY)) as StoredAuthData;
+    },
+    /**
+     * Get the Auth local storage
+     * @returns StoredAuthData
+     */
+    getAuthStorageAccount (address: string): StoreAuthAccount {
+      const storedAuthData = JSON.parse(localStorage.getItem(AuthStorage.STORAGE_KEY)) as StoredAuthData;
+      return storedAuthData.accounts.find(account => account.address === address) || null;
     },
     /**
      * Check if the user has a valid authorization
      * @returns true if the authorization is valid
      */
     hasValidAuthAuthorization (): boolean {
-      const authStorage = AuthStorage.get();
+      const authStorage = AuthStorage.get(useAccountStore().address);
 
       try {
         const authorization = authStorage.authorization;
@@ -124,7 +169,8 @@ export const useAuthStore = defineStore({
      * @param route New route after the logout. Don't re-route if omitted
      */
     async logout (route?: string): Promise<void> {
-      AuthStorage.delete();
+      console.log("called logout");
+      AuthStorage.delete(useAccountStore().address);
       await useWalletStore().disconnect(); // disconnect the wallet (signer and client)
       useAccountStore().$reset();
       useAuthStore().$reset();
@@ -221,14 +267,14 @@ export const useAuthStore = defineStore({
         const address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
         const token = Buffer.from(signedBytes).toString("base64");// Store the auth data locally
         const accountInfo = await (await useWalletStore().wallet.client).getAccount(address).catch(() => { return null; });
-        const storedAuthData: StoredAuthData = {
-          version: 1,
+        const storedAuthAccount: StoreAuthAccount = {
           address,
           signer: useWalletStore().signerId,
           authorization: token,
-          accountNumber: accountInfo?.accountNumber || 0
+          accountNumber: accountInfo?.accountNumber || 0,
+          useAuthz: false
         };
-        AuthStorage.set(storedAuthData);
+        AuthStorage.set(storedAuthAccount);
         await useAccountStore().getUserInfo();
         return true;
       } catch (e) {
