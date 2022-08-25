@@ -196,24 +196,24 @@ async function publish () {
     return;
   }
 
-  const res = await (
-    await fetch(`${useBackendStore().apiUrl}/posts/${extId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        signedPost: Buffer.from(signedBytes).toString("base64"),
-        externalId: msgCreatePost.value.externalId,
-        author: msgCreatePost.value.author,
-        sectionId: msgCreatePost.value.sectionId,
-        text: msgCreatePost.value.text,
-        tags: msgCreatePost.value.tags,
-        subtitle: useDraftStore().subtitle,
-        content: useDraftStore().content,
-        entities: JSON.stringify(msgCreatePost.value.entities)
-      })
+  const res = await (await useBackendStore().fetch(
+    `${useBackendStore().apiUrl}/posts/${extId}`,
+    "POST",
+    {
+      "Content-Type": "application/json"
+    },
+    JSON.stringify({
+      signedPost: Buffer.from(signedBytes).toString("base64"),
+      externalId: msgCreatePost.value.externalId,
+      author: msgCreatePost.value.author,
+      sectionId: msgCreatePost.value.sectionId,
+      text: msgCreatePost.value.text,
+      tags: msgCreatePost.value.tags,
+      subtitle: useDraftStore().subtitle,
+      content: useDraftStore().content,
+      entities: JSON.stringify(msgCreatePost.value.entities)
     })
+  )
   ).json() as any;
   if (res.code === 0) {
     usePostStore().userPosts = await useUserStore().getUserArticles(useAccountStore().address);

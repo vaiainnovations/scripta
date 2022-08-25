@@ -33,16 +33,12 @@ export const usePostStore = defineStore({
     },
     async deletePost (extId: string, id: string, signedPost: Uint8Array): Promise<void> {
       try {
-        await fetch(`${useBackendStore().apiUrl}posts/delete/${extId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            id,
-            signedPost: Buffer.from(signedPost).toString("base64")
-          })
-        });
+        await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/delete/${extId}`, "POST", {
+          "Content-Type": "application/json"
+        }, JSON.stringify({
+          id,
+          signedPost: Buffer.from(signedPost).toString("base64")
+        }));
       } catch (e) {
         console.log(e);
       }
