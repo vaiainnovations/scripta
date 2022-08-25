@@ -135,8 +135,16 @@ export const useAuthStore = defineStore({
      * @returns StoredAuthData
      */
     getAuthStorageAccount (address: string): StoreAuthAccount {
-      const storedAuthData = JSON.parse(localStorage.getItem(AuthStorage.STORAGE_KEY)) as StoredAuthData;
-      return storedAuthData.accounts.find(account => account.address === address) || null;
+      try {
+        const storedAuthData = JSON.parse(localStorage.getItem(AuthStorage.STORAGE_KEY)) as StoredAuthData;
+        // if not supported AuthStorage version, delete
+        if (storedAuthData.version !== AuthStorage.STORAGE_VERSION) {
+          AuthStorage.delete();
+        }
+        return storedAuthData.accounts.find(account => account.address === address);
+      } catch (e) {
+      }
+      return null;
     },
     /**
      * Check if the user has a valid authorization
