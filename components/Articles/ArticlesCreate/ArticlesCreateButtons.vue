@@ -187,7 +187,9 @@ async function publish () {
 
   let signedBytes = new Uint8Array();
   try {
-    signedBytes = await $useTransaction().directSign(msgs);
+    if (!useAccountStore().authz.hasAuthz) {
+      signedBytes = await $useTransaction().directSign(msgs);
+    }
   } catch (e) {
     console.log(e);
   }
@@ -203,7 +205,7 @@ async function publish () {
       "Content-Type": "application/json"
     },
     JSON.stringify({
-      signedPost: Buffer.from(signedBytes).toString("base64"),
+      signedPost: (signedBytes) ? Buffer.from(signedBytes).toString("base64") : "",
       externalId: msgCreatePost.value.externalId,
       author: msgCreatePost.value.author,
       sectionId: msgCreatePost.value.sectionId,
