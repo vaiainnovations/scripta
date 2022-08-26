@@ -1,19 +1,29 @@
 <template>
   <AuthCard>
     <template #card>
-      <span v-if="!isGeneratingToken">
+      <span v-if="!isLoading">
         <AuthContentCard>
           <AuthDescription class="p-5">
-            <p class="text-3xl font-extrabold leading-normal text-center pt-5">
-              Wanna try an improved Web3 experience?
-            </p>
-            <p class="text-lg leading-normal pt-10 text-center">
-              By granting to Scripta.network the Authorization to sign <b>only</b> Scripta related operations on your behalf, you won’t have to sign every post/comment/reaction, but only a session authorization.
-              <br><br>It’s free and you can revoke this authorization whenever you want!
-            </p>
+            <span v-if="!hasAuthz">
+              <p class="text-3xl font-extrabold leading-normal text-center pt-5">
+                Wanna try an improved Web3 experience?
+              </p>
+              <p class="text-lg leading-normal pt-10 text-center">
+                By granting to Scripta.network the Authorization to sign <b>only</b> Scripta related operations on your behalf, you won’t have to sign every post/comment/reaction, but only a session authorization.
+                <br><br>It’s free and you can revoke this authorization whenever you want!
+              </p>
+            </span>
+            <span v-else>
+              <p class="text-3xl font-extrabold leading-normal text-center pt-5">
+                Welcome back
+              </p>
+              <p class="text-lg leading-normal pt-10 text-center">
+                Your Authorization or device session has <b>expired</b>, please renew it.
+              </p>
+            </span>
 
             <div class="pt-12">
-              <div class="text-center p-4">
+              <div v-if="!hasAuthz" class="text-center p-4">
                 <button
                   class="rounded-xl py-2 px-4 text-xl bg-primary text-background-alt hover:bg-primary/70"
                   @click="continueWithAuthz()"
@@ -26,7 +36,12 @@
                   class="rounded-xl py-2 px-4 text-xl bg-primary text-background-alt hover:bg-primary/70"
                   @click="continueWithoutAuthz()"
                 >
-                  Continue without
+                  <span v-if="!hasValidAuthorization&&!hasAuthz">
+                    Continue without
+                  </span>
+                  <span v-else>
+                    Authorize device
+                  </span>
                 </button>
               </div>
             </div>
@@ -65,7 +80,20 @@
 import { useBackendStore } from "~~/core/store/BackendStore";
 import { useAccountStore } from "~~/core/store/AccountStore";
 
-const isGeneratingToken = ref(false);
+const isLoading = ref(true);
+const hasAuthz = ref(false);
+const hasValidAuthorization = ref(false);
+
+// new authz
+// renew token
+
+// may be unnecessary since ensured by the [not-direct-route] guard
+if (process.client) {
+  const { $useAuth } = useNuxtApp();
+  isLoading.value = false;
+  hasAuthz.value = useAccountStore().authz.hasAuthz;
+  hasValidAuthorization.value = $useAuth().hasValidAuthAuthorization();
+}
 
 function logout () {
   const { $useAuth } = useNuxtApp();
@@ -73,24 +101,23 @@ function logout () {
 }
 
 async function continueWithoutAuthz () {
-  useAccountStore().authz.wantsAuthz = false;
-  isGeneratingToken.value = true;
+  useAccountStore().authz.hasAuthz = false;
+  isLoading.value = true;
   const { $useAuth } = useNuxtApp();
   const success = await $useAuth().authorize();
-  isGeneratingToken.value = false;
+  isLoading.value = false;
 
   if (success) {
     await navigateTo("/profile");
   }
 }
 async function continueWithAuthz () {
-  useAccountStore().authz.wantsAuthz = true;
-  isGeneratingToken.value = true;
+  isLoading.value = true;
   const { $useAuth } = useNuxtApp();
   const authorized = await $useAuth().authorize();
 
   if (!authorized) {
-    isGeneratingToken.value = false;
+    isLoading.value = false;
     return false;
   }
 
@@ -108,13 +135,13 @@ async function continueWithAuthz () {
   }
 
   if (!authzConfig) {
-    isGeneratingToken.value = false;
+    isLoading.value = false;
     return false;
   }
 
   const success = await useAccountStore().grantAuthorizations();
   console.log(success);
 
-  isGeneratingToken.value = false;
+  isLoading.value = false;
 }
 </script>

@@ -20,13 +20,12 @@ interface StoreAuthAccount {
   signer: SupportedSigner,
   authorization: string,
   accountNumber: number,
-  useAuthz: boolean,
 }
 
 interface StoredAuthData {
   version: number,
   accounts: StoreAuthAccount[],
-  signer: SupportedSigner,
+  signer: SupportedSigner | null,
 }
 
 export class AuthStorage {
@@ -42,7 +41,12 @@ export class AuthStorage {
     if (!storedAuthData || !storedAuthData.accounts || storedAuthData.accounts?.length === 0) {
       storedAuthData = { accounts: [value], version: this.STORAGE_VERSION, signer: value.signer };
     } else {
-      storedAuthData.accounts.push(value);
+      const index = storedAuthData.accounts.findIndex(account => account.address === value.address);
+      if (index >= 0) {
+        storedAuthData.accounts[index] = value;
+      } else {
+        storedAuthData.accounts.push(value);
+      }
       storedAuthData.signer = value.signer;
     }
     localStorage.setItem(AuthStorage.STORAGE_KEY, JSON.stringify(storedAuthData));
@@ -71,15 +75,16 @@ export class AuthStorage {
   static delete (address = ""): void {
     if (address) {
       const storedAuthData = JSON.parse(localStorage.getItem(AuthStorage.STORAGE_KEY)) as StoredAuthData;
+      storedAuthData.signer = null;
       if (storedAuthData && storedAuthData.version === this.STORAGE_VERSION && storedAuthData.accounts && storedAuthData?.accounts?.length > 0) {
         const index = storedAuthData.accounts.findIndex(account => account.address === address);
-        if (index !== -1) {
+        if (index >= 0) {
           storedAuthData.accounts.splice(index, 1);
           localStorage.setItem(AuthStorage.STORAGE_KEY, JSON.stringify(storedAuthData));
         }
       }
     } else {
-      // localStorage.removeItem(AuthStorage.STORAGE_KEY);
+      localStorage.removeItem(AuthStorage.STORAGE_KEY);
     }
   }
 }
@@ -99,14 +104,16 @@ export const useAuthStore = defineStore({
   actions: {
     async init (): Promise<void> {
       const storedAuth = AuthStorage.get(); // just check if there is any stored auth data
-      if (storedAuth && storedAuth.signer) {
+      if (storedAuth) {
         this.authLevel = AuthLevel.Memory;
-        await useWalletStore().retrieveCurrentWallet(storedAuth.signer);
-        const storedAuthAccount = AuthStorage.get((await useWalletStore().wallet.signer.getCurrentAccount()).address);
-        if (!storedAuthAccount) {
-          this.logout("/auth");
+        if (storedAuth.signer) {
+          await useWalletStore().retrieveCurrentWallet(storedAuth.signer);
+          const storedAuthAccount = AuthStorage.get((await useWalletStore().wallet.signer.getCurrentAccount()).address);
+          if (!storedAuthAccount) {
+            this.logout("/auth");
+          }
+          await useAccountStore().getUserInfo();
         }
-        await useAccountStore().getUserInfo();
         if (this.authLevel !== AuthLevel.None) {
           this.login();
         }
@@ -146,15 +153,6 @@ export const useAuthStore = defineStore({
       }
       return null;
     },
-    setAuthStorageAuthz (address: string, useAuthz: boolean) {
-      try {
-        const storedAuthAccount = this.getAuthStorageAccount(address);
-        storedAuthAccount.useAuthz = useAuthz;
-        AuthStorage.set(storedAuthAccount);
-      } catch (e) {
-      }
-      return null;
-    },
     /**
      * Check if the user has a valid authorization
      * @returns true if the authorization is valid
@@ -186,14 +184,12 @@ export const useAuthStore = defineStore({
      * @param route New route after the logout. Don't re-route if omitted
      */
     async logout (route?: string): Promise<void> {
-      console.log("called logout");
       AuthStorage.delete(useAccountStore().address);
       await useWalletStore().disconnect(); // disconnect the wallet (signer and client)
       useAccountStore().$reset();
       useAuthStore().$reset();
       useWalletStore().$reset();
       localStorage.removeItem("walletconnect");
-      console.log("logged out");
       if (route) {
         await navigateTo(route);
       }
@@ -216,6 +212,9 @@ export const useAuthStore = defineStore({
         // Get the user address
         const account = await useWalletStore().wallet.signer.getCurrentAccount();
         useAccountStore().address = account.address;
+
+        // update auth info (authz, etc) from the backend
+        await useAccountStore().getUserInfo();
 
         // Retrieve the Desmos profile, if exists
         const profile = await (await useWalletStore().wallet.client).getProfile(account.address);
@@ -288,8 +287,7 @@ export const useAuthStore = defineStore({
           address,
           signer: useWalletStore().signerId,
           authorization: token,
-          accountNumber: accountInfo?.accountNumber || 0,
-          useAuthz: false
+          accountNumber: accountInfo?.accountNumber || 0
         };
         AuthStorage.set(storedAuthAccount);
         await useAccountStore().getUserInfo();

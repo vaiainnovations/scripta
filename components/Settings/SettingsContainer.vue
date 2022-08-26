@@ -111,14 +111,14 @@ import { useDesmosStore } from "~~/core/store/DesmosStore";
 const hasAcceptedPrivacy = ref(true);
 const hasAcceptedAdvertisement = ref(false);
 const hasAcceptedCookies = ref(false);
-const hasAuthzAuthorization = ref(new Date(Date.now()) < useAccountStore().authz.grantExpiration);
+const hasAuthzAuthorization = ref(useAccountStore().authz.hasAuthz);
 
 // subscribe to changes in the account store, the first call to the Account endpoint is async, so it is necessary
 useAccountStore().$subscribe(() => {
   hasAcceptedPrivacy.value = true;
   hasAcceptedAdvertisement.value = false;
   hasAcceptedCookies.value = false;
-  hasAuthzAuthorization.value = new Date(Date.now()) < useAccountStore().authz.grantExpiration;
+  hasAuthzAuthorization.value = useAccountStore().authz.hasAuthz;
 });
 
 async function handleAuthzAuthorizationChange () {

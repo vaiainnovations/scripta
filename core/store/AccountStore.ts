@@ -6,7 +6,6 @@ import { Timestamp } from "cosmjs-types/google/protobuf/timestamp";
 import { MsgRevoke } from "cosmjs-types/cosmos/authz/v1beta1/tx";
 import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
 import { GenericAuthorization } from "cosmjs-types/cosmos/authz/v1beta1/authz";
-import { useAuthStore } from "./AuthStore";
 import { useDesmosStore } from "./DesmosStore";
 import { useBackendStore } from "./BackendStore";
 import { registerModuleHMR } from ".";
@@ -27,12 +26,11 @@ export const useAccountStore = defineStore({
     settings: {
       hasAcceptedPrivacy: true,
       hasAcceptedAdvertisement: false,
-      hasAcceptedCookies: false,
-      hasAuthzAuthorization: false
+      hasAcceptedCookies: false
     },
     authz: {
       DEFAULT_AUTHORIZATIONS: ["/desmos.posts.v2.MsgCreatePost", "/desmos.posts.v2.MsgEditPost", "/desmos.posts.v2.MsgDeletePost"/* , "/desmos.profiles.v3.MsgSaveProfile" */],
-      wantsAuthz: false,
+      hasAuthz: false,
       grantExpiration: null as Date || null,
       grantGrantee: ""
     }
@@ -59,11 +57,15 @@ export const useAccountStore = defineStore({
     async getUserInfo () {
       try {
         const res = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}user/${this.address}`, "GET", {})).json() as any;
-        console.log(res);
         if (res) {
           this.sectionId = Number(res.sectionId);
           this.authz.grantExpiration = (res?.grantExpiration) ? new Date(res?.grantExpiration) : null;
           this.authz.grantGrantee = res?.grantGrantee || "";
+          try {
+            if (new Date(res?.grantExpiration) > new Date(Date.now())) {
+              this.authz.hasAuthz = true;
+            }
+          } catch (e) {}
         }
       } catch (e) {
         console.log(e);
@@ -99,8 +101,6 @@ export const useAccountStore = defineStore({
       if (!signed) {
         return false;
       }
-
-      useAuthStore().setAuthStorageAuthz(useAccountStore().address, true);
 
       try {
         const res = (await (

@@ -13,6 +13,11 @@ export default defineNuxtPlugin(() => {
       return await navigateTo("/auth");
     }
 
+    if (!authStorage.signer) {
+      console.log(`[Guard] ${to.path} not authenticated (no signer), re-routing`);
+      return await navigateTo("/auth");
+    }
+
     // check if the user has already a connected address (if first page load, the address is not set yet)
     // Note: call useWalletStore().retrieveCurrentWallet every time is slow!
     let address = "";
