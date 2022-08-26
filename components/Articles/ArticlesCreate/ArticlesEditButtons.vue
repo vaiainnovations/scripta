@@ -94,7 +94,9 @@ async function editArticle () {
 
   let signedBytes = new Uint8Array();
   try {
-    signedBytes = await $useTransaction().directSign([msgEditPost]);
+    if (!useAccountStore().authz.hasAuthz) {
+      signedBytes = await $useTransaction().directSign([msgEditPost]);
+    }
   } catch (e) {
     console.log(e);
   }
@@ -112,7 +114,7 @@ async function editArticle () {
       },
       JSON.stringify({
         id: draftStore.id,
-        signedPost: Buffer.from(signedBytes).toString("base64"),
+        signedPost: (signedBytes) ? Buffer.from(signedBytes).toString("base64") : "",
         externalId: extId,
         author: useAccountStore().address,
         sectionId: useAccountStore().sectionId,
@@ -149,7 +151,9 @@ async function deleteArticle () {
 
   let signedBytes = new Uint8Array();
   try {
-    signedBytes = await $useTransaction().directSign([msgDeletePost]);
+    if (!useAccountStore().authz.hasAuthz) {
+      signedBytes = await $useTransaction().directSign([msgDeletePost]);
+    }
   } catch (e) {
     console.log(e);
   }
@@ -166,7 +170,8 @@ async function deleteArticle () {
         "Content-Type": "application/json"
       },
       JSON.stringify({
-        signedPost: Buffer.from(signedBytes).toString("base64")
+        signedPost: Buffer.from(signedBytes).toString("base64"),
+        id: useDraftStore().id
       })
     )
   ).json()) as any;
