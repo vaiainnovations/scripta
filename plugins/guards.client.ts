@@ -54,28 +54,30 @@ export default defineNuxtPlugin(() => {
     if (useAuthStore().hasAuthStorage()) {
       const authStorage = useAuthStore().getAuthStorage();
 
-      // check if the user has already a connected address (if first page load, the address is not set yet)
-      // Note: call useWalletStore().retrieveCurrentWallet every time is slow!
-      let address = "";
-      try {
-        address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
-      } catch (e) {
-      // signer not connected, not already connected
-      }
+      if (authStorage.signer) {
+        // check if the user has already a connected address (if first page load, the address is not set yet)
+        // Note: call useWalletStore().retrieveCurrentWallet every time is slow!
+        let address = "";
+        try {
+          address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+        } catch (e) {
+          // signer not connected, not already connected
+        }
 
-      // connect to the wallet if the user is not connected
-      if (!address) {
-        await useWalletStore().retrieveCurrentWallet(authStorage.signer);
-        address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
-      }
+        // connect to the wallet if the user is not connected
+        if (!address) {
+          await useWalletStore().retrieveCurrentWallet(authStorage.signer);
+          address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+        }
 
-      // check if the user is authenticated
-      const storedAuthAccount = useAuthStore().getAuthStorageAccount(address);
+        // check if the user is authenticated
+        const storedAuthAccount = useAuthStore().getAuthStorageAccount(address);
 
-      if (storedAuthAccount) {
-        return await navigateTo("/");
+        if (storedAuthAccount) {
+          return await navigateTo("/");
+        }
+        console.log("[Guard] routing, is logged");
       }
-      console.log("[Guard] routing, is logged");
     }
   });
 });
