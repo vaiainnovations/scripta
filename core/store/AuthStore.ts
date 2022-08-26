@@ -146,6 +146,15 @@ export const useAuthStore = defineStore({
       }
       return null;
     },
+    setAuthStorageAuthz (address: string, useAuthz: boolean) {
+      try {
+        const storedAuthAccount = this.getAuthStorageAccount(address);
+        storedAuthAccount.useAuthz = useAuthz;
+        AuthStorage.set(storedAuthAccount);
+      } catch (e) {
+      }
+      return null;
+    },
     /**
      * Check if the user has a valid authorization
      * @returns true if the authorization is valid

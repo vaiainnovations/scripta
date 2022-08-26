@@ -121,14 +121,14 @@ useAccountStore().$subscribe(() => {
   hasAuthzAuthorization.value = new Date(Date.now()) < useAccountStore().authz.grantExpiration;
 });
 
-function handleAuthzAuthorizationChange () {
-  // TODO: implement authorization and revoke
+async function handleAuthzAuthorizationChange () {
   if (hasAuthzAuthorization.value) {
-    // useDesmosStore().grantAuthorization();
     console.log("grant authorization");
+    const success = await useAccountStore().grantAuthorizations();
+    console.log("grant authorization", success);
   } else {
-    // useDesmosStore().revokeAuthorization();
-    console.log("revoke authorization");
+    const success = await useAccountStore().revokeAuthorizations();
+    console.log("revoke authorization", success);
   }
 }
 </script>

@@ -82,9 +82,9 @@ export const useTransactionStore = defineStore({
         this.status = QueueStatus.SIGNING;
         const client = await $useWallet().wallet.client;
         client.setSigner(signMode === 0 ? $useWallet().wallet.aminoSigner as Signer : $useWallet().wallet.signer as Signer);
+        // client.setSigner($useWallet().wallet.signer as Signer);
         const address = useAccountStore().address;
         const accountInfo = await client.getAccount(address).catch(() => { return null; });
-
         // sign the messages
         const signed = await client.sign(address, messages, fees, memo, accountInfo === null
           ? {
@@ -97,7 +97,7 @@ export const useTransactionStore = defineStore({
 
         // broadcast the messages
         this.status = QueueStatus.SUCCESS;
-        this.resetQueueWithTimer(5);
+        this.resetQueueWithTimer(0);
         return txBytes;
       } catch (e) {
         console.log(e);

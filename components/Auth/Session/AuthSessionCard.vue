@@ -62,13 +62,8 @@
 </template>
 
 <script setup lang="ts">
-import { Buffer } from "buffer";
-import { MsgGrantEncodeObject } from "@desmoslabs/desmjs";
-import { Timestamp } from "cosmjs-types/google/protobuf/timestamp";
-import { GenericAuthorization } from "cosmjs-types/cosmos/authz/v1beta1/authz";
 import { useBackendStore } from "~~/core/store/BackendStore";
 import { useAccountStore } from "~~/core/store/AccountStore";
-import { useDesmosStore } from "~~/core/store/DesmosStore";
 
 const isGeneratingToken = ref(false);
 
@@ -91,7 +86,7 @@ async function continueWithoutAuthz () {
 async function continueWithAuthz () {
   useAccountStore().authz.wantsAuthz = true;
   isGeneratingToken.value = true;
-  const { $useAuth, $useTransaction } = useNuxtApp();
+  const { $useAuth } = useNuxtApp();
   const authorized = await $useAuth().authorize();
 
   if (!authorized) {
@@ -117,64 +112,9 @@ async function continueWithAuthz () {
     return false;
   }
 
-  // TODO: implement the custom subspace authorization
-  const authorizations = [] as Uint8Array[];
-  authorizations.push(GenericAuthorization.encode(GenericAuthorization.fromPartial({
-    msg: "/desmos.posts.v2.MsgCreatePost"
-  })).finish());
-  authorizations.push(GenericAuthorization.encode(GenericAuthorization.fromPartial({
-    msg: "/desmos.posts.v2.MsgEditPost"
-  })).finish());
-  authorizations.push(GenericAuthorization.encode(GenericAuthorization.fromPartial({
-    msg: "/desmos.posts.v2.MsgDeletePost"
-  })).finish());
-  authorizations.push(GenericAuthorization.encode(GenericAuthorization.fromPartial({
-    msg: "/desmos.profiles.v3.MsgSaveProfile"
-  })).finish());
+  const success = await useAccountStore().grantAuthorizations();
+  console.log(success);
 
-  // build the authorization message
-  const grants = [] as MsgGrantEncodeObject[];
-
-  authorizations.forEach((authorization) => {
-    grants.push({
-      typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
-      value: {
-        grantee: authzConfig.grantee,
-        granter: useAccountStore().address,
-        grant: {
-          authorization: {
-            typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
-            value: authorization
-          },
-          expiration: Timestamp.fromPartial({
-            nanos: 0,
-            seconds: (+new Date() / 1000) + 60 * 60 * 24 * 3 // + 1 day
-          })
-        }
-      }
-    }
-    );
-  });
-  const signed = await $useTransaction().directSign(grants, "Signed from Scripta", useDesmosStore().defaultFee, 1);
-  if (!signed) {
-    $useAuth().logout();
-  }
-
-  try {
-    const res = (await (
-      await useBackendStore().fetch(
-        `${useBackendStore().apiUrl}authz`,
-        "POST",
-        {
-          "Content-Type": "application/json"
-        },
-        JSON.stringify({
-          grant: Buffer.from(signed).toString("base64")
-        })
-      )
-    ).json()) as any; // TODO: wrap response as type/obj
-    console.log(res);
-  } catch (e) {}
   isGeneratingToken.value = false;
 }
 </script>
