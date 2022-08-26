@@ -6,7 +6,12 @@
       class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-danger text-xl font-medium"
       @click="deleteArticle()"
     >
-      Delete Article
+      <span v-if="useDraftStore().id">
+        Delete Article
+      </span>
+      <span v-else>
+        Delete Draft
+      </span>
     </button>
     <div class="col-span-2 lg:col-start-5">
       <span v-if="!isPublishing">
@@ -16,7 +21,12 @@
           class="p-1 w-full h-full rounded-xl text-[#FFFFFF] bg-primary text-xl font-medium"
           @click="editArticle()"
         >
-          Publish Edit
+          <span v-if="useDraftStore().id">
+            Publish Edit
+          </span>
+          <span v-else>
+            Publish Article
+          </span>
         </button>
       </span>
       <span v-else>
@@ -140,6 +150,25 @@ async function editArticle () {
 async function deleteArticle () {
   isPublishing.value = true;
   const { $useTransaction } = useNuxtApp();
+
+  if (!useDraftStore().id) {
+    await (
+      await useBackendStore().fetch(
+        `${useBackendStore().apiUrl}/posts/delete/${useDraftStore().externalId}`,
+        "POST",
+        {
+          "Content-Type": "application/json"
+        },
+        JSON.stringify({
+          draft: true
+        })
+      )
+    ).json();
+    isPublishing.value = false;
+    await navigateTo("/profile");
+    return;
+  }
+
   const msgDeletePost: MsgDeletePostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgDeletePost",
     value: {

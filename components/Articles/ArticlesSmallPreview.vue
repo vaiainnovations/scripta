@@ -12,6 +12,9 @@
         </div>
 
         <div class="w-2/3 p-4 md:p-4">
+          <a v-if="props.content.id <= 0" class="rounded-2xl bg-primary-light text-xs font-medium text-background px-2 py-1 float-right">
+            Draft
+          </a>
           <p class="mb-2 text-sm text-gray-600 dark:text-gray-400">
             <a
               v-for="tag in props.content.tags"
