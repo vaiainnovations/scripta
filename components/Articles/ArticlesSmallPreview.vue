@@ -45,6 +45,9 @@
             class="max-h-56 w-full object-cover"
           >
           <div class="bg-background-alt dark:bg-gray-800 w-full p-4">
+            <a v-if="props.content.id <= 0" class="rounded-2xl bg-primary-light text-xs font-medium text-background px-2 py-1 float-right">
+              Draft
+            </a>
             <p class="text-primary-text dark:text-white text-xl font-medium mb-2">
               {{ props.content.title }}
             </p>

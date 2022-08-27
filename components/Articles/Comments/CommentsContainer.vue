@@ -9,8 +9,8 @@
     <div class="pt-4 w-full lg:w-2/4">
       <ArticlesCommentsViewComment
         v-for="comment in comments"
-        :key="comment.id"
-        :comment="comment"
+        :key="comment.comment.id"
+        :comment="comment.comment"
         class="gap-2"
       />
     </div>
@@ -19,6 +19,7 @@
 
 <script lang="ts" setup>
 import { useBackendStore } from "~~/core/store/BackendStore";
+import { useDesmosStore } from "~~/core/store/DesmosStore";
 import { PostComment } from "~~/types/PostComment";
 
 interface Props {
@@ -26,25 +27,26 @@ interface Props {
   sectionId: number;
 }
 const props = defineProps<Props>();
-const comments = ref([] as PostComment[]);
+const comments = ref([] as { comment: PostComment}[]);
 
 updateArticleComments();
 
 async function updateArticleComments () {
-  const query = `query getPostComments {
-  post(where: {references: {reference_id:{_eq: ${props.referencedPost.toString()} }}}, order_by:{creation_date:desc}){
-    id
-    text
-    creation_date
-    author{
-      address
-      dtag
-      nickname
-      profile_pic
+  const query = `query PostReplies {
+  comments: post_reference(where: {reference: {subspace_id: {_eq: ${useDesmosStore().subspaceId}}, id: {_eq: ${props.referencedPost.toString()}}}}, order_by:{reference: {creation_date:desc}}) {
+    comment: post {
+      id
+      text
+      creation_date
+      author {
+        address
+        dtag
+        nickname
+        profile_pic
+      }
     }
   }
-}
-`;
+}`;
   const commentsResponse = (await (
     await useBackendStore().fetch(
       `${useBackendStore().apiUrl}graphql`,
@@ -55,15 +57,15 @@ async function updateArticleComments () {
       JSON.stringify({ q: query, type: "" })
     )
   ).json()) as {
-    data: { post: PostComment[] };
+    data: { comments: {comment: PostComment[]}[] };
   };
   if (
     !commentsResponse ||
     !commentsResponse.data ||
-    !commentsResponse.data.post
+    !commentsResponse.data.comments
   ) {
     // TODO: handle error?
   }
-  comments.value = commentsResponse.data.post;
+  comments.value = commentsResponse.data.comments;
 }
 </script>
