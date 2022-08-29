@@ -71,15 +71,33 @@ export const useAccountStore = defineStore({
         console.log(e);
       }
     },
+    async getAuthzConfig (): Promise<{
+      grantee: string
+    } | null> {
+      let authzConfig: {
+        grantee: string
+      } | null = null;
+      try {
+        authzConfig = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}authz`, "GET", {
+          "Content-Type": "application/json"
+        })).json();
+      } catch (e) {
+        console.log(e);
+      }
+      return authzConfig;
+    },
     async grantAuthorizations () {
       const { $useTransaction } = useNuxtApp();
       const grants = [] as MsgGrantEncodeObject[];
+      await useAccountStore().getUserInfo();
+
+      const authzConfig = await useAccountStore().getAuthzConfig();
 
       this.authz.DEFAULT_AUTHORIZATIONS.forEach((authorization) => {
         grants.push({
           typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
           value: {
-            grantee: this.authz.grantGrantee,
+            grantee: authzConfig.grantee,
             granter: useAccountStore().address,
             grant: {
               authorization: {

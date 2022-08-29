@@ -77,7 +77,6 @@
 </template>
 
 <script setup lang="ts">
-import { useBackendStore } from "~~/core/store/BackendStore";
 import { useAccountStore } from "~~/core/store/AccountStore";
 
 const isLoading = ref(true);
@@ -122,17 +121,7 @@ async function continueWithAuthz () {
   }
 
   // retrieve the Authz Scripta configuration from the backend
-  let authzConfig = null as {
-    grantee: string
-  } | null;
-
-  try {
-    authzConfig = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}authz`, "GET", {
-      "Content-Type": "application/json"
-    })).json();
-  } catch (e) {
-    console.log(e);
-  }
+  const authzConfig = await useAccountStore().getAuthzConfig();
 
   if (!authzConfig) {
     isLoading.value = false;
