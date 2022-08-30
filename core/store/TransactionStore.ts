@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { Buffer } from "buffer";
 import { defineStore } from "pinia";
 import { EncodeObject } from "@cosmjs/proto-signing";
 import { StdFee } from "@cosmjs/stargate";
@@ -7,6 +8,7 @@ import { Signer } from "@desmoslabs/desmjs";
 import { useAccountStore } from "./AccountStore";
 import { useDesmosStore } from "./DesmosStore";
 import { registerModuleHMR } from ".";
+import { useBackendStore } from "./BackendStore";
 
 export enum QueueStatus {
   WAITING = "waiting",
@@ -51,10 +53,24 @@ export const useTransactionStore = defineStore({
         // sign the messages
         const signed = await client.sign(address, this.queue, defaultFee, "Signed from Scripta.network");
         const txBytes = TxRaw.encode(signed).finish();
+        console.log(Buffer.from(txBytes).toString("base64"));
 
         // broadcast the messages
         this.status = QueueStatus.PENDING;
         const broadcastResult = await client.broadcastTx(txBytes, 10000, 2000);
+
+        // TODO: replaces with multmessage backend broadcast
+        /* let res = null as any;
+        try {
+          res = await useBackendStore().fetch(`${useBackendStore().apiUrl}/broadcast`, "POST", {
+            "Content-Type": "application/json"
+          }, JSON.stringify({
+            signedBytes: Buffer.from(txBytes).toString("base64")
+          }));
+        } catch (e) {
+          console.log(e);
+        }
+        console.log(res); */
 
         // parse the result
         if (broadcastResult.code !== 0) {

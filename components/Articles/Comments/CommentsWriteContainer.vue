@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { Buffer } from "buffer";
+/* import { Buffer } from "buffer"; */
 import { MsgCreatePostEncodeObject } from "@desmoslabs/desmjs";
 import { PostReferenceType } from "@desmoslabs/desmjs-types/desmos/posts/v2/models";
 import Long from "long";
 import { v4 as uuidv4 } from "uuid";
 import { useAccountStore } from "~~/core/store/AccountStore";
-import { useBackendStore } from "~~/core/store/BackendStore";
+/* import { useBackendStore } from "~~/core/store/BackendStore"; */
 import { useDesmosStore } from "~~/core/store/DesmosStore";
 
 interface Props {
@@ -25,7 +25,7 @@ if (process.client) {
   }
 }
 
-async function postComment () {
+function postComment () {
   const { $useTransaction } = useNuxtApp();
   const msgCreateComment: MsgCreatePostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgCreatePost",
@@ -47,7 +47,8 @@ async function postComment () {
     }
   };
   isCommentPublishing.value = true;
-  let signedBytes = new Uint8Array();
+  $useTransaction().push(msgCreateComment);
+  /* let signedBytes = new Uint8Array();
   try {
     if (!useAccountStore().authz.hasAuthz) {
       signedBytes = await $useTransaction().directSign([msgCreateComment]);
@@ -81,7 +82,7 @@ async function postComment () {
     comment.value = "";
     isCommentPublishing.value = false;
     emit("newComment");
-  }
+  } */
 
   $useTransaction().$subscribe(() => {
     if ($useTransaction().queue.length === 0) {
