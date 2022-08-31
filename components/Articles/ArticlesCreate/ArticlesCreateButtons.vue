@@ -44,16 +44,16 @@
 </template>
 
 <script setup lang="ts">
-import { Buffer } from "buffer";
+/* import { Buffer } from "buffer"; */
 import { MsgCreatePostEncodeObject, MsgSaveProfileEncodeObject } from "@desmoslabs/desmjs";
 import Long from "long";
 import { v4 as uuidv4 } from "uuid";
 import { EncodeObject } from "@cosmjs/proto-signing";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
-import { useBackendStore } from "~~/core/store/BackendStore";
+/* import { useBackendStore } from "~~/core/store/BackendStore";
 import { usePostStore } from "~~/core/store/PostStore";
-import { useUserStore } from "~~/core/store/UserStore";
+import { useUserStore } from "~~/core/store/UserStore"; */
 import { useDesmosStore } from "~~/core/store/DesmosStore";
 
 const isPublishing = ref(false);
@@ -183,9 +183,10 @@ async function publish () {
     msgs.push(msgSaveProfile);
   }
   // push the post message
-  msgs.push(msgCreatePost);
+  console.log(msgCreatePost);
+  $useTransaction().push(msgCreatePost);
 
-  let signedBytes = new Uint8Array();
+  /* let signedBytes = new Uint8Array();
   try {
     if (!useAccountStore().authz.hasAuthz) {
       signedBytes = await $useTransaction().directSign(msgs);
@@ -221,7 +222,7 @@ async function publish () {
     usePostStore().userPosts = await useUserStore().getUserArticles(useAccountStore().address);
     draftStore.$reset();
     useRouter().push(`/@${useAccountStore().profile.dtag}/${extId}`);
-  }
+  } */
   isPublishing.value = false;
 }
 </script>

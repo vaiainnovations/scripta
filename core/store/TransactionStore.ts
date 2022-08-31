@@ -7,8 +7,8 @@ import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { Signer } from "@desmoslabs/desmjs";
 import { useAccountStore } from "./AccountStore";
 import { useDesmosStore } from "./DesmosStore";
-import { registerModuleHMR } from ".";
 import { useBackendStore } from "./BackendStore";
+import { registerModuleHMR } from ".";
 
 export enum QueueStatus {
   WAITING = "waiting",
@@ -57,20 +57,20 @@ export const useTransactionStore = defineStore({
 
         // broadcast the messages
         this.status = QueueStatus.PENDING;
-        const broadcastResult = await client.broadcastTx(txBytes, 10000, 2000);
+        // const broadcastResult = await client.broadcastTx(txBytes, 10000, 2000);
 
         // TODO: replaces with multmessage backend broadcast
-        /* let res = null as any;
+        let broadcastResult = null as any;
         try {
-          res = await useBackendStore().fetch(`${useBackendStore().apiUrl}/broadcast`, "POST", {
+          broadcastResult = await useBackendStore().fetch(`${useBackendStore().apiUrl}/broadcast`, "POST", {
             "Content-Type": "application/json"
           }, JSON.stringify({
-            signedBytes: Buffer.from(txBytes).toString("base64")
+            signedMsgs: Buffer.from(txBytes).toString("base64")
           }));
         } catch (e) {
           console.log(e);
         }
-        console.log(res); */
+        console.log(broadcastResult);
 
         // parse the result
         if (broadcastResult.code !== 0) {

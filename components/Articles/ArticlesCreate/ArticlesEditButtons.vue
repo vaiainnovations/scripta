@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { Buffer } from "buffer";
+/* import { Buffer } from "buffer"; */
 import {
   MsgDeletePostEncodeObject,
   MsgEditPostEncodeObject
@@ -49,8 +49,8 @@ import Long from "long";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
 import { useBackendStore } from "~~/core/store/BackendStore";
-import { usePostStore } from "~~/core/store/PostStore";
-import { useUserStore } from "~~/core/store/UserStore";
+/* import { usePostStore } from "~~/core/store/PostStore";
+import { useUserStore } from "~~/core/store/UserStore"; */
 import { useDesmosStore } from "~~/core/store/DesmosStore";
 
 const isPublishing = ref(false);
@@ -59,7 +59,7 @@ async function editArticle () {
   isPublishing.value = true;
   const { $useIpfs, $useTransaction } = useNuxtApp();
   const draftStore = await useDraftStore();
-  const extId = draftStore.externalId;
+  /* const extId = draftStore.externalId; */
 
   const msgEditPost: MsgEditPostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgEditPost",
@@ -99,10 +99,10 @@ async function editArticle () {
     urls: [ipfsEntityUrl]
   };
 
-  /* $useTransaction().push(msgCreatePost);
-  const signedBytes = await $useTransaction().execute(); */
+  $useTransaction().push(msgEditPost);
+  /* const signedBytes = await $useTransaction().execute(); */
 
-  let signedBytes = new Uint8Array();
+  /* let signedBytes = new Uint8Array();
   try {
     if (!useAccountStore().authz.hasAuthz) {
       signedBytes = await $useTransaction().directSign([msgEditPost]);
@@ -143,7 +143,7 @@ async function editArticle () {
     );
     draftStore.$reset();
     useRouter().push(`/@${useAccountStore().profile.dtag}/${extId}`);
-  }
+  } */
   isPublishing.value = false;
 }
 
@@ -177,8 +177,9 @@ async function deleteArticle () {
       signer: useAccountStore().address
     }
   };
+  $useTransaction().push(msgDeletePost);
 
-  let signedBytes = new Uint8Array();
+  /* let signedBytes = new Uint8Array();
   try {
     if (!useAccountStore().authz.hasAuthz) {
       signedBytes = await $useTransaction().directSign([msgDeletePost]);
@@ -211,7 +212,7 @@ async function deleteArticle () {
     );
     useDraftStore().$reset();
     useRouter().push("/profile");
-  }
+  } */
   isPublishing.value = false;
 }
 </script>
