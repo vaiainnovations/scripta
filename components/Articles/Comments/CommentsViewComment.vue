@@ -3,6 +3,8 @@ import { PostComment } from "~~/types/PostComment";
 
 interface Props {
   comment: PostComment;
+  isCommentator: boolean;
+  isModerator: boolean;
 }
 const props = defineProps<Props>();
 
@@ -10,9 +12,13 @@ const text = ref(props.comment.text);
 const profilePic = ref(props.comment.author.profile_pic || "");
 const nickname = ref(props.comment.author.nickname);
 
-const creationDateString = ref(getElapsedTime(new Date(props.comment.creation_date)));
+const creationDateString = ref(
+  getElapsedTime(new Date(props.comment.creation_date))
+);
 const commentsDateInterval = setInterval(() => {
-  creationDateString.value = getElapsedTime(new Date(props.comment.creation_date));
+  creationDateString.value = getElapsedTime(
+    new Date(props.comment.creation_date)
+  );
 }, 1000);
 
 onBeforeUnmount(() => {
@@ -37,6 +43,7 @@ function getElapsedTime (creationDate: Date): string {
 }
 
 // const canWrite = ref(false);
+
 </script>
 
 <template>
@@ -50,9 +57,16 @@ function getElapsedTime (creationDate: Date): string {
         <div class="flex text-sm">
           <div class="flex-1 p-0.5">
             {{ nickname }}
+            <span class="text-primary-text-light text-xs">
+              - {{ creationDateString }}
+            </span>
           </div>
-          <div class="fex-grow text-primary-text-light text-xs">
-            {{ creationDateString }}
+          <div class="">
+            <ArticlesCommentsActionsOverlay
+              :comment="props.comment"
+              :is-commentator="props.isCommentator"
+              :is-moderator="props.isModerator"
+            />
           </div>
         </div>
         <div

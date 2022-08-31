@@ -11,6 +11,8 @@
         v-for="comment in comments"
         :key="comment.comment.id"
         :comment="comment.comment"
+        :is-commentator="comment.comment.author.address === useAccountStore().address"
+        :is-moderator="props.sectionId === useAccountStore().sectionId"
         class="gap-2"
       />
     </div>
@@ -18,6 +20,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useAccountStore } from "~~/core/store/AccountStore";
 import { useBackendStore } from "~~/core/store/BackendStore";
 import { useDesmosStore } from "~~/core/store/DesmosStore";
 import { PostComment } from "~~/types/PostComment";
