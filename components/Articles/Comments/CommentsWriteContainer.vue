@@ -1,11 +1,8 @@
 <script lang="ts" setup>
-/* import { Buffer } from "buffer"; */
 import { MsgCreatePostEncodeObject } from "@desmoslabs/desmjs";
-import { PostReferenceType } from "@desmoslabs/desmjs-types/desmos/posts/v2/models";
 import Long from "long";
 import { v4 as uuidv4 } from "uuid";
 import { useAccountStore } from "~~/core/store/AccountStore";
-/* import { useBackendStore } from "~~/core/store/BackendStore"; */
 import { useDesmosStore } from "~~/core/store/DesmosStore";
 
 interface Props {
@@ -39,7 +36,7 @@ function postComment () {
       tags: [],
       conversationId: Long.fromNumber(0),
       referencedPosts: [{
-        type: PostReferenceType.POST_REFERENCE_TYPE_REPLY,
+        type: 1 /* PostReferenceType.POST_REFERENCE_TYPE_REPLY */,
         postId: props.referencedPost,
         position: Long.fromNumber(0)
       }],

@@ -1,12 +1,7 @@
-import { Buffer } from "buffer";
 import { defineStore } from "pinia";
 import { EncodeObject } from "@cosmjs/proto-signing";
-import { MsgGrantEncodeObject } from "@desmoslabs/desmjs";
-import { Timestamp } from "cosmjs-types/google/protobuf/timestamp";
 import { MsgRevoke } from "cosmjs-types/cosmos/authz/v1beta1/tx";
-import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
-import { GenericAuthorization } from "cosmjs-types/cosmos/authz/v1beta1/authz";
-import { useDesmosStore } from "./DesmosStore";
+/* import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile"; */
 import { useBackendStore } from "./BackendStore";
 import { registerModuleHMR } from ".";
 
@@ -19,7 +14,7 @@ export const useAccountStore = defineStore({
   id: "AccountStore",
   state: () => ({
     address: "",
-    profile: null as Profile,
+    profile: null as any,
     balance: 0,
     isNewProfile: false,
     sectionId: 0,
@@ -70,108 +65,6 @@ export const useAccountStore = defineStore({
       } catch (e) {
         console.log(e);
       }
-    },
-    async getAuthzConfig (): Promise<{
-      grantee: string
-    } | null> {
-      let authzConfig: {
-        grantee: string
-      } | null = null;
-      try {
-        authzConfig = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}authz`, "GET", {
-          "Content-Type": "application/json"
-        })).json();
-      } catch (e) {
-        console.log(e);
-      }
-      return authzConfig;
-    },
-    async grantAuthorizations () {
-      const { $useTransaction } = useNuxtApp();
-      const grants = [] as MsgGrantEncodeObject[];
-      await useAccountStore().getUserInfo();
-
-      const authzConfig = await useAccountStore().getAuthzConfig();
-
-      this.authz.DEFAULT_AUTHORIZATIONS.forEach((authorization) => {
-        grants.push({
-          typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
-          value: {
-            grantee: authzConfig.grantee,
-            granter: useAccountStore().address,
-            grant: {
-              authorization: {
-                typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
-                value: GenericAuthorization.encode(GenericAuthorization.fromPartial({
-                  msg: authorization
-                })).finish()
-              },
-              expiration: Timestamp.fromPartial({
-                nanos: 0,
-                seconds: (+new Date() / 1000) + 60 * 60 * 24 * 3 // + 1 day
-              })
-            }
-          }
-        }
-        );
-      });
-      const signed = await $useTransaction().directSign(grants, "Signed from Scripta", useDesmosStore().defaultFee, 1);
-      if (!signed) {
-        return false;
-      }
-
-      try {
-        const res = (await (
-          await useBackendStore().fetch(
-            `${useBackendStore().apiUrl}authz`,
-            "POST",
-            {
-              "Content-Type": "application/json"
-            },
-            JSON.stringify({
-              grant: Buffer.from(signed).toString("base64")
-            })
-          )
-        ).json()) as any; // TODO: wrap response as type/obj
-        console.log(res);
-      } catch (e) {
-        return false;
-      }
-      return true;
-    },
-    async revokeAuthorizations (): Promise<boolean> {
-      const { $useTransaction } = useNuxtApp();
-      const revokes = [] as MsgRevokeEncodeObject[];
-      this.authz.DEFAULT_AUTHORIZATIONS.forEach((revokeType) => {
-        revokes.push({
-          typeUrl: "/cosmos.authz.v1beta1.MsgRevoke",
-          value: {
-            granter: useAccountStore().address,
-            grantee: useAccountStore().authz.grantGrantee,
-            msgTypeUrl: revokeType
-          }
-        });
-      });
-      const signed = await $useTransaction().directSign(revokes, "Signed from Scripta", useDesmosStore().defaultFee, 1);
-
-      try {
-        (await (
-          await useBackendStore().fetch(
-            `${useBackendStore().apiUrl}authz/delete`,
-            "POST",
-            {
-              "Content-Type": "application/json"
-            },
-            JSON.stringify({
-              grant: Buffer.from(signed).toString("base64")
-            })
-          )
-        ).json()) as any; // TODO: wrap response as type/obj
-      } catch (e) {
-        console.log(e);
-        return false;
-      }
-      return true;
     }
   }
 });

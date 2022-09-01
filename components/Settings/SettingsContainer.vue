@@ -170,12 +170,13 @@ function updateSettingsValues () {
 }
 
 async function handleAuthzAuthorizationChange () {
+  const { $useAuth } = useNuxtApp();
   isUpdating.value = true;
   if (hasAuthzAuthorization.value) {
-    const success = await useAccountStore().grantAuthorizations();
+    const success = await $useAuth().grantAuthorizations();
     hasAuthzAuthorization.value = success;
   } else {
-    const success = await useAccountStore().revokeAuthorizations();
+    const success = await $useAuth().revokeAuthorizations();
     hasAuthzAuthorization.value = !success;
   }
   isUpdating.value = false;
