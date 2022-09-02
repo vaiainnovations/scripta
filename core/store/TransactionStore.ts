@@ -18,22 +18,27 @@ export enum QueueStatus {
   FAILED = "failed"
 }
 
+interface TransactionQueueMsg {
+  message: EncodeObject;
+  details: Record<string, unknown>;
+}
+
 export const useTransactionStore = defineStore({
   id: "TransactionStore",
   state: () => ({
-    queue: [] as EncodeObject[],
+    queue: [] as TransactionQueueMsg[],
     status: QueueStatus.WAITING,
     errorText: "",
     hash: ""
   }),
   actions: {
-    push (message: any): void {
+    push (message: EncodeObject, details: Record<string, unknown> = {}): void {
       // check if the draft is not empty
       // TODO: add controls to prevent pushing same message twice, and same operations (ex. 2 profile updates, works but is not ideal)
       if (this.status === QueueStatus.FAILED) {
         this.$reset();
       }
-      this.queue.push(message);
+      this.queue.push({ message, details });
     },
     async execute (): Promise<Uint8Array> {
       const { $useWallet } = useNuxtApp();
@@ -51,7 +56,9 @@ export const useTransactionStore = defineStore({
         };
 
         // sign the messages
-        const signed = await client.sign(address, this.queue, defaultFee, "Signed from Scripta.network");
+        const msgs = (this.queue as TransactionQueueMsg[]).map((el: TransactionQueueMsg) => el.message);
+        const details = (this.queue as TransactionQueueMsg[]).map((el: TransactionQueueMsg) => el.details);
+        const signed = await client.sign(address, msgs, defaultFee, "Signed from Scripta.network");
         const txBytes = TxRaw.encode(signed).finish();
         console.log(Buffer.from(txBytes).toString("base64"));
 
@@ -62,18 +69,19 @@ export const useTransactionStore = defineStore({
         // TODO: replaces with multmessage backend broadcast
         let broadcastResult = null as any;
         try {
-          broadcastResult = await useBackendStore().fetch(`${useBackendStore().apiUrl}/broadcast`, "POST", {
+          broadcastResult = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}/broadcast`, "POST", {
             "Content-Type": "application/json"
           }, JSON.stringify({
-            signedMsgs: Buffer.from(txBytes).toString("base64")
-          }));
+            signedMsgs: Buffer.from(txBytes).toString("base64"),
+            detailedMsgs: JSON.stringify(details)
+          }))).json();
         } catch (e) {
           console.log(e);
         }
         console.log(broadcastResult);
 
         // parse the result
-        if (broadcastResult.code !== 0) {
+        if (!broadcastResult?.transactionHash) {
           this.status = QueueStatus.FAILED;
           this.errorText = `${broadcastResult.rawLog}`;
           this.hash = broadcastResult.transactionHash;

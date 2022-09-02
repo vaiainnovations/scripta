@@ -183,8 +183,16 @@ async function publish () {
     msgs.push(msgSaveProfile);
   }
   // push the post message
-  console.log(msgCreatePost);
-  $useTransaction().push(msgCreatePost);
+  $useTransaction().push(msgCreatePost, {
+    externalId: msgCreatePost.value.externalId,
+    author: msgCreatePost.value.author,
+    sectionId: msgCreatePost.value.sectionId,
+    text: msgCreatePost.value.text,
+    tags: msgCreatePost.value.tags,
+    subtitle: useDraftStore().subtitle,
+    content: useDraftStore().content,
+    entities: JSON.stringify(msgCreatePost.value.entities)
+  });
 
   /* let signedBytes = new Uint8Array();
   try {

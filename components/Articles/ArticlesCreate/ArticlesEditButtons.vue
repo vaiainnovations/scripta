@@ -59,7 +59,7 @@ async function editArticle () {
   isPublishing.value = true;
   const { $useIpfs, $useTransaction } = useNuxtApp();
   const draftStore = await useDraftStore();
-  /* const extId = draftStore.externalId; */
+  const extId = draftStore.externalId;
 
   const msgEditPost: MsgEditPostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgEditPost",
@@ -99,7 +99,17 @@ async function editArticle () {
     urls: [ipfsEntityUrl]
   };
 
-  $useTransaction().push(msgEditPost);
+  $useTransaction().push(msgEditPost, {
+    id: draftStore.id,
+    externalId: extId,
+    author: useAccountStore().address,
+    sectionId: useAccountStore().sectionId,
+    text: draftStore.title,
+    tags: draftStore.tags.map(tag => tag.content.value),
+    subtitle: draftStore.subtitle,
+    content: draftStore.content,
+    entities: JSON.stringify(msgEditPost.value.entities)
+  });
   /* const signedBytes = await $useTransaction().execute(); */
 
   /* let signedBytes = new Uint8Array();
