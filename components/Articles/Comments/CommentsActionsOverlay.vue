@@ -3,7 +3,6 @@ import {
   MsgDeletePostEncodeObject,
   MsgEditPostEncodeObject
 } from "@desmoslabs/desmjs";
-import { MsgEditPost } from "@desmoslabs/desmjs-types/desmos/posts/v2/msgs";
 import Long from "long";
 import { PostComment } from "~~/types/PostComment";
 import { useAccountStore } from "~~/core/store/AccountStore";
@@ -15,6 +14,7 @@ interface Props {
   isModerator: boolean;
 }
 const props = defineProps<Props>();
+const emit = defineEmits(["editComment"]);
 
 const isOverlayOpen = ref(false);
 
@@ -39,17 +39,18 @@ function deleteComment () {
 
 function editComment () {
   const { $useTransaction } = useNuxtApp();
+  emit("editComment");
   toggleOverlay();
 
   const msgEditPost: MsgEditPostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgEditPost",
-    value: MsgEditPost.fromPartial({
+    value: {
       subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
       postId: Long.fromNumber(props.comment.id),
       tags: [],
       text: "edited force",
       editor: useAccountStore().address
-    })
+    }
   };
   $useTransaction().push(msgEditPost);
 }
