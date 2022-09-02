@@ -73,7 +73,7 @@ export const useTransactionStore = defineStore({
             "Content-Type": "application/json"
           }, JSON.stringify({
             signedMsgs: Buffer.from(txBytes).toString("base64"),
-            detailedMsgs: JSON.stringify(details)
+            detailedMsgs: details
           }))).json();
         } catch (e) {
           console.log(e);
