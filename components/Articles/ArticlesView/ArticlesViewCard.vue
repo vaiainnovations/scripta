@@ -19,15 +19,20 @@
       :date="new Date(props.article.creationDate)"
     />
     <a v-if="ipfsSourceUrl" :href="ipfsSourceUrl" target="_blank" class="text-xs">IPFS source</a>
-    <!--  <div class="grid grid-cols-2 place-content-between gap-y-3 lg:grid-cols-4 lg:gap-x-2">
+    <div class="grid grid-cols-2 place-content-between gap-y-3 lg:grid-cols-4 lg:gap-x-2">
       <div class="flex flex-row gap-x-1.5 lg:col-span-1">
-        <img src="/icons/outline/heart.svg" class="h-5 w-5">
-        // TODO: Change font to 15px
-        <p class="text-sm font-medium">
-          15k <span class="hidden lg:inline">upvotes</span>
+        <button class="group p-0.5 rounded-full" @click="addReaction(':up:')">
+          <img src="/icons/bold/arrow-up.svg" class="h-5 w-5 hidden group-hover:block">
+          <img src="/icons/linear/arrow-up.svg" class="h-5 w-5 group-hover:hidden">
+        </button>
+        <p class="text-sm font-medium my-auto">
+          {{ }}
         </p>
+        <button class="group p-0.5 rounded-full ml-2" @click="addReaction(':down:')">
+          <img src="/icons/bold/arrow-down.svg" class="h-5 w-5 hidden group-hover:block">
+          <img src="/icons/linear/arrow-down.svg" class="h-5 w-5 group-hover:hidden">
+        </button>
       </div>
-      // TODO: Change font to 15px
       <div class="flex flex-row gap-x-1.5 place-self-end lg:flex-row-reverse lg:place-self-start">
         <p class="text-sm font-medium">
           Tip
@@ -35,13 +40,12 @@
         <img src="/icons/bold/send-2.svg" class="h-5 w-5">
       </div>
       <div class="flex flex-row gap-x-3 lg:col-end-5 lg:place-self-end">
-        // TODO: change icons
         <img src="/svg/social/twitter.svg" class="w-5 object-contain">
         <img src="/svg/social/facebook.svg" class="w-5 object-contain">
         <img src="/svg/social/linkedin.svg" class="w-5 object-contain">
         <img src="/svg/social/link.svg" class="w-5 object-contain">
       </div>
-    </div> -->
+    </div>
     <div class="h-11 w-full bg-primary" />
     <div class="flex flex-row">
       <div v-if="showComments" class="w-full lg:w-7/12 2xl:w-full">
@@ -106,5 +110,10 @@ function handleNavbarChange (event: Event) {
   } else {
     navBarReading.value.show = false;
   }
+}
+
+function addReaction (code: string) {
+  const { $useReaction } = useNuxtApp();
+  $useReaction().addReaction(code, props.article.id);
 }
 </script>

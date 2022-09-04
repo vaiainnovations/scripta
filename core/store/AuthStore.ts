@@ -1,5 +1,5 @@
 
-import { Buffer } from "buffer";
+/* import { Buffer } from "buffer"; */
 import { MsgGrantEncodeObject } from "@desmoslabs/desmjs";
 import { Timestamp } from "cosmjs-types/google/protobuf/timestamp";
 import { GenericAuthorization } from "cosmjs-types/cosmos/authz/v1beta1/authz";
@@ -373,7 +373,7 @@ export const useAuthStore = defineStore({
     async revokeAuthorizations (): Promise<boolean> {
       const { $useTransaction } = useNuxtApp();
       const revokes = [] as MsgRevokeEncodeObject[];
-      this.authz.DEFAULT_AUTHORIZATIONS.forEach((revokeType) => {
+      useAccountStore().authz.DEFAULT_AUTHORIZATIONS.forEach((revokeType) => {
         revokes.push({
           typeUrl: "/cosmos.authz.v1beta1.MsgRevoke",
           value: {

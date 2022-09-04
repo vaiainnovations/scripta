@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Buffer } from "buffer";
+/* import { Buffer } from "buffer"; */
 import { defineStore } from "pinia";
 import { EncodeObject } from "@cosmjs/proto-signing";
 import { StdFee } from "@cosmjs/stargate";
