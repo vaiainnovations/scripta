@@ -121,14 +121,14 @@ async function continueWithAuthz () {
   }
 
   // retrieve the Authz Scripta configuration from the backend
-  const authzConfig = await useAccountStore().getAuthzConfig();
+  const authzConfig = await $useAuth().getAuthzConfig();
 
   if (!authzConfig) {
     isLoading.value = false;
     return false;
   }
 
-  const success = await useAccountStore().grantAuthorizations();
+  const success = await $useAuth().grantAuthorizations();
   console.log(success);
 
   isLoading.value = false;

@@ -322,9 +322,9 @@ export const useAuthStore = defineStore({
       const grants = [] as MsgGrantEncodeObject[];
       await useAccountStore().getUserInfo();
 
-      const authzConfig = await useAccountStore().getAuthzConfig();
+      const authzConfig = await this.getAuthzConfig();
 
-      this.authz.DEFAULT_AUTHORIZATIONS.forEach((authorization) => {
+      useAccountStore().authz.DEFAULT_AUTHORIZATIONS.forEach((authorization) => {
         grants.push({
           typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
           value: {
