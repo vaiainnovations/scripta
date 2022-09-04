@@ -187,7 +187,9 @@ async function deleteArticle () {
       signer: useAccountStore().address
     }
   };
-  $useTransaction().push(msgDeletePost);
+  $useTransaction().push(msgDeletePost, {
+    id: useDraftStore().id
+  });
 
   /* let signedBytes = new Uint8Array();
   try {

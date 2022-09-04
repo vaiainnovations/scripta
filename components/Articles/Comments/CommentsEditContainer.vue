@@ -23,7 +23,7 @@ if (process.client) {
 
 function edit () {
   const { $useTransaction } = useNuxtApp();
-  const msgEditCOmment: MsgEditPostEncodeObject = {
+  const msgEditComment: MsgEditPostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgEditPost",
     value: {
       subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
@@ -34,7 +34,10 @@ function edit () {
     }
   };
   isCommentPublishing.value = true;
-  $useTransaction().push(msgEditCOmment);
+  $useTransaction().push(msgEditComment, {
+    id: Long.fromNumber(props.comment.id),
+    text: comment.value
+  });
   /* let signedBytes = new Uint8Array();
   try {
     if (!useAccountStore().authz.hasAuthz) {

@@ -58,9 +58,13 @@ export const useTransactionStore = defineStore({
         // sign the messages
         const msgs = (this.queue as TransactionQueueMsg[]).map((el: TransactionQueueMsg) => el.message);
         const details = (this.queue as TransactionQueueMsg[]).map((el: TransactionQueueMsg) => el.details);
-        const signed = await client.sign(address, msgs, defaultFee, "Signed from Scripta.network");
-        const txBytes = TxRaw.encode(signed).finish();
-        console.log(Buffer.from(txBytes).toString("base64"));
+
+        let txBytes: Uint8Array = null;
+        if (!useAccountStore().authz.hasAuthz) {
+          const signed = await client.sign(address, msgs, defaultFee, "Signed from Scripta.network");
+          txBytes = TxRaw.encode(signed).finish();
+          console.log(Buffer.from(txBytes).toString("base64"));
+        }
 
         // broadcast the messages
         this.status = QueueStatus.PENDING;
@@ -72,7 +76,7 @@ export const useTransactionStore = defineStore({
           broadcastResult = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}/broadcast`, "POST", {
             "Content-Type": "application/json"
           }, JSON.stringify({
-            signedMsgs: Buffer.from(txBytes).toString("base64"),
+            signedMsgs: txBytes ? Buffer.from(txBytes).toString("base64") : null,
             detailedMsgs: details
           }))).json();
         } catch (e) {

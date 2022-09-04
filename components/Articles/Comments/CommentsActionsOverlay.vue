@@ -34,7 +34,9 @@ function deleteComment () {
       signer: useAccountStore().address
     }
   };
-  $useTransaction().push(msgDeletePost);
+  $useTransaction().push(msgDeletePost, {
+    id: Long.fromNumber(props.comment.id)
+  });
 }
 
 function editComment () {
@@ -52,7 +54,10 @@ function editComment () {
       editor: useAccountStore().address
     }
   };
-  $useTransaction().push(msgEditPost);
+  $useTransaction().push(msgEditPost, {
+    id: Long.fromNumber(props.comment.id),
+    text: "edited force"
+  });
 }
 
 function report () {

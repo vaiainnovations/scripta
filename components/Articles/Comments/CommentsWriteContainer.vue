@@ -24,11 +24,12 @@ if (process.client) {
 
 function postComment () {
   const { $useTransaction } = useNuxtApp();
+  const extId = uuidv4();
   const msgCreateComment: MsgCreatePostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgCreatePost",
     value: {
       subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
-      externalId: uuidv4(),
+      externalId: extId,
       attachments: [],
       author: useAccountStore().address,
       text: comment.value,
@@ -44,7 +45,22 @@ function postComment () {
     }
   };
   isCommentPublishing.value = true;
-  $useTransaction().push(msgCreateComment);
+  $useTransaction().push(msgCreateComment, {
+    subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
+    externalId: extId,
+    attachments: [],
+    author: useAccountStore().address,
+    text: comment.value,
+    sectionId: props.sectionId,
+    tags: [],
+    conversationId: Long.fromNumber(0),
+    referencedPosts: [{
+      type: 1 /* PostReferenceType.POST_REFERENCE_TYPE_REPLY */,
+      postId: props.referencedPost,
+      position: Long.fromNumber(0)
+    }],
+    replySettings: 1
+  });
   /* let signedBytes = new Uint8Array();
   try {
     if (!useAccountStore().authz.hasAuthz) {
