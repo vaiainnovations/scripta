@@ -54,6 +54,8 @@ export const useAccountStore = defineStore({
         const res = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}user/${this.address}`, "GET", {})).json() as any;
         if (res) {
           this.sectionId = Number(res.sectionId);
+          this.settings.hasAcceptedCookies = res.privacyTracking;
+          this.settings.hasAcceptedAdvertisement = res.privacyNotifications;
           this.authz.grantExpiration = (res?.grantExpiration) ? new Date(res?.grantExpiration) : null;
           this.authz.grantGrantee = res?.grantGrantee || "";
           try {

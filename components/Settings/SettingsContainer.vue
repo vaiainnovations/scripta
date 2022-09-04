@@ -154,8 +154,8 @@ async function savePrivacySettings () {
     "Content-Type": "application/json"
   }, JSON.stringify({
     sectionId: useAccountStore().sectionId,
-    privacyNotifications: hasAcceptedPrivacy,
-    privacyTracking: hasAcceptedCookies
+    privacyNotifications: hasAcceptedPrivacy.value,
+    privacyTracking: hasAcceptedCookies.value
   }));
   console.log(success);
   arePrivacySettingsChanged.value = false;
