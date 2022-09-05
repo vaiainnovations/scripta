@@ -2,7 +2,6 @@
 import { defineNuxtConfig } from "nuxt";
 import eslintPlugin from "vite-plugin-eslint";
 import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
-import { NodeModulesPolyfillPlugin } from "@esbuild-plugins/node-modules-polyfill";
 import inject from "@rollup/plugin-inject";
 const path = require("path");
 const mode = process.env.NODE_ENV === "production" ? "production" : "development";
@@ -28,7 +27,8 @@ export default defineNuxtConfig({
     process: "process/browser",
     stream: "stream-browserify",
     buffer: "buffer",
-    Buffer: "buffer"
+    Buffer: "buffer",
+    util: "rollup-plugin-node-polyfills/polyfills/util"
   },
   nitro,
   tailwindcss: {
@@ -41,8 +41,8 @@ export default defineNuxtConfig({
   vite: {
     build: {
       rollupOptions: {
-        /* plugins: [
-          inject({ Buffer: ["buffer", "Buffer"], util: ["util"] })] */
+        plugins: [
+          inject({ Buffer: ["buffer", "Buffer"], util: ["util"] })]
       }
     },
     plugins: [eslintPlugin()],
@@ -62,11 +62,10 @@ export default defineNuxtConfig({
         },
         // Enable esbuild polyfill plugins
         plugins: [
-          /* NodeGlobalsPolyfillPlugin({
+          NodeGlobalsPolyfillPlugin({
             process: true,
             buffer: true
-          }), */
-          NodeModulesPolyfillPlugin()
+          })
         ]
       }
     },

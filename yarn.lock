@@ -593,7 +593,15 @@
   resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-2.0.2.tgz#1bfafe4b7ed0f3e4105837e056e0a89b108ebe36"
   integrity sha512-IkpVW/ehM1hWKln4fCA3NzJU8KwD+kIOvPZA4cqxoJHtE21CCzjyp+Kxbu0i5I4tBNOlXPL9mjwnWlL0VEG4Fg==
 
-"@desmoslabs/desmjs-types@^4.3.5", "@desmoslabs/desmjs-types@workspace:packages/types":
+"@desmoslabs/desmjs-types@^4.3.7":
+  version "4.3.7"
+  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-types/-/desmjs-types-4.3.7.tgz#3733999003402c48c83092409aaf8cb07a1d2343"
+  integrity sha512-C51CMNKQ3n82AksQdrDxmBG7qs4iXqFv2mkfRc7UUjtG822+iHfTqxNevtmkl1bpPUR76dUYwzr0Gj+vOeFW2g==
+  dependencies:
+    long "^4.0.0"
+    protobufjs "^7.1.0"
+
+"@desmoslabs/desmjs-types@workspace:packages/types":
   version "4.3.6"
   resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-types/-/desmjs-types-4.3.6.tgz#a933b5852d9583ab11e563655c988f548a3beee7"
   integrity sha512-WnJRKK+QCDVLZxWuQCxmmmJAdJ5zRfMVh/YSPcrGDm2Czo1OjMISENt2T/dQo6npB5T8BO0zHXzbw1uNTT2drQ==
@@ -601,10 +609,10 @@
     long "^4.0.0"
     protobufjs "^7.1.0"
 
-"@desmoslabs/desmjs-walletconnect@^4.3.5":
-  version "4.3.6"
-  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-walletconnect/-/desmjs-walletconnect-4.3.6.tgz#be19555909fb99c25b9d1dd354d7b0658e9f0224"
-  integrity sha512-L0BWjoTQJZsdY6HySJJIXY/TYC8QZBxIPQNyyFt9xNl/0KJhFZ3AnoROZHItPAH7jgDYeY7PqJJ8gzNgyeScUw==
+"@desmoslabs/desmjs-walletconnect@^4.3.7":
+  version "4.3.7"
+  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-walletconnect/-/desmjs-walletconnect-4.3.7.tgz#a69a9f42e98ce7bc399bc0686c86a34d162a4820"
+  integrity sha512-KNURv0vroheKWHsXTd8hipEAbFv6IY2qeJqunWZU8898KBGnb6uSXaJxA0yBlDQXKI2pZtd1sam3q/HscBk14A==
   dependencies:
     "@cosmjs/amino" "^0.28.1"
     "@cosmjs/crypto" "^0.28.1"
@@ -623,7 +631,26 @@
     cosmos-wallet "^1.1.0"
     long "^4.0.0"
 
-"@desmoslabs/desmjs@^4.3.5", "@desmoslabs/desmjs@workspace:packages/core":
+"@desmoslabs/desmjs@^4.3.7":
+  version "4.3.7"
+  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs/-/desmjs-4.3.7.tgz#c11da261b460e0f6007b2999d124e5bbd0388337"
+  integrity sha512-yTZay88KpGMbkr7rFrmhwwq1FoW2RdfQqYEZ5kvJmCN2e5l08Qi76qF7kakP4jcloVcRwu3AD4rmg0zohcpndg==
+  dependencies:
+    "@cosmjs/amino" "^0.28.11"
+    "@cosmjs/cosmwasm-stargate" "^0.28.11"
+    "@cosmjs/crypto" "^0.28.11"
+    "@cosmjs/encoding" "^0.28.11"
+    "@cosmjs/math" "^0.28.11"
+    "@cosmjs/proto-signing" "^0.28.11"
+    "@cosmjs/stargate" "^0.28.11"
+    "@cosmjs/tendermint-rpc" "^0.28.11"
+    "@cosmjs/utils" "^0.28.11"
+    "@desmoslabs/desmjs-types" "workspace:packages/types"
+    cosmjs-types "^0.4.1"
+    cosmos-wallet "^1.1.0"
+    long "^4.0.0"
+
+"@desmoslabs/desmjs@workspace:packages/core":
   version "4.3.6"
   resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs/-/desmjs-4.3.6.tgz#b18306dc0b7a67136f5dec05a1f66c144344a45a"
   integrity sha512-UsiHo0r3200+JEMelBhnk41BnHdhWIhbRewe3Xd64A/pYnMe9/b98AKLPRWYXW67S2jtm0o+7N0gB7tDqkeGnw==
@@ -727,14 +754,6 @@
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@esbuild-plugins/node-globals-polyfill/-/node-globals-polyfill-0.1.1.tgz#a313ab3efbb2c17c8ce376aa216c627c9b40f9d7"
   integrity sha512-MR0oAA+mlnJWrt1RQVQ+4VYuRJW/P2YmRTv1AsplObyvuBMnPHiizUF95HHYiSsMGLhyGtWufaq2XQg6+iurBg==
-
-"@esbuild-plugins/node-modules-polyfill@^0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@esbuild-plugins/node-modules-polyfill/-/node-modules-polyfill-0.1.4.tgz#eb2f55da11967b2986c913f1a7957d1c868849c0"
-  integrity sha512-uZbcXi0zbmKC/050p3gJnne5Qdzw8vkXIv+c2BW0Lsc1ji1SkrxbKPUy5Efr0blbTu1SL8w4eyfpnSdPg3G0Qg==
-  dependencies:
-    escape-string-regexp "^4.0.0"
-    rollup-plugin-node-polyfills "^0.2.1"
 
 "@esbuild/linux-loong64@0.14.54":
   version "0.14.54"
@@ -6997,7 +7016,7 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
-magic-string@^0.25.3, magic-string@^0.25.7:
+magic-string@^0.25.7:
   version "0.25.9"
   resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.25.9.tgz#de7f9faf91ef8a1c91d02c2e5314c8277dbcdd1c"
   integrity sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==
@@ -9281,22 +9300,6 @@ robust-predicates@^3.0.0:
   resolved "https://registry.yarnpkg.com/robust-predicates/-/robust-predicates-3.0.1.tgz#ecde075044f7f30118682bd9fb3f123109577f9a"
   integrity sha512-ndEIpszUHiG4HtDsQLeIuMvRsDnn8c8rYStabochtUeCvfuvNptb5TUbVD68LRAILPX7p9nqQGh4xJgn3EHS/g==
 
-rollup-plugin-inject@^3.0.0:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-inject/-/rollup-plugin-inject-3.0.2.tgz#e4233855bfba6c0c12a312fd6649dff9a13ee9f4"
-  integrity sha512-ptg9PQwzs3orn4jkgXJ74bfs5vYz1NCZlSQMBUA0wKcGp5i5pA1AO3fOUEte8enhGUC+iapTCzEWw2jEFFUO/w==
-  dependencies:
-    estree-walker "^0.6.1"
-    magic-string "^0.25.3"
-    rollup-pluginutils "^2.8.1"
-
-rollup-plugin-node-polyfills@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-node-polyfills/-/rollup-plugin-node-polyfills-0.2.1.tgz#53092a2744837164d5b8a28812ba5f3ff61109fd"
-  integrity sha512-4kCrKPTJ6sK4/gLL/U5QzVT8cxJcofO0OU74tnB19F40cmuAKSzH5/siithxlofFEjwvw1YAhPmbvGNA6jEroA==
-  dependencies:
-    rollup-plugin-inject "^3.0.0"
-
 rollup-plugin-terser@^7.0.2:
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/rollup-plugin-terser/-/rollup-plugin-terser-7.0.2.tgz#e8fbba4869981b2dc35ae7e8a502d5c6c04d324d"
@@ -9317,7 +9320,7 @@ rollup-plugin-visualizer@^5.8.0:
     source-map "^0.7.3"
     yargs "^17.5.1"
 
-rollup-pluginutils@^2.8.1, rollup-pluginutils@^2.8.2:
+rollup-pluginutils@^2.8.2:
   version "2.8.2"
   resolved "https://registry.yarnpkg.com/rollup-pluginutils/-/rollup-pluginutils-2.8.2.tgz#72f2af0748b592364dbd3389e600e5a9444a351e"
   integrity sha512-EEp9NhnUkwY8aif6bxgovPHMoMoNr2FulJziTndpt5H9RdwC47GSGuII9XxpSdzVGM0GWrNPHV6ie1LTNJPaLQ==

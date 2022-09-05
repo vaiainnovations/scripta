@@ -1,5 +1,5 @@
 
-/* import { Buffer } from "buffer"; */
+import { Buffer } from "buffer";
 import { MsgGrantEncodeObject } from "@desmoslabs/desmjs";
 import { Timestamp } from "cosmjs-types/google/protobuf/timestamp";
 import { GenericAuthorization } from "cosmjs-types/cosmos/authz/v1beta1/authz";
