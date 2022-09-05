@@ -22,18 +22,15 @@
     <div class="grid grid-cols-2 place-content-between gap-y-3 lg:grid-cols-4 lg:gap-x-2">
       <div class="flex flex-row gap-x-1.5 lg:col-span-1">
         <button class="group p-0.5 rounded-full" @click="addReaction(':up:')">
-          <img src="/icons/bold/arrow-up.svg" class="h-5 w-5 hidden group-hover:block">
-          <img src="/icons/linear/arrow-up.svg" class="h-5 w-5 group-hover:hidden">
+          <img src="/icons/bold/arrow-up.svg" class="h-5 w-5" :class="(userReaction?.code === ':up:')?'block group-hover:hidden fill-primary-light stroke-primary text-success':'hidden group-hover:block'">
+          <img src="/icons/linear/arrow-up.svg" class="h-5 w-5" :class="(userReaction?.code === ':up:')?'hidden group-hover:block':'block group-hover:hidden'">
         </button>
-        <p class="text-sm font-medium my-auto">
-          {{ }}
-        </p>
         <button class="group p-0.5 rounded-full ml-2" @click="addReaction(':down:')">
-          <img src="/icons/bold/arrow-down.svg" class="h-5 w-5 hidden group-hover:block">
-          <img src="/icons/linear/arrow-down.svg" class="h-5 w-5 group-hover:hidden">
+          <img src="/icons/bold/arrow-down.svg" class="h-5 w-5" :class="(userReaction?.code === ':down:')?'block group-hover:hidden':'hidden group-hover:block'">
+          <img src="/icons/linear/arrow-down.svg" class="h-5 w-5" :class="(userReaction?.code === ':down:')?'hidden group-hover:hidden':'block group-hover:hidden'">
         </button>
       </div>
-      <div class="flex flex-row gap-x-1.5 place-self-end lg:flex-row-reverse lg:place-self-start">
+      <!--  <div class="flex flex-row gap-x-1.5 place-self-end lg:flex-row-reverse lg:place-self-start">
         <p class="text-sm font-medium">
           Tip
         </p>
@@ -44,7 +41,7 @@
         <img src="/svg/social/facebook.svg" class="w-5 object-contain">
         <img src="/svg/social/linkedin.svg" class="w-5 object-contain">
         <img src="/svg/social/link.svg" class="w-5 object-contain">
-      </div>
+      </div> -->
     </div>
     <div class="h-11 w-full bg-primary" />
     <div class="flex flex-row">
@@ -71,6 +68,7 @@
 <script setup lang="ts">
 import { Ref } from "vue";
 import { usePostStore } from "~~/core/store/PostStore";
+import { ArticleReaction } from "~~/core/store/ReactionStore";
 import { NavBarReadingType } from "~~/layouts/readingCustom.vue";
 import { PostExtended } from "~~/types/PostExtended";
 import { ArticleSearch } from "~~/types/SearchResults";
@@ -103,6 +101,9 @@ navBarReading.value.title = props.article.text;
 // eslint-disable-next-line vue/no-setup-props-destructure
 navBarReading.value.date = new Date(props.article.creationDate);
 
+const userReaction = ref(null);
+getReactions(props.article.id).then((reaction: ArticleReaction) => { userReaction.value = reaction; });
+
 function handleNavbarChange (event: Event) {
   const { scrollTop } = (event.target as HTMLDivElement);
   if (scrollTop > 120) {
@@ -112,8 +113,19 @@ function handleNavbarChange (event: Event) {
   }
 }
 
+async function getReactions (postId: any): Promise<ArticleReaction> {
+  const { $useReaction } = useNuxtApp();
+  return await $useReaction().getUserPostReaction(postId);
+}
+
 function addReaction (code: string) {
   const { $useReaction } = useNuxtApp();
+  const reaction = $useReaction().getReaction(code);
+  if (code === userReaction.value?.code) {
+    userReaction.value = null;
+  } else {
+    userReaction.value = reaction;
+  }
   $useReaction().addReaction(code, props.article.id);
 }
 </script>
