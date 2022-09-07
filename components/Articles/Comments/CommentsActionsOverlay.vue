@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import {
-  MsgDeletePostEncodeObject,
-  MsgEditPostEncodeObject
+  MsgDeletePostEncodeObject
 } from "@desmoslabs/desmjs";
 import Long from "long";
 import { PostComment } from "~~/types/PostComment";
@@ -17,9 +16,13 @@ const props = defineProps<Props>();
 const emit = defineEmits(["editComment"]);
 
 const isOverlayOpen = ref(false);
+const isReportOverlayOpen = ref(false);
 
 function toggleOverlay () {
   isOverlayOpen.value = !isOverlayOpen.value;
+}
+function toggleReportOverlay () {
+  isReportOverlayOpen.value = !isReportOverlayOpen.value;
 }
 
 function deleteComment () {
@@ -40,29 +43,14 @@ function deleteComment () {
 }
 
 function editComment () {
-  const { $useTransaction } = useNuxtApp();
   emit("editComment");
-  toggleOverlay();
-
-  const msgEditPost: MsgEditPostEncodeObject = {
-    typeUrl: "/desmos.posts.v2.MsgEditPost",
-    value: {
-      subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
-      postId: Long.fromNumber(props.comment.id),
-      tags: [],
-      text: "edited force",
-      editor: useAccountStore().address
-    }
-  };
-  $useTransaction().push(msgEditPost, {
-    id: Long.fromNumber(props.comment.id),
-    text: "edited force"
-  });
 }
 
 function addReport () {
-  const { $useReport } = useNuxtApp();
-  $useReport().addPostReport(Long.fromNumber(props.comment.id), [1]);
+  /* const { $useReport } = useNuxtApp();
+  $useReport().addPostReport(Long.fromNumber(props.comment.id), [1]); */
+  toggleOverlay();
+  toggleReportOverlay();
 }
 </script>
 
@@ -127,6 +115,7 @@ function addReport () {
           </div>
         </div>
       </div>
+      <ArticlesCommentsActionsReportOverlay v-if="isReportOverlayOpen" :comment="props.comment" @close-report-overlay="toggleReportOverlay" />
     </div>
   </div>
 </template>

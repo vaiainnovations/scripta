@@ -1,33 +1,50 @@
 import { defineStore } from "pinia";
-/* import { useBackendStore } from "./BackendStore"; */
 
 import Long from "long";
-/* import { PostTarget } from "@desmoslabs/desmjs-types/desmos/reports/v1/models"; */
-import { MsgCreateReport } from "@desmoslabs/desmjs-types/desmos/reports/v1/msgs";
 import { PostTarget } from "@desmoslabs/desmjs-types/desmos/reports/v1/models";
-import { EncodeObject } from "@desmoslabs/desmjs";
+import { MsgCreateReportEncodeObject } from "@desmoslabs/desmjs";
 import { useDesmosStore } from "./DesmosStore";
 import { useAccountStore } from "./AccountStore";
 import { registerModuleHMR } from ".";
 
-export interface MsgCreateReportEncodeObject extends EncodeObject {
-  readonly typeUrl: "/desmos.reports.v1.MsgCreateReport";
-  readonly value: MsgCreateReport;
-}
-
 export const useReportStore = defineStore({
   id: "ReportStore",
   state: () => ({
+    registeredReasons: [{
+      id: 1,
+      title: "General",
+      descriptions: "",
+      hasText: true
+    }, {
+      id: 2,
+      title: "Violent or extreme content",
+      descriptions: "",
+      hasText: false
+    }, {
+      id: 3,
+      title: "Bullying or harassment",
+      descriptions: "",
+      hasText: false
+    }, {
+      id: 4,
+      title: "Terrorism",
+      descriptions: "",
+      hasText: false
+    }, {
+      id: 5,
+      title: "Offensive",
+      descriptions: "",
+      hasText: false
+    }]
   }),
   actions: {
-    addPostReport (postId: Long, reasonsIds: number[]) {
-      console.log(postId, reasonsIds);
+    addPostReport (postId: Long, reasonsIds: number[], message: string) {
       const { $useTransaction } = useNuxtApp();
       const msgAddReport: MsgCreateReportEncodeObject = {
         typeUrl: "/desmos.reports.v1.MsgCreateReport",
         value: {
           subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
-          message: "",
+          message,
           reasonsIds,
           reporter: useAccountStore().address,
           target: {
@@ -38,8 +55,7 @@ export const useReportStore = defineStore({
           }
         }
       };
-      $useTransaction().push(msgAddReport, {
-      });
+      $useTransaction().push(msgAddReport, {});
     }
   }
 });
