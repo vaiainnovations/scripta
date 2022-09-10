@@ -30,13 +30,10 @@
           <img src="/icons/linear/arrow-down.svg" class="h-5 w-5" :class="(userReaction?.code === ':down:')?'hidden group-hover:hidden':'block group-hover:hidden'">
         </button>
       </div>
-      <!--  <div class="flex flex-row gap-x-1.5 place-self-end lg:flex-row-reverse lg:place-self-start">
-        <p class="text-sm font-medium">
-          Tip
-        </p>
-        <img src="/icons/bold/send-2.svg" class="h-5 w-5">
+      <div class="flex flex-row gap-x-1.5 place-self-end lg:flex-row-reverse lg:place-self-start">
+        <ArticlesTipsButton :author="props.article.author" />
       </div>
-      <div class="flex flex-row gap-x-3 lg:col-end-5 lg:place-self-end">
+      <!-- <div class="flex flex-row gap-x-3 lg:col-end-5 lg:place-self-end">
         <img src="/svg/social/twitter.svg" class="w-5 object-contain">
         <img src="/svg/social/facebook.svg" class="w-5 object-contain">
         <img src="/svg/social/linkedin.svg" class="w-5 object-contain">
