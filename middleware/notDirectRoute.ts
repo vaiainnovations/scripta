@@ -1,8 +1,8 @@
 /**
  * Prevent direct access to the route
  */
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware((to, from) => {
   if (from.fullPath === to.fullPath) {
-    return await navigateTo("/");
+    return navigateTo("/");
   }
 });
