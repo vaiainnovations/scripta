@@ -51,7 +51,8 @@ export default defineNuxtConfig({
       alias: {
         "@": path.resolve(__dirname, "/src"),
         process: "process/browser",
-        stream: "stream-browserify"
+        stream: "stream-browserify",
+        util: "util"
       }
     },
     optimizeDeps: {
@@ -76,7 +77,8 @@ export default defineNuxtConfig({
     }
   },
   alias: {
-    "@vue/devtools-api": "@vue/devtools-api"
+    "@vue/devtools-api": "@vue/devtools-api",
+    util: "util"
   },
   modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
   experimental: {
