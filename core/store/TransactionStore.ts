@@ -117,7 +117,7 @@ export const useTransactionStore = defineStore({
         const signed = await client.sign(address, messages, fees, memo, accountInfo === null
           ? {
             accountNumber: 0,
-            chainId: "morpheus-apollo-2",
+            chainId: useDesmosStore().chainInfo.chainId,
             sequence: 0
           }
           : null);

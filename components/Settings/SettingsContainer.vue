@@ -110,7 +110,7 @@
                 Scripta v1.0.0 ()
               </h6>
               <h6 class="text-xs text-gray-dark">
-                {{ useDesmosStore().chainId }}
+                {{ useDesmosStore().chainInfo.chainId }}
               </h6>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import { KeplrSigner } from "~~/core/store/wallet/KeplrSigner";
+import { KeplrSigner } from "@desmoslabs/desmjs-keplr";
 import { useKeplrStore } from "~~/core/store/wallet/KeplrStore";
 import { useWalletConnectStore } from "~~/core/store/wallet/WalletConnectStore";
 import { useTransactionStore } from "~~/core/store/TransactionStore";

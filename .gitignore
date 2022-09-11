@@ -1,4 +1,11 @@
-node_modules
+node_modules/*
+!node_modules/@desmoslabs/
+
+node_modules/@desmoslabs/*
+!node_modules/@desmoslabs/desmjs-keplr
+
+node_modules/@desmoslabs/desmjs-keplr/node_modules/
+
 *.log*
 .nuxt
 .nitro

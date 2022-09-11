@@ -101,7 +101,7 @@ export const useWalletStore = defineStore({
 
       // create the Desmos Client
       try {
-        this.wallet.client = DesmosClient.connectWithSigner(useDesmosStore().rpc, this.wallet.signer as Signer);
+        this.wallet.client = await DesmosClient.connectWithSigner(useDesmosStore().rpc, this.wallet.signer as Signer);
       } catch (e) {
         console.log(e);
         // abort if the client fails to connect
@@ -109,10 +109,12 @@ export const useWalletStore = defineStore({
       }
       // get Wallet account
       const account = await this.wallet.signer.getCurrentAccount();
+      console.log(this.wallet.client);
 
       // if the account does not exists, abort
       if (!account) {
-        // return;
+        console.error("Keplr account does not exists");
+        return;
       }
 
       // Start the final step of the login process

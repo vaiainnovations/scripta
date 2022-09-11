@@ -593,10 +593,27 @@
   resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-2.0.2.tgz#1bfafe4b7ed0f3e4105837e056e0a89b108ebe36"
   integrity sha512-IkpVW/ehM1hWKln4fCA3NzJU8KwD+kIOvPZA4cqxoJHtE21CCzjyp+Kxbu0i5I4tBNOlXPL9mjwnWlL0VEG4Fg==
 
-"@desmoslabs/desmjs-types@^4.3.7":
-  version "4.3.7"
-  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-types/-/desmjs-types-4.3.7.tgz#3733999003402c48c83092409aaf8cb07a1d2343"
-  integrity sha512-C51CMNKQ3n82AksQdrDxmBG7qs4iXqFv2mkfRc7UUjtG822+iHfTqxNevtmkl1bpPUR76dUYwzr0Gj+vOeFW2g==
+"@desmoslabs/desmjs-keplr@file:/Users/lucagraziotti/Projects/Web/desmjs/packages/keplr/":
+  version "4.3.8"
+  dependencies:
+    "@cosmjs/amino" "^0.28.1"
+    "@cosmjs/crypto" "^0.28.1"
+    "@cosmjs/encoding" "^0.28.1"
+    "@cosmjs/math" "^0.28.1"
+    "@cosmjs/proto-signing" "^0.28.1"
+    "@cosmjs/stargate" "^0.28.1"
+    "@cosmjs/tendermint-rpc" "^0.28.1"
+    "@cosmjs/utils" "^0.28.1"
+    "@desmoslabs/desmjs" "workspace:packages/core"
+    "@keplr-wallet/types" "0.10.19"
+    cosmjs-types "^0.4.1"
+    cosmos-wallet "^1.1.0"
+    long "^4.0.0"
+
+"@desmoslabs/desmjs-types@^4.3.8":
+  version "4.3.8"
+  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-types/-/desmjs-types-4.3.8.tgz#9094f3a97aa778d1a9cbcf38ad760b8a903c42b6"
+  integrity sha512-wXjBL1LlryGpgh/RENEHsKtWlYaynQ0tDdovWWH/Ryl8GNTAT+4ZIatYxD4ye9U/5mIwOiXIot5vV8SVkLb+6g==
   dependencies:
     long "^4.0.0"
     protobufjs "^7.1.0"
@@ -609,10 +626,10 @@
     long "^4.0.0"
     protobufjs "^7.1.0"
 
-"@desmoslabs/desmjs-walletconnect@^4.3.7":
-  version "4.3.7"
-  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-walletconnect/-/desmjs-walletconnect-4.3.7.tgz#a69a9f42e98ce7bc399bc0686c86a34d162a4820"
-  integrity sha512-KNURv0vroheKWHsXTd8hipEAbFv6IY2qeJqunWZU8898KBGnb6uSXaJxA0yBlDQXKI2pZtd1sam3q/HscBk14A==
+"@desmoslabs/desmjs-walletconnect@^4.3.8":
+  version "4.3.8"
+  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-walletconnect/-/desmjs-walletconnect-4.3.8.tgz#1898413a2bded84d2d4bc93f71edb064b9af7d3e"
+  integrity sha512-n8np5UG3oDfutq9ozOiND6uXYNqdFyQYew7xamsCwBpe+6wMpYd39TavhdUJKC6H2YiLSZb1KCiZcdmkXwebxQ==
   dependencies:
     "@cosmjs/amino" "^0.28.1"
     "@cosmjs/crypto" "^0.28.1"
@@ -631,10 +648,10 @@
     cosmos-wallet "^1.1.0"
     long "^4.0.0"
 
-"@desmoslabs/desmjs@^4.3.7":
-  version "4.3.7"
-  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs/-/desmjs-4.3.7.tgz#c11da261b460e0f6007b2999d124e5bbd0388337"
-  integrity sha512-yTZay88KpGMbkr7rFrmhwwq1FoW2RdfQqYEZ5kvJmCN2e5l08Qi76qF7kakP4jcloVcRwu3AD4rmg0zohcpndg==
+"@desmoslabs/desmjs@^4.3.8":
+  version "4.3.8"
+  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs/-/desmjs-4.3.8.tgz#50dc95431fc02eb014651ccc59d57592c2491a12"
+  integrity sha512-0iiTuGYJhSngVYMRfcrMIgEKBJFgrmQ6v+ToOVIAYdrz1gAnJa5Nt4u5btrHQER6Bhoqs5Jxv+/YSv5Wz14Ckg==
   dependencies:
     "@cosmjs/amino" "^0.28.11"
     "@cosmjs/cosmwasm-stargate" "^0.28.11"

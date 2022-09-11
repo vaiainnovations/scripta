@@ -13,9 +13,10 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.14.1",
-    "@desmoslabs/desmjs": "^4.3.7",
-    "@desmoslabs/desmjs-types": "^4.3.7",
-    "@desmoslabs/desmjs-walletconnect": "^4.3.7",
+    "@desmoslabs/desmjs": "^4.3.8",
+    "@desmoslabs/desmjs-keplr": "file:/Users/lucagraziotti/Projects/Web/desmjs/packages/keplr/",
+    "@desmoslabs/desmjs-types": "^4.3.8",
+    "@desmoslabs/desmjs-walletconnect": "^4.3.8",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@ezone-devops/milkdown-plugin-directive-fallback": "^6.2.2",
     "@keplr-wallet/types": "0.10.19",
