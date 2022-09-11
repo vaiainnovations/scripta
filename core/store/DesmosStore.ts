@@ -1,6 +1,7 @@
 /* import { DesmosMainnet } from "@desmoslabs/desmjs"; */
 import { DesmosTestnet } from "@desmoslabs/desmjs-keplr";
 import { defineStore } from "pinia";
+import { useBackendStore } from "./BackendStore";
 import { registerModuleHMR } from ".";
 
 const chainInfo = DesmosTestnet;
@@ -23,8 +24,14 @@ export const useDesmosStore = defineStore({
         denom: chainInfo.currencies[0].coinMinimalDenom
       }],
       gas: "300000"
+    },
+    desmosPrice: 0
+  }),
+  actions: {
+    async updateDesmosPrice () {
+      this.desmosPrice = (await (await useBackendStore().fetch("https://api.coingecko.com/api/v3/simple/price?ids=desmos&vs_currencies=usd", "GET", {})).json() as any).desmos.usd;
     }
-  })
+  }
 });
 
 // Register the store to enable HMR
