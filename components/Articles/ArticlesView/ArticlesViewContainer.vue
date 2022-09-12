@@ -2,25 +2,20 @@
   <!-- Container for reading an article, with a sidebar on larger screens (>= 1536 px)  -->
   <div v-if="post" class="2xl:flex 2xl:flex-row h-full">
     <ArticlesViewSidebar :suggested-articles="suggestedArticlesResults" />
-    <ArticlesViewCard :suggested-articles="suggestedArticlesResults" :article="post" />
+    <ArticlesViewCard :suggested-articles="suggestedArticlesResults" :article="props.post" />
   </div>
 </template>
 
 <script setup lang="ts">
 // content of the article
-import { usePostStore } from "~~/core/store/PostStore";
+import { PostExtended } from "~~/types/PostExtended";
 import { AuthorSearch, ArticleSearch } from "~~/types/SearchResults";
 
 interface Props {
-  externalId: string;
+  post: PostExtended;
 }
 
 const props = defineProps<Props>();
-
-const post = await usePostStore().getPost(props.externalId);
-if (!post) {
-  // useRouter().push("/404");
-}
 
 // Suggested
 const suggestedArticlesResults = ref(getSuggestedArticles());
