@@ -35,7 +35,7 @@ function postComment () {
       text: comment.value,
       sectionId: props.sectionId,
       tags: [],
-      conversationId: Long.fromNumber(0),
+      conversationId: props.referencedPost,
       referencedPosts: [{
         type: 1 /* PostReferenceType.POST_REFERENCE_TYPE_REPLY */,
         postId: props.referencedPost,
