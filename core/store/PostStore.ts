@@ -21,14 +21,15 @@ export const usePostStore = defineStore({
     async getPost (externalID: string): Promise<PostExtended> {
       if (!process.client) {
         const cachedPost = await PostKv.get(externalID);
-        console.log(cachedPost);
-        return cachedPost as any;
+        if (cachedPost) {
+          return cachedPost as any;
+        }
+        console.log("No KV cached post found for", externalID);
       }
       try {
         return await (await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${externalID}`, "GET", {}, "")).json() as PostExtended;
       } catch (e) {
         console.log(e);
-        // TODO: handle the error properly
       }
     },
     async deletePost (extId: string, id: string, signedPost: Uint8Array): Promise<void> {

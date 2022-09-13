@@ -10,7 +10,6 @@
 import { usePostStore } from "~~/core/store/PostStore";
 const route = useRoute();
 const externalId = route.params.id as string;
-
 const post = await usePostStore().getPost(externalId);
 if (!post) {
   throw createError({

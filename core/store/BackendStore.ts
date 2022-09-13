@@ -17,16 +17,18 @@ export const useBackendStore = defineStore({
     fetch (url: string, method: "GET" | "POST" | "PUT" | "DELETE", headersRaw: HeadersInit, body = ""): Promise<Response> {
       const headers = new Headers(headersRaw);
 
-      // if logged, set authorization and accountNumber (as an) headers
-      const { $useAuth } = useNuxtApp();
-      const authStorage = $useAuth().getAuthStorageAccount(useAccountStore().address);
+      // if is a client and is logged, set authorization and accountNumber (as an) headers
+      if (process.client) {
+        const { $useAuth } = useNuxtApp();
+        const authStorage = $useAuth().getAuthStorageAccount(useAccountStore().address);
 
-      if (authStorage) {
-        if (authStorage.authorization) {
-          headers.append("Authorization", authStorage.authorization);
-        }
-        if (authStorage.accountNumber) {
-          headers.append("an", authStorage.accountNumber.toString());
+        if (authStorage) {
+          if (authStorage.authorization) {
+            headers.append("Authorization", authStorage.authorization);
+          }
+          if (authStorage.accountNumber) {
+            headers.append("an", authStorage.accountNumber.toString());
+          }
         }
       }
 
