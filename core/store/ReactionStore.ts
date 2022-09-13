@@ -56,7 +56,7 @@ export const useReactionStore = defineStore({
         q: query,
         type: "desmos"
       }))).json() as any;
-      if (reactionRaw && reactionRaw.data) {
+      if (reactionRaw && reactionRaw.data && reactionRaw.data.userReaction[0]) {
         return this.getReaction("", reactionRaw.data.userReaction[0].reaction.registered_reaction_id);
       }
       return null;
