@@ -593,8 +593,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-2.0.2.tgz#1bfafe4b7ed0f3e4105837e056e0a89b108ebe36"
   integrity sha512-IkpVW/ehM1hWKln4fCA3NzJU8KwD+kIOvPZA4cqxoJHtE21CCzjyp+Kxbu0i5I4tBNOlXPL9mjwnWlL0VEG4Fg==
 
-"@desmoslabs/desmjs-keplr@file:/Users/lucagraziotti/Projects/Web/desmjs/packages/keplr/":
-  version "4.3.8"
+"@desmoslabs/desmjs-keplr@^4.3.10":
+  version "4.3.10"
+  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-keplr/-/desmjs-keplr-4.3.10.tgz#cb2461f856f84c28ac701fe064f0c1615816b11e"
+  integrity sha512-P6vNbM6nWfru92g74KXvOng1vHgZQwmC/hJpovJ9XWynUqRQXXjGw7dCGkyEL75YDoWdjyGF/U5aapaYhyPbpQ==
   dependencies:
     "@cosmjs/amino" "^0.28.1"
     "@cosmjs/crypto" "^0.28.1"
@@ -610,10 +612,10 @@
     cosmos-wallet "^1.1.0"
     long "^4.0.0"
 
-"@desmoslabs/desmjs-types@^4.3.8":
-  version "4.3.8"
-  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-types/-/desmjs-types-4.3.8.tgz#9094f3a97aa778d1a9cbcf38ad760b8a903c42b6"
-  integrity sha512-wXjBL1LlryGpgh/RENEHsKtWlYaynQ0tDdovWWH/Ryl8GNTAT+4ZIatYxD4ye9U/5mIwOiXIot5vV8SVkLb+6g==
+"@desmoslabs/desmjs-types@^4.3.10":
+  version "4.3.10"
+  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-types/-/desmjs-types-4.3.10.tgz#5b19941101536ce7512dd25db103ba8b98f1f5eb"
+  integrity sha512-Bk/e8EtuBdudj570qyfOqriq+rQoCbJa6bAgnObq2NNXoXjseNY4hr3GFv2QuqA4OOjDTmFIhgI4wG4Y3yPDyQ==
   dependencies:
     long "^4.0.0"
     protobufjs "^7.1.0"
@@ -648,10 +650,10 @@
     cosmos-wallet "^1.1.0"
     long "^4.0.0"
 
-"@desmoslabs/desmjs@^4.3.8":
-  version "4.3.8"
-  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs/-/desmjs-4.3.8.tgz#50dc95431fc02eb014651ccc59d57592c2491a12"
-  integrity sha512-0iiTuGYJhSngVYMRfcrMIgEKBJFgrmQ6v+ToOVIAYdrz1gAnJa5Nt4u5btrHQER6Bhoqs5Jxv+/YSv5Wz14Ckg==
+"@desmoslabs/desmjs@^4.3.10":
+  version "4.3.10"
+  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs/-/desmjs-4.3.10.tgz#145a55e549573c2562b1e605ccde3ad9f23ebd86"
+  integrity sha512-jChOOOdvi+vKnZiBRAVs8ayCF8QEY71VeqjBedf7VhTdQnlyQYw+aeiLIxQznw8bWWNrJzqrD3zBNMiSGw+bMQ==
   dependencies:
     "@cosmjs/amino" "^0.28.11"
     "@cosmjs/cosmwasm-stargate" "^0.28.11"
