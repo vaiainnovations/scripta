@@ -165,8 +165,6 @@ async function publish () {
   /* $useTransaction().push(msgCreatePost);
   const signedBytes = await $useTransaction().execute(); */
 
-  const msgs = [] as EncodeObject[];
-
   // if is a new user and has no profile, create one with the randomly generated username
   if (useAccountStore().isNewProfile) {
     const msgSaveProfile: MsgSaveProfileEncodeObject = {
@@ -180,7 +178,14 @@ async function publish () {
         creator: useAccountStore().address
       }
     };
-    msgs.push(msgSaveProfile);
+    $useTransaction().push(msgSaveProfile, {
+      dtag: useAccountStore().profile.dtag,
+      nickname: useAccountStore().profile.nickname,
+      bio: useAccountStore().profile.bio,
+      profile: useAccountStore().profile.pictures.profile,
+      cover: useAccountStore().profile.pictures.cover,
+      scriptaOp: "MsgSaveProfile"
+    });
   }
   // push the post message
   $useTransaction().push(msgCreatePost, {
@@ -192,7 +197,7 @@ async function publish () {
     subtitle: useDraftStore().subtitle,
     content: useDraftStore().content,
     entities: JSON.stringify(msgCreatePost.value.entities),
-    scriptaOp: "MsgSaveProfile"
+    scriptaOp: "MsgCreatePost"
   });
 
   /* let signedBytes = new Uint8Array();

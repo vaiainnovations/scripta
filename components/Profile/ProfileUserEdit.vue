@@ -165,7 +165,14 @@ function saveProfile () {
     }
   };
   $useTransaction().push(msgSaveProfile,
-    { scriptaOp: "MsgSaveProfile" });
+    {
+      dtag: newUsername.value,
+      nickname: newNickname.value,
+      bio: newBio.value,
+      profile: newProfilePicture.value,
+      cover: oldProfile.pictures.cover,
+      scriptaOp: "MsgSaveProfile"
+    });
   emit("userEdited");
 }
 
