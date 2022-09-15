@@ -53,13 +53,14 @@ function postComment () {
     text: comment.value,
     sectionId: props.sectionId,
     tags: [],
-    conversationId: Long.fromNumber(0),
+    conversationId: props.referencedPost,
     referencedPosts: [{
       type: 1 /* PostReferenceType.POST_REFERENCE_TYPE_REPLY */,
       postId: props.referencedPost,
       position: Long.fromNumber(0)
     }],
-    replySettings: 1
+    replySettings: 1,
+    scriptaOp: "MsgCreatePostComment"
   });
   /* let signedBytes = new Uint8Array();
   try {

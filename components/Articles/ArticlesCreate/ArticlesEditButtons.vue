@@ -108,7 +108,8 @@ async function editArticle () {
     tags: draftStore.tags.map(tag => tag.content.value),
     subtitle: draftStore.subtitle,
     content: draftStore.content,
-    entities: JSON.stringify(msgEditPost.value.entities)
+    entities: JSON.stringify(msgEditPost.value.entities),
+    scriptaOp: "MsgEditPost"
   });
   /* const signedBytes = await $useTransaction().execute(); */
 
@@ -188,7 +189,8 @@ async function deleteArticle () {
     }
   };
   $useTransaction().push(msgDeletePost, {
-    id: useDraftStore().id
+    id: useDraftStore().id,
+    scriptaOp: "MsgDeletePost"
   });
 
   /* let signedBytes = new Uint8Array();

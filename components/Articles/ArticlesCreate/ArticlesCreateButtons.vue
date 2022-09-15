@@ -191,7 +191,8 @@ async function publish () {
     tags: msgCreatePost.value.tags,
     subtitle: useDraftStore().subtitle,
     content: useDraftStore().content,
-    entities: JSON.stringify(msgCreatePost.value.entities)
+    entities: JSON.stringify(msgCreatePost.value.entities),
+    scriptaOp: "MsgSaveProfile"
   });
 
   /* let signedBytes = new Uint8Array();

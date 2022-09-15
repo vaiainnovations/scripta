@@ -55,7 +55,7 @@ export const useReportStore = defineStore({
           }
         }
       };
-      $useTransaction().push(msgAddReport, {});
+      $useTransaction().push(msgAddReport, { scriptaOp: "MsgCreateReport" });
     }
   }
 });

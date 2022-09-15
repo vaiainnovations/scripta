@@ -36,7 +36,8 @@ function edit () {
   isCommentPublishing.value = true;
   $useTransaction().push(msgEditComment, {
     id: Long.fromNumber(props.comment.id),
-    text: comment.value
+    text: comment.value,
+    scriptaOp: "MsgEditPostComment"
   });
   /* let signedBytes = new Uint8Array();
   try {

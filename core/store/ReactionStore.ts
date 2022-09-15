@@ -42,7 +42,9 @@ export const useReactionStore = defineStore({
         }
       };
       const index = $useTransaction().queue.findIndex(m => m.message.typeUrl === msgAddReaction.typeUrl && m.message.value?.postId === msgAddReaction.value.postId);
-      (index < 0) ? $useTransaction().push(msgAddReaction) : $useTransaction().queue[index].message = msgAddReaction;
+      (index < 0)
+        ? $useTransaction().push(msgAddReaction, { scriptaOp: "MsgAddReaction" })
+        : $useTransaction().queue[index].message = msgAddReaction;
     },
     async getUserPostReaction (postId: number):Promise<ArticleReaction> {
       const query = `query getPostReactions {

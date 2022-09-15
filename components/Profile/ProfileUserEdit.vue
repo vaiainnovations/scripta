@@ -164,7 +164,8 @@ function saveProfile () {
       cover: oldProfile.pictures.cover
     }
   };
-  $useTransaction().push(msgSaveProfile);
+  $useTransaction().push(msgSaveProfile,
+    { scriptaOp: "MsgSaveProfile" });
   emit("userEdited");
 }
 

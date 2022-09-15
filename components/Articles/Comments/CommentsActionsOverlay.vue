@@ -38,7 +38,8 @@ function deleteComment () {
     }
   };
   $useTransaction().push(msgDeletePost, {
-    id: Long.fromNumber(props.comment.id)
+    id: Long.fromNumber(props.comment.id),
+    scriptaOp: "MsgDeletePostComment"
   });
 }
 
