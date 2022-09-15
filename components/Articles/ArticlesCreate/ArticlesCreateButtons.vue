@@ -48,7 +48,6 @@
 import { MsgCreatePostEncodeObject, MsgSaveProfileEncodeObject } from "@desmoslabs/desmjs";
 import Long from "long";
 import { v4 as uuidv4 } from "uuid";
-import { EncodeObject } from "@cosmjs/proto-signing";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
 /* import { useBackendStore } from "~~/core/store/BackendStore";
