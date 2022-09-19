@@ -18,45 +18,49 @@
       :address="props.article.author"
       :date="new Date(props.article.creationDate)"
     />
-    <a v-if="ipfsSourceUrl" :href="ipfsSourceUrl" target="_blank" class="text-xs">IPFS source</a>
-    <div class="grid grid-cols-2 place-content-between gap-y-3 lg:grid-cols-4 lg:gap-x-2">
-      <div class="flex flex-row gap-x-1.5 lg:col-span-1">
-        <button class="group p-0.5 rounded-full" @click="addReaction(':up:')">
-          <img src="/icons/bold/arrow-up.svg" class="h-5 w-5" :class="(userReaction?.code === ':up:')?'block group-hover:hidden fill-primary-light stroke-primary text-success':'hidden group-hover:block'">
-          <img src="/icons/linear/arrow-up.svg" class="h-5 w-5" :class="(userReaction?.code === ':up:')?'hidden group-hover:block':'block group-hover:hidden'">
-        </button>
-        <button class="group p-0.5 rounded-full ml-2" @click="addReaction(':down:')">
-          <img src="/icons/bold/arrow-down.svg" class="h-5 w-5" :class="(userReaction?.code === ':down:')?'block group-hover:hidden':'hidden group-hover:block'">
-          <img src="/icons/linear/arrow-down.svg" class="h-5 w-5" :class="(userReaction?.code === ':down:')?'hidden group-hover:hidden':'block group-hover:hidden'">
-        </button>
+    <div class="bg-background">
+      <div>
+        <a v-if="ipfsSourceUrl" :href="ipfsSourceUrl" target="_blank" class="text-xs">IPFS source</a>
       </div>
-      <div class="flex flex-row gap-x-1.5 place-self-end lg:flex-row-reverse lg:place-self-start">
-        <ArticlesTipsButton :author="props.article.author" />
-      </div>
+      <div class="grid grid-cols-2 place-content-between gap-y-3 lg:grid-cols-4 lg:gap-x-2">
+        <div class="flex flex-row gap-x-1.5 lg:col-span-1">
+          <button class="group p-0.5 rounded-full" @click="addReaction(':up:')">
+            <img src="/icons/bold/arrow-up.svg" class="h-5 w-5" :class="(userReaction?.code === ':up:')?'block group-hover:hidden fill-primary-light stroke-primary text-success':'hidden group-hover:block'">
+            <img src="/icons/linear/arrow-up.svg" class="h-5 w-5" :class="(userReaction?.code === ':up:')?'hidden group-hover:block':'block group-hover:hidden'">
+          </button>
+          <button class="group p-0.5 rounded-full ml-2" @click="addReaction(':down:')">
+            <img src="/icons/bold/arrow-down.svg" class="h-5 w-5" :class="(userReaction?.code === ':down:')?'block group-hover:hidden':'hidden group-hover:block'">
+            <img src="/icons/linear/arrow-down.svg" class="h-5 w-5" :class="(userReaction?.code === ':down:')?'hidden group-hover:hidden':'block group-hover:hidden'">
+          </button>
+        </div>
+        <div class="flex flex-row gap-x-1.5 place-self-end lg:flex-row-reverse lg:place-self-start">
+          <ArticlesTipsButton :author="props.article.author" />
+        </div>
       <!-- <div class="flex flex-row gap-x-3 lg:col-end-5 lg:place-self-end">
         <img src="/svg/social/twitter.svg" class="w-5 object-contain">
         <img src="/svg/social/facebook.svg" class="w-5 object-contain">
         <img src="/svg/social/linkedin.svg" class="w-5 object-contain">
         <img src="/svg/social/link.svg" class="w-5 object-contain">
       </div> -->
-    </div>
-    <div class="h-11 w-full bg-primary" />
-    <div class="flex flex-row">
-      <div v-if="showComments" class="w-full lg:w-7/12 2xl:w-full">
-        <h3 class="text-2xl">
-          Comments
-        </h3>
-        <ArticlesCommentsContainer :referenced-post="article.id" :section-id="article.sectionId" />
       </div>
-      <div class="hidden items-center gap-y-2 lg:flex lg:w-5/12 lg:flex-col 2xl:hidden">
-        <p class="text-sm font-bold text-primary-text-light">
-          Continue your reading
-        </p>
-        <span v-for="post in (usePostStore().trendings)" :key="post.externalId">
-          <NuxtLink :to="`/@${post.author}/${post.externalId}`">
-            <SearchArticleCard :post="post" />
-          </NuxtLink>
-        </span>
+      <!-- <div class="h-11 w-full bg-primary" /> -->
+      <div class="flex flex-row pt-4">
+        <div v-if="showComments" class="w-full lg:w-7/12 2xl:w-full">
+          <h3 class="text-2xl">
+            Comments
+          </h3>
+          <ArticlesCommentsContainer :referenced-post="article.id" :section-id="article.sectionId" />
+        </div>
+        <div class="hidden items-center gap-y-2 lg:flex lg:w-5/12 lg:flex-col 2xl:hidden">
+          <p class="text-sm font-bold text-primary-text-light">
+            Continue your reading
+          </p>
+          <span v-for="post in (usePostStore().trendings)" :key="post.externalId">
+            <NuxtLink :to="`/@${post.author}/${post.externalId}`">
+              <SearchArticleCard :post="post" />
+            </NuxtLink>
+          </span>
+        </div>
       </div>
     </div>
   </div>

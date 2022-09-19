@@ -6,7 +6,7 @@
       class="w-fit mr-4"
     >
       <div class="hidden md:block">
-        <div class="gradient-text flex h-10 flex-row items-center justify-center rounded-lg border border-primary-text-light sm:px-5 md:px-10 mr-3">
+        <div class="gradient-text flex h-10 flex-row items-center justify-center rounded-full border border-primary-text-light sm:px-5 md:px-10 mr-3">
           <button
             type="button"
             class="bg-gradient-to-r from-primary-light to-green-light bg-clip-text text-2xl font-semibold"
