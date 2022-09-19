@@ -1,5 +1,4 @@
-/* import { DesmosMainnet } from "@desmoslabs/desmjs"; */
-import { DesmosTestnet } from "@desmoslabs/desmjs-keplr";
+import { DesmosTestnet } from "@desmoslabs/desmjs-keplr/build/chains";
 import { defineStore } from "pinia";
 import { useBackendStore } from "./BackendStore";
 import { registerModuleHMR } from ".";
