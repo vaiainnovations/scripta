@@ -248,7 +248,7 @@
                 class="text-teal-700 transition hover:text-teal-700/75"
               >
                 <span class="sr-only">Twitter</span>
-                <img src="//twitter/logo.svg" alt="twitter" class="w-6 h-6">
+                <img src="/brands/twitter/logo.svg" alt="twitter" class="w-6 h-6">
               </a>
             </li>
 

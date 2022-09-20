@@ -1,30 +1,15 @@
 <template>
   <section
     id="features"
-    class="lg:h-[70vh] bg-purple xl:bg-background-alt"
+    class="lg:h-[70vh] bg-purple 2xl:bg-background-alt"
   >
-    <div class="container mx-auto px-4 h-full flex justify-center xl:bg-[url('/img/landing/bg_features_abstract.svg')] xl:bg-no-repeat xl:bg-cover">
+    <div class="container mx-auto px-4 h-full flex justify-center">
       <div class="grid grid-cols-12 lg:gap-20">
-        <div class="w-full px-4 xl:px-16 mx-auto my-auto col-span-12 lg:col-span-6 font-serif text-background order-2">
-          <!-- Discover -->
-          <!-- <span v-if="activeDescription === 'tip'">
-            <div class="flex">
-              <div class="flex-1 p-6">
-                <img
-                  src="https://cdn.discordapp.com/attachments/956124846750834719/1019630768181489824/profile_home.png"
-                  class="mx-auto max-h-[55vh] z-30"
-                >
-              </div>
-              <div class="flex-grow p-6">
-                spiegazione
-              </div>
-            </div>
-          </span> -->
-
+        <div class="w-full px-4 xl:p-16 mx-auto my-auto col-span-12 lg:col-span-6 font-serif text-background order-2 2xl:bg-[url('/img/landing/bg_features_abstract.svg')] 2xl:bg-no-repeat 2xl:bg-cover">
           <!-- Web3 -->
           <div v-if="activeDescription === 'web3'">
             <h2 class="text-4xl lg:text-6xl text-center">
-              Web3, for real.
+              Web3, for real
             </h2>
             <div class="flex py-6 xl:p-12 text-3xl">
               <div class="">
@@ -38,7 +23,7 @@
 
           <!-- Discover -->
           <span v-if="activeDescription === 'discover'">
-            <h2 class="text-4xl lg:text-6xl text-center">Explore.</h2>
+            <h2 class="text-4xl lg:text-6xl text-center">Explore</h2>
             <div class="flex py-6 xl:p-12 text-3xl">
               <div class="text-center">
                 <div>Search and discover new Articles, writers and artist.<br> <span class="font-bold">Without being tracked. </span></div>
@@ -48,7 +33,7 @@
 
           <!-- Create -->
           <span v-if="activeDescription === 'create'">
-            <h2 class="text-4xl lg:text-6xl text-center">Without limits.</h2>
+            <h2 class="text-4xl lg:text-6xl text-center">Without limits</h2>
             <div class="flex py-6 xl:p-12 text-3xl z-20">
               <div class=" text-center">
                 <div>Express your thought and your creativity without the fear of being censored or tracked,
@@ -60,7 +45,7 @@
 
           <!-- Discuss -->
           <span v-if="activeDescription === 'discuss'">
-            <h2 class="text-4xl lg:text-6xl text-center">Discuss freely.</h2>
+            <h2 class="text-4xl lg:text-6xl text-center">Discuss freely</h2>
             <div class="flex py-6 xl:p-12 text-3xl">
               <div class=" text-center">
                 <div>Talk about your favorite Articles, and share your opinion with the community.
@@ -71,7 +56,7 @@
 
           <!-- Tip -->
           <span v-if="activeDescription === 'tip'">
-            <h2 class="text-4xl lg:text-6xl text-center">Show support.</h2>
+            <h2 class="text-4xl lg:text-6xl text-center">Show support</h2>
             <div class="flex py-6 xl:p-12 text-3xl">
               <div class=" text-center">
                 <div>Encourage and support the work of you favorite writers and creators,
@@ -98,9 +83,9 @@
             </div>
           </span> -->
         </div>
-        <div class="md:flex-1 my-auto col-span-12 lg:col-span-6 md:px-10 order-1 xl:order-last mx-auto">
+        <div class="md:flex-1 my-auto col-span-12 lg:col-span-6 md:px-10 order-1 2xl:order-last mx-auto">
           <div class="text-primary-dark py-10">
-            <h3 class="font-extralight text-6xl text-center lg:text-7xl py-8 lg:-skew-x-12 lg:-skew-y-3 underline decoration-orange">
+            <h3 class="font-extralight text-6xl text-center lg:text-7xl py-8 lg:-skew-x-12 lg:-skew-y-3 underline decoration-orange text-background 2xl:text-primary-text">
               It's time to evolve.
             </h3>
             <p class="pt-6 text-primary-text text-xl">
