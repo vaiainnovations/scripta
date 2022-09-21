@@ -29,6 +29,9 @@ module.exports = {
       milkdown: ["MilkdownIcons", "serif"]
     },
     extend: {
+      screens: {
+        "3xl": "1600px"
+      },
       spacing: {
         "8xl": "96rem",
         "9xl": "128rem"

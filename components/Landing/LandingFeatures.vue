@@ -5,7 +5,7 @@
   >
     <div class="container mx-auto px-4 h-full flex justify-center">
       <div class="grid grid-cols-12 lg:gap-20">
-        <div class="w-full px-4 xl:p-16 mx-auto my-auto col-span-12 lg:col-span-6 font-serif text-background order-2 2xl:bg-[url('/img/landing/bg_features_abstract.svg')] 2xl:bg-no-repeat 2xl:bg-cover">
+        <div class="w-full px-4 xl:p-16 mx-auto mt-32 3xl:my-auto col-span-12 lg:col-span-6 font-serif text-background order-2 2xl:bg-[url('/img/landing/bg_features_abstract.svg')] 2xl:bg-no-repeat 2xl:bg-cover">
           <!-- Web3 -->
           <div v-if="activeDescription === 'web3'">
             <h2 class="text-4xl lg:text-6xl text-center">
@@ -21,12 +21,12 @@
             </div>
           </div>
 
-          <!-- Discover -->
+          <!-- Explore -->
           <span v-if="activeDescription === 'discover'">
             <h2 class="text-4xl lg:text-6xl text-center">Explore</h2>
             <div class="flex py-6 xl:p-12 text-3xl">
               <div class="text-center">
-                <div>Search and discover new Articles, writers and artist.<br> <span class="font-bold">Without being tracked. </span></div>
+                <div>Search and discover new Articles, writers and artists.<br><br> <span class="font-bold">Without being tracked. </span></div><br><br>
               </div>
             </div>
           </span>
@@ -48,7 +48,7 @@
             <h2 class="text-4xl lg:text-6xl text-center">Discuss freely</h2>
             <div class="flex py-6 xl:p-12 text-3xl">
               <div class=" text-center">
-                <div>Talk about your favorite Articles, and share your opinion with the community.
+                <div>Talk about your favorite Articles, and share your opinion with the community.<br>
                 </div>
               </div>
             </div>

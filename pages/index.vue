@@ -30,7 +30,7 @@ useHead({
       <!-- Features -->
       <section class="xl:h-[50vh]">
         <div class="grid grid-cols-2 h-full">
-          <div class="col-span-2 lg:col-span-1 bg-[#f86a32e6] noise flex">
+          <div class="col-span-2 lg:col-span-1 bg-[#f86a32e6] noise flex py-10">
             <section id="decentralized" class="flex-grow my-auto p-8">
               <h1 class="text-4xl md:text-6xl font-serif">
                 Decentralized, no <div class="bg-primary-text hover:line-through hover:bg-[transparent] cursor-pointer hover:rotate-0 -rotate-1 flex w-full xl:w-1/2 mt-2">censorship</div>
@@ -40,7 +40,7 @@ useHead({
               </p>
             </section>
           </div>
-          <div class="col-span-2 lg:col-span-1 bg-primary-light noise flex group cursor-pointer group">
+          <div class="col-span-2 lg:col-span-1 bg-primary-light noise flex group cursor-pointer group py-10">
             <section id="privacy" class="flex-grow my-auto p-8 blur-sm group-hover:hidden">
               <h1 class="text-4xl md:text-6xl font-serif">
                 ***** *** **** ****
