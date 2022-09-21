@@ -33,7 +33,11 @@ export const useTransactionStore = defineStore({
   }),
   actions: {
     push (message: EncodeObject, details: Record<string, unknown> = {}): void {
-      // check if the draft is not empty
+      if (!useAccountStore().address) {
+        useRouter().push("/auth");
+        return;
+      }
+
       // TODO: add controls to prevent pushing same message twice, and same operations (ex. 2 profile updates, works but is not ideal)
       if (this.status === QueueStatus.FAILED) {
         this.$reset();
@@ -92,7 +96,7 @@ export const useTransactionStore = defineStore({
           // this.resetQueueWithTimer(8);
         } else {
           this.status = QueueStatus.SUCCESS;
-          this.resetQueueWithTimer(5);
+          this.resetQueueWithTimer(5, true);
         }
         this.hash = broadcastResult.transactionHash;
         return txBytes;
@@ -100,7 +104,7 @@ export const useTransactionStore = defineStore({
       } catch (e) {
         this.status = QueueStatus.FAILED;
         this.errorText = `${e}`;
-        this.resetQueueWithTimer(10);
+        this.resetQueueWithTimer(10, true);
       }
     },
     async directSign (messages: EncodeObject[], memo = "Signed from Scripta.network", fees = useDesmosStore().defaultFee, signMode: 0 | 1 = 0): Promise<Uint8Array> {
@@ -134,9 +138,15 @@ export const useTransactionStore = defineStore({
         this.resetQueueWithTimer(10);
       }
     },
-    resetQueueWithTimer (s: number): void {
+    resetQueueWithTimer (s: number, reset = false): void {
       setTimeout(() => {
-        this.$reset();
+        if (reset) {
+          this.$reset();
+        } else {
+          this.status = QueueStatus.WAITING;
+          this.hash = "";
+          this.hash = "";
+        }
         console.log("TransactionModule reset");
       }, s * 1000);
     }
