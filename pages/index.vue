@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useConfigStore } from "~~/core/store/ConfigStore";
 useHead({
   title: "Scripta"
 });
@@ -10,78 +11,72 @@ useHead({
       name="landing"
       class="w-screen"
     >
-      <!-- hero -->
-      <LandingHero />
-      <!-- Explore arrow -->
-      <section class="h-[10vh] border-t-[3px] border-b-[3px] bg-explore-now bg-background-alt">
-        <div class="flex h-full ">
-          <div class="flex-1 h-full align-middle flex flex-col justify-center text-center font-extralight font-serif text-4xl text-primary-text ">
-            Explore Now
-            <img
-              src="/icons/bold/arrow-down.svg"
-              class="mt-2 h-7 w-7 animate-bounce mx-auto"
-            >
-          </div>
-        </div>
-      </section>
-      <!--  -->
-      <LandingFeatures />
-
-      <!-- Features -->
-      <section class="xl:h-[50vh]">
-        <div class="grid grid-cols-2 h-full">
-          <div class="col-span-2 lg:col-span-1 bg-[#f86a32e6] noise flex py-10">
-            <section id="decentralized" class="flex-grow my-auto p-8">
-              <h1 class="text-4xl md:text-6xl font-serif">
-                Decentralized, no <div class="bg-primary-text hover:line-through hover:bg-[transparent] cursor-pointer hover:rotate-0 -rotate-1 flex w-full xl:w-1/2 mt-2">censorship</div>
-              </h1>
-              <p class="pt-10 text-2xl md:text-3xl font-light">
-                Discover a better way to write your stories, without the fear of being censored.
-              </p>
-            </section>
-          </div>
-          <div class="col-span-2 lg:col-span-1 bg-primary-light noise flex group cursor-pointer group py-10">
-            <section id="privacy" class="flex-grow my-auto p-8 blur-sm group-hover:hidden">
-              <h1 class="text-4xl md:text-6xl font-serif">
-                ***** *** **** ****
-              </h1>
-              <p class="pt-10 text-2xl md:text-3xl font-light">
-                **** ******* ***** ******** **** ** ***** ***** **** **** ******** ***
-                ******* ** **** ******* ** *** *** ** *** ******* ** *** ** *** ******
-                **** ******** **
-              </p>
-            </section>
-            <div class="flex-grow my-auto p-8 group-hover:block hidden duration-1000">
-              <h1 class="text-4xl md:text-6xl font-serif">
-                Built for your privacy
-              </h1>
-              <p class="pt-10 text-2xl md:text-3xl font-light">
-                Privacy is a fundamental human right.<br>
-                We don't track, we don't sell your data, we don't even ask for your personal informations.
-              </p>
+      <span v-if="!useConfigStore().isBetaVersion">
+        <!-- hero -->
+        <LandingHero />
+        <!-- Explore arrow -->
+        <section class="h-[10vh] border-t-[3px] border-b-[3px] bg-explore-now bg-background-alt">
+          <div class="flex h-full ">
+            <div class="flex-1 h-full align-middle flex flex-col justify-center text-center font-extralight font-serif text-4xl text-primary-text ">
+              Explore Now
+              <img
+                src="/icons/bold/arrow-down.svg"
+                class="mt-2 h-7 w-7 animate-bounce mx-auto"
+              >
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+        <!--  -->
+        <LandingFeatures />
 
-      <!-- Get Started -->
-      <LandingGettingStarted />
-
-      <!--  -->
-      <section />
-      <!-- <section class="min-h-[10vh] bg-background-alt border-t-2 border-b-2">
-        <div class="flex h-full ">
-          <div
-            v-for="word in ['Feel Free', 'Feel Inspired', 'Feel Safe', 'Feel Genuine']"
-            :key="word"
-            class="flex-1 h-full bg-background align-middle flex flex-col justify-center text-center font-black text-xl italic text-gray-dark "
-          >
-            {{ word }}
+        <!-- Features -->
+        <section class="xl:h-[50vh]">
+          <div class="grid grid-cols-2 h-full">
+            <div class="col-span-2 lg:col-span-1 bg-[#f86a32e6] noise flex py-10">
+              <section
+                id="decentralized"
+                class="flex-grow my-auto p-8"
+              >
+                <h1 class="text-4xl md:text-6xl font-serif">
+                  Decentralized, no <div class="bg-primary-text hover:line-through hover:bg-[transparent] cursor-pointer hover:rotate-0 -rotate-1 flex w-full xl:w-1/2 mt-2">censorship</div>
+                </h1>
+                <p class="pt-10 text-2xl md:text-3xl font-light">
+                  Discover a better way to write your stories, without the fear of being censored.
+                </p>
+              </section>
+            </div>
+            <div class="col-span-2 lg:col-span-1 bg-primary-light noise flex group cursor-pointer group py-10">
+              <section
+                id="privacy"
+                class="flex-grow my-auto p-8 blur-sm group-hover:hidden"
+              >
+                <h1 class="text-4xl md:text-6xl font-serif">
+                  ***** *** **** ****
+                </h1>
+                <p class="pt-10 text-2xl md:text-3xl font-light">
+                  **** ******* ***** ******** **** ** ***** ***** **** **** ******** ***
+                  ******* ** **** ******* ** *** *** ** *** ******* ** *** ** *** ******
+                  **** ******** **
+                </p>
+              </section>
+              <div class="flex-grow my-auto p-8 group-hover:block hidden duration-1000">
+                <h1 class="text-4xl md:text-6xl font-serif">
+                  Built for your privacy
+                </h1>
+                <p class="pt-10 text-2xl md:text-3xl font-light">
+                  Privacy is a fundamental human right.<br>
+                  We don't track, we don't sell your data, we don't even ask for your personal informations.
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      </section> -->
+        </section>
 
-      <section id="explore">
+        <!-- Get Started -->
+        <LandingGettingStarted />
+      </span>
+
+      <section id="explore" :class="{'pt-20': useConfigStore().isBetaVersion}">
         <div class="min-h-[10vh] py-8 bg-purple noise flex border-t-4 border-b-4">
           <h1 class="text-6xl font-serif text-center flex-grow my-auto text-background">
             Discover

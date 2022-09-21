@@ -1,9 +1,12 @@
+<script lang="ts" setup>
+import { useConfigStore } from "~~/core/store/ConfigStore";
+</script>
 <template>
   <section>
     <footer class="bg-white">
       <div class="px-4 py-16 mx-auto max-w-screen-xl sm:px-6 lg:px-8">
         <!-- CTA -->
-        <div class="flex flex-col items-center p-6 bg-indigo-600 rounded-lg shadow-4xl gap-4 sm:flex-row sm:justify-between order-1">
+        <div  v-if="!useConfigStore().isBetaVersion" class="flex flex-col items-center p-6 bg-indigo-600 rounded-lg shadow-4xl gap-4 sm:flex-row sm:justify-between order-1">
           <strong class="text-xl text-white sm:text-xl">
             Try the Beta Now!
           </strong>
@@ -201,6 +204,9 @@
               class="h-10"
               src="/logo/logo_lettering.svg"
             >
+            <span v-if="useConfigStore().isBetaVersion" class="font-serif">
+              beta
+            </span>
           </div>
 
           <p class="max-w-md mx-auto mt-4 leading-relaxed text-center text-gray-500 sm:ml-0 lg:mr-0 sm:text-left lg:mt-0 font-serif tracking-wide italic">

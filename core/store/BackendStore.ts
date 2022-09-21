@@ -1,14 +1,12 @@
 import { defineStore } from "pinia";
 import { useAccountStore } from "./AccountStore";
+import { useConfigStore } from "./ConfigStore";
 import { registerModuleHMR } from ".";
 
 export const useBackendStore = defineStore({
   id: "BackendStore",
   state: () => ({
-    apiUrl: "http://127.0.0.1:4000/v1/"
-    // apiUrl: "http://domusarezzo.ddns.net:4000/v1/"
-    // apiUrl: "http://192.168.1.2:4000/v1/"
-    // apiUrl: "https://rest-dev.scripta.network/v1/"
+    apiUrl: useConfigStore().restApiUrl
   }),
   getters: {
 

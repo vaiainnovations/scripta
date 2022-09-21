@@ -22,6 +22,12 @@ if (mode === "production") {
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
+  runtimeConfig: {
+    public: {
+      isBetaVersion: process.env.NUXT_IS_BETA_VERSION === "true",
+      restApiUrl: process.env.NUXT_REST_API_URL
+    }
+  },
   alias: {
     "@": path.resolve(__dirname, "/src"),
     process: "process/browser",
