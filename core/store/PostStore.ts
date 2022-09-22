@@ -22,19 +22,22 @@ export const usePostStore = defineStore({
      * @returns Post
      */
     async getPost (externalID: string): Promise<PostExtended> {
+      let cachedPost: PostExtended | false = false;
       if (!process.client) {
-        const cachedPost = await PostKv.get(externalID);
+        cachedPost = await PostKv.get(externalID);
         if (cachedPost) {
           useLogStore().logOp({ scriptaOp: "getPost", externalID });
-          return cachedPost as any;
+        } else {
+          console.log("No KV cached post found for", externalID);
         }
-        console.log("No KV cached post found for", externalID);
+      } else {
+        try {
+          cachedPost = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${externalID}`, "GET", {}, "")).json() as PostExtended;
+        } catch (e) {
+          console.log(e);
+        }
       }
-      try {
-        return await (await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${externalID}`, "GET", {}, "")).json() as PostExtended;
-      } catch (e) {
-        console.log(e);
-      }
+      return cachedPost || null;
     },
     async deletePost (extId: string, id: string, signedPost: Uint8Array): Promise<void> {
       try {

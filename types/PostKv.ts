@@ -1,4 +1,4 @@
-import { PostPreview } from "./PostPreview";
+import { PostExtended } from "./PostExtended";
 declare const KV_POSTS: KVNamespace;
 
 export class PostKv {
@@ -7,9 +7,9 @@ export class PostKv {
    * @param id Post id
    * @returns Cached post if the cache hits, false otherwise.
    */
-  public static async get (id: string): Promise<PostPreview | false> {
+  public static async get (id: string): Promise<PostExtended | false> {
     try {
-      return JSON.parse(await KV_POSTS.get(id)) as PostPreview;
+      return JSON.parse(await KV_POSTS.get(id)) as PostExtended;
     } catch (e) {
       console.warn(`[cache] Post ${id} miss`);
       return false;

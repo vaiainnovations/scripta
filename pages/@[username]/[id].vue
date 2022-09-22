@@ -10,7 +10,12 @@
 import { usePostStore } from "~~/core/store/PostStore";
 const route = useRoute();
 const externalId = route.params.id as string;
-const post = await usePostStore().getPost(externalId);
+const post = useState("post", () => null);
+if (!process.client) {
+  post.value = await usePostStore().getPost(externalId);
+} else if (!post.value) {
+  post.value = await usePostStore().getPost(externalId);
+}
 if (!post) {
   throw createError({
     statusCode: 404,
