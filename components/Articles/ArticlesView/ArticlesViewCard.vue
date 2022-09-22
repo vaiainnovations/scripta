@@ -34,12 +34,26 @@
         <div class="flex flex-row gap-x-1.5 place-self-end lg:flex-row-reverse lg:place-self-start">
           <ArticlesTipsButton :author="props.article.author" />
         </div>
-      <!-- <div class="flex flex-row gap-x-3 lg:col-end-5 lg:place-self-end">
-        <img src="/svg/social/twitter.svg" class="w-5 object-contain">
-        <img src="/svg/social/facebook.svg" class="w-5 object-contain">
-        <img src="/svg/social/linkedin.svg" class="w-5 object-contain">
-        <img src="/svg/social/link.svg" class="w-5 object-contain">
-      </div> -->
+        <div class="flex flex-row gap-x-3 lg:col-end-12 lg:place-self-end my-auto">
+          <a
+            target="_blank"
+            :href="`https://twitter.com/intent/tweet?text=${props.article.text}&url=${sharingUrl}`"
+          >
+            <img src="/brands/twitter/logo.svg" class="w-5 h-5 object-contain">
+          </a>
+          <a
+            target="_blank"
+            :href="`https://www.facebook.com/sharer/sharer.php?u=#${sharingUrl}`"
+          >
+            <img src="/brands/facebook/logo.svg" class="w-5 h-5 object-contain">
+          </a>
+          <a
+            target="_blank"
+            :href="`https://www.linkedin.com/sharing/share-offsite/?url=${sharingUrlEncoded}`"
+          >
+            <img src="/brands/linkedin/logo.svg" class="w-5 h-5 object-contain">
+          </a>
+        </div>
       </div>
       <!-- <div class="h-11 w-full bg-primary" /> -->
       <div class="flex flex-row pt-4">
@@ -66,6 +80,7 @@
 
 <script setup lang="ts">
 import { Ref } from "vue";
+import { useConfigStore } from "~~/core/store/ConfigStore";
 import { usePostStore } from "~~/core/store/PostStore";
 import { ArticleReaction } from "~~/core/store/ReactionStore";
 import { NavBarReadingType } from "~~/layouts/readingCustom.vue";
@@ -87,6 +102,8 @@ if (process.client) {
 useHead({
   title: `${props.article.text} - ${props.article.author} on Scripta`
 });
+const sharingUrl = (useConfigStore().isBetaVersion) ? `https://beta.scripta.network${useRoute().fullPath}` : `https://scripta.network${useRoute().fullPath}`;
+const sharingUrlEncoded = encodeURIComponent(sharingUrl);
 
 const tags = (props.article.tags && props.article.tags.length > 0) ? new Array(props.article.tags.length).fill(0).map((_, i) => ({ i, content: { value: props.article.tags[i] } as TagType })) : [];
 let ipfsSourceUrl = "";
