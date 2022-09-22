@@ -1,0 +1,57 @@
+<template>
+  <div class="group-hover:text-green" :class="{'text-green': props.reacted}">
+    <span v-if="props.reacted">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        version="1.1"
+        id="svg4"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:svg="http://www.w3.org/2000/svg"
+      >
+        <defs id="defs8" />
+        <path
+          d="M12 18.0001H9.33004C6.02005 18.0001 4.66005 15.6501 6.32005 12.7801L7.66004 10.4701L9.00005 8.16007C10.66 5.29007 13.37 5.29007 15.03 8.16007L16.37 10.4701L17.71 12.7801C19.37 15.6501 18.01 18.0001 14.7 18.0001H12Z"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-miterlimit="10"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          id="path2"
+        />
+        <path
+          fill="currentColor"
+          d="M 7.440443,17.642623 16.440455,17.837569 18.84479,14.458503 12.996407,5.8158921 8.7400837,7.8303352 5.620946,15.563197 Z"
+          id="path168"
+        />
+      </svg>
+    </span>
+    <span v-else>
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 18.0001H9.33004C6.02005 18.0001 4.66005 15.6501 6.32005 12.7801L7.66004 10.4701L9.00005 8.16007C10.66 5.29007 13.37 5.29007 15.03 8.16007L16.37 10.4701L17.71 12.7801C19.37 15.6501 18.01 18.0001 14.7 18.0001H12Z"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-miterlimit="10"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+
+    </span>
+  </div>
+</template>
+
+<script lang="ts" setup>
+interface Props {
+  reacted: boolean;
+}
+const props = defineProps<Props>();
+</script>

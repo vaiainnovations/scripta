@@ -22,15 +22,13 @@
       <div>
         <a v-if="ipfsSourceUrl" :href="ipfsSourceUrl" target="_blank" class="text-xs">IPFS source</a>
       </div>
-      <div class="grid grid-cols-2 place-content-between gap-y-3 lg:grid-cols-4 lg:gap-x-2">
+      <div class="grid grid-cols-2 place-content-between gap-y-3 lg:grid-cols-4 xl:grid-cols-12 lg:gap-x-2">
         <div class="flex flex-row gap-x-1.5 lg:col-span-1">
-          <button class="group p-0.5 rounded-full" @click="addReaction(':up:')">
-            <img src="/icons/bold/arrow-up.svg" class="h-5 w-5" :class="(userReaction?.code === ':up:')?'block group-hover:hidden fill-primary-light stroke-primary text-success':'hidden group-hover:block'">
-            <img src="/icons/linear/arrow-up.svg" class="h-5 w-5" :class="(userReaction?.code === ':up:')?'hidden group-hover:block':'block group-hover:hidden'">
+          <button class="group p-1.5 rounded-full hover:bg-background-alt/40" @click="handleReaction(':up:')">
+            <ArticlesUpvote :reacted="userReaction?.code === ':up:'" />
           </button>
-          <button class="group p-0.5 rounded-full ml-2" @click="addReaction(':down:')">
-            <img src="/icons/bold/arrow-down.svg" class="h-5 w-5" :class="(userReaction?.code === ':down:')?'block group-hover:hidden':'hidden group-hover:block'">
-            <img src="/icons/linear/arrow-down.svg" class="h-5 w-5" :class="(userReaction?.code === ':down:')?'hidden group-hover:hidden':'block group-hover:hidden'">
+          <button class="group p-1.5 rounded-full hover:bg-background-alt/40" @click="handleReaction(':down:')">
+            <ArticlesDownvote :reacted="userReaction?.code === ':down:'" />
           </button>
         </div>
         <div class="flex flex-row gap-x-1.5 place-self-end lg:flex-row-reverse lg:place-self-start">
@@ -103,7 +101,13 @@ navBarReading.value.title = props.article.text;
 navBarReading.value.date = new Date(props.article.creationDate);
 
 const userReaction = ref(null);
-getReactions(props.article.id).then((reaction: ArticleReaction) => { userReaction.value = reaction; });
+const previousReaction = ref(null);
+try {
+  await getReactions(props.article.id).then((reaction: ArticleReaction) => { userReaction.value = reaction; previousReaction.value = reaction; });
+} catch (e) {
+  // no reaction or error
+  console.error(e);
+}
 
 function handleNavbarChange (event: Event) {
   const { scrollTop } = (event.target as HTMLDivElement);
@@ -119,7 +123,7 @@ async function getReactions (postId: any): Promise<ArticleReaction> {
   return await $useReaction().getUserPostReaction(postId);
 }
 
-function addReaction (code: string) {
+function handleReaction (code: string) {
   const { $useReaction } = useNuxtApp();
   const reaction = $useReaction().getReaction(code);
   if (code === userReaction.value?.code) {
@@ -127,6 +131,11 @@ function addReaction (code: string) {
   } else {
     userReaction.value = reaction;
   }
-  $useReaction().addReaction(code, props.article.id);
+  console.log(previousReaction.value);
+  if (previousReaction.value && userReaction.value === null) {
+    $useReaction().removeReaction(props.article.id, previousReaction.value.reactionId);
+  } else {
+    $useReaction().addReaction(props.article.id, userReaction.value);
+  }
 }
 </script>
