@@ -78,7 +78,6 @@ function edit () {
   $useTransaction().$subscribe(() => {
     if ($useTransaction().queue.length === 0) {
       // comment published
-      comment.value = "";
       isCommentPublishing.value = false;
       emit("editComment");
     }
