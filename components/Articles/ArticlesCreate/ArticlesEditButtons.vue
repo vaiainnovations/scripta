@@ -52,6 +52,7 @@ import { useBackendStore } from "~~/core/store/BackendStore";
 /* import { usePostStore } from "~~/core/store/PostStore";
 import { useUserStore } from "~~/core/store/UserStore"; */
 import { useDesmosStore } from "~~/core/store/DesmosStore";
+import { usePostStore } from "~~/core/store/PostStore";
 
 const isPublishing = ref(false);
 
@@ -99,7 +100,7 @@ async function editArticle () {
     urls: [ipfsEntityUrl]
   };
 
-  $useTransaction().push(msgEditPost, {
+  const success = await $useTransaction().directTx([msgEditPost], [{
     id: draftStore.id,
     externalId: extId,
     author: useAccountStore().address,
@@ -110,51 +111,13 @@ async function editArticle () {
     content: draftStore.content,
     entities: JSON.stringify(msgEditPost.value.entities),
     scriptaOp: "MsgEditPost"
-  });
-  /* const signedBytes = await $useTransaction().execute(); */
+  }]);
 
-  /* let signedBytes = new Uint8Array();
-  try {
-    if (!useAccountStore().authz.hasAuthz) {
-      signedBytes = await $useTransaction().directSign([msgEditPost]);
-    }
-  } catch (e) {
-    console.log(e);
-  }
-
-  if (!signedBytes) {
-    return;
-  }
-
-  const res = (await (
-    await useBackendStore().fetch(
-      `${useBackendStore().apiUrl}/posts/${extId}`,
-      "PUT",
-      {
-        "Content-Type": "application/json"
-      },
-      JSON.stringify({
-        id: draftStore.id,
-        signedPost: (signedBytes) ? Buffer.from(signedBytes).toString("base64") : "",
-        externalId: extId,
-        author: useAccountStore().address,
-        sectionId: useAccountStore().sectionId,
-        text: draftStore.title,
-        tags: draftStore.tags.map(tag => tag.content.value),
-        subtitle: draftStore.subtitle,
-        content: draftStore.content,
-        entities: JSON.stringify(msgEditPost.value.entities)
-      })
-    )
-  ).json()) as any;
-  console.log(res);
-  if (res.code === 0) {
-    usePostStore().userPosts = await useUserStore().getUserArticles(
-      useAccountStore().address
-    );
-    draftStore.$reset();
+  if (success) {
+    await usePostStore().updateUserPosts();
+    useDraftStore().$reset();
     useRouter().push(`/@${useAccountStore().profile.dtag}/${extId}`);
-  } */
+  }
   isPublishing.value = false;
 }
 
@@ -162,6 +125,7 @@ async function deleteArticle () {
   isPublishing.value = true;
   const { $useTransaction } = useNuxtApp();
 
+  // if draft, just delete the draft from the backend
   if (!useDraftStore().id) {
     await (
       await useBackendStore().fetch(
@@ -180,6 +144,7 @@ async function deleteArticle () {
     return;
   }
 
+  // otherwise, delete the post from the chain & the backend
   const msgDeletePost: MsgDeletePostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgDeletePost",
     value: {
@@ -188,45 +153,15 @@ async function deleteArticle () {
       signer: useAccountStore().address
     }
   };
-  $useTransaction().push(msgDeletePost, {
+  const success = await $useTransaction().directTx([msgDeletePost], [{
     id: useDraftStore().id,
     scriptaOp: "MsgDeletePost"
-  });
-
-  /* let signedBytes = new Uint8Array();
-  try {
-    if (!useAccountStore().authz.hasAuthz) {
-      signedBytes = await $useTransaction().directSign([msgDeletePost]);
-    }
-  } catch (e) {
-    console.log(e);
-  }
-
-  if (!signedBytes) {
-    return;
-  }
-
-  const res = (await (
-    await useBackendStore().fetch(
-      `${useBackendStore().apiUrl}/posts/delete/${useDraftStore().externalId}`,
-      "POST",
-      {
-        "Content-Type": "application/json"
-      },
-      JSON.stringify({
-        signedPost: Buffer.from(signedBytes).toString("base64"),
-        id: useDraftStore().id
-      })
-    )
-  ).json()) as any;
-  console.log(res);
-  if (res.code === 0) {
-    usePostStore().userPosts = await useUserStore().getUserArticles(
-      useAccountStore().address
-    );
+  }]);
+  if (success) {
+    await usePostStore().updateUserPosts();
     useDraftStore().$reset();
     useRouter().push("/profile");
-  } */
+  }
   isPublishing.value = false;
 }
 </script>

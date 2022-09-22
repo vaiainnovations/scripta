@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
 /* import { Buffer } from "buffer"; */
-import { MsgCreatePostEncodeObject, MsgSaveProfileEncodeObject } from "@desmoslabs/desmjs";
+import { EncodeObject, MsgCreatePostEncodeObject, MsgSaveProfileEncodeObject } from "@desmoslabs/desmjs";
 import Long from "long";
 import { v4 as uuidv4 } from "uuid";
 import { useAccountStore } from "~~/core/store/AccountStore";
@@ -54,6 +54,7 @@ import { useDraftStore } from "~~/core/store/DraftStore";
 import { usePostStore } from "~~/core/store/PostStore";
 import { useUserStore } from "~~/core/store/UserStore"; */
 import { useDesmosStore } from "~~/core/store/DesmosStore";
+import { usePostStore } from "~~/core/store/PostStore";
 
 const isPublishing = ref(false);
 const isSavingDraft = ref(false);
@@ -165,6 +166,8 @@ async function publish () {
   const signedBytes = await $useTransaction().execute(); */
 
   // if is a new user and has no profile, create one with the randomly generated username
+  const msgs: EncodeObject[] = [];
+  const msgsDetails: any[] = [];
   if (useAccountStore().isNewProfile) {
     const msgSaveProfile: MsgSaveProfileEncodeObject = {
       typeUrl: "/desmos.profiles.v3.MsgSaveProfile",
@@ -177,7 +180,8 @@ async function publish () {
         creator: useAccountStore().address
       }
     };
-    $useTransaction().push(msgSaveProfile, {
+    msgs.push(msgSaveProfile);
+    msgsDetails.push({
       dtag: useAccountStore().profile.dtag,
       nickname: useAccountStore().profile.nickname,
       bio: useAccountStore().profile.bio,
@@ -187,7 +191,8 @@ async function publish () {
     });
   }
   // push the post message
-  $useTransaction().push(msgCreatePost, {
+  msgs.push(msgCreatePost);
+  msgsDetails.push({
     externalId: msgCreatePost.value.externalId,
     author: msgCreatePost.value.author,
     sectionId: msgCreatePost.value.sectionId,
@@ -199,43 +204,12 @@ async function publish () {
     scriptaOp: "MsgCreatePost"
   });
 
-  /* let signedBytes = new Uint8Array();
-  try {
-    if (!useAccountStore().authz.hasAuthz) {
-      signedBytes = await $useTransaction().directSign(msgs);
-    }
-  } catch (e) {
-    console.log(e);
-  }
-
-  if (!signedBytes) {
-    return;
-  }
-
-  const res = await (await useBackendStore().fetch(
-    `${useBackendStore().apiUrl}/posts/${extId}`,
-    "POST",
-    {
-      "Content-Type": "application/json"
-    },
-    JSON.stringify({
-      signedPost: (signedBytes) ? Buffer.from(signedBytes).toString("base64") : "",
-      externalId: msgCreatePost.value.externalId,
-      author: msgCreatePost.value.author,
-      sectionId: msgCreatePost.value.sectionId,
-      text: msgCreatePost.value.text,
-      tags: msgCreatePost.value.tags,
-      subtitle: useDraftStore().subtitle,
-      content: useDraftStore().content,
-      entities: JSON.stringify(msgCreatePost.value.entities)
-    })
-  )
-  ).json() as any;
-  if (res.code === 0) {
-    usePostStore().userPosts = await useUserStore().getUserArticles(useAccountStore().address);
-    draftStore.$reset();
+  const success = await $useTransaction().directTx(msgs, msgsDetails);
+  if (success) {
+    await usePostStore().updateUserPosts();
+    useDraftStore().$reset();
     useRouter().push(`/@${useAccountStore().profile.dtag}/${extId}`);
-  } */
+  }
   isPublishing.value = false;
 }
 </script>

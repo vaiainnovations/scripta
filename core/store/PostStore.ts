@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
+import { useAccountStore } from "./AccountStore";
 import { useBackendStore } from "./BackendStore";
+import { useUserStore } from "./UserStore";
 import { registerModuleHMR } from ".";
 import { PostKv } from "~~/types/PostKv";
 import { PostExtended, searchFirstContentImage } from "~~/types/PostExtended";
@@ -52,6 +54,9 @@ export const usePostStore = defineStore({
           this.trendings[i].image = searchFirstContentImage(this.trendings[i].content) || "/img/author_pic.png";
         }
       }
+    },
+    async updateUserPosts (): Promise<void> {
+      this.userPosts = await useUserStore().getUserArticles(useAccountStore().address);
     }
   }
 });
