@@ -84,7 +84,7 @@ import { useConfigStore } from "~~/core/store/ConfigStore";
 import { usePostStore } from "~~/core/store/PostStore";
 import { ArticleReaction } from "~~/core/store/ReactionStore";
 import { NavBarReadingType } from "~~/layouts/readingCustom.vue";
-import { PostExtended } from "~~/types/PostExtended";
+import { PostExtended, searchFirstContentImage } from "~~/types/PostExtended";
 import { ArticleSearch } from "~~/types/SearchResults";
 import { TagType } from "~~/types/TagType";
 
@@ -98,12 +98,69 @@ const showComments = ref(false);
 if (process.client) {
   showComments.value = true;
 }
-
-useHead({
-  title: `${props.article.text} - ${props.article.author} on Scripta`
-});
 const sharingUrl = (useConfigStore().isBetaVersion) ? `https://beta.scripta.network${useRoute().fullPath}` : `https://scripta.network${useRoute().fullPath}`;
 const sharingUrlEncoded = encodeURIComponent(sharingUrl);
+
+useHead({
+  title: `${props.article.text} - ${props.article.author} on Scripta`,
+  meta: [
+    {
+      hid: "title",
+      name: "title",
+      content: props.article.text
+    },
+    {
+      hid: "description",
+      name: "description",
+      content: props.article.subtitle
+    },
+    {
+      hid: "image",
+      name: "image",
+      content: searchFirstContentImage(props.article.content)
+    },
+    {
+      hid: "og:title",
+      property: "og:title",
+      content: props.article.text
+    },
+    {
+      hid: "og:description",
+      property: "og:description",
+      content: props.article.subtitle
+    },
+    {
+      hid: "og:image",
+      property: "og:image",
+      content: searchFirstContentImage(props.article.content)
+    },
+    {
+      hid: "og:url",
+      property: "og:url",
+      content: sharingUrl
+    },
+    {
+      hid: "twitter:title",
+      name: "twitter:title",
+      content: props.article.text
+    },
+    {
+      hid: "twitter:description",
+      name: "twitter:description",
+      content: props.article.subtitle
+    },
+    {
+      hid: "twitter:image",
+      name: "twitter:image",
+      content: searchFirstContentImage(props.article.content)
+    },
+    {
+      hid: "twitter:card",
+      name: "twitter:card",
+      content: "summary_large_image"
+    }
+  ]
+});
 
 const tags = (props.article.tags && props.article.tags.length > 0) ? new Array(props.article.tags.length).fill(0).map((_, i) => ({ i, content: { value: props.article.tags[i] } as TagType })) : [];
 let ipfsSourceUrl = "";
