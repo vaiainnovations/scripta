@@ -6,8 +6,9 @@ import { StdFee } from "@cosmjs/stargate";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { Signer } from "@desmoslabs/desmjs";
 import { useAccountStore } from "./AccountStore";
-import { useDesmosStore } from "./DesmosStore";
 import { useBackendStore } from "./BackendStore";
+import { useDesmosStore } from "./DesmosStore";
+import { useWalletStore } from "./wallet/WalletStore";
 import { registerModuleHMR } from ".";
 
 export enum QueueStatus {
@@ -74,7 +75,6 @@ export const useTransactionStore = defineStore({
         this.status = QueueStatus.PENDING;
         // const broadcastResult = await client.broadcastTx(txBytes, 10000, 2000);
 
-        // TODO: replaces with multmessage backend broadcast
         let broadcastResult = null as any;
         try {
           broadcastResult = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}/broadcast`, "POST", {
@@ -107,6 +107,47 @@ export const useTransactionStore = defineStore({
         this.resetQueueWithTimer(10, true);
       }
     },
+    /**
+     * Sign and broadcast messages directy avoiding the queue
+     * @param messages Encoded messages to sign and broadcast
+     * @param details Custom details to be sent to the backend
+     * @returns success boolean
+     */
+    async directTx (messages: EncodeObject[], details: Record<string, unknown>[] = []): Promise<boolean> {
+      try {
+        let signedBytes = new Uint8Array();
+        this.status = QueueStatus.SIGNING;
+        if (!useAccountStore().authz.hasAuthz) {
+          signedBytes = await this.directSign(messages, "Signed from Scripta.network", useDesmosStore().defaultFee, useWalletStore().wallet.signer.signingMode);
+        }
+
+        let broadcastResult = null as any;
+        try {
+          broadcastResult = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}broadcast`, "POST", {
+            "Content-Type": "application/json"
+          }, JSON.stringify({
+            signedMsgs: signedBytes ? Buffer.from(signedBytes).toString("base64") : null,
+            detailedMsgs: details
+          }))).json();
+        } catch (e) {
+          console.log(e);
+        }
+        this.hash = broadcastResult.transactionHash;
+        return broadcastResult?.transactionHash || false;
+      } catch (e) {
+        // handle tx error or wallet signing rejection
+        console.log(e);
+        return false;
+      }
+    },
+    /**
+     * Sign messages directy avoiding the queue and authz
+     * @param messages Encoded messages to sign
+     * @param memo Tx memo
+     * @param fees Tx fees
+     * @param signMode Tx sign mode
+     * @returns signed bytes
+     */
     async directSign (messages: EncodeObject[], memo = "Signed from Scripta.network", fees = useDesmosStore().defaultFee, signMode: 0 | 1 = 0): Promise<Uint8Array> {
       const { $useWallet } = useNuxtApp();
       // check if the draft is not empty
