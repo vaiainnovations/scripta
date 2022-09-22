@@ -92,9 +92,9 @@ function sendTip () {
       toAddress: props.author
     }
   };
-  $useTransaction().push(msgSend, {
+  $useTransaction().directTx([msgSend], [{
     scriptaOp: "MsgSend"
-  });
+  }], true);
   emit("closeTipsOverlay");
 }
 </script>

@@ -111,13 +111,14 @@ export const useTransactionStore = defineStore({
      * Sign and broadcast messages directy avoiding the queue
      * @param messages Encoded messages to sign and broadcast
      * @param details Custom details to be sent to the backend
+     * @param skipAuthz Skip Authz, sign manually (usefull for tip, profile, etc.)
      * @returns success boolean
      */
-    async directTx (messages: EncodeObject[], details: Record<string, unknown>[] = []): Promise<boolean> {
+    async directTx (messages: EncodeObject[], details: Record<string, unknown>[] = [], skipAuthz = false): Promise<boolean> {
       try {
         let signedBytes = new Uint8Array();
         this.status = QueueStatus.SIGNING;
-        if (!useAccountStore().authz.hasAuthz) {
+        if (!useAccountStore().authz.hasAuthz || skipAuthz) {
           signedBytes = await this.directSign(messages, "Signed from Scripta.network", useDesmosStore().defaultFee, useWalletStore().wallet.signer.signingMode);
         }
 
