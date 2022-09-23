@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 // Globally executed on every page load
 
+import { useConfigStore } from "./core/store/ConfigStore";
 import { usePostStore } from "./core/store/PostStore";
 const isBetaAlertDismissed = ref(true);
 if (process.client) {
-  isBetaAlertDismissed.value = window.localStorage.getItem("isBetaAlertDismissed") === "true";
+  isBetaAlertDismissed.value = window.localStorage.getItem("isBetaAlertDismissed") === "true" || !useConfigStore().isBetaVersion;
 }
 
 if (process.client) {
