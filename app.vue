@@ -2,6 +2,10 @@
 // Globally executed on every page load
 
 import { usePostStore } from "./core/store/PostStore";
+const isBetaAlertDismissed = ref(true);
+if (process.client) {
+  isBetaAlertDismissed.value = window.localStorage.getItem("isBetaAlertDismissed") === "true";
+}
 
 if (process.client) {
   const { $useAuth } = useNuxtApp();
@@ -9,12 +13,18 @@ if (process.client) {
 } else {
   await usePostStore().loadTrendings();
 }
+
+function dismissBetaAlert () {
+  window.localStorage.setItem("isBetaAlertDismissed", "true");
+  isBetaAlertDismissed.value = true;
+}
 </script>
 
 <template>
   <div>
     <NuxtLayout>
       <NuxtPage />
+      <LandingBetaAlert v-if="!isBetaAlertDismissed" @close-beta-alert="dismissBetaAlert()" />
     </NuxtLayout>
   </div>
 </template>

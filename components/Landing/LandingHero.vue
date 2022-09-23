@@ -13,15 +13,29 @@
                 scripta manent.
               </div>
             </div>
-            <!--  <div class="pt-14 text-2xl font-light">
+            <!-- <div class="pt-14 text-2xl font-light">
               Discover a Decentrilezed way to share your thoughts.
-            </div>
-            <div class="pt-4 text-4xl text-background-alt font-serif underline">
-              Available Soon
-            </div>
-            <div class="pt-6 text-2xl">
-              <a href="">Try the Beta</a>
             </div> -->
+            <div
+              v-if="!useConfigStore().isBetaVersion"
+              class="flex flex-col bg-background items-center p-6 bg-indigo-600 rounded-lg shadow-4xl gap-4 sm:flex-row sm:justify-between order-1 mt-10"
+            >
+              <strong class="text-3xl text-white lg:text-3xl text-center">
+                Available <span class="text-xs align-top">(very)</span> Soon!
+              </strong>
+
+              <a
+                class="inline-flex items-center px-8 py-3 text-indigo-600 bg-white border border-white rounded-full hover:bg-transparent hover:text-white active:bg-white/90 focus:outline-none focus:ring"
+                href="https://beta.scripta.network"
+              >
+                <span class="text-xs font-medium"> Try the Beta! </span>
+
+                <img
+                  class="w-5 h-5 ml-3"
+                  src="/icons/linear/arrow-right.svg"
+                >
+              </a>
+            </div>
           </div>
           <div class="w-full mx-auto flex flex-col-reverse pt-20 md:pt-0">
             <img
@@ -35,22 +49,26 @@
   </section>
 </template>
 
+<script lang="ts" setup>
+import { useConfigStore } from "~~/core/store/ConfigStore";
+</script>
+
 <style>
-  .background-animate {
-    background-size: 400%;
+.background-animate {
+  background-size: 400%;
 
-    -webkit-animation: blurAnimated 10s ease infinite;
-    -moz-animation: blurAnimated 10s ease infinite;
-    animation: blurAnimated 10s ease infinite;
-  }
+  -webkit-animation: blurAnimated 10s ease infinite;
+  -moz-animation: blurAnimated 10s ease infinite;
+  animation: blurAnimated 10s ease infinite;
+}
 
-  @keyframes blurAnimated {
-    0%,
-    100% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
+@keyframes blurAnimated {
+  0%,
+  100% {
+    background-position: 0% 50%;
   }
+  50% {
+    background-position: 100% 50%;
+  }
+}
 </style>

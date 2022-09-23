@@ -13,7 +13,7 @@ import { useConfigStore } from "~~/core/store/ConfigStore";
 
           <a
             class="inline-flex items-center px-8 py-3 text-indigo-600 bg-white border border-white rounded-full hover:bg-transparent hover:text-white active:bg-white/90 focus:outline-none focus:ring"
-            href="/"
+            href="https://beta.scripta.network"
           >
             <span class="text-sm font-medium"> Let's Get Started </span>
 
