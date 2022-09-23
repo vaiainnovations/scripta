@@ -1,6 +1,6 @@
 <template>
   <!-- Container to set the position of the tooltip -->
-  <div class="fixed bottom-30 mx-auto h-auto max-h-screen w-screen px-2 pt-24 md:pt-20">
+  <div class="fixed bottom-30 mx-auto h-auto max-h-screen w-screen px-2 pt-24 md:pt-20 z-50">
     <!-- Tooltip box with relative position -->
     <div class="relative mx-auto h-5/6 w-full overflow-scroll rounded-2xl bg-background px-4 shadow-2xl lg:w-3/4 xl:w-3/5">
       <!-- Flex container on mobile devices (< 768 px), grid with seven columns for bigger ones  -->
