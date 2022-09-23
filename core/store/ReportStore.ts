@@ -55,7 +55,14 @@ export const useReportStore = defineStore({
           }
         }
       };
-      $useTransaction().push(msgAddReport, { scriptaOp: "MsgCreateReport" });
+      $useTransaction().push(msgAddReport, {
+        subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
+        message,
+        reasonsIds,
+        reporter: useAccountStore().address,
+        postId,
+        scriptaOp: "MsgCreateReport"
+      });
     }
   }
 });
