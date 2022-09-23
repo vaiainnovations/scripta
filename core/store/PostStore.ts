@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import { useAccountStore } from "./AccountStore";
 import { useBackendStore } from "./BackendStore";
 import { useUserStore } from "./UserStore";
-import { useLogStore } from "./LogStore";
 import { registerModuleHMR } from ".";
 import { PostKv } from "~~/types/PostKv";
 import { PostExtended, searchFirstContentImage } from "~~/types/PostExtended";
@@ -25,9 +24,7 @@ export const usePostStore = defineStore({
       let cachedPost: PostExtended | false = false;
       if (!process.client) {
         cachedPost = await PostKv.get(externalID);
-        if (cachedPost) {
-          useLogStore().logOp({ scriptaOp: "getPost", externalID });
-        } else {
+        if (!cachedPost) {
           console.log("No KV cached post found for", externalID);
         }
       } else {
