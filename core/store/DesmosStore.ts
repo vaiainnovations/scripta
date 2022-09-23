@@ -9,8 +9,8 @@ export const useDesmosStore = defineStore({
   id: "DesmosStore",
   state: () => ({
     chainInfo,
-    rpc: "https://rpc-testnet.go-find.me/",
-    lcd: "https://lcd-testnet.go-find.me/",
+    rpc: "https://rpc-testnet.scripta.network/",
+    lcd: "https://lcd-testnet.scripta.network/",
     explorer: "https://morpheus.desmos.network/",
     coinDenom: chainInfo.currencies[chainInfo.currencies.length - 1].coinDenom,
     ucoinDenom: chainInfo.currencies[0].coinMinimalDenom,
