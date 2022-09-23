@@ -14,9 +14,9 @@ useHead({
       <!-- hero -->
       <LandingHero />
       <!-- Explore arrow -->
-      <section class="h-[10vh] border-t-[3px] border-b-[3px] bg-explore-now bg-background-alt">
+      <section class="min-h-[10vh] border-t-[3px] border-b-[3px] bg-explore-now bg-background-alt">
         <div class="flex h-full ">
-          <div class="flex-1 h-full align-middle flex flex-col justify-center text-center font-extralight font-serif text-4xl text-primary-text ">
+          <div class="flex-1 h-full align-middle flex flex-col justify-center text-center font-extralight font-serif text-4xl text-primary-text p-2">
             Explore Now
             <img
               src="/icons/bold/arrow-down.svg"

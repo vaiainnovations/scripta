@@ -1,5 +1,5 @@
 <template>
-  <section class="h-screen md:h-[80vh]  bg-gradient-to-tr from-[#e5007e8b] to-[#f2910096] pt-40 md:pt-8 background-animate">
+  <section class="min-h-screen md:h-[80vh]  bg-gradient-to-tr from-[#e5007e8b] to-[#f2910096] pt-40 md:pt-8 background-animate">
     <div class="h-full w-full">
       <!-- bg-[rgba(244,184,73,0.54)] -->
       <div class="container mx-auto px-4 h-full flex justify-center">
@@ -18,7 +18,7 @@
             </div> -->
             <div
               v-if="!useConfigStore().isBetaVersion"
-              class="flex flex-col bg-background items-center p-6 bg-indigo-600 rounded-lg shadow-4xl gap-4 sm:flex-row sm:justify-between order-1 mt-10"
+              class="flex flex-col bg-background items-center p-6 m-2 bg-indigo-600 rounded-lg shadow-4xl gap-4 sm:flex-row sm:justify-between order-1 mt-10"
             >
               <strong class="text-3xl text-white lg:text-3xl text-center">
                 Available <span class="text-xs align-top">(very)</span> Soon!
