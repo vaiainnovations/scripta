@@ -13,7 +13,7 @@
     <!-- Image of the article -->
     <div class="col-span-1 rounded-xl bg-[#B4FFFF]/20 py-1 px-1">
       <img
-        class="aspect-video h-full object-scale-down"
+        class="aspect-video h-full max-h-20 object-scale-down"
         :src="articleImage"
       >
     </div>

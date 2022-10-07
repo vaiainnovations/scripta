@@ -15,11 +15,14 @@
         <!-- Articles found by the search; on mobile devices (< 768 px) it's last shown -->
         <div v-if="useSearchStore().articleResults.length > 0" class="order-last flex flex-col gap-y-2 md:order-none col-span-5 col-start-2">
           <!-- md:col-span-4 md:col-start-1 -->
-          <SearchArticleCard
-            v-for="result in useSearchStore().articleResults"
-            :key="result.externalId"
-            :post="result"
-          />
+          <div class="overflow-visible max-h-[80vh]">
+            <SearchArticleCard
+              v-for="result in useSearchStore().articleResults"
+              :key="result.externalId"
+              :post="result"
+              class="my-2"
+            />
+          </div>
         </div>
         <!-- Authors found by the search; on mobile devices (< 768 px) it's a grid with two columns; a flex container for bigger ones -->
         <!-- <div

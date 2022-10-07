@@ -1,5 +1,5 @@
 <template>
-  <section class="min-h-screen md:h-[80vh]  bg-gradient-to-tr from-[#e5007e8b] to-[#f2910096] pt-40 md:pt-8 background-animate">
+  <section class="min-h-screen md:min-h-[80vh] bg-gradient-to-tr from-[#e5007e8b] to-[#f2910096] pt-28 md:pt-40 background-animate">
     <div class="h-full w-full">
       <!-- bg-[rgba(244,184,73,0.54)] -->
       <div class="container mx-auto px-4 h-full flex justify-center">
