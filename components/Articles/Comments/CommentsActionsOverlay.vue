@@ -48,8 +48,6 @@ function editComment () {
 }
 
 function addReport () {
-  /* const { $useReport } = useNuxtApp();
-  $useReport().addPostReport(Long.fromNumber(props.comment.id), [1]); */
   toggleOverlay();
   toggleReportOverlay();
 }
@@ -57,28 +55,6 @@ function addReport () {
 
 <template>
   <div>
-    <!-- <img
-      class="flex items-center justify-center cursor-pointer"
-      src="/icons/linear/dots.svg"
-      @click="toggleOverlay()"
-    >
-    <div v-if="isOverlayOpen" class="bg-background-alt/10 p-2 px-1 rounded-2xl absolute w-full h-full top-0 left-0">
-      <div v-if="props.isCommentator || props.isModerator" class="bg-background px-3 py-0.5 rounded-md m-1 text-primary-text/60">
-        <button @click="deleteArticle">
-          Delete
-        </button>
-      </div>
-      <div v-if="props.isCommentator" class="bg-background px-3 py-0.5 rounded-md m-1 text-primary-text/60">
-        <button @click="editComment">
-          Edit
-        </button>
-      </div>
-      <div>
-        <button class="bg-background px-3 py-0.5 rounded-md m-1 text-primary-text/60" @click="editComment">
-          Report
-        </button>
-      </div>
-    </div> -->
     <div class="relative inline-block text-left">
       <div>
         <button class="bg-white" @click="toggleOverlay">
@@ -116,7 +92,7 @@ function addReport () {
           </div>
         </div>
       </div>
-      <ArticlesCommentsActionsReportOverlay v-if="isReportOverlayOpen" :comment="props.comment" @close-report-overlay="toggleReportOverlay" />
+      <ReportsActionOverlay v-if="isReportOverlayOpen" :post-id="props.comment.id" :content="props.comment.text" :author="props.comment.author" @close-report-overlay="toggleReportOverlay" />
     </div>
   </div>
 </template>
