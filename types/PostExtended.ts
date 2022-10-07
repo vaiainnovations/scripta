@@ -1,3 +1,5 @@
+import { Author } from "./Author";
+
 export interface PostExtended {
     id: Long;
     externalId: string;
@@ -7,7 +9,7 @@ export interface PostExtended {
     tags: string[];
     image: string;
     sectionId: number;
-    author: string;
+    author: Author;
     creationDate: string;
     lastEditedDate: string;
     attachments: any[];

@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
 import { useAccountStore } from "./AccountStore";
 import { useBackendStore } from "./BackendStore";
 import { useUserStore } from "./UserStore";
@@ -32,6 +33,21 @@ export const usePostStore = defineStore({
           cachedPost = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${externalID}`, "GET", {}, "")).json() as PostExtended;
         } catch (e) {
           console.log(e);
+        }
+      }
+      if (cachedPost) {
+        const author: Profile = await useUserStore().getUser(cachedPost.author as any, true);
+        if (author) {
+          cachedPost.author = {
+            address: (author.account as any).address,
+            bio: author.bio,
+            dtag: author.dtag,
+            nickname: author.nickname,
+            pictures: {
+              cover: author.pictures.cover,
+              profile: author.pictures.profile
+            }
+          };
         }
       }
       return cachedPost || null;

@@ -1,5 +1,8 @@
 <template>
   <div class="flex h-full flex-col gap-y-6 overflow-y-scroll bg-background px-4 py-5 md:px-32 lg:py-10 2xl:w-5/6 2xl:px-14 2xl:border border-primary-text-light" @scroll="handleNavbarChange">
+    <div class="text-right w-full">
+      <ArticlesActionsOverlay :article="props.article" />
+    </div>
     <div class="flex h-6 flex-row items-center justify-start gap-x-4 py-0.5">
       <ArticlesViewTag v-for="tag in tags" :key="tag.i" :content="tag.content" class="w-36" />
       <!-- <svg
@@ -15,7 +18,7 @@
       :title="props.article.text"
       :subtitle="props.article.subtitle"
       :content="props.article.content"
-      :address="props.article.author"
+      :address="props.article.author.address"
       :date="new Date(props.article.creationDate)"
     />
     <div class="bg-background">
@@ -32,7 +35,7 @@
           </button>
         </div>
         <div class="flex flex-row gap-x-1.5 place-self-end lg:flex-row-reverse lg:place-self-start">
-          <ArticlesTipsButton :author="props.article.author" />
+          <ArticlesTipsButton :author="props.article.author.address" />
         </div>
         <div class="flex flex-row gap-x-3 lg:col-end-12 lg:place-self-end my-auto">
           <a
@@ -102,7 +105,7 @@ const sharingUrl = (useConfigStore().isBetaVersion) ? `https://beta.scripta.netw
 const sharingUrlEncoded = encodeURIComponent(sharingUrl);
 
 useHead({
-  title: `${props.article.text} - ${props.article.author} on Scripta`,
+  title: `${props.article.text} - @${props.article.author.dtag} on Scripta`,
   meta: [
     {
       hid: "title",

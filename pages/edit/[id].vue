@@ -25,7 +25,7 @@ if (!article) {
   useRouter().replace("/profile");
 }
 // prevent to open edit page of other user's article
-if (useAccountStore().address !== article.author && useAccountStore().profile?.dtag !== article.author) {
+if (useAccountStore().address !== article.author.address && useAccountStore().profile?.dtag !== article.author) {
   useRouter().push("/profile");
 }
 useDraftStore().$reset();
