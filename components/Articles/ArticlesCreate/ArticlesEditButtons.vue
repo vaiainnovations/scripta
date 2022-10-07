@@ -1,6 +1,20 @@
 <template>
   <div class="grid grid-cols-2 lg:grid-cols-6 w-full gap-y-4 gap-x-6 lg:gap-x-4 xl:gap-x-10">
     <button
+      v-if="!isPublishing && (useDraftStore().title || useDraftStore().subtitle || useDraftStore().content || useDraftStore().tags.length>0) && !useDraftStore().id"
+      :disabled="isSavingDraft"
+      type="button"
+      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-primary-text text-xl font-medium hover:bg-primary-text/50"
+      @click="saveDraft()"
+    >
+      <span v-if="!isSavingDraft">
+        Save Draft
+      </span>
+      <span v-else>
+        Saving...
+      </span>
+    </button>
+    <button
       v-if="!isPublishing"
       type="button"
       class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-danger text-xl font-medium"
@@ -19,7 +33,7 @@
           v-if="useDraftStore().title && useDraftStore().subtitle && useDraftStore().content"
           type="button"
           class="p-1 w-full h-full rounded-xl text-[#FFFFFF] bg-primary text-xl font-medium"
-          @click="editArticle()"
+          @click="publish()"
         >
           <span v-if="useDraftStore().id">
             Publish Edit
@@ -54,13 +68,36 @@ import { useUserStore } from "~~/core/store/UserStore"; */
 import { useDesmosStore } from "~~/core/store/DesmosStore";
 import { usePostStore } from "~~/core/store/PostStore";
 
+const isSavingDraft = ref(false);
 const isPublishing = ref(false);
 
-async function editArticle () {
+function saveDraft () {
+  isSavingDraft.value = true;
+  useDraftStore().saveDraft().then(() => {
+    isSavingDraft.value = false;
+  });
+}
+
+async function publish () {
   isPublishing.value = true;
+  if (useDraftStore().id) {
+    editArticle();
+    return;
+  }
+  const success = await usePostStore().savePost();
+  if (success) {
+    await usePostStore().updateUserPosts();
+    useDraftStore().$reset();
+    useRouter().push(`/@${useAccountStore().profile.dtag}/${useDraftStore().externalId}`);
+  }
+  isPublishing.value = false;
+}
+
+async function editArticle () {
   const { $useIpfs, $useTransaction } = useNuxtApp();
   const draftStore = await useDraftStore();
   const extId = draftStore.externalId;
+  isPublishing.value = true;
 
   const msgEditPost: MsgEditPostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgEditPost",
