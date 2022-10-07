@@ -26,13 +26,8 @@
         <a v-if="ipfsSourceUrl" :href="ipfsSourceUrl" target="_blank" class="text-xs">IPFS source</a>
       </div>
       <div class="grid grid-cols-2 place-content-between gap-y-3 lg:grid-cols-4 xl:grid-cols-12 lg:gap-x-2">
-        <div class="flex flex-row gap-x-1.5 lg:col-span-1">
-          <button class="group p-1.5 rounded-full hover:bg-background-alt/40" @click="handleReaction(':up:')">
-            <ArticlesUpvote :reacted="userReaction?.code === ':up:'" />
-          </button>
-          <button class="group p-1.5 rounded-full hover:bg-background-alt/40" @click="handleReaction(':down:')">
-            <ArticlesDownvote :reacted="userReaction?.code === ':down:'" />
-          </button>
+        <div v-if="useAccountStore().address" class="flex flex-row gap-x-1.5 lg:col-span-1">
+          <ArticlesReactions :article="props.article" />
         </div>
         <div class="flex flex-row gap-x-1.5 place-self-end lg:flex-row-reverse lg:place-self-start">
           <ArticlesTipsButton :author="props.article.author.address" />
@@ -83,9 +78,9 @@
 
 <script setup lang="ts">
 import { Ref } from "vue";
+import { useAccountStore } from "~~/core/store/AccountStore";
 import { useConfigStore } from "~~/core/store/ConfigStore";
 import { usePostStore } from "~~/core/store/PostStore";
-import { ArticleReaction } from "~~/core/store/ReactionStore";
 import { NavBarReadingType } from "~~/layouts/readingCustom.vue";
 import { PostExtended, searchFirstContentImage } from "~~/types/PostExtended";
 import { ArticleSearch } from "~~/types/SearchResults";
@@ -177,42 +172,12 @@ navBarReading.value.title = props.article.text;
 // eslint-disable-next-line vue/no-setup-props-destructure
 navBarReading.value.date = new Date(props.article.creationDate);
 
-const userReaction = ref(null);
-const previousReaction = ref(null);
-try {
-  await getReactions(props.article.id).then((reaction: ArticleReaction) => { userReaction.value = reaction; previousReaction.value = reaction; });
-} catch (e) {
-  // no reaction or error
-  console.error(e);
-}
-
 function handleNavbarChange (event: Event) {
   const { scrollTop } = (event.target as HTMLDivElement);
   if (scrollTop > 120) {
     navBarReading.value.show = true;
   } else {
     navBarReading.value.show = false;
-  }
-}
-
-async function getReactions (postId: any): Promise<ArticleReaction> {
-  const { $useReaction } = useNuxtApp();
-  return await $useReaction().getUserPostReaction(postId);
-}
-
-function handleReaction (code: string) {
-  const { $useReaction } = useNuxtApp();
-  const reaction = $useReaction().getReaction(code);
-  if (code === userReaction.value?.code) {
-    userReaction.value = null;
-  } else {
-    userReaction.value = reaction;
-  }
-  console.log(previousReaction.value);
-  if (previousReaction.value && userReaction.value === null) {
-    $useReaction().removeReaction(props.article.id, previousReaction.value.reactionId);
-  } else {
-    $useReaction().addReaction(props.article.id, userReaction.value);
   }
 }
 </script>
