@@ -25,7 +25,7 @@
         <img
           :src="userPic"
           onerror="this.src='/img/author_pic.png'"
-          class="max-w-11 w-11 h-11 object-cover rounded-full"
+          class="max-w-11 w-11 h-11 object-cover rounded-full shadow-md border border-background"
         >
       </div>
     </NuxtLink>

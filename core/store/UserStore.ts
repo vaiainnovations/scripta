@@ -24,7 +24,7 @@ export const useUserStore = defineStore({
       return null;
     },
     async getUserArticles (address: string): Promise<PostExtended []> {
-      const posts = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}search`, "POST", {
+      const posts = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}search/posts`, "POST", {
         "Content-Type": "application/json"
       },
       JSON.stringify({ q: "", author: address })

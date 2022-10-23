@@ -1,5 +1,7 @@
 export interface AuthorSearch {
-  name: string,
+  address: string,
+  dtag: string,
+  nickname: string,
   image: string
 }
 
