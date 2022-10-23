@@ -2,7 +2,7 @@ export interface AuthorSearch {
   address: string,
   dtag: string,
   nickname: string,
-  image: string
+  profile: string
 }
 
 export interface ArticleSearch {
