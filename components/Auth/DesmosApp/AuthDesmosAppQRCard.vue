@@ -30,7 +30,7 @@ const signer = await $useWalletConnect().connect();
 
 const wcUrl = ref(getWalletConnectUrl(signer));
 console.log(wcUrl.value);
-await $useWallet().connect(signer, "walletconnect");
+await $useWallet().connect(signer, signer, "walletconnect");
 
 /**
  * Generate WalletConnect socket URL to display as QR code.

@@ -13,7 +13,7 @@
       :key="i"
     >
       <NuxtLink :to="`/@${post.author}/${post.externalId}`">
-        <ArticlesSmallPreview :content="{title: post.text, description: post.subtitle, image: post.image, content: post.content, tags: post.tags}" />
+        <ArticlesSmallPreview :content="{title: post.text, description: post.subtitle, image: post.image, content: post.content, tags: post.tags, id: post.id}" />
       </NuxtLink>
     </span>
   </div>

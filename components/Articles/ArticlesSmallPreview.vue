@@ -3,7 +3,7 @@
     <!-- Desktop -->
     <div class="max-w-7xl lg:max-w-2xl mx-auto hidden md:block">
       <div class="flex max-w-full mx-auto overflow-hidden bg-background-alt rounded-3xl shadow-md dark:bg-gray-800">
-        <div class="w-1/3 h-40">
+        <div class="w-1/3 h-48">
           <img
             alt="Article cover picture"
             :src="props.content.image"
@@ -12,6 +12,9 @@
         </div>
 
         <div class="w-2/3 p-4 md:p-4">
+          <a v-if="props.content.id <= 0" class="rounded-2xl bg-primary-light text-xs font-medium text-background px-2 py-1 float-right">
+            Draft
+          </a>
           <p class="mb-2 text-sm text-gray-600 dark:text-gray-400">
             <a
               v-for="tag in props.content.tags"
@@ -34,7 +37,7 @@
 
     <!-- Mobile -->
     <div class="w-fit mx-auto block md:hidden">
-      <div class="overflow-hidden shadow-lg rounded-3xl w-80 cursor-pointer m-auto">
+      <div class="overflow-hidden shadow-lg rounded-3xl md:w-80 cursor-pointer m-auto">
         <div class="w-full h-full">
           <img
             alt="Article cover picture"
@@ -42,6 +45,9 @@
             class="max-h-56 w-full object-cover"
           >
           <div class="bg-background-alt dark:bg-gray-800 w-full p-4">
+            <a v-if="props.content.id <= 0" class="rounded-2xl bg-primary-light text-xs font-medium text-background px-2 py-1 float-right">
+              Draft
+            </a>
             <p class="text-primary-text dark:text-white text-xl font-medium mb-2">
               {{ props.content.title }}
             </p>

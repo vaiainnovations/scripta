@@ -1,12 +1,31 @@
 <template>
   <div class="grid grid-cols-2 lg:grid-cols-6 w-full gap-y-4 gap-x-6 lg:gap-x-4 xl:gap-x-10">
     <button
+      v-if="!isPublishing && (useDraftStore().title || useDraftStore().subtitle || useDraftStore().content || useDraftStore().tags.length>0) && !useDraftStore().id"
+      :disabled="isSavingDraft"
+      type="button"
+      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-primary-text text-xl font-medium hover:bg-primary-text/50"
+      @click="saveDraft()"
+    >
+      <span v-if="!isSavingDraft">
+        Save Draft
+      </span>
+      <span v-else>
+        Saving...
+      </span>
+    </button>
+    <button
       v-if="!isPublishing"
       type="button"
       class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-danger text-xl font-medium"
       @click="deleteArticle()"
     >
-      Delete Article
+      <span v-if="useDraftStore().id">
+        Delete Article
+      </span>
+      <span v-else>
+        Delete Draft
+      </span>
     </button>
     <div class="col-span-2 lg:col-start-5">
       <span v-if="!isPublishing">
@@ -14,9 +33,14 @@
           v-if="useDraftStore().title && useDraftStore().subtitle && useDraftStore().content"
           type="button"
           class="p-1 w-full h-full rounded-xl text-[#FFFFFF] bg-primary text-xl font-medium"
-          @click="editArticle()"
+          @click="publish()"
         >
-          Publish Edit
+          <span v-if="useDraftStore().id">
+            Publish Edit
+          </span>
+          <span v-else>
+            Publish Article
+          </span>
         </button>
       </span>
       <span v-else>
@@ -30,23 +54,50 @@
 </template>
 
 <script setup lang="ts">
-import { Buffer } from "buffer";
-import { MsgDeletePostEncodeObject, MsgEditPostEncodeObject } from "@desmoslabs/desmjs";
+/* import { Buffer } from "buffer"; */
+import {
+  MsgDeletePostEncodeObject,
+  MsgEditPostEncodeObject
+} from "@desmoslabs/desmjs";
 import Long from "long";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
 import { useBackendStore } from "~~/core/store/BackendStore";
-import { usePostStore } from "~~/core/store/PostStore";
-import { useUserStore } from "~~/core/store/UserStore";
+/* import { usePostStore } from "~~/core/store/PostStore";
+import { useUserStore } from "~~/core/store/UserStore"; */
 import { useDesmosStore } from "~~/core/store/DesmosStore";
+import { usePostStore } from "~~/core/store/PostStore";
 
+const isSavingDraft = ref(false);
 const isPublishing = ref(false);
 
-async function editArticle () {
+function saveDraft () {
+  isSavingDraft.value = true;
+  useDraftStore().saveDraft().then(() => {
+    isSavingDraft.value = false;
+  });
+}
+
+async function publish () {
   isPublishing.value = true;
+  if (useDraftStore().id) {
+    editArticle();
+    return;
+  }
+  const success = await usePostStore().savePost();
+  if (success) {
+    await usePostStore().updateUserPosts();
+    useDraftStore().$reset();
+    useRouter().push(`/@${useAccountStore().profile.dtag}/${useDraftStore().externalId}`);
+  }
+  isPublishing.value = false;
+}
+
+async function editArticle () {
   const { $useIpfs, $useTransaction } = useNuxtApp();
   const draftStore = await useDraftStore();
   const extId = draftStore.externalId;
+  isPublishing.value = true;
 
   const msgEditPost: MsgEditPostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgEditPost",
@@ -69,7 +120,7 @@ async function editArticle () {
   // upload the post to IPFS (without CID attachment), get the returned CID
   const postCid = await $useIpfs().uploadPost(JSON.stringify(ipfsPost));
 
-  const postIpfsUrl = `https://ipfs.infura.io/ipfs/${postCid}`;
+  const postIpfsUrl = `${$useIpfs().gateway}${postCid}`;
   console.log(postIpfsUrl);
 
   const ipfsEntityUrl = {
@@ -86,44 +137,22 @@ async function editArticle () {
     urls: [ipfsEntityUrl]
   };
 
-  /* $useTransaction().push(msgCreatePost);
-  const signedBytes = await $useTransaction().execute(); */
+  const success = await $useTransaction().directTx([msgEditPost], [{
+    id: draftStore.id,
+    externalId: extId,
+    author: useAccountStore().address,
+    sectionId: useAccountStore().sectionId,
+    text: draftStore.title,
+    tags: draftStore.tags.map(tag => tag.content.value),
+    subtitle: draftStore.subtitle,
+    content: draftStore.content,
+    entities: JSON.stringify(msgEditPost.value.entities),
+    scriptaOp: "MsgEditPost"
+  }]);
 
-  let signedBytes = new Uint8Array();
-  try {
-    signedBytes = await $useTransaction().directSign([msgEditPost]);
-  } catch (e) {
-    console.log(e);
-  }
-
-  if (!signedBytes) {
-    return;
-  }
-
-  const res = await (
-    await fetch(`${useBackendStore().apiUrl}/posts/${extId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        id: draftStore.id,
-        signedPost: Buffer.from(signedBytes).toString("base64"),
-        externalId: extId,
-        author: useAccountStore().address,
-        sectionId: useAccountStore().sectionId,
-        text: draftStore.title,
-        tags: draftStore.tags.map(tag => tag.content.value),
-        subtitle: draftStore.subtitle,
-        content: draftStore.content,
-        entities: JSON.stringify(msgEditPost.value.entities)
-      })
-    })
-  ).json() as any;
-  console.log(res);
-  if (res.code === 0) {
-    usePostStore().userPosts = await useUserStore().getUserArticles(useAccountStore().address);
-    draftStore.$reset();
+  if (success) {
+    await usePostStore().updateUserPosts();
+    useDraftStore().$reset();
     useRouter().push(`/@${useAccountStore().profile.dtag}/${extId}`);
   }
   isPublishing.value = false;
@@ -132,6 +161,27 @@ async function editArticle () {
 async function deleteArticle () {
   isPublishing.value = true;
   const { $useTransaction } = useNuxtApp();
+
+  // if draft, just delete the draft from the backend
+  if (!useDraftStore().id) {
+    await (
+      await useBackendStore().fetch(
+        `${useBackendStore().apiUrl}/posts/delete/${useDraftStore().externalId}`,
+        "POST",
+        {
+          "Content-Type": "application/json"
+        },
+        JSON.stringify({
+          draft: true
+        })
+      )
+    ).json();
+    isPublishing.value = false;
+    await navigateTo("/profile");
+    return;
+  }
+
+  // otherwise, delete the post from the chain & the backend
   const msgDeletePost: MsgDeletePostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgDeletePost",
     value: {
@@ -140,32 +190,12 @@ async function deleteArticle () {
       signer: useAccountStore().address
     }
   };
-
-  let signedBytes = new Uint8Array();
-  try {
-    signedBytes = await $useTransaction().directSign(msgDeletePost);
-  } catch (e) {
-    console.log(e);
-  }
-
-  if (!signedBytes) {
-    return;
-  }
-
-  const res = await (
-    await fetch(`${useBackendStore().apiUrl}/posts/delete/${useDraftStore().externalId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        signedPost: Buffer.from(signedBytes).toString("base64")
-      })
-    })
-  ).json() as any;
-  console.log(res);
-  if (res.code === 0) {
-    usePostStore().userPosts = await useUserStore().getUserArticles(useAccountStore().address);
+  const success = await $useTransaction().directTx([msgDeletePost], [{
+    id: useDraftStore().id,
+    scriptaOp: "MsgDeletePost"
+  }]);
+  if (success) {
+    await usePostStore().updateUserPosts();
     useDraftStore().$reset();
     useRouter().push("/profile");
   }

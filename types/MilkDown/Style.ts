@@ -407,7 +407,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   const containerStyle = css`
     .milkdown {
       width: 100%;
-      min-height: 632px;
+      min-height: 100%;
 
       margin-left: auto;
       margin-right: auto;
@@ -433,6 +433,10 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       ${tooltipInputStyle}
 
       ${editorStyle}
+    }
+
+    .ProseMirror-focused {
+      border-left: 2px solid #FCF4E8;
     }
   `;
 
@@ -491,7 +495,6 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       padding: 0.5rem;
       row-gap: 0.5rem;
 
-      ${borderAll}
       background-color: ${surfaceColor};
 
       ${menuStyle}

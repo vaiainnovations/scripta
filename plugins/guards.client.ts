@@ -1,14 +1,48 @@
 import { useAuthStore } from "~~/core/store/AuthStore";
+import { useWalletStore } from "~~/core/store/wallet/WalletStore";
 export default defineNuxtPlugin(() => {
-  console.log("Loaded Client plugins");
   /**
    * Override default `authenticated` guard
    * Ensure user is authenticated, otherwise redirect to auth page
    */
   addRouteMiddleware("authenticated", async (to) => {
-    if (!useAuthStore().hasAuthStorage()) {
-      console.log(`[Guard] ${to.path} not authenticated, re-routing`);
+    // check if user is authenticated
+    const authStorage = useAuthStore().getAuthStorage();
+    if (!authStorage) {
+      console.log(`[Guard] ${to.path} not authenticated (no auth storage), re-routing`);
       return await navigateTo("/auth");
+    }
+
+    if (!authStorage.signer) {
+      console.log(`[Guard] ${to.path} not authenticated (no signer), re-routing`);
+      return await navigateTo("/auth");
+    }
+
+    // check if the user has already a connected address (if first page load, the address is not set yet)
+    // Note: call useWalletStore().retrieveCurrentWallet every time is slow!
+    let address = "";
+    try {
+      address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+    } catch (e) {
+      // signer not connected, not already connected
+    }
+
+    // connect to the wallet if the user is not connected
+    if (!address) {
+      await useWalletStore().retrieveCurrentWallet(authStorage.signer);
+      address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+    }
+
+    // check if the user is authenticated
+    const storedAuthAccount = useAuthStore().getAuthStorageAccount(address);
+    if (!storedAuthAccount) {
+      return await navigateTo("/auth/session");
+    }
+
+    // check if user has an authorized session
+    if (!useAuthStore().hasValidAuthAuthorization()) {
+      console.log(`[Guard] ${to.path} not valid authorization, re-routing`);
+      return await navigateTo("/auth/session");
     }
   });
 
@@ -18,8 +52,32 @@ export default defineNuxtPlugin(() => {
    */
   addRouteMiddleware("not-authenticated", async () => {
     if (useAuthStore().hasAuthStorage()) {
-      console.log("[Guard] routing, is logged");
-      return await navigateTo("/");
+      const authStorage = useAuthStore().getAuthStorage();
+
+      if (authStorage.signer) {
+        // check if the user has already a connected address (if first page load, the address is not set yet)
+        // Note: call useWalletStore().retrieveCurrentWallet every time is slow!
+        let address = "";
+        try {
+          address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+        } catch (e) {
+          // signer not connected, not already connected
+        }
+
+        // connect to the wallet if the user is not connected
+        if (!address) {
+          await useWalletStore().retrieveCurrentWallet(authStorage.signer);
+          address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+        }
+
+        // check if the user is authenticated
+        const storedAuthAccount = useAuthStore().getAuthStorageAccount(address);
+
+        if (storedAuthAccount) {
+          return await navigateTo("/");
+        }
+        console.log("[Guard] routing, is logged");
+      }
     }
   });
 });

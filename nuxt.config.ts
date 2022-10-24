@@ -22,12 +22,19 @@ if (mode === "production") {
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
+  runtimeConfig: {
+    public: {
+      isBetaVersion: process.env.NUXT_IS_BETA_VERSION === "true",
+      restApiUrl: process.env.NUXT_REST_API_URL
+    }
+  },
   alias: {
     "@": path.resolve(__dirname, "/src"),
     process: "process/browser",
     stream: "stream-browserify",
     buffer: "buffer",
-    Buffer: "buffer"
+    Buffer: "buffer",
+    util: "rollup-plugin-node-polyfills/polyfills/util"
   },
   nitro,
   tailwindcss: {
@@ -41,7 +48,7 @@ export default defineNuxtConfig({
     build: {
       rollupOptions: {
         plugins: [
-          inject({ Buffer: ["buffer", "Buffer"] })]
+          inject({ Buffer: ["buffer", "Buffer"], util: ["util"] })]
       }
     },
     plugins: [eslintPlugin()],
@@ -50,7 +57,8 @@ export default defineNuxtConfig({
       alias: {
         "@": path.resolve(__dirname, "/src"),
         process: "process/browser",
-        stream: "stream-browserify"
+        stream: "stream-browserify",
+        util: "util"
       }
     },
     optimizeDeps: {
@@ -75,7 +83,8 @@ export default defineNuxtConfig({
     }
   },
   alias: {
-    "@vue/devtools-api": "@vue/devtools-api"
+    "@vue/devtools-api": "@vue/devtools-api",
+    util: "util"
   },
   modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
   experimental: {

@@ -6,22 +6,52 @@
     <p class="text-xl font-medium text-primary-text-light lg:text-2xl xl:text-3xl">
       {{ props.subtitle }}
     </p>
-    <ArticlesViewUser :address="props.address" :date="props.date" />
+    <ArticlesViewUser
+      :address="props.address"
+      :date="props.date"
+    />
+    <div
+      v-if="isAuthor"
+      class="w-full text-right"
+    >
+      <div class="relative inline-flex text-gray-dark">
+        <NuxtLink :to="`/edit/${props.externalId}`" class="flex">
+          <img
+            src="/icons/broken/edit.svg"
+            class="mr-1 h-5 w-5 my-auto"
+          > Edit
+        </NuxtLink>
+      </div>
+    </div>
     <div class="pt-7">
-      <MarkDownEditor :read-only="true" :content="props.content" />
+      <MarkDownEditor
+        :read-only="true"
+        :content="props.content"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useAccountStore } from "~~/core/store/AccountStore";
 
 interface Props {
-  title: string
-  subtitle: string
-  content: string
-  address: string
-  date: Date
+  externalId: string;
+  title: string;
+  subtitle: string;
+  content: string;
+  address: string;
+  date: Date;
 }
 
 const props = defineProps<Props>();
+const isAuthor = ref(false);
+
+if (process.client) {
+  try {
+    isAuthor.value = props.address === useAccountStore().address;
+  } catch (e) {
+    // ignore
+  }
+}
 </script>

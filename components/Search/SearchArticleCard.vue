@@ -13,8 +13,9 @@
     <!-- Image of the article -->
     <div class="col-span-1 rounded-xl bg-[#B4FFFF]/20 py-1 px-1">
       <img
-        class="aspect-video h-full object-scale-down"
-        :src="articleImage"
+        class="aspect-video h-full max-h-20 object-scale-down"
+        :src="articleImage || '/img/author_pic.png'"
+        onerror="this.onerror=null;this.src='/img/author_pic.png'"
       >
     </div>
     <!-- Description of the article and author as flex container -->
@@ -26,15 +27,17 @@
         </p>
       </div>
       <!-- Author of the article -->
-      <div class="flex flex-row items-center gap-x-1 self-end">
+      <div class="flex flex-row items-center gap-x-1">
+        <p class="flex-grow" />
         <!-- Author name -->
-        <p class="text-md text-primary-text-light 2xl:text-sm">
+        <p class="text-md text-primary-text-light 2xl:text-sm truncate w-3/5 text-right">
           {{ authorNickname }}
         </p>
         <!-- Author profile picture -->
         <img
-          :src="authorImage"
-          class="h-3 w-3 object-contain lg:h-4 lg:w-4 2xl:h-5 2xl:w-5"
+          :src="authorImage || '/img/author_pic.png'"
+          onerror="this.onerror=null;this.src='/img/author_pic.png'"
+          class="h-5 w-5 object-contain rounded-full 2xl:h-6 2xl:w-6"
         >
       </div>
     </div>

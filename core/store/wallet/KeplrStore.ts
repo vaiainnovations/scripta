@@ -1,7 +1,7 @@
 /* import { SigningMode } from "@desmoslabs/desmjs"; */
 import { defineStore } from "pinia";
 import { registerModuleHMR } from "..";
-import { DESMOS_TESTNET_CHAIN_INFO } from "./KeplrSigner";
+import { useDesmosStore } from "../DesmosStore";
 
 export const useKeplrStore = defineStore({
   id: "KeplrStore",
@@ -24,36 +24,49 @@ export const useKeplrStore = defineStore({
     * Get the Keplr Signer from the window, and connect it to the wallet
     */
     async connect (): Promise<void> {
-      const { $useAuth, $useWallet, $KeplrSigner } = useNuxtApp();
-      if (!window.keplr) {
+      const { $useWallet, $KeplrSigner } = useNuxtApp();
+      const client = window.keplr;
+      if (!client) {
         return;
       }
       this.isInstalled = true;
 
       console.log(useRuntimeConfig().desmos);
-      // const chainInfo = (truncateSync) ? DESMOS_TESTNET_CHAIN_INFO : DESMOS_MAINNET_CHAIN_INFO;
-      const chainInfo = DESMOS_TESTNET_CHAIN_INFO;
-      await $KeplrSigner.setupChainNetwork(chainInfo);
+      // eslint-disable-next-line no-constant-condition
+      const chainInfo = useDesmosStore().chainInfo;
+
+      // Create the Keplr Signer with the currrent configuration
+      const keplrAminoSigner = new $KeplrSigner(client, {
+        signingMode: 0,
+        signOptions: {
+          disableBalanceCheck: false,
+          preferNoSetFee: false,
+          preferNoSetMemo: false
+        },
+        chainInfo
+      });
+      console.log(keplrAminoSigner);
+      const keplrSigner = new $KeplrSigner(client, {
+        signingMode: 1,
+        signOptions: {
+          disableBalanceCheck: false,
+          preferNoSetFee: false,
+          preferNoSetMemo: false
+        },
+        chainInfo
+      });
 
       // If Keplr + Ledger, sign out the user
-      const isLedgerKeplrUser = (await window.keplr.getKey("morpheus-apollo-2")).isNanoLedger;
+      /* const isLedgerKeplrUser = (await client.getKey("morpheus-apollo-2")).isNanoLedger;
       if (isLedgerKeplrUser) {
         await $useAuth().logout();
         await navigateTo({
           path: "/auth/desmos-app"
         });
         return;
-      }
+      } */
 
-      // Create the Keplr Signer with the currrent configuration
-      const keplrSigner = new $KeplrSigner(window.keplr!, {
-        signingMode: 1,
-        preferNoSetFee: true,
-        preferNoSetMemo: true,
-        chainInfo
-      });
-
-      await $useWallet().connect(keplrSigner, "keplr");
+      await $useWallet().connect(keplrSigner, keplrAminoSigner, "keplr");
     }
   }
 });

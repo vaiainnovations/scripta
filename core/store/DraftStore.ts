@@ -36,24 +36,21 @@ export const useDraftStore = defineStore({
       localStorage.setItem("drafts", this.externalId);
 
       // save the draft
-      const success = await fetch(`${useBackendStore().apiUrl}posts/${this.externalId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          draft: true,
-          text: this.title,
-          subtitle: this.subtitle,
-          content: this.content,
-          author: useAccountStore().address,
-          sectionId: 0,
-          entities: {},
-          creationDate: new Date(Date.now()),
-          lastEditedDate: new Date(Date.now()),
-          tags: this.tags.map(tag => tag.content.value)
-        })
-      });
+      const success = await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${this.externalId}`, "POST", {
+        "Content-Type": "application/json"
+      }, JSON.stringify({
+        draft: true,
+        text: this.title,
+        subtitle: this.subtitle,
+        content: this.content,
+        author: useAccountStore().address,
+        sectionId: 0,
+        entities: {},
+        creationDate: new Date(Date.now()),
+        lastEditedDate: new Date(Date.now()),
+        tags: this.tags.map(tag => tag.content.value)
+      })
+      );
 
       // handle the failure
       if (!success) {
@@ -68,7 +65,7 @@ export const useDraftStore = defineStore({
       useDraftStore().$reset(); // remove previous draft
       const localExternalId = localStorage.getItem("drafts") || "";
       if (localExternalId) {
-        const draft = await (await fetch(`${useBackendStore().apiUrl}posts/${localExternalId}`)).json() as any;
+        const draft = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${localExternalId}`, "GET", {}, "")).json() as any;
         if (!draft) {
           return; // no drafts found
         }
@@ -90,15 +87,13 @@ export const useDraftStore = defineStore({
       }
     },
     async deleteDraft () {
-      await fetch(`${useBackendStore().apiUrl}posts/${this.externalId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          draft: true
-        })
-      });
+      await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${this.externalId}`, "POST", {
+        "Content-Type": "application/json"
+      },
+      JSON.stringify({
+        draft: true
+      })
+      );
       localStorage.removeItem("drafts");
       useDraftStore().$reset();
     }
