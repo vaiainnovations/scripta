@@ -11,9 +11,8 @@ if (process.client) {
 if (process.client) {
   const { $useAuth } = useNuxtApp();
   $useAuth().init();
-} else {
-  await usePostStore().loadTrendings();
 }
+await usePostStore().loadTrendings();
 
 function dismissBetaAlert () {
   window.localStorage.setItem("isBetaAlertDismissed", "true");

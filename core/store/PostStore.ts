@@ -70,7 +70,7 @@ export const usePostStore = defineStore({
       }
     },
 
-    async  savePost (): Promise<boolean> {
+    async savePost (): Promise<boolean> {
       const { $useTransaction, $useIpfs } = useNuxtApp();
 
       // check if the user has a sectionId
@@ -190,8 +190,35 @@ export const usePostStore = defineStore({
       return await $useTransaction().directTx(msgs, msgsDetails);
     },
     async loadTrendings (): Promise<void> {
-      const trendingPostsRaw = await TrendingPostsKv.get("1");
-      this.trendings = trendingPostsRaw !== false ? trendingPostsRaw.slice(0, trendingPostsRaw.length - 1) : [];
+      let trendingPosts: PostExtended[] = [];
+
+      // Load backend trending posts
+      if (process.client) {
+        try {
+          trendingPosts = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}trend/posts`, "POST", {
+            "Content-Type": "application/json"
+          })).json() as PostExtended[];
+        } catch (e) {
+          console.log(e);
+        }
+      }
+
+      // Load KV trending posts
+      const kvTrendingPosts = useState("trendingPosts", () => []); // create shared client/server state for the trending posts
+      if (process.server) {
+        kvTrendingPosts.value = await TrendingPostsKv.get("1") || [];
+      }
+
+      // Merge the two trending posts
+      this.trendings = trendingPosts.concat(kvTrendingPosts.value);
+
+      // remove duplicates
+      this.trendings = this.trendings.filter((value, index, self) =>
+        index === self.findIndex(t => (
+          t.externalId === value.externalId
+        ))
+      );
+
       if (this.trendings.length > 0) {
         for (let i = 0; i < this.trendings.length; i++) {
           this.trendings[i].image = searchFirstContentImage(this.trendings[i].content) || "/img/author_pic.png";
