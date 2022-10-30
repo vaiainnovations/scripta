@@ -22,7 +22,6 @@
 <script lang="ts" setup>
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useBackendStore } from "~~/core/store/BackendStore";
-import { useDesmosStore } from "~~/core/store/DesmosStore";
 import { PostComment } from "~~/types/PostComment";
 
 interface Props {
@@ -35,8 +34,9 @@ const comments = ref([] as { comment: PostComment}[]);
 updateArticleComments();
 
 async function updateArticleComments () {
+  const { $useDesmosNetwork } = useNuxtApp();
   const query = `query PostReplies {
-  comments: post_reference(where: {reference: {subspace_id: {_eq: ${useDesmosStore().subspaceId}}, id: {_eq: ${props.referencedPost.toString()}}}}, order_by:{reference: {creation_date:desc}}) {
+  comments: post_reference(where: {reference: {subspace_id: {_eq: ${$useDesmosNetwork().subspaceId}}, id: {_eq: ${props.referencedPost.toString()}}}}, order_by:{reference: {creation_date:desc}}) {
     comment: post {
       id
       text

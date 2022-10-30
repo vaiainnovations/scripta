@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { useDesmosStore } from "./DesmosStore";
 import { useBackendStore } from "./BackendStore";
 import { registerModuleHMR } from ".";
 import { PostExtended, searchFirstContentImage } from "~~/types/PostExtended";
@@ -11,11 +10,12 @@ export const useUserStore = defineStore({
   }),
   actions: {
     async getUser (username: string, useCache = false): Promise<any> {
+      const { $useDesmosNetwork } = useNuxtApp();
       const cachedUser = this.users.get(username);
       if (cachedUser && useCache) {
         return cachedUser;
       }
-      const res = (await (await fetch(`${useDesmosStore().lcd}desmos/profiles/v3/profiles/${username}`)).json() as any);
+      const res = (await (await fetch(`${$useDesmosNetwork().lcd}desmos/profiles/v3/profiles/${username}`)).json() as any);
       if (res.profile) {
         const user = res.profile as any;
         this.users.set(username, user);

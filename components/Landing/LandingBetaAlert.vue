@@ -12,7 +12,7 @@
             This is a Beta version
           </h2>
           <div class="p-1">
-            This version is still under development, may contain bugs, and runs on top of the <b>Desmos Testnet</b> (morpheus-apollo-2).
+            This version is still under development, may contain bugs, and runs on top of the <b>Desmos Testnet</b>.
             <div class="pt-2 text-sm">
               Please report any issues to the Scripta team.
             </div>

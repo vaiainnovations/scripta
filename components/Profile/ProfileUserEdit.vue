@@ -118,7 +118,6 @@
 <script setup lang="ts">
 import { MsgSaveProfileEncodeObject } from "@desmoslabs/desmjs";
 import { useAccountStore } from "~~/core/store/AccountStore";
-import { useDesmosStore } from "~~/core/store/DesmosStore";
 const emit = defineEmits(["userEdited"]);
 const newNickname = ref(useAccountStore().profile?.nickname || "");
 const newUsername = ref(useAccountStore().profile?.dtag || "");
@@ -180,6 +179,7 @@ function saveProfile () {
  * Check username availability
  */
 async function checkUsername () {
+  const { $useDesmosNetwork } = useNuxtApp();
   // TODO: improve with graphql calls
   const username = newUsername.value;
 
@@ -188,13 +188,13 @@ async function checkUsername () {
     return;
   }
 
-  if (!(useDesmosStore().usernameRegexp.test(username))) {
+  if (!($useDesmosNetwork().usernameRegexp.test(username))) {
     isValidUsername.value = false;
     return;
   }
 
   try {
-    const res = await (await fetch(`${useDesmosStore().lcd}desmos/profiles/v3/profiles/${username}`)).json() as any;
+    const res = await (await fetch(`${$useDesmosNetwork().lcd}desmos/profiles/v3/profiles/${username}`)).json() as any;
     if (res?.profile) {
       isValidUsername.value = false;
       return;

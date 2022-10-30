@@ -110,7 +110,7 @@
                 Scripta v1.0.0 ()
               </h6>
               <h6 class="text-xs text-gray-dark">
-                {{ useDesmosStore().chainInfo.chainId }}
+                {{ $useDesmosNetwork().chainId }}
               </h6>
             </div>
           </div>
@@ -123,7 +123,7 @@
 <script lang="ts" setup>
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useBackendStore } from "~~/core/store/BackendStore";
-import { useDesmosStore } from "~~/core/store/DesmosStore";
+const { $useDesmosNetwork } = useNuxtApp();
 
 const isUpdating = ref(false);
 

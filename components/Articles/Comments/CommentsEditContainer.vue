@@ -2,7 +2,6 @@
 import { MsgEditPostEncodeObject } from "@desmoslabs/desmjs";
 import Long from "long";
 import { useAccountStore } from "~~/core/store/AccountStore";
-import { useDesmosStore } from "~~/core/store/DesmosStore";
 import { PostComment } from "~~/types/PostComment";
 
 interface Props {
@@ -22,11 +21,11 @@ if (process.client) {
 }
 
 function edit () {
-  const { $useTransaction } = useNuxtApp();
+  const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
   const msgEditComment: MsgEditPostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgEditPost",
     value: {
-      subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
+      subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
       postId: Long.fromNumber(props.comment.id),
       editor: useAccountStore().address,
       text: comment.value,
@@ -39,41 +38,6 @@ function edit () {
     text: comment.value,
     scriptaOp: "MsgEditPostComment"
   });
-  /* let signedBytes = new Uint8Array();
-  try {
-    if (!useAccountStore().authz.hasAuthz) {
-      signedBytes = await $useTransaction().directSign([msgCreateComment]);
-    }
-  } catch (e) {
-    console.log(e);
-  }
-
-  if (!signedBytes) {
-    return;
-  }
-
-  const res = (await (
-    await useBackendStore().fetch(
-      `${useBackendStore().apiUrl}/comments/${msgCreateComment.value.externalId}`,
-      "POST",
-      {
-        "Content-Type": "application/json"
-      },
-      JSON.stringify({
-        signedPost: (signedBytes) ? Buffer.from(signedBytes).toString("base64") : "",
-        externalId: msgCreateComment.value.externalId,
-        author: useAccountStore().address,
-        sectionId: msgCreateComment.value.sectionId,
-        text: msgCreateComment.value.text,
-        referencedPosts: msgCreateComment.value.referencedPosts
-      })
-    )
-  ).json()) as any;
-  if (res.code === 0) {
-    comment.value = "";
-    isCommentPublishing.value = false;
-    emit("newComment");
-  } */
 
   $useTransaction().$subscribe(() => {
     if ($useTransaction().queue.length === 0) {

@@ -9,7 +9,7 @@
         class="h-5 w-5 object-contain"
       >
       <p class="text-xl font-medium">
-        {{ useAccountStore().balance }} {{ useDesmosStore().coinDenom.toUpperCase() }}
+        {{ useAccountStore().balance }} {{ coinDenom }}
       </p>
     </div>
     <button
@@ -29,7 +29,12 @@
 
 <script setup lang="ts">
 import { useAccountStore } from "~~/core/store/AccountStore";
-import { useDesmosStore } from "~~/core/store/DesmosStore";
+const { $useDesmosNetwork } = useNuxtApp();
+const coinDenom = ref("");
+
+if (process.client) {
+  coinDenom.value = $useDesmosNetwork().coinDenom.toUpperCase();
+}
 
 function logout () {
   const { $useAuth } = useNuxtApp();

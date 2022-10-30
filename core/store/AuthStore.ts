@@ -1,14 +1,14 @@
 
 import { Buffer } from "buffer";
-import { MsgGrantEncodeObject } from "@desmoslabs/desmjs";
+import { MsgGrantEncodeObject, MsgRevokeEncodeObject } from "@desmoslabs/desmjs";
 import { Timestamp } from "cosmjs-types/google/protobuf/timestamp";
 import { GenericAuthorization } from "cosmjs-types/cosmos/authz/v1beta1/authz";
 import { defineStore } from "pinia";
 import { generateUsername } from "unique-username-generator";
 import { decodeTxRaw } from "@cosmjs/proto-signing";
 import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
-import { SupportedSigner, useWalletStore } from "./wallet/WalletStore";
-import { useDesmosStore } from "./DesmosStore";
+import { useWalletStore } from "./wallet/WalletStore";
+import { SupportedSigner } from "./wallet/SupportedSigner";
 import { useAccountStore } from "./AccountStore";
 import { useBackendStore } from "./BackendStore";
 import { registerModuleHMR } from ".";
@@ -318,7 +318,7 @@ export const useAuthStore = defineStore({
       return authzConfig;
     },
     async grantAuthorizations () {
-      const { $useTransaction } = useNuxtApp();
+      const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
       const grants = [] as MsgGrantEncodeObject[];
       await useAccountStore().getUserInfo();
 
@@ -346,7 +346,7 @@ export const useAuthStore = defineStore({
         }
         );
       });
-      const signed = await $useTransaction().directSign(grants, "Signed from Scripta", useDesmosStore().defaultFee, 1);
+      const signed = await $useTransaction().directSign(grants, "Signed from Scripta", $useDesmosNetwork().defaultFee, 1);
       if (!signed) {
         return false;
       }
@@ -371,7 +371,7 @@ export const useAuthStore = defineStore({
       return true;
     },
     async revokeAuthorizations (): Promise<boolean> {
-      const { $useTransaction } = useNuxtApp();
+      const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
       const revokes = [] as MsgRevokeEncodeObject[];
       useAccountStore().authz.DEFAULT_AUTHORIZATIONS.forEach((revokeType) => {
         revokes.push({
@@ -383,7 +383,7 @@ export const useAuthStore = defineStore({
           }
         });
       });
-      const signed = await $useTransaction().directSign(revokes, "Signed from Scripta", useDesmosStore().defaultFee, 1);
+      const signed = await $useTransaction().directSign(revokes, "Signed from Scripta", $useDesmosNetwork().defaultFee, 1);
 
       try {
         (await (

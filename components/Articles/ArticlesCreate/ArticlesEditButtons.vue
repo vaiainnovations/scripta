@@ -63,9 +63,6 @@ import Long from "long";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
 import { useBackendStore } from "~~/core/store/BackendStore";
-/* import { usePostStore } from "~~/core/store/PostStore";
-import { useUserStore } from "~~/core/store/UserStore"; */
-import { useDesmosStore } from "~~/core/store/DesmosStore";
 import { usePostStore } from "~~/core/store/PostStore";
 
 const isSavingDraft = ref(false);
@@ -94,7 +91,7 @@ async function publish () {
 }
 
 async function editArticle () {
-  const { $useIpfs, $useTransaction } = useNuxtApp();
+  const { $useIpfs, $useTransaction, $useDesmosNetwork } = useNuxtApp();
   const draftStore = await useDraftStore();
   const extId = draftStore.externalId;
   isPublishing.value = true;
@@ -102,7 +99,7 @@ async function editArticle () {
   const msgEditPost: MsgEditPostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgEditPost",
     value: {
-      subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
+      subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
       editor: useAccountStore().address,
       postId: draftStore.id,
       tags: draftStore.tags.map(tag => tag.content.value),
@@ -160,7 +157,7 @@ async function editArticle () {
 
 async function deleteArticle () {
   isPublishing.value = true;
-  const { $useTransaction } = useNuxtApp();
+  const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
 
   // if draft, just delete the draft from the backend
   if (!useDraftStore().id) {
@@ -185,7 +182,7 @@ async function deleteArticle () {
   const msgDeletePost: MsgDeletePostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgDeletePost",
     value: {
-      subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
+      subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
       postId: useDraftStore().id,
       signer: useAccountStore().address
     }

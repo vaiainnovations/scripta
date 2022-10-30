@@ -1,7 +1,6 @@
-/* import { SigningMode } from "@desmoslabs/desmjs"; */
 import { defineStore } from "pinia";
 import { registerModuleHMR } from "..";
-import { useDesmosStore } from "../DesmosStore";
+import { SupportedSigner } from "./SupportedSigner";
 
 export const useKeplrStore = defineStore({
   id: "KeplrStore",
@@ -24,16 +23,15 @@ export const useKeplrStore = defineStore({
     * Get the Keplr Signer from the window, and connect it to the wallet
     */
     async connect (): Promise<void> {
-      const { $useWallet, $KeplrSigner } = useNuxtApp();
+      const { $useWallet, $KeplrSigner, $useDesmosNetwork, $useAuth } = useNuxtApp();
       const client = window.keplr;
       if (!client) {
         return;
       }
       this.isInstalled = true;
 
-      console.log(useRuntimeConfig().desmos);
-      // eslint-disable-next-line no-constant-condition
-      const chainInfo = useDesmosStore().chainInfo;
+      await $useDesmosNetwork().updateChainStatus();
+      const chainInfo = $useDesmosNetwork().chainInfo;
 
       // Create the Keplr Signer with the currrent configuration
       const keplrAminoSigner = new $KeplrSigner(client, {
@@ -45,7 +43,6 @@ export const useKeplrStore = defineStore({
         },
         chainInfo
       });
-      console.log(keplrAminoSigner);
       const keplrSigner = new $KeplrSigner(client, {
         signingMode: 1,
         signOptions: {
@@ -57,16 +54,16 @@ export const useKeplrStore = defineStore({
       });
 
       // If Keplr + Ledger, sign out the user
-      /* const isLedgerKeplrUser = (await client.getKey("morpheus-apollo-2")).isNanoLedger;
+      const isLedgerKeplrUser = (await client.getKey($useDesmosNetwork().chainId)).isNanoLedger;
       if (isLedgerKeplrUser) {
         await $useAuth().logout();
         await navigateTo({
           path: "/auth/desmos-app"
         });
         return;
-      } */
+      }
 
-      await $useWallet().connect(keplrSigner, keplrAminoSigner, "keplr");
+      await $useWallet().connect(keplrSigner, keplrAminoSigner, SupportedSigner.Keplr);
     }
   }
 });

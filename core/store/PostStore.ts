@@ -6,7 +6,6 @@ import Long from "long";
 import { useAccountStore } from "./AccountStore";
 import { useBackendStore } from "./BackendStore";
 import { useUserStore } from "./UserStore";
-import { useDesmosStore } from "./DesmosStore";
 import { useDraftStore } from "./DraftStore";
 import { registerModuleHMR } from ".";
 import { PostKv } from "~~/types/PostKv";
@@ -71,7 +70,7 @@ export const usePostStore = defineStore({
     },
 
     async savePost (): Promise<boolean> {
-      const { $useTransaction, $useIpfs } = useNuxtApp();
+      const { $useTransaction, $useIpfs, $useDesmosNetwork } = useNuxtApp();
 
       // check if the user has a sectionId
       if (useAccountStore().sectionId <= 0) {
@@ -105,7 +104,7 @@ export const usePostStore = defineStore({
       const msgCreatePost: MsgCreatePostEncodeObject = {
         typeUrl: "/desmos.posts.v2.MsgCreatePost",
         value: {
-          subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
+          subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
           externalId: extId,
           attachments: [],
           author: useAccountStore().address,

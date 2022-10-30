@@ -22,7 +22,7 @@
               <div class="font-bold h-full py-2">
                 {{ amount }}
                 <p class="text-[0.7rem] font-normal text-primary-text/70">
-                  {{ (amount * useDesmosStore().desmosPrice).toPrecision(2) }}$
+                  {{ (amount * $useDesmosNetwork().desmosPrice).toPrecision(2) }}$
                 </p>
               </div>
             </div>
@@ -41,7 +41,7 @@
               <input v-model="tipAmount" type="number" min="1" class="outline-none py-2 px-4 block w-full pl-12 sm:text-sm rounded-md" placeholder="0">
             </div>
             <p class="text-xs font-light text-primary-text/60 pt-1" :class="{'text-danger': tipAmount > useAccountStore().balance }">
-              You have: {{ useAccountStore().balance }} {{ useDesmosStore().coinDenom }}
+              You have: {{ useAccountStore().balance }} {{ $useDesmosNetwork().coinDenom }}
             </p>
           </div>
           <div v-if="tipAmount <= useAccountStore().balance" class="my-auto p-1 mx-3 hover:bg-background rounded-full">
@@ -57,7 +57,6 @@
 <script lang="ts" setup>
 import { MsgSendEncodeObject } from "@cosmjs/stargate";
 import { useAccountStore } from "~~/core/store/AccountStore";
-import { useDesmosStore } from "~~/core/store/DesmosStore";
 import { useUserStore } from "~~/core/store/UserStore";
 
 interface Props {
@@ -71,7 +70,9 @@ const tipAmount = ref(1);
 
 const nickname = ref(props.author);
 nickname.value = (await useUserStore().getUser(props.author, true)).dtag;
-useDesmosStore().updateDesmosPrice();
+
+const { $useDesmosNetwork } = useNuxtApp();
+$useDesmosNetwork().updateDesmosPrice();
 
 function setTipAmount (amount:number) {
   tipAmount.value = amount;
@@ -85,7 +86,7 @@ function sendTip () {
       amount: [
         {
           amount: (tipAmount.value * 1_000_000).toString(),
-          denom: useDesmosStore().ucoinDenom
+          denom: $useDesmosNetwork().ucoinDenom
         }
       ],
       fromAddress: useAccountStore().address,
