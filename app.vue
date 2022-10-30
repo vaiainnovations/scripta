@@ -8,9 +8,9 @@ const isBetaAlertDismissed = ref(true);
 if (process.client) {
   const { $useAuth } = useNuxtApp();
   isBetaAlertDismissed.value = window.localStorage.getItem("isBetaAlertDismissed") === "true" || !useConfigStore().isBetaVersion;
+  await useNuxtApp().$useDesmosNetwork().init();
   $useAuth().init();
 }
-await useNuxtApp().$useDesmosNetwork().init();
 await usePostStore().loadTrendings();
 
 function dismissBetaAlert () {

@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { DesmosTestnet } from "@desmoslabs/desmjs";
+import { useConfigStore } from "./ConfigStore";
 import { useBackendStore } from "./BackendStore";
 import { registerModuleHMR } from ".";
 
@@ -36,8 +37,6 @@ export const useDesmosStore = defineStore({
   state: () => ({
     chainStatus: null as ChainStatus,
     chainInfo,
-    rpc: "https://rpc-testnet.scripta.network/",
-    lcd: "https://lcd-testnet.scripta.network/",
     explorer: "https://morpheus.desmos.network/",
     coinDenom: chainInfo.currencies[chainInfo.currencies.length - 1].coinDenom,
     ucoinDenom: chainInfo.currencies[0].coinMinimalDenom,
@@ -62,7 +61,7 @@ export const useDesmosStore = defineStore({
       }
     },
     async updateChainStatus (): Promise<void> {
-      this.chainStatus = (await (await fetch(`${this.rpc}/status`)).json() as any).result as ChainStatus;
+      this.chainStatus = (await (await fetch(`${useConfigStore().rpcUrl}/status`)).json() as any).result as ChainStatus;
     },
     async updateDesmosPrice () {
       this.desmosPrice = (await (await useBackendStore().fetch("https://api.coingecko.com/api/v3/simple/price?ids=desmos&vs_currencies=usd", "GET", {})).json() as any).desmos.usd;

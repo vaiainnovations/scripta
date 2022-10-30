@@ -25,7 +25,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       isBetaVersion: process.env.NUXT_IS_BETA_VERSION === "true",
-      restApiUrl: process.env.NUXT_REST_API_URL
+      restApiUrl: process.env.NUXT_REST_API_URL,
+      rpcUrl: process.env.NUXT_RPC_URL,
+      lcdUrl: process.env.NUXT_LCD_URL
     }
   },
   alias: {

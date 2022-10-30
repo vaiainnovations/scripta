@@ -5,7 +5,9 @@ export const useConfigStore = defineStore({
   id: "ConfigStore",
   state: () => ({
     isBetaVersion: useRuntimeConfig().public.isBetaVersion,
-    restApiUrl: useRuntimeConfig().public.restApiUrl
+    restApiUrl: useRuntimeConfig().public.restApiUrl,
+    rpcUrl: useRuntimeConfig().public.rpcUrl,
+    lcdUrl: useRuntimeConfig().public.lcdUrl
   }),
   actions: {
   }
