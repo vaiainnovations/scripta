@@ -129,8 +129,11 @@ async function continueWithAuthz () {
   }
 
   const success = await $useAuth().grantAuthorizations();
-  console.log(success);
-
   isLoading.value = false;
+
+  if (success) {
+    await useAccountStore().getUserInfo(); // update the user info
+    await navigateTo("/profile");
+  }
 }
 </script>
