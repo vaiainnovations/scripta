@@ -55,6 +55,7 @@ function edit () {
       <div class="flex">
         <img
           :src="useAccountStore().profile?.pictures?.profile || ''"
+          onerror="this.onerror=null;this.src='/img/author_pic.png'"
           class="h-7 w-7 md:h-10 md:w-10 rounded-full mr-1 lg:mr-3"
         >
         <textarea
