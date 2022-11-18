@@ -26,6 +26,8 @@ export const useBackendStore = defineStore({
           }
           if (authStorage.accountNumber) {
             headers.append("an", authStorage.accountNumber.toString());
+          } else if (authStorage.authorization) {
+            headers.append("an", "0");
           }
         }
       }
