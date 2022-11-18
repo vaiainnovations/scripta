@@ -15,11 +15,15 @@ export const useUserStore = defineStore({
       if (cachedUser && useCache) {
         return cachedUser;
       }
-      const res = (await (await fetch(`${useConfigStore().lcdUrl}desmos/profiles/v3/profiles/${username}`)).json() as any);
-      if (res.profile) {
-        const user = res.profile as any;
-        this.users.set(username, user);
-        return user;
+      try {
+        const res = (await (await fetch(`${useConfigStore().lcdUrl}desmos/profiles/v3/profiles/${username}`)).json() as any);
+        if (res.profile) {
+          const user = res.profile as any;
+          this.users.set(username, user);
+          return user;
+        }
+      } catch (e) {
+        // profile not found
       }
       return null;
     },
