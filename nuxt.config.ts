@@ -88,7 +88,7 @@ export default defineNuxtConfig({
     "@vue/devtools-api": "@vue/devtools-api",
     util: "util"
   },
-  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
+  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt", "@nuxtjs/device"],
   experimental: {
     treeshakeClientOnly: true
   }

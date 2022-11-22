@@ -19,13 +19,23 @@
 
 <script setup lang="ts">
 import { useKeplrStore } from "~~/core/store/wallet/KeplrStore";
-await initKeplr();
+
+if (process.client) {
+  initKeplr();
+  window.setInterval(async () => {
+    if (!useKeplrStore().isInstalled) {
+      await initKeplr();
+    }
+  }, 1000);
+}
 
 /**
  * Start Keplr detection
+ * @returns {boolean} true if Keplr is installed & initialized
  */
 async function initKeplr () {
   await useKeplrStore().init();
+  return useKeplrStore().isAvailable;
 }
 
 function onDownloadAction () {

@@ -5,7 +5,8 @@ import { SupportedSigner } from "./SupportedSigner";
 export const useKeplrStore = defineStore({
   id: "KeplrStore",
   state: () => ({
-    isInstalled: false
+    isInstalled: false, // Keplr extension is installed
+    isAvailable: false // Keplr is available
   }),
   getters: {
   },
@@ -13,9 +14,25 @@ export const useKeplrStore = defineStore({
     /**
      * Init Keplr & check requirements
      */
-    init (): void {
+    async init (): Promise<void> {
       if (process.client) {
-        this.isInstalled = window.keplr && window.keplr.version !== "";
+        if (window.keplr) { // Check if Keplr is already installed
+          this.isInstalled = true;
+          this.isAvailable = true;
+          return;
+        }
+        const device = useDevice();
+        if (device.isChrome) {
+          try {
+            await fetch("chrome-extension://dmkamcknogkgcdfhhbddcghachkejeap/injectedScript.bundle.js"); // check if the js bundle is available
+            window.location.reload(); // if it is, the extension is installed, reload the page to load the extension
+          } catch (e) {
+            console.log("Keplr extension is not installed");
+          }
+        }
+        if (this.isInstalled) {
+          this.isAvailable = window.keplr && window.keplr.version !== ""; // check if the Keplr instance is available
+        }
       }
     },
     /**
@@ -23,18 +40,19 @@ export const useKeplrStore = defineStore({
     * Get the Keplr Signer from the window, and connect it to the wallet
     */
     async connect (): Promise<void> {
-      const { $useWallet, $KeplrSigner, $useDesmosNetwork, $useAuth } = useNuxtApp();
+      const { $useWallet, $DesmjsKeplr, $useDesmosNetwork, $useAuth } = useNuxtApp();
       const client = window.keplr;
       if (!client) {
         return;
       }
-      this.isInstalled = true;
+      this.isAvailable = true;
 
       await $useDesmosNetwork().updateChainStatus();
       const chainInfo = $useDesmosNetwork().chainInfo;
+      await $DesmjsKeplr.KeplrSigner.setupChainNetwork(await useNuxtApp().$DesmjsKeplr.setupChainInfo(chainInfo));
 
       // Create the Keplr Signer with the currrent configuration
-      const keplrAminoSigner = new $KeplrSigner(client, {
+      const keplrAminoSigner = new $DesmjsKeplr.KeplrSigner(client, {
         signingMode: 0,
         signOptions: {
           disableBalanceCheck: false,
@@ -43,7 +61,7 @@ export const useKeplrStore = defineStore({
         },
         chainInfo
       });
-      const keplrSigner = new $KeplrSigner(client, {
+      const keplrSigner = new $DesmjsKeplr.KeplrSigner(client, {
         signingMode: 1,
         signOptions: {
           disableBalanceCheck: false,
