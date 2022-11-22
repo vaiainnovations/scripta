@@ -14,13 +14,6 @@ const emit = defineEmits(["newComment"]);
 const comment = ref("");
 const isCommentPublishing = ref(false);
 
-const canWrite = ref(false);
-if (process.client) {
-  if (useAccountStore().address) {
-    canWrite.value = true;
-  }
-}
-
 function postComment () {
   const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
   const extId = uuidv4();
@@ -75,7 +68,7 @@ function postComment () {
 
 <template>
   <div class="p-3">
-    <div v-if="canWrite">
+    <div>
       <div class="flex">
         <img
           onerror="this.onerror=null;this.src='/img/author_pic.png'"
