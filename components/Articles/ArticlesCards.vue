@@ -9,7 +9,7 @@
       </NuxtLink>
     </div>
     <span
-      v-for="(post, i) in trendingPosts"
+      v-for="(post, i) in trendingPosts.slice(1)"
       :key="i"
     >
       <NuxtLink :to="`/@${post.author}/${post.externalId}`">
