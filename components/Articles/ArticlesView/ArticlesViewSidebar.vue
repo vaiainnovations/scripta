@@ -5,11 +5,17 @@
         Continue your reading
       </p>
     </div>
-    <span v-for="post in (usePostStore().trendings)" :key="post.externalId" class="w-full">
-      <NuxtLink :to="`/@${post.author}/${post.externalId}`">
-        <ArticlesViewSuggested :post="post" />
-      </NuxtLink>
-    </span>
+    <div class="max-h-[90vh]  overflow-y-auto w-full">
+      <span
+        v-for="post in (usePostStore().trendings)"
+        :key="post.externalId"
+        class="w-full"
+      >
+        <NuxtLink :to="`/@${post.author}/${post.externalId}`">
+          <ArticlesViewSuggested :post="post" />
+        </NuxtLink>
+      </span>
+    </div>
   </div>
 </template>
 
