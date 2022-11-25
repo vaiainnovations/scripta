@@ -5,4 +5,9 @@ export interface ContentPreviewType {
   image: string;
   content: string;
   tags: string[];
+  analytics?: {
+    views: number;
+    upvotes: number;
+    downvotes: number;
+  }
 }
