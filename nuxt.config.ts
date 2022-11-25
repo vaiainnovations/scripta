@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { defineNuxtConfig } from "nuxt";
 import eslintPlugin from "vite-plugin-eslint";
 import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
 import inject from "@rollup/plugin-inject";
