@@ -25,7 +25,7 @@
           class="w-full"
           :to="`/edit/${article.externalId}`"
         >
-          <ArticlesSmallPreview :content="{description: article.subtitle, title: article.text, image: article.image, content: article.content, tags: article.tags, id: article.id, analytics: {views: 0, upvotes: article.reaction_cnt_1, downvotes: article.reaction_cnt_2}}" />
+          <ArticlesSmallPreview :content="{description: article.subtitle, title: article.text, image: article.image, content: article.content, tags: article.tags, id: article.id, analytics: {views: article.post_cnt, upvotes: article.reaction_cnt_1, downvotes: article.reaction_cnt_2}}" />
         </NuxtLink>
       </div>
       <div

@@ -46,14 +46,14 @@
               v-if="props.content.analytics && props.content.id > 0"
               class="mt-auto self-end flex"
             >
-              <!-- <div class="flex">
+              <div class="flex">
                 <img src="/icons/linear/eye.svg" class="h-5 mx-1">
                 {{ shortNumber(props.content.analytics.views) }}
               </div>
 
               <div class="flex">
                 <div class="w-1 h-1 bg-primary-text rounded-full mx-1.5 my-auto" />
-              </div> -->
+              </div>
 
               <div class="flex">
                 <ArticlesUpvote :reacted="true" />
@@ -113,14 +113,14 @@
               v-if="props.content.analytics && props.content.id > 0"
               class="mt-auto self-end flex float-right m-2"
             >
-              <!-- <div class="flex">
-              <img src="/icons/linear/eye.svg" class="h-5 mx-1">
-              {{ shortNumber(props.content.analytics.views) }}
-            </div>
+              <div class="flex">
+                <img src="/icons/linear/eye.svg" class="h-5 mx-1">
+                {{ shortNumber(props.content.analytics.views) }}
+              </div>
 
-            <div class="flex">
-              <div class="w-1 h-1 bg-primary-text rounded-full mx-1.5 my-auto" />
-            </div> -->
+              <div class="flex">
+                <div class="w-1 h-1 bg-primary-text rounded-full mx-1.5 my-auto" />
+              </div>
 
               <div class="flex">
                 <ArticlesUpvote :reacted="true" />
