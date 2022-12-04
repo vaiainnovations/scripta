@@ -1,21 +1,30 @@
 <template>
-  <section class="min-h-screen md:min-h-[80vh] bg-gradient-to-tr from-[#e5007e8b] to-[#f2910096] pt-28 md:pt-40 background-animate">
+  <section class="md:min-h-[60vh] px-10 2xl:px-40 bg-gradient-to-tr from-[#e5007e8b] to-[#f2910096] pt-40 md:pt-32 background-animate text-primary-text">
     <div class="h-full w-full">
       <!-- bg-[rgba(244,184,73,0.54)] -->
       <div class="container mx-auto px-4 h-full flex justify-center">
         <div class="md:flex">
-          <div class="flex-1 my-auto md:pl-10">
-            <div class="text-primary-dark text-center md:text-left">
-              <div class="font-thin italic text-7xl xl:text-8xl tracking-wide p-4 md:p-0">
+          <div class="pb-20 md:pb-0 md:w-9/12 2xl:w-7/12 my-auto md:pl-10">
+            <div class="text-primary-dark md:text-left">
+              <div class="font-thin italic text-5xl sm:text-4xl xl:text-6xl tracking-wide md:p-0">
                 verba volant<span class="pl-1">,</span>
               </div>
-              <div class="font-black pt-6 text-primary-text text-6xl md:text-7xl xl:text-8xl uppercase tracking-widest">
+              <div class="font-black pt-2 text-4xl sm:text-3xl lg:text-4xl xl:text-6xl uppercase tracking-widest">
                 scripta manent.
               </div>
             </div>
-            <!-- <div class="pt-14 text-2xl font-light">
-              Discover a Decentrilezed way to share your thoughts.
-            </div> -->
+            <div class="pt-8 text-lg text-2xl xl:text-3xl font-extralight xl:mr-64">
+              Explore stories, thoughts, and insights on any topics, without having worries about your privacy
+
+              <div class="gradient-text h-12 rounded-xl bg-white sm:px-5 md:px-10 mt-8 w-full md:w-1/2 flex justify-center">
+                <button
+                  type="button"
+                  class="bg-gradient-to-r to-[#e5007e] from-[#f29100] bg-clip-text bg-background text-2xl font-semibold "
+                >
+                  Start Reading
+                </button>
+              </div>
+            </div>
             <div
               v-if="!useConfigStore().isBetaVersion"
               class="flex flex-col bg-background items-center p-6 m-2 bg-indigo-600 rounded-lg shadow-4xl gap-4 sm:flex-row sm:justify-between order-1 mt-10"
@@ -37,10 +46,10 @@
               </a>
             </div>
           </div>
-          <div class="w-full mx-auto flex flex-col-reverse pt-20 md:pt-0">
+          <div class="hidden md:block w-full mx-auto md:flex-1 mt-auto md:pt-0 2xl:pl-20">
             <img
               src="https://cdn.discordapp.com/attachments/956124846750834719/1019643475194548224/3_med.png"
-              class="w-3/5 mx-auto lg:mr-14 md:pb-10 my-auto"
+              class="2xl:w-3/5 "
             >
           </div>
         </div>
