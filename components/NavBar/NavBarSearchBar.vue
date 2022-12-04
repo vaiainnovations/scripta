@@ -1,6 +1,6 @@
 <template>
   <!-- Search input, wider on larger screen (>= 1024 px) -->
-  <div class="relative h-10 w-56 lg:w-full">
+  <div class="relative h-10 w-full mx-2 sm:w-3/5 lg:w-1/3 xl:w-1/5">
     <label class="block h-full">
       <!-- Search icon on the left of the searchbar -->
       <span class="absolute inset-y-0 left-0 flex items-center pl-2">
@@ -12,8 +12,8 @@
       <!-- Input for searching; activates the search tooltip on the blur/focus event -->
       <input
         v-model="inputSearch"
-        class="block h-full w-full rounded-xl border border-primary-text-light bg-background-alt pl-10 align-middle text-sm text-primary-text placeholder:text-primary-text"
-        placeholder="Search"
+        class="block h-full w-full rounded-xl border border-gray-light bg-white pl-10 align-middle text-sm text-primary-text placeholder:text-primary-text"
+        placeholder="Search for articles"
         type="text"
         @keyup="onSearchInput"
       >

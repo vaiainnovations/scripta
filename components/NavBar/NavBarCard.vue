@@ -8,7 +8,9 @@
     </div> -->
     <div class="flex h-16 flex-row items-center justify-between px-3 md:gap-x-24 md:px-8 xl:gap-x-48 xl:px-16">
       <!-- Logo on the left of the navbar -->
-      <NavBarLogo />
+      <slot name="left">
+        <NavBarLogo />
+      </slot>
       <!-- Search bar in the middle of the navbar -->
       <slot name="central">
         <NavBarSearchBar />

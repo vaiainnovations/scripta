@@ -6,12 +6,12 @@
       class="w-fit mr-4"
     >
       <div class="hidden md:block">
-        <div class="gradient-text flex h-10 flex-row items-center justify-center rounded-full border border-primary-text-light sm:px-5 md:px-10 mr-3">
+        <div class="gradient-text flex h-10 flex-row items-center justify-center rounded-xl border border-gray-light bg-white sm:px-5 md:px-10 mr-3">
           <button
             type="button"
-            class="bg-gradient-to-r to-[#e5007e] from-[#f29100] bg-clip-text text-2xl font-semibold"
+            class="bg-gradient-to-r to-[#e5007e] from-[#f29100] bg-clip-text bg-background text-2xl font-semibold"
           >
-            Write
+            Start Writing
           </button>
         </div>
       </div>
