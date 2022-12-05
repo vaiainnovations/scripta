@@ -15,7 +15,7 @@ import { TrendingPostsKv } from "~~/types/TrendingPostsKv";
 export const usePostStore = defineStore({
   id: "PostStore",
   state: () => ({
-    trendings: [] as PostExtended[],
+    trendings: useState("trendings", () => [] as PostExtended[]),
     userPosts: [] as any[],
     cachedPosts: new Map<string, any>()
   }),
@@ -28,7 +28,7 @@ export const usePostStore = defineStore({
     async getPost (externalID: string): Promise<PostExtended> {
       let cachedPost: PostExtended | false = false;
       if (!process.client) {
-        cachedPost = await PostKv.get(externalID);
+        /* cachedPost = await PostKv.get(externalID); */
         if (!cachedPost) {
           console.log("No KV cached post found for", externalID);
         }
@@ -192,24 +192,22 @@ export const usePostStore = defineStore({
       let trendingPosts: PostExtended[] = [];
 
       // Load backend trending posts
-      if (process.client) {
-        try {
-          trendingPosts = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}trend/posts`, "POST", {
-            "Content-Type": "application/json"
-          })).json() as PostExtended[];
-        } catch (e) {
-          console.log(e);
-        }
+      try {
+        trendingPosts = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}trend/posts`, "POST", {
+          "Content-Type": "application/json"
+        })).json() as PostExtended[];
+      } catch (e) {
+        console.log(e);
       }
 
       // Load KV trending posts
-      const kvTrendingPosts = useState("trendingPosts", () => []); // create shared client/server state for the trending posts
+      let kvTrendingPosts = []; // create shared client/server state for the trending posts
       if (process.server) {
-        kvTrendingPosts.value = await TrendingPostsKv.get("1") || [];
+        kvTrendingPosts = await TrendingPostsKv.get("1") || [];
       }
 
       // Merge the two trending posts
-      this.trendings = trendingPosts.concat(kvTrendingPosts.value);
+      this.trendings = trendingPosts.concat(kvTrendingPosts);
 
       // remove duplicates
       this.trendings = this.trendings.filter((value, index, self) =>

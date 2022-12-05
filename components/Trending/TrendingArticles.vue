@@ -1,0 +1,69 @@
+<template>
+  <span>
+    <div class="flex pb-4">
+      <img src="/icons/linear/trend-up-circle.svg">
+      <h1 class="ml-2 text-3xl font-extrabold el-icon-arrow-right">
+        Trending Articles
+      </h1>
+    </div>
+    <div class="flex">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
+        <NuxtLink
+          v-for="x in trendings"
+          :key="x.id"
+          :to="`/@${x.author}/${x.externalId}`"
+          class="col-span-1 sm:flex px-4 py-2 my-4 md:my-2 p-1 hover:bg-white rounded-2xl cursor-pointer"
+        >
+          <img
+            class="object-cover my-2 w-2/4 sm:w-1/3 lg:w-36 sm:mx-6 mx-auto rounded-xl h-40 lg:aspect-square aspect-video lg:h-36 flex-none my-auto"
+            :src="x.image ||'img/author_pic.png'"
+            onerror="this.src='img/author_pic.png'"
+            loading="lazy"
+          >
+          <div class="flex-1 my-3 xl:my-4">
+            <h2 class="mb-1 text-2xl md:text-lg font-bold leading-snug text-gray-800">
+              {{ x.text }}
+            </h2>
+            <p class="text-lg md:text-sm font-normal text-gray-500">
+              {{ x.subtitle }}
+            </p>
+            <div class="py-1">
+              <div v-if="(x.tags && x.tags.length>0)" class="flex flex-wrap">
+                <div
+                  v-for="tag, index in x.tags"
+                  :key="index"
+                  class="p-0.5"
+                >
+                  <div
+                    class="text-xs text-extralight text-primary-text-light hover:underline cursor-pointer"
+                  >
+                    #{{ tag }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div
+                  v-if="x.author"
+                  class="flex pt-3 md:pt-1"
+                >
+                  <img
+                    class="h-6 w-6 rounded-full"
+                    :src="x.author.pictures?.profile ||'img/author_pic.png'"
+                    onerror="this.src='img/author_pic.png'"
+                    loading="lazy"
+                  >
+                  <h6 class="text-xs pl-2 my-auto">
+                    {{ x.author?.nickname || x.author?.dtag }}
+                  </h6>
+                </div> -->
+          </div>
+        </NuxtLink>
+      </div>
+    </div>
+  </span>
+</template>
+
+<script setup>
+import { usePostStore } from "~~/core/store/PostStore";
+const trendings = useState("ctrendings", () => usePostStore().trendings.slice(0, 6).reverse());
+</script>
