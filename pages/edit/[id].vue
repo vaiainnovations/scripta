@@ -1,6 +1,6 @@
 <template>
   <section>
-    <NuxtLayout name="custom">
+    <NuxtLayout name="profile" :title="'Edit Article'" :to="'/profile'">
       <ArticlesEdit />
     </NuxtLayout>
   </section>
@@ -12,7 +12,7 @@ import { useDraftStore } from "~~/core/store/DraftStore";
 import { usePostStore } from "~~/core/store/PostStore";
 
 useHead({
-  title: "Edit Article - Scripta"
+  title: "Scripta - Edit"
 });
 definePageMeta({
   middleware: ["authenticated"]

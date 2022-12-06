@@ -12,7 +12,7 @@
       <p class="text-xl text-center">
         @{{ useAccountStore().profile?.dtag || '' }}
       </p>
-      <div class="min-h-40 h-40 overflow-hidden">
+      <div class="min-h-10 max-h-40 overflow-hidden">
         <p class="font-light text-xs text-center">
           {{ useAccountStore().profile?.bio || '' }}
         </p>

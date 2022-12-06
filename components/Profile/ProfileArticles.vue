@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#FFFFFF] flex flex-col gap-y-7 items-center lg:w-2/3 lg:bg-background lg:overflow-y-auto lg:px-32 lg:py-9">
+  <div>
     <div class="h-24 flex flex-row justify-between px-6 w-full items-center bg-background">
       <p class="text-2xl md:text-4xl font-semibold">
         Your Articles
