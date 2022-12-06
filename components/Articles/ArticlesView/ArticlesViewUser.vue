@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row pt-2 lg:gap-x-2.5">
+  <div class="flex flex-row pt-2 lg:gap-x-2.5" v-if="author && author.dtag">
     <NuxtLink :to="`/@${author.dtag}`" class="flex gap-x-3">
       <img
         :src="author.pictures.profile"

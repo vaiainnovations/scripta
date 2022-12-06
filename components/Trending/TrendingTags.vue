@@ -3,7 +3,7 @@
     <div class="flex pb-4">
       <img src="/icons/linear/quote-down-circle.svg">
       <h1 class="ml-2 text-3xl font-extrabold">
-        Topics
+        Trending Topics
       </h1>
     </div>
     <div class="flex flex-wrap md:-m-2 -m-1">
@@ -12,13 +12,8 @@
         :key="topic"
         class="md:p-2 p-1"
       >
-        <div class="bg-background-alt hover:bg-white rounded-md px-4 py-0.5 border border-gray cursor-pointer">
-          <NuxtLink
-            :to="`/tag/${topic}`"
-            class="text-lg font-medium"
-          >
-            {{ topic }}
-          </NuxtLink>
+        <div class="">
+          <TheTag :tag="topic" />
         </div>
       </div>
     </div>
@@ -37,4 +32,5 @@ usePostStore().trendings.forEach((x) => {
     }
   });
 });
+tags.sort(() => Math.random() - 0.5);
 </script>

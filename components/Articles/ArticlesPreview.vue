@@ -22,7 +22,7 @@
               #{{ tag }}
             </a>
           </p>
-          <h1 class="text-3xl font-bold text-gray-800 dark:text-white">
+          <h1 class="text-3xl font-bold">
             {{ props.content.title }}
           </h1>
 

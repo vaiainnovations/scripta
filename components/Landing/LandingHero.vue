@@ -17,12 +17,12 @@
               Explore stories, thoughts, and insights on any topics, without having worries about your privacy
 
               <div class="gradient-text h-12 rounded-xl bg-white sm:px-5 md:px-10 mt-8 w-full md:w-1/2 flex justify-center">
-                <button
-                  type="button"
-                  class="bg-gradient-to-r to-[#e5007e] from-[#f29100] bg-clip-text bg-background text-2xl font-semibold "
+                <NuxtLink
+                  to="/explore"
+                  class="bg-gradient-to-r to-[#e5007e] from-[#f29100] bg-clip-text bg-background text-2xl font-semibold my-auto"
                 >
                   Start Reading
-                </button>
+                </NuxtLink>
               </div>
             </div>
             <div

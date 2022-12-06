@@ -1,9 +1,7 @@
 <template>
-  <div class="flex w-full h-5 flex-col justify-center rounded-xl bg-primary-light py-0.5">
+  <div class="w-full h-5">
     <slot>
-      <p class="bg-primary-light text-center text-xs text-background-alt w-full h-5 rounded-xl">
-        {{ props.content.value }}
-      </p>
+      <TheTag :tag="props.content.value" />
     </slot>
   </div>
 </template>

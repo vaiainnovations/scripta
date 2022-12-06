@@ -24,7 +24,7 @@
             >
           </div>
           <span v-if="!isUploadingProfilePic">
-            <label class="opacity-0 hover:opacity-100 hover:bg-opacity-40 hover:bg-primary-text duration-300 absolute inset-0 z-10 flex justify-center items-center text-white font-semibold rounded-full cursor-pointer" for="fileUploadProfilePic" @click="uploadProfilePic()">
+            <label class="opacity-0 hover:opacity-100 hover:bg-opacity-40 hover:bg-primary-text duration-300 absolute inset-0 z-10 flex justify-center items-center font-semibold rounded-full cursor-pointer" for="fileUploadProfilePic" @click="uploadProfilePic()">
               <img
                 src="/icons/linear/cloud-upload.svg"
                 class="h-16 w-16 md:h-20 md:w-20 object-contain border-[#EDEEFF] relative"
@@ -33,7 +33,7 @@
             <input id="fileUploadProfilePic" ref="fileUploadProfilePic" type="file" class="hidden" @change="uploadProfilePic()">
           </span>
           <span v-else>
-            <div class="opacity-70 bg-background absolute inset-0 z-10 flex justify-center items-center text-white font-semibold rounded-full cursor-progress">
+            <div class="opacity-70 bg-background absolute inset-0 z-10 flex justify-center items-center font-semibold rounded-full cursor-progress">
               <img
                 src="/svg/spinner/dots.svg"
                 class="h-16 w-16 md:h-20 md:w-20 object-contain border-[#EDEEFF] relative"

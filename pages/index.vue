@@ -13,54 +13,10 @@ useHead({
     >
       <!-- hero -->
       <LandingHero />
-      <!-- Explore arrow -->
-      <!-- <section class="min-h-[10vh] border-t-[3px] border-b-[3px] bg-explore-now bg-background-alt">
-        <div class="flex h-full ">
-          <div class="flex-1 h-full align-middle flex flex-col justify-center text-center font-extralight font-serif text-4xl text-primary-text p-2">
-            Explore Now
-            <img
-              src="/icons/bold/arrow-down.svg"
-              class="mt-2 h-7 w-7 animate-bounce mx-auto"
-            >
-          </div>
-        </div>
-      </section> -->
 
-      <LandingTrendingSection />
-
-      <!--  -->
-      <LandingFeatures />
-
-      <!-- Get Started -->
-      <LandingGettingStarted />
-
-      <section
-        v-if="useConfigStore().isBetaVersion"
-        id="explore"
-        :class="{'pt-20': useConfigStore().isBetaVersion}"
-      >
-        <div class="min-h-[10vh] py-8 bg-purple noise flex border-t-4 border-b-4">
-          <h1 class="text-6xl font-serif text-center flex-grow my-auto text-background">
-            Discover
-          </h1>
-        </div>
-        <div class="bg-background-alt z-50">
-          <TrendingContents class="py-10">
-            <h1 class="text-5xl font-serif">
-              Trending Articles
-            </h1>
-          </TrendingContents>
-          <!-- <TrendingContents
-            :is-author="true"
-            class="py-10"
-          >
-            <h1 class="text-5xl font-serif">
-              Trending Authors
-            </h1>
-          </TrendingContents> -->
-
-          <!-- Footer -->
-        </div>
+      <!-- trending -->
+      <section v-if="useConfigStore().isBetaVersion">
+        <LandingTrendingSection />
       </section>
       <TheFooter />
     </NuxtLayout>
