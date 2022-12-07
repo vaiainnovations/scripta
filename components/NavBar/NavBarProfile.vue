@@ -2,7 +2,7 @@
   <div class="flex flex-row w-fit items-center">
     <!-- The button to write new article appears on larger screen (>= 768 px) -->
     <NuxtLink
-      to="/new"
+      :to="!!useAccountStore().address ? '/new' : '/writer'"
       class="w-fit mr-4"
     >
       <div class="hidden md:block">
