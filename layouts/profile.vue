@@ -9,6 +9,7 @@
           </div>
           <div class="flex-none bottom-0">
             <ProfileActions />
+            <ProfileAirdrop />
             <ProfileBalance class="pt-4" />
           </div>
         </div>

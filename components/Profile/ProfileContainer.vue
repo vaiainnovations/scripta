@@ -3,6 +3,7 @@
     <div class="flex flex-col gap-y-14 lg:gap-y-0 lg:justify-evenly lg:w-1/4 py-14 lg:h-full">
       <ProfileUser />
       <ProfileActions />
+      <ProfileAirdrop />
       <ProfileBalance />
     </div>
     <ProfileArticles />
