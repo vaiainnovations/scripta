@@ -4,14 +4,14 @@
     class="w-full my-4 mx-auto"
   >
     <!-- Desktop -->
-    <div class="max-w-7xl lg:max-w-2xl mx-auto hidden md:block">
+    <div class=" mx-auto hidden sm:block">
       <div class="flex max-w-full mx-auto overflow-hidden bg-background-alt rounded-3xl shadow-md dark:bg-gray-800">
         <div class="w-1/3 h-48">
           <img
             alt="Article cover picture"
             :src="props.content.image"
             onerror="this.onerror=null;this.src='/img/author_pic.png'"
-            class="w-full h-full object-cover bg-[#FFFF]"
+            class="w-full h-full object-contain bg-[#FFFF]"
           >
         </div>
 
@@ -76,14 +76,14 @@
     </div>
 
     <!-- Mobile -->
-    <div class="w-fit mx-auto block md:hidden">
+    <div class="w-full mx-auto block sm:hidden">
       <div class="overflow-hidden shadow-lg rounded-3xl md:w-80 cursor-pointer m-auto">
         <div class="w-full h-full">
           <img
             alt="Article cover picture"
             :src="props.content.image"
             onerror="this.onerror=null;this.src='/img/author_pic.png'"
-            class="max-h-56 w-full object-cover"
+            class="max-h-56 w-full object-contain"
           >
           <div class="bg-background-alt dark:bg-gray-800 w-full p-4">
             <a

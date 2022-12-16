@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-background min-h-screen w-full flex flex-col items-center justify-start px-4 gap-y-3.5 py-3.5 lg:px-16 lg:py-10 lg:gap-y-2.5">
+  <div class="bg-background min-h-screen w-full flex flex-col items-center justify-start px-4 md:px-0 gap-y-3.5 lg:gap-y-2.5">
     <!-- Last edit -->
     <p
       v-if="useDraftStore().lastSave"

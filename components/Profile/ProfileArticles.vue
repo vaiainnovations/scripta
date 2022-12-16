@@ -19,13 +19,15 @@
         v-if="usePostStore().userPosts && usePostStore().userPosts.length>0"
         class="flex flex-col gap-y-9 justify-start items-center lg:w-full lg:gap-y-4 w-full"
       >
-        <NuxtLink
+        <span
           v-for="article in usePostStore().userPosts"
           :key="article.externalId"
-          :to="`/edit/${article.externalId}`"
+          class="px-5 sm:px-20 lg:px-0 2xl:px-48 w-full"
         >
-          <ArticlesSmallPreview :content="{description: article.subtitle, title: article.text, image: article.image, content: article.content, tags: article.tags, id: article.id, analytics: {views: article.post_cnt, upvotes: article.reaction_cnt_1, downvotes: article.reaction_cnt_2}}" />
-        </NuxtLink>
+          <NuxtLink :to="`/edit/${article.externalId}`">
+            <ArticlesSmallPreview :content="{description: article.subtitle, title: article.text, image: article.image, content: article.content, tags: article.tags, id: article.id, analytics: {views: article.post_cnt, upvotes: article.reaction_cnt_1, downvotes: article.reaction_cnt_2}}" />
+          </NuxtLink>
+        </span>
       </div>
       <div
         v-else
