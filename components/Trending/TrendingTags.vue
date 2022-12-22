@@ -21,10 +21,11 @@
 </template>
 
 <script setup>
+import { useBackendStore } from "~~/core/store/BackendStore";
 import { usePostStore } from "~~/core/store/PostStore";
 
 // take the tags from the trending articles
-const tags = [];
+let tags = [];
 usePostStore().trendings.forEach((x) => {
   x.tags.forEach((y) => {
     if (!tags.includes(y)) {
@@ -33,4 +34,16 @@ usePostStore().trendings.forEach((x) => {
   });
 });
 tags.sort(() => Math.random() - 0.5);
+
+await useBackendStore()
+  .fetch(`${useBackendStore().apiUrl}tags`, "POST", {})
+  .then(async (res) => {
+    const trendingTags = await res.json();
+    const newTrendingTags = [];
+    trendingTags.forEach((tag) => {
+      newTrendingTags.push(tag.tag);
+    });
+    tags = newTrendingTags;
+    tags.sort(() => Math.random() - 0.5);
+  });
 </script>
