@@ -5,7 +5,7 @@
   >
     <div class="">
       <NuxtLink
-        :to="`/@${props.content.author}/${props.content.externalId}`"
+        :to="`/@${props.content.author.dtag || props.content.author.account.dtag || props.content.author.address || props.content.author.account.address || props.content.author}/${props.content.externalId}`"
         class="flex flex-col sm:flex-row px-4 py-2 my-4 md:my-2 p-1 bg-background-alt lg:p-4 lg:px-8 hover:bg-background/50 rounded-2xl cursor-pointer"
       >
         <div class="flex-1 my-3 xl:my-4 order-2 sm:order-1">
