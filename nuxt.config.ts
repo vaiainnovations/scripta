@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { defineNuxtConfig } from "nuxt";
 import eslintPlugin from "vite-plugin-eslint";
 import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
 import inject from "@rollup/plugin-inject";
@@ -25,7 +24,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       isBetaVersion: process.env.NUXT_IS_BETA_VERSION === "true",
-      restApiUrl: process.env.NUXT_REST_API_URL
+      restApiUrl: process.env.NUXT_REST_API_URL,
+      rpcUrl: process.env.NUXT_RPC_URL,
+      lcdUrl: process.env.NUXT_LCD_URL
     }
   },
   alias: {
@@ -86,7 +87,7 @@ export default defineNuxtConfig({
     "@vue/devtools-api": "@vue/devtools-api",
     util: "util"
   },
-  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
+  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt", "@nuxtjs/device"],
   experimental: {
     treeshakeClientOnly: true
   }

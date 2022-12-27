@@ -3,7 +3,6 @@ import { MsgCreatePostEncodeObject } from "@desmoslabs/desmjs";
 import Long from "long";
 import { v4 as uuidv4 } from "uuid";
 import { useAccountStore } from "~~/core/store/AccountStore";
-import { useDesmosStore } from "~~/core/store/DesmosStore";
 
 interface Props {
   referencedPost: Long;
@@ -15,20 +14,13 @@ const emit = defineEmits(["newComment"]);
 const comment = ref("");
 const isCommentPublishing = ref(false);
 
-const canWrite = ref(false);
-if (process.client) {
-  if (useAccountStore().address) {
-    canWrite.value = true;
-  }
-}
-
 function postComment () {
-  const { $useTransaction } = useNuxtApp();
+  const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
   const extId = uuidv4();
   const msgCreateComment: MsgCreatePostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgCreatePost",
     value: {
-      subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
+      subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
       externalId: extId,
       attachments: [],
       author: useAccountStore().address,
@@ -46,7 +38,7 @@ function postComment () {
   };
   isCommentPublishing.value = true;
   $useTransaction().push(msgCreateComment, {
-    subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
+    subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
     externalId: extId,
     attachments: [],
     author: useAccountStore().address,
@@ -62,41 +54,6 @@ function postComment () {
     replySettings: 1,
     scriptaOp: "MsgCreatePostComment"
   });
-  /* let signedBytes = new Uint8Array();
-  try {
-    if (!useAccountStore().authz.hasAuthz) {
-      signedBytes = await $useTransaction().directSign([msgCreateComment]);
-    }
-  } catch (e) {
-    console.log(e);
-  }
-
-  if (!signedBytes) {
-    return;
-  }
-
-  const res = (await (
-    await useBackendStore().fetch(
-      `${useBackendStore().apiUrl}/comments/${msgCreateComment.value.externalId}`,
-      "POST",
-      {
-        "Content-Type": "application/json"
-      },
-      JSON.stringify({
-        signedPost: (signedBytes) ? Buffer.from(signedBytes).toString("base64") : "",
-        externalId: msgCreateComment.value.externalId,
-        author: useAccountStore().address,
-        sectionId: msgCreateComment.value.sectionId,
-        text: msgCreateComment.value.text,
-        referencedPosts: msgCreateComment.value.referencedPosts
-      })
-    )
-  ).json()) as any;
-  if (res.code === 0) {
-    comment.value = "";
-    isCommentPublishing.value = false;
-    emit("newComment");
-  } */
 
   $useTransaction().$subscribe(() => {
     if ($useTransaction().queue.length === 0) {
@@ -111,9 +68,10 @@ function postComment () {
 
 <template>
   <div class="p-3">
-    <div v-if="canWrite">
+    <div>
       <div class="flex">
         <img
+          onerror="this.onerror=null;this.src='/img/author_pic.png'"
           :src="useAccountStore().profile?.pictures?.profile || ''"
           class="h-7 w-7 md:h-10 md:w-10 rounded-full mr-1 lg:mr-3"
         >

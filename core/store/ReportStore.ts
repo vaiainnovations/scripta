@@ -3,7 +3,6 @@ import { defineStore } from "pinia";
 import Long from "long";
 import { PostTarget } from "@desmoslabs/desmjs-types/desmos/reports/v1/models";
 import { MsgCreateReportEncodeObject } from "@desmoslabs/desmjs";
-import { useDesmosStore } from "./DesmosStore";
 import { useAccountStore } from "./AccountStore";
 import { registerModuleHMR } from ".";
 
@@ -39,11 +38,11 @@ export const useReportStore = defineStore({
   }),
   actions: {
     addPostReport (postId: Long, reasonsIds: number[], message: string) {
-      const { $useTransaction } = useNuxtApp();
+      const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
       const msgAddReport: MsgCreateReportEncodeObject = {
         typeUrl: "/desmos.reports.v1.MsgCreateReport",
         value: {
-          subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
+          subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
           message,
           reasonsIds,
           reporter: useAccountStore().address,
@@ -56,7 +55,7 @@ export const useReportStore = defineStore({
         }
       };
       $useTransaction().push(msgAddReport, {
-        subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
+        subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
         message,
         reasonsIds,
         reporter: useAccountStore().address,

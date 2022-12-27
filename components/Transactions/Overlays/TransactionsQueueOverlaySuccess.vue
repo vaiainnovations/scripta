@@ -12,7 +12,7 @@
           <a
             class="text-gray-dark underline text-sm cursor-pointer"
             target="_blank"
-            :href="`${useDesmosStore().explorer}/transactions/${$useTransaction().hash}`"
+            :href="`${$useDesmosNetwork().explorer}/transactions/${$useTransaction().hash}`"
           >
             {{ $useTransaction().hash.slice(0,14) }}...
           </a>
@@ -23,6 +23,5 @@
 </template>
 
 <script setup lang="ts">
-import { useDesmosStore } from "~~/core/store/DesmosStore";
-const { $useTransaction } = useNuxtApp();
+const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
 </script>

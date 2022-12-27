@@ -4,6 +4,7 @@
       <div class="w-1/4">
         <img
           :src="props.post.image"
+          onerror="this.onerror=null;this.src='/img/author_pic.png'"
           class="w-full p-1 my-auto mx-auto object-contain max-h-14 rounded-xl"
         >
       </div>
@@ -19,6 +20,7 @@
     <div class="w-full flex">
       <img
         :src="authorImage"
+        onerror="this.onerror=null;this.src='/img/author_pic.png'"
         class="h-6 w-6 object-cover rounded-full mx-1"
       >
       <p class="text-sm font-medium text-primary-text-light my-auto truncate mx-2">

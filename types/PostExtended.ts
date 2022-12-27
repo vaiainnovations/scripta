@@ -14,6 +14,8 @@ export interface PostExtended {
     lastEditedDate: string;
     attachments: any[];
     entities: any[];
+    reaction_cnt_1?: number;
+    reaction_cnt_2?: number;
 }
 
 export function searchFirstContentImage (content: string): string {

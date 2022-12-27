@@ -4,7 +4,7 @@
       <span v-if="!isLoading">
         <AuthContentCard>
           <AuthDescription class="p-5">
-            <span v-if="!hasAuthz">
+            <span v-if="!hasAuthz&&suggestAuthz">
               <p class="text-3xl font-extrabold leading-normal text-center pt-5">
                 Wanna try an improved Web3 experience?
               </p>
@@ -23,7 +23,7 @@
             </span>
 
             <div class="pt-12">
-              <div v-if="!hasAuthz" class="text-center p-4">
+              <div v-if="!hasAuthz&&suggestAuthz" class="text-center p-4">
                 <button
                   class="rounded-xl py-2 px-4 text-xl bg-primary text-background-alt hover:bg-primary/70"
                   @click="continueWithAuthz()"
@@ -37,7 +37,12 @@
                   @click="continueWithoutAuthz()"
                 >
                   <span v-if="!hasValidAuthorization&&!hasAuthz">
-                    Continue without
+                    <span v-if="!hasAuthz && suggestAuthz">
+                      Continue without
+                    </span>
+                    <span v-else>
+                      Continue
+                    </span>
                   </span>
                   <span v-else>
                     Authorize device
@@ -82,6 +87,7 @@ import { useAccountStore } from "~~/core/store/AccountStore";
 const isLoading = ref(true);
 const hasAuthz = ref(false);
 const hasValidAuthorization = ref(false);
+const suggestAuthz = ref(false);
 
 // new authz
 // renew token

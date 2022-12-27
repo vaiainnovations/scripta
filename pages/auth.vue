@@ -6,6 +6,6 @@
 
 <script setup lang="ts">
 useHead({
-  title: "Auth - Scripta"
+  title: "Scripta - Auth"
 });
 </script>

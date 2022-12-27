@@ -2,18 +2,13 @@ import { defineStore } from "pinia";
 import { DesmosClient, NoOpSigner, Signer, SignerStatus } from "@desmoslabs/desmjs";
 import { registerModuleHMR } from "..";
 import { useAuthStore } from "../AuthStore";
-import { useDesmosStore } from "../DesmosStore";
+import { useConfigStore } from "../ConfigStore";
 import { useWalletConnectStore } from "./WalletConnectStore";
 import { useKeplrStore } from "./KeplrStore";
-
-export enum SupportedSigner {
-    Noop = "noop",
-    WalletConnect = "walletconnect",
-    Keplr = "keplr",
-}
+import { SupportedSigner } from "./SupportedSigner";
 
 class Wallet {
-  public client = DesmosClient.connectWithSigner(useDesmosStore().rpc, new NoOpSigner());
+  public client = DesmosClient.connectWithSigner(useConfigStore().rpcUrl, new NoOpSigner());
   public signer: Signer = new NoOpSigner();
   public aminoSigner: Signer = new NoOpSigner();
 }
@@ -101,7 +96,7 @@ export const useWalletStore = defineStore({
 
       // create the Desmos Client
       try {
-        this.wallet.client = await DesmosClient.connectWithSigner(useDesmosStore().rpc, this.wallet.signer as Signer);
+        this.wallet.client = await DesmosClient.connectWithSigner(useConfigStore().rpcUrl, this.wallet.signer as Signer);
       } catch (e) {
         console.log(e);
         // abort if the client fails to connect

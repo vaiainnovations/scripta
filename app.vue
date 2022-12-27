@@ -4,12 +4,11 @@
 import { useConfigStore } from "./core/store/ConfigStore";
 import { usePostStore } from "./core/store/PostStore";
 const isBetaAlertDismissed = ref(true);
-if (process.client) {
-  isBetaAlertDismissed.value = window.localStorage.getItem("isBetaAlertDismissed") === "true" || !useConfigStore().isBetaVersion;
-}
 
 if (process.client) {
   const { $useAuth } = useNuxtApp();
+  isBetaAlertDismissed.value = window.localStorage.getItem("isBetaAlertDismissed") === "true" || !useConfigStore().isBetaVersion;
+  await useNuxtApp().$useDesmosNetwork().init();
   $useAuth().init();
 }
 await usePostStore().loadTrendings();

@@ -1,6 +1,6 @@
 <template>
   <section>
-    <NuxtLayout name="custom">
+    <NuxtLayout name="profile" :title="'Edit Article'" :to="'/profile'">
       <ArticlesEdit />
     </NuxtLayout>
   </section>
@@ -12,7 +12,7 @@ import { useDraftStore } from "~~/core/store/DraftStore";
 import { usePostStore } from "~~/core/store/PostStore";
 
 useHead({
-  title: "Edit Article - Scripta"
+  title: "Scripta - Edit"
 });
 definePageMeta({
   middleware: ["authenticated"]
@@ -25,7 +25,7 @@ if (!article) {
   useRouter().replace("/profile");
 }
 // prevent to open edit page of other user's article
-if (useAccountStore().address !== article.author.address && useAccountStore().profile?.dtag !== article.author) {
+if (article.id !== null && useAccountStore().address !== article.author.address && useAccountStore().profile?.dtag !== article.author) {
   useRouter().push("/profile");
 }
 useDraftStore().$reset();

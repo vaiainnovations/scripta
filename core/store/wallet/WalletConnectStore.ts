@@ -2,7 +2,7 @@ import { SigningMode } from "@desmoslabs/desmjs";
 import { QRCodeModal, WalletConnect, WalletConnectSigner } from "@desmoslabs/desmjs-walletconnect";
 import { defineStore } from "pinia";
 import { registerModuleHMR } from "..";
-import { SupportedSigner, useWalletStore } from "./WalletStore";
+import { useWalletStore } from "./WalletStore";
 
 export const useWalletConnectStore = defineStore({
   id: "WalletConnectStore",
@@ -33,7 +33,7 @@ export const useWalletConnectStore = defineStore({
       await aminoSigner.connect();
 
       // Connect to the wallet with the WalletConnect signer
-      await walletStore.connect(signer, aminoSigner, SupportedSigner.WalletConnect);
+      await walletStore.connect(signer, aminoSigner, "walletconnect");
       return signer;
     }
   }

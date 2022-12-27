@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import Long from "long";
 import { RegisteredReactionValue } from "@desmoslabs/desmjs-types/desmos/reactions/v1/models";
 import { MsgAddReactionEncodeObject, MsgRemoveReactionEncodeObject } from "@desmoslabs/desmjs";
-import { useDesmosStore } from "./DesmosStore";
 import { useBackendStore } from "./BackendStore";
 import { useAccountStore } from "./AccountStore";
 import { registerModuleHMR } from ".";
@@ -42,7 +41,7 @@ export const useReactionStore = defineStore({
      * @param reactionCode reaction code (ex. :up:)
      */
     addReaction (postId: Long, reactionCode: any) {
-      const { $useTransaction } = useNuxtApp();
+      const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
       const reactionId = reactionCode.id;
       const reactionValue = {
         typeUrl: "/desmos.reactions.v1.RegisteredReactionValue",
@@ -53,7 +52,7 @@ export const useReactionStore = defineStore({
       const msgAddReaction: MsgAddReactionEncodeObject = {
         typeUrl: "/desmos.reactions.v1.MsgAddReaction",
         value: {
-          subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
+          subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
           postId,
           user: useAccountStore().address,
           value: reactionValue
@@ -68,11 +67,11 @@ export const useReactionStore = defineStore({
      * @param reactionId id of the reaction (note: not the registered reaction id)
      */
     removeReaction (postId: Long, reactionId: number) {
-      const { $useTransaction } = useNuxtApp();
+      const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
       const msgRemoveReaction: MsgRemoveReactionEncodeObject = {
         typeUrl: "/desmos.reactions.v1.MsgRemoveReaction",
         value: {
-          subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
+          subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
           postId,
           user: useAccountStore().address,
           reactionId

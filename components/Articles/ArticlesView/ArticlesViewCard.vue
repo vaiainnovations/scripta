@@ -5,13 +5,6 @@
     </div>
     <div class="flex h-6 flex-row items-center justify-start gap-x-4 py-0.5">
       <ArticlesViewTag v-for="tag in tags" :key="tag.i" :content="tag.content" class="w-36" />
-      <!-- <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 20 20"
-        class="w-5 h-5 col-end-12"
-      >
-        <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
-      </svg> -->
     </div>
     <ArticlesViewContent
       :external-id="props.article.externalId"

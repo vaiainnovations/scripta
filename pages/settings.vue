@@ -1,6 +1,6 @@
 <template>
   <section>
-    <NuxtLayout name="reading-custom">
+    <NuxtLayout name="profile" :title="'Settings'" :to="'/profile'">
       <SettingsContainer />
     </NuxtLayout>
   </section>
@@ -9,5 +9,8 @@
 <script setup lang="ts">
 definePageMeta({
   middleware: ["authenticated"]
+});
+useHead({
+  title: "Scripta - Settings"
 });
 </script>

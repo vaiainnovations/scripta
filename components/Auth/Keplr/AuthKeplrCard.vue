@@ -9,7 +9,7 @@
         <AuthButtonsBackRouting v-if="count == 0" to="/auth" />
       </AuthButtonsBack>
       <!-- Let the user proceed only if Keplr is installed -->
-      <AuthButtonsNext v-if="count < maxPages && useKeplrStore().isInstalled" @edit-page="editCount" />
+      <AuthButtonsNext v-if="count < maxPages && useKeplrStore().isAvailable" @edit-page="editCount" />
     </template>
   </AuthCard>
 </template>

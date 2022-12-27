@@ -26,7 +26,7 @@ function addReport () {
   <div>
     <div class="relative inline-block text-left">
       <div>
-        <button class="bg-white" @click="toggleOverlay">
+        <button class="" @click="toggleOverlay">
           <img src="/icons/linear/dots.svg">
         </button>
       </div>

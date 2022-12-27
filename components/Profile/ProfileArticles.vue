@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#FFFFFF] flex flex-col gap-y-7 items-center lg:w-2/3 lg:bg-background lg:overflow-y-auto lg:px-32 lg:py-9">
+  <div>
     <div class="h-24 flex flex-row justify-between px-6 w-full items-center bg-background">
       <p class="text-2xl md:text-4xl font-semibold">
         Your Articles
@@ -19,14 +19,15 @@
         v-if="usePostStore().userPosts && usePostStore().userPosts.length>0"
         class="flex flex-col gap-y-9 justify-start items-center lg:w-full lg:gap-y-4 w-full"
       >
-        <NuxtLink
+        <span
           v-for="article in usePostStore().userPosts"
           :key="article.externalId"
-          class="w-full"
-          :to="`/edit/${article.externalId}`"
+          class="px-5 sm:px-20 lg:px-0 2xl:px-48 w-full"
         >
-          <ArticlesSmallPreview :content="{description: article.subtitle, title: article.text, image: article.image, content: article.content, tags: article.tags, id: article.id}" />
-        </NuxtLink>
+          <NuxtLink :to="`/edit/${article.externalId}`">
+            <ArticlesSmallPreview :content="{description: article.subtitle, title: article.text, image: article.image, content: article.content, tags: article.tags, id: article.id, analytics: {views: article.post_cnt, upvotes: article.reaction_cnt_1, downvotes: article.reaction_cnt_2}}" />
+          </NuxtLink>
+        </span>
       </div>
       <div
         v-else

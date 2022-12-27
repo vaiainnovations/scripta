@@ -6,7 +6,6 @@ import Long from "long";
 import { useAccountStore } from "./AccountStore";
 import { useBackendStore } from "./BackendStore";
 import { useUserStore } from "./UserStore";
-import { useDesmosStore } from "./DesmosStore";
 import { useDraftStore } from "./DraftStore";
 import { registerModuleHMR } from ".";
 import { PostKv } from "~~/types/PostKv";
@@ -16,7 +15,7 @@ import { TrendingPostsKv } from "~~/types/TrendingPostsKv";
 export const usePostStore = defineStore({
   id: "PostStore",
   state: () => ({
-    trendings: [] as PostExtended[],
+    trendings: useState("trendings", () => [] as PostExtended[]),
     userPosts: [] as any[],
     cachedPosts: new Map<string, any>()
   }),
@@ -29,7 +28,7 @@ export const usePostStore = defineStore({
     async getPost (externalID: string): Promise<PostExtended> {
       let cachedPost: PostExtended | false = false;
       if (!process.client) {
-        cachedPost = await PostKv.get(externalID);
+        /* cachedPost = await PostKv.get(externalID); */
         if (!cachedPost) {
           console.log("No KV cached post found for", externalID);
         }
@@ -71,7 +70,7 @@ export const usePostStore = defineStore({
     },
 
     async savePost (): Promise<boolean> {
-      const { $useTransaction, $useIpfs } = useNuxtApp();
+      const { $useTransaction, $useIpfs, $useDesmosNetwork } = useNuxtApp();
 
       // check if the user has a sectionId
       if (useAccountStore().sectionId <= 0) {
@@ -105,7 +104,7 @@ export const usePostStore = defineStore({
       const msgCreatePost: MsgCreatePostEncodeObject = {
         typeUrl: "/desmos.posts.v2.MsgCreatePost",
         value: {
-          subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
+          subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
           externalId: extId,
           attachments: [],
           author: useAccountStore().address,
@@ -193,24 +192,22 @@ export const usePostStore = defineStore({
       let trendingPosts: PostExtended[] = [];
 
       // Load backend trending posts
-      if (process.client) {
-        try {
-          trendingPosts = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}trend/posts`, "POST", {
-            "Content-Type": "application/json"
-          })).json() as PostExtended[];
-        } catch (e) {
-          console.log(e);
-        }
+      try {
+        trendingPosts = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}trend/posts`, "POST", {
+          "Content-Type": "application/json"
+        })).json() as PostExtended[];
+      } catch (e) {
+        console.log(e);
       }
 
       // Load KV trending posts
-      const kvTrendingPosts = useState("trendingPosts", () => []); // create shared client/server state for the trending posts
+      let kvTrendingPosts = []; // create shared client/server state for the trending posts
       if (process.server) {
-        kvTrendingPosts.value = await TrendingPostsKv.get("1") || [];
+        kvTrendingPosts = await TrendingPostsKv.get("1") || [];
       }
 
       // Merge the two trending posts
-      this.trendings = trendingPosts.concat(kvTrendingPosts.value);
+      this.trendings = trendingPosts.concat(kvTrendingPosts);
 
       // remove duplicates
       this.trendings = this.trendings.filter((value, index, self) =>

@@ -7,7 +7,6 @@ import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { Signer } from "@desmoslabs/desmjs";
 import { useAccountStore } from "./AccountStore";
 import { useBackendStore } from "./BackendStore";
-import { useDesmosStore } from "./DesmosStore";
 import { useWalletStore } from "./wallet/WalletStore";
 import { registerModuleHMR } from ".";
 
@@ -115,11 +114,12 @@ export const useTransactionStore = defineStore({
      * @returns success boolean
      */
     async directTx (messages: EncodeObject[], details: Record<string, unknown>[] = [], skipAuthz = false): Promise<boolean> {
+      const { $useDesmosNetwork } = useNuxtApp();
       try {
         let signedBytes = new Uint8Array();
         this.status = QueueStatus.SIGNING;
         if (!useAccountStore().authz.hasAuthz || skipAuthz) {
-          signedBytes = await this.directSign(messages, "Signed from Scripta.network", useDesmosStore().defaultFee, useWalletStore().wallet.signer.signingMode);
+          signedBytes = await this.directSign(messages, "Signed from Scripta.network", $useDesmosNetwork().defaultFee, useWalletStore().wallet.signer.signingMode);
         }
 
         let broadcastResult = null as any;
@@ -149,8 +149,8 @@ export const useTransactionStore = defineStore({
      * @param signMode Tx sign mode
      * @returns signed bytes
      */
-    async directSign (messages: EncodeObject[], memo = "Signed from Scripta.network", fees = useDesmosStore().defaultFee, signMode: 0 | 1 = 0): Promise<Uint8Array> {
-      const { $useWallet } = useNuxtApp();
+    async directSign (messages: EncodeObject[], memo = "Signed from Scripta.network", fees = useNuxtApp().$useDesmosNetwork().defaultFee, signMode: 0 | 1 = 0): Promise<Uint8Array> {
+      const { $useWallet, $useDesmosNetwork } = useNuxtApp();
       // check if the draft is not empty
       try {
         this.status = QueueStatus.SIGNING;
@@ -163,7 +163,7 @@ export const useTransactionStore = defineStore({
         const signed = await client.sign(address, messages, fees, memo, accountInfo === null
           ? {
             accountNumber: 0,
-            chainId: useDesmosStore().chainInfo.chainId,
+            chainId: $useDesmosNetwork().chainId,
             sequence: 0
           }
           : null);

@@ -1,6 +1,10 @@
 <template>
   <section>
-    <NuxtLayout name="custom">
+    <NuxtLayout
+      name="profile"
+      :title="'Write'"
+      :to="'/profile'"
+    >
       <ArticlesCreate />
     </NuxtLayout>
   </section>
@@ -8,7 +12,7 @@
 
 <script setup lang="ts">
 useHead({
-  title: "New Article - Scripta"
+  title: "Scripta - Write"
 });
 definePageMeta({
   middleware: ["authenticated"]

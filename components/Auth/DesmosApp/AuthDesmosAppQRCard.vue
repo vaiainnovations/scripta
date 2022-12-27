@@ -23,6 +23,7 @@
 <script setup lang="ts">
 import { WalletConnectSigner } from "@desmoslabs/desmjs-walletconnect";
 import QrcodeVue from "qrcode.vue";
+import { SupportedSigner } from "~~/core/store/wallet/SupportedSigner";
 
 const { $useWalletConnect, $useWallet } = useNuxtApp();
 // Create and initializer the WalletConnect signer without QR modal
@@ -30,7 +31,7 @@ const signer = await $useWalletConnect().connect();
 
 const wcUrl = ref(getWalletConnectUrl(signer));
 console.log(wcUrl.value);
-await $useWallet().connect(signer, signer, "walletconnect");
+await $useWallet().connect(signer, signer, SupportedSigner.WalletConnect);
 
 /**
  * Generate WalletConnect socket URL to display as QR code.

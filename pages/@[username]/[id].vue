@@ -1,7 +1,7 @@
 <template>
   <section>
     <NuxtLayout name="reading-custom">
-      <ArticlesViewContainer :post="post" />
+      <ArticlesViewContainer v-if="post!==null" :post="post" />
     </NuxtLayout>
   </section>
 </template>
@@ -9,16 +9,17 @@
 <script setup lang="ts">
 import { useLogStore } from "~~/core/store/LogStore";
 import { usePostStore } from "~~/core/store/PostStore";
+import { PostExtended } from "~~/types/PostExtended";
 const route = useRoute();
 const externalId = route.params.id as string;
 
-const post = useState("post", () => null); // create shared client/server state for the post
+const post = useState("post", () => null as PostExtended | null); // create shared client/server state for the post
 const isServerFetched = useState("isPostServerFetched", () => false); // shared state to know if the post has been fetched on the server cache
 
+post.value = await usePostStore().getPost(externalId);
 // Fetch the post
 if (!process.client) {
   // if server, fetch from KV
-  post.value = await usePostStore().getPost(externalId);
   if (post.value) {
     isServerFetched.value = true;
   }

@@ -7,6 +7,7 @@
           <img
             alt="Article cover picture"
             :src="props.content.image"
+            onerror="this.onerror=null;this.src='/img/author_pic.png'"
             class="w-full h-full object-cover bg-[#FFFF]"
           >
         </div>
@@ -21,7 +22,7 @@
               #{{ tag }}
             </a>
           </p>
-          <h1 class="text-3xl font-bold text-gray-800 dark:text-white">
+          <h1 class="text-3xl font-bold">
             {{ props.content.title }}
           </h1>
 
@@ -39,6 +40,7 @@
           <img
             alt="Article cover picture"
             :src="props.content.image"
+            onerror="this.onerror=null;this.src='/img/author_pic.png'"
             class="max-h-56 w-full object-cover"
           >
           <div class="bg-background-alt dark:bg-gray-800 w-full p-4">

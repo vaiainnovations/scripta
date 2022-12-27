@@ -5,7 +5,6 @@ import {
 import Long from "long";
 import { PostComment } from "~~/types/PostComment";
 import { useAccountStore } from "~~/core/store/AccountStore";
-import { useDesmosStore } from "~~/core/store/DesmosStore";
 
 interface Props {
   comment: PostComment;
@@ -26,13 +25,13 @@ function toggleReportOverlay () {
 }
 
 function deleteComment () {
-  const { $useTransaction } = useNuxtApp();
+  const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
   toggleOverlay();
 
   const msgDeletePost: MsgDeletePostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgDeletePost",
     value: {
-      subspaceId: Long.fromNumber(useDesmosStore().subspaceId),
+      subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
       postId: Long.fromNumber(props.comment.id),
       signer: useAccountStore().address
     }
@@ -57,7 +56,7 @@ function addReport () {
   <div>
     <div class="relative inline-block text-left">
       <div>
-        <button class="bg-white" @click="toggleOverlay">
+        <button class="" @click="toggleOverlay">
           <img src="/icons/linear/dots.svg">
         </button>
       </div>

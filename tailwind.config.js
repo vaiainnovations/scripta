@@ -1,3 +1,4 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [],
   theme: {
@@ -21,7 +22,8 @@ module.exports = {
       yellow: "#ffc82c",
       "gray-dark": "#273444",
       gray: "#8492a6",
-      "gray-light": "#d3dce6"
+      "gray-light": "#F1EFEC",
+      white: "#ffffff"
     },
     fontFamily: {
       sans: ["Poppins", "sans-serif"],
@@ -48,4 +50,4 @@ module.exports = {
   plugins: [
     require("@tailwindcss/typography")
   ]
-};
+}
