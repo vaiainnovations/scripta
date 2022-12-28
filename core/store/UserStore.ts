@@ -28,15 +28,18 @@ export const useUserStore = defineStore({
       return null;
     },
     async getUserArticles (address: string): Promise<PostExtended []> {
-      const posts = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}search/posts`, "POST", {
-        "Content-Type": "application/json"
-      },
-      JSON.stringify({ q: "", author: address })
-      )).json() as PostExtended [];
-      for (let i = 0; i < posts.length; i++) {
-        posts[i].image = searchFirstContentImage(posts[i].content) || "/img/author_pic.png";
-      }
-      return (posts.length > 0 ? posts : null);
+      let posts = [];
+      try {
+        posts = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}search/posts`, "POST", {
+          "Content-Type": "application/json"
+        },
+        JSON.stringify({ q: "", author: address })
+        )).json() as PostExtended [];
+        for (let i = 0; i < posts.length; i++) {
+          posts[i].image = searchFirstContentImage(posts[i].content) || "/img/author_pic.png";
+        }
+      } catch (e) { return []; }
+      return (posts.length > 0 ? posts : []);
     }
   }
 });

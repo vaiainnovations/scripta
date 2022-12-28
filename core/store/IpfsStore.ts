@@ -1,12 +1,13 @@
 import { defineStore } from "pinia";
 import { create } from "ipfs-http-client";
+import { useConfigStore } from "./ConfigStore";
 import { useBackendStore } from "./BackendStore";
 import { registerModuleHMR } from ".";
 
 export const useIpfsStore = defineStore({
   id: "IpfsStore",
   state: () => ({
-    gateway: "https://scripta-beta.infura-ipfs.io/ipfs/",
+    gateway: useConfigStore().ipfsGateway,
     client: create({
       url: `${useBackendStore().apiUrl}ipfs`
     })

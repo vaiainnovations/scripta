@@ -11,6 +11,7 @@ import { useWalletStore } from "./wallet/WalletStore";
 import { SupportedSigner } from "./wallet/SupportedSigner";
 import { useAccountStore } from "./AccountStore";
 import { useBackendStore } from "./BackendStore";
+import { useDesmosStore } from "./DesmosStore";
 import { registerModuleHMR } from ".";
 
 export enum AuthLevel {
@@ -254,7 +255,7 @@ export const useAuthStore = defineStore({
         }
 
         // TODO: to consider accounts with no balance
-        const balance = await (await useWalletStore().wallet.client).getBalance(account.address, "udaric");
+        const balance = await (await useWalletStore().wallet.client).getBalance(account.address, useDesmosStore().ucoinDenom);
 
         // update the store
         useAccountStore().balance = Number(balance.amount) / 1_000_000;
@@ -279,7 +280,7 @@ export const useAuthStore = defineStore({
             gas: "0",
             amount: [
               {
-                denom: "udaric",
+                denom: useDesmosStore().ucoinDenom,
                 amount: "0"
               }
             ]

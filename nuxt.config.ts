@@ -26,7 +26,9 @@ export default defineNuxtConfig({
       isBetaVersion: process.env.NUXT_IS_BETA_VERSION === "true",
       restApiUrl: process.env.NUXT_REST_API_URL,
       rpcUrl: process.env.NUXT_RPC_URL,
-      lcdUrl: process.env.NUXT_LCD_URL
+      lcdUrl: process.env.NUXT_LCD_URL,
+      subspaceId: process.env.NUXT_SUBSPACE_ID,
+      ipfsGateway: process.env.NUXT_IPFS_GATEWAY
     }
   },
   alias: {

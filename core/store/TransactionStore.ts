@@ -7,6 +7,7 @@ import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { Signer } from "@desmoslabs/desmjs";
 import { useAccountStore } from "./AccountStore";
 import { useBackendStore } from "./BackendStore";
+import { useDesmosStore } from "./DesmosStore";
 import { useWalletStore } from "./wallet/WalletStore";
 import { registerModuleHMR } from ".";
 
@@ -54,7 +55,7 @@ export const useTransactionStore = defineStore({
         const defaultFee: StdFee = {
           amount: [{
             amount: "1000",
-            denom: "udaric"
+            denom: useDesmosStore().ucoinDenom
           }],
           gas: "200000"
         };

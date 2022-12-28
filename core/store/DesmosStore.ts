@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
-import { DesmosTestnet } from "@desmoslabs/desmjs";
+import { DesmosMainnet, DesmosTestnet } from "@desmoslabs/desmjs";
 import { useConfigStore } from "./ConfigStore";
 import { useBackendStore } from "./BackendStore";
 import { registerModuleHMR } from ".";
 
-const chainInfo = DesmosTestnet;
+let chainInfo = DesmosMainnet;
 
 export interface NodeInfo {
   id: string;
@@ -37,10 +37,10 @@ export const useDesmosStore = defineStore({
   state: () => ({
     chainStatus: null as ChainStatus,
     chainInfo,
-    explorer: "https://morpheus.desmos.network/",
+    explorer: "https://explorer.desmos.network/",
     coinDenom: chainInfo.currencies[chainInfo.currencies.length - 1].coinDenom,
     ucoinDenom: chainInfo.currencies[0].coinMinimalDenom,
-    subspaceId: 8,
+    subspaceId: useConfigStore().subspaceId,
     // eslint-disable-next-line prefer-regex-literals
     usernameRegexp: new RegExp("^[A-Za-z0-9_]{6,30}$"),
     defaultFee: {
@@ -56,6 +56,9 @@ export const useDesmosStore = defineStore({
     async init () {
       try {
         await this.updateChainStatus();
+        if (useConfigStore().isBetaVersion) {
+          chainInfo = DesmosTestnet;
+        }
       } catch (e) {
         // TODO: Handle error
       }

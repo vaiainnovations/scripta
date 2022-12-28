@@ -207,7 +207,9 @@ export const usePostStore = defineStore({
       }
 
       // Merge the two trending posts
-      this.trendings = trendingPosts.concat(kvTrendingPosts);
+      if (kvTrendingPosts.length > 0 || trendingPosts.length > 0) {
+        this.trendings = trendingPosts.concat(kvTrendingPosts);
+      }
 
       // remove duplicates
       this.trendings = this.trendings.filter((value, index, self) =>

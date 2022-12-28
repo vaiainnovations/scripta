@@ -7,7 +7,9 @@ export const useConfigStore = defineStore({
     isBetaVersion: useRuntimeConfig().public.isBetaVersion,
     restApiUrl: useRuntimeConfig().public.restApiUrl,
     rpcUrl: useRuntimeConfig().public.rpcUrl,
-    lcdUrl: useRuntimeConfig().public.lcdUrl
+    lcdUrl: useRuntimeConfig().public.lcdUrl,
+    subspaceId: useRuntimeConfig().public.subspaceId,
+    ipfsGateway: useRuntimeConfig().public.ipfsGateway
   }),
   actions: {
   }
