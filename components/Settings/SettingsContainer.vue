@@ -83,7 +83,7 @@
             <h6 class="text-sm">
               Scripta v1.0.0 ()
             </h6>
-            <h6 class="text-xs text-gray-dark">
+            <h6 v-if="$useDesmosNetwork" class="text-xs text-gray-dark">
               {{ $useDesmosNetwork().chainId }}
             </h6>
           </div>
