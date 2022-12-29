@@ -41,6 +41,7 @@
             <input
               id="inputNickname"
               v-model="newNickname"
+              placeholder="nickname"
               type="text"
               class="rounded-xl w-full border-primary-text-light border bg-background-alt font-bold text-xl text-primary-text px-7 py-1 lg:text-xl"
             >
@@ -107,6 +108,7 @@
 <script setup lang="ts">
 import { MsgSaveProfileEncodeObject } from "@desmoslabs/desmjs";
 import { useAccountStore } from "~~/core/store/AccountStore";
+import { useConfigStore } from "~~/core/store/ConfigStore";
 const emit = defineEmits(["userEdited"]);
 const newNickname = ref(useAccountStore().profile?.nickname || "");
 const newUsername = ref(useAccountStore().profile?.dtag || "");
@@ -183,7 +185,7 @@ async function checkUsername () {
   }
 
   try {
-    const res = await (await fetch(`${$useDesmosNetwork().lcd}desmos/profiles/v3/profiles/${username}`)).json() as any;
+    const res = await (await fetch(`${useConfigStore().lcdUrl}desmos/profiles/v3/profiles/${username}`)).json() as any;
     if (res?.profile) {
       isValidUsername.value = false;
       return;

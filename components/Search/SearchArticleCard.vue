@@ -65,7 +65,6 @@ if (image) {
 
 useUserStore().$subscribe(() => {
   const authorProfile = useUserStore().users.get(props.post.author);
-  console.log(authorProfile);
   if (authorProfile) {
     authorImage.value = authorProfile.pictures?.profile;
     authorNickname.value = authorProfile.nickname;

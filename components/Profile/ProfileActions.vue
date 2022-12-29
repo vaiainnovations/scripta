@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col px-2">
     <div
       v-for="action in profileActions"
       :key="action.display"

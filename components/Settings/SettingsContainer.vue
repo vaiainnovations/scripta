@@ -81,7 +81,7 @@
           >
           <div class="text-center pt-2">
             <h6 class="text-sm">
-              Scripta v1.0.0 ()
+              Scripta
             </h6>
             <h6 v-if="$useDesmosNetwork" class="text-xs text-gray-dark">
               {{ $useDesmosNetwork().chainId }}
@@ -130,7 +130,6 @@ async function savePrivacySettings () {
     privacyNotifications: hasAcceptedPrivacy.value,
     privacyTracking: hasAcceptedCookies.value
   }));
-  console.log(success);
   arePrivacySettingsChanged.value = false;
   isUpdating.value = false;
 }
