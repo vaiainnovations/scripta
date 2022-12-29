@@ -23,7 +23,13 @@
     >
       <div class="">
         <img
-          :src="userPic"
+          v-if="!useAccountStore().profile?.pictures.profile"
+          src="/icons/linear/profile-circle.svg"
+          class="max-w-11 w-11 h-11 object-cover rounded-full shadow-md border border-background"
+        >
+        <img
+          v-if="useAccountStore().profile?.pictures.profile"
+          :src="useAccountStore().profile?.pictures.profile"
           onerror="this.onerror=null;this.src='/img/author_pic.png'"
           class="max-w-11 w-11 h-11 object-cover rounded-full shadow-md border border-background"
         >
@@ -34,22 +40,6 @@
 
 <script setup lang="ts">
 import { useAccountStore } from "~~/core/store/AccountStore";
-const userPic = ref("/icons/linear/profile-circle.svg");
-if (process.client) {
-  useAccountStore().$subscribe(() => {
-    updateUserPic();
-  });
-  updateUserPic();
-}
-
-function updateUserPic () {
-  if (!useAccountStore().profile) {
-    return;
-  }
-  if (useAccountStore().profile.pictures) {
-    userPic.value = useAccountStore().profile.pictures.profile;
-  }
-}
 </script>
 
 <style>
