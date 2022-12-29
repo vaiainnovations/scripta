@@ -5,9 +5,12 @@
     </p>
     <div class="grid grid-cols-12 md:grid-cols-10 w-full gap-y-2 lg:grid-cols-12">
       <ArticlesCreateTag v-for="tag in useDraftStore().tags" :key="tag.id" v-model="tag.content.value" :content="tag.content" @remove-tag="() => removeTag(tag.id)" />
-      <button v-if="useDraftStore().tags.length < maxTags" class="flex flex-col justify-center items-center col-span-1 rounded-full bg-primary-text h-5 w-5 text-[#FFFFFF]" @click="addTag">
-        +
-      </button>
+      <img
+        v-if="useDraftStore().tags.length < maxTags"
+        src="/icons/bold/add-circle.svg"
+        class="w-6 h-6 object-contain cursor-pointer"
+        @click="addTag"
+      >
     </div>
   </div>
 </template>

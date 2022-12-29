@@ -1,11 +1,11 @@
 <template>
-  <div class="max-h-fit overflow-hidden border-b border-b-primary-text-light pt-2 pb-2 pl-2.5">
+  <div class="max-h-fit overflow-hidden xl:mx-2 hover:bg-gray-light/40 hover:rounded-lg pt-2 pb-2 pl-2.5 xl:pl-0 border-b border-gray-light/70">
     <div class="w-full flex">
       <div class="w-1/4">
         <img
           :src="props.post.image"
           onerror="this.onerror=null;this.src='/img/author_pic.png'"
-          class="w-full p-1 my-auto mx-auto object-contain max-h-14 rounded-xl"
+          class="w-full pr-1 my-auto mx-auto object-contain max-h-14 rounded-lg"
         >
       </div>
       <div class="w-3/4">
@@ -17,16 +17,16 @@
         </p>
       </div>
     </div>
-    <div class="w-full flex">
+    <!-- <div class="w-full flex">
       <img
         :src="authorImage"
         onerror="this.onerror=null;this.src='/img/author_pic.png'"
         class="h-6 w-6 object-cover rounded-full mx-1"
       >
-      <p class="text-sm font-medium text-primary-text-light my-auto truncate mx-2">
+      <p class="text-xs font-medium text-primary-text-light my-auto truncate mx-2">
         {{ authorNickname }}
       </p>
-    </div>
+    </div> -->
   </div>
 </template>
 

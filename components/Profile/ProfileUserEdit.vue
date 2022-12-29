@@ -5,7 +5,7 @@
         <div class="flex-none">
           <div class="mb-10 lg:mb-5">
             <div class="h-32 w-32 md:h-44 md:w-44 relative mx-auto md:mx-0">
-              <div class="absolute inset-0 bg-cover bg-center z-0 rounded-full hover:scale-150">
+              <div class="absolute inset-0 bg-cover bg-center z-0 rounded-full">
                 <ProfileUserPic />
               </div>
               <span v-if="!isUploadingProfilePic">

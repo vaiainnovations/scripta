@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full flex-col gap-y-6 overflow-y-scroll bg-background px-4 py-5 md:px-32 lg:py-10 2xl:w-5/6 2xl:px-14 2xl:border border-primary-text-light" @scroll="handleNavbarChange">
+  <div class="flex h-full flex-col gap-y-6 overflow-y-scroll bg-background px-4 py-5 md:px-32 lg:py-10 xl:py-0 2xl:w-5/6 2xl:px-14" @scroll="handleNavbarChange">
     <div class="text-right w-full">
       <ArticlesActionsOverlay :article="props.article" />
     </div>
