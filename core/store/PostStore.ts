@@ -25,7 +25,7 @@ export const usePostStore = defineStore({
      * @param externalId Post `externalId`
      * @returns Post
      */
-    async getPost (externalID: string): Promise<PostExtended> {
+    async getPost (externalID: string): Promise<PostExtended | null> {
       let cachedPost: PostExtended | false = false;
       if (!process.client) {
         /* cachedPost = await PostKv.get(externalID); */
@@ -43,13 +43,13 @@ export const usePostStore = defineStore({
         const author: Profile = await useUserStore().getUser(cachedPost.author as any, true);
         if (author) {
           cachedPost.author = {
-            address: (author.account as any).address,
+            address: (author.account as any).address || cachedPost.author,
             bio: author.bio,
             dtag: author.dtag,
             nickname: author.nickname,
             pictures: {
-              cover: author.pictures.cover,
-              profile: author.pictures.profile
+              cover: author.pictures?.cover || "",
+              profile: author.pictures?.profile || ""
             }
           };
         }

@@ -1,6 +1,6 @@
 <template>
   <section class="md:min-h-[55vh] px-10 2xl:px-40 bg-gradient-to-tr from-[#e5007e8b] to-[#f2910096] pt-40 md:pt-32 background-animate text-primary-text">
-    <div class="h-full w-full">
+    <div class="h-full w-full pb-2">
       <!-- bg-[rgba(244,184,73,0.54)] -->
       <div class="container mx-auto px-4 h-full flex justify-center">
         <div class="md:flex">
@@ -19,7 +19,7 @@
               <div class="gradient-text h-12 rounded-xl bg-white sm:px-5 md:px-10 mt-8 w-full md:w-1/2 flex justify-center">
                 <NuxtLink
                   to="/explore"
-                  class="bg-gradient-to-r to-[#e5007e] from-[#f29100] bg-clip-text bg-background text-2xl font-semibold my-auto"
+                  class="bg-gradient-to-r to-[#e5007e] from-[#f29100] bg-clip-text bg-background text-xl xl:text-2xl font-semibold my-auto"
                 >
                   Start Reading
                 </NuxtLink>

@@ -6,10 +6,7 @@
           <div class="mb-10 lg:mb-5">
             <div class="h-32 w-32 md:h-44 md:w-44 relative mx-auto md:mx-0">
               <div class="absolute inset-0 bg-cover bg-center z-0 rounded-full hover:scale-150">
-                <img
-                  :src="newProfilePicture || '/img/author_pic.png'"
-                  class="h-32 w-32 md:h-44 md:w-44 object-contain border-2 shadow-md rounded-full border-[#EDEEFF] relative"
-                >
+                <ProfileUserPic />
               </div>
               <span v-if="!isUploadingProfilePic">
                 <label class="opacity-0 hover:opacity-100 hover:bg-opacity-40 hover:bg-primary-text duration-300 absolute inset-0 z-10 flex justify-center items-center font-semibold rounded-full cursor-pointer" for="fileUploadProfilePic" @click="uploadProfilePic()">
