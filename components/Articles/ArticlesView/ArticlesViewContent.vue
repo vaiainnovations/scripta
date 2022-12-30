@@ -11,7 +11,7 @@
       :date="props.date"
     />
     <div
-      v-if="isAuthor"
+      v-if="props.address === (useAccountStore().address || '')"
       class="w-full text-right"
     >
       <div class="relative inline-flex text-gray-dark">
@@ -45,13 +45,4 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-const isAuthor = ref(false);
-
-if (process.client) {
-  try {
-    isAuthor.value = props.address === useAccountStore().address;
-  } catch (e) {
-    // ignore
-  }
-}
 </script>
