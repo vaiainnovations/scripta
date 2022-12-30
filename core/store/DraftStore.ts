@@ -33,8 +33,6 @@ export const useDraftStore = defineStore({
         this.externalId = uuidv4();
       }
 
-      localStorage.setItem("drafts", this.externalId);
-
       // save the draft
       const success = await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${this.externalId}`, "POST", {
         "Content-Type": "application/json"
@@ -60,32 +58,6 @@ export const useDraftStore = defineStore({
       this.lastSave = new Date(Date.now()); // update with the current timestamp
     },
 
-    async loadDraft (): Promise<void> {
-      // load the draft
-      useDraftStore().$reset(); // remove previous draft
-      const localExternalId = localStorage.getItem("drafts") || "";
-      if (localExternalId) {
-        const draft = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${localExternalId}`, "GET", {}, "")).json() as any;
-        if (!draft) {
-          return; // no drafts found
-        }
-        this.externalId = draft.externalId;
-        this.title = draft.text;
-        this.subtitle = draft.subtitle;
-        this.content = draft.content;
-        this.entities = draft.entities;
-        this.lastSave = new Date(draft.lastEditedDate);
-        draft.tags.forEach((tagRaw, index) => {
-          const tag: EditorTag = {
-            id: index,
-            content: {
-              value: tagRaw
-            }
-          };
-          this.tags.push(tag);
-        });
-      }
-    },
     async deleteDraft () {
       await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${this.externalId}`, "POST", {
         "Content-Type": "application/json"
@@ -94,7 +66,6 @@ export const useDraftStore = defineStore({
         draft: true
       })
       );
-      localStorage.removeItem("drafts");
       useDraftStore().$reset();
     }
   }

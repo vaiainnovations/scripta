@@ -25,7 +25,7 @@ import { useDraftStore } from "~~/core/store/DraftStore";
 const isDraftLoaded = ref(false);
 
 if (process.client) {
-  await useDraftStore().loadDraft();
+  useDraftStore().$reset();
   isDraftLoaded.value = true;
 }
 </script>

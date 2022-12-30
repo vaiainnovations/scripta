@@ -4,7 +4,7 @@ import { useConfigStore } from "./ConfigStore";
 import { useBackendStore } from "./BackendStore";
 import { registerModuleHMR } from ".";
 
-let chainInfo = DesmosMainnet;
+let chainInfo = DesmosTestnet;
 
 export interface NodeInfo {
   id: string;
