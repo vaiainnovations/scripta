@@ -32,7 +32,7 @@ module.exports = {
     },
     extend: {
       screens: {
-        "3xl": "1600px"
+        "3xl": "1800px"
       },
       spacing: {
         "8xl": "96rem",

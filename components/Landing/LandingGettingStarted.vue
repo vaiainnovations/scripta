@@ -1,7 +1,7 @@
 <template>
   <section class="min-h-[70vh] bg-background flex">
     <div class="flex-grow bg-gradient-to-b from-gray-100 to-white my-auto xl:pb-16">
-      <div class="px-4 py-10 mx-auto text-left md:text-center md:w-3/4 lg:w-2/4">
+      <div class="px-4 pt-10 pb-5 mx-auto text-left md:text-center md:w-3/4 lg:w-2/4">
         <h1 class="mb-6 text-6xl font-extrabold font-serif tracking-tight md:mb-6 md:leading-tight text-center">
           Earn from your words
         </h1>
@@ -9,7 +9,7 @@
       <div class="">
         <div class="grid grid-cols-12 px-5 md:px-20">
           <!-- Create Wallet -->
-          <div class="col-span-12 lg:col-span-5 xl:col-span-2 m-8 shadow-4xl hover:shadow-5xl rounded-md rounded-br-none bg-background-alt">
+          <div class="col-span-12 lg:col-span-5 xl:col-span-3 3xl:col-span-2 m-8 shadow-4xl hover:shadow-5xl rounded-md rounded-br-none bg-background-alt">
             <div class="float-right bg-background rounded-full h-10 w-10 text-white relative -mt-5 -mr-6 bg-[#000000]">
               <p class="text-center p-1.5 text-xl font-bold">
                 1
@@ -39,7 +39,7 @@
           </div>
 
           <!-- Write Article -->
-          <div class="col-span-12 lg:col-span-5 xl:col-span-2 m-8 shadow-4xl hover:shadow-5xl rounded-md rounded-br-none bg-background-alt">
+          <div class="col-span-12 lg:col-span-5 xl:col-span-3 3xl:col-span-2 m-8 shadow-4xl hover:shadow-5xl rounded-md rounded-br-none bg-background-alt">
             <div class="float-right bg-background rounded-full h-10 w-10 text-white relative -mt-5 -mr-6 bg-[#000000]">
               <p class="text-center p-1.5 text-xl font-bold">
                 2
@@ -64,7 +64,7 @@
           </div>
 
           <!-- Get Feedback -->
-          <div class="col-span-12 lg:col-span-5 xl:col-span-2 m-8 shadow-4xl hover:shadow-5xl rounded-md rounded-br-none bg-background-alt">
+          <div class="col-span-12 lg:col-span-5 xl:col-span-3 3xl:col-span-2 m-8 shadow-4xl hover:shadow-5xl rounded-md rounded-br-none bg-background-alt">
             <div class="float-right bg-background rounded-full h-10 w-10 text-white relative -mt-5 -mr-6 bg-[#000000]">
               <p class="text-center p-1.5 text-xl font-bold">
                 3
@@ -88,7 +88,7 @@
           </div>
 
           <!-- Earn -->
-          <div class="col-span-12 lg:col-span-5 xl:col-span-2 m-8 shadow-4xl hover:shadow-5xl rounded-md rounded-br-none bg-background-alt">
+          <div class="col-span-12 lg:col-span-5 xl:col-span-3 3xl:col-span-2 m-8 shadow-4xl hover:shadow-5xl rounded-md rounded-br-none bg-background-alt">
             <div class="float-right bg-background rounded-full h-10 w-10 text-white relative -mt-5 -mr-6 bg-[#000000]">
               <p class="text-center p-1.5 text-xl font-bold">
                 4
