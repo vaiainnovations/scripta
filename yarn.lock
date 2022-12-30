@@ -1183,7 +1183,7 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
-"@milkdown/core@^6.2.0", "@milkdown/core@^6.3.2":
+"@milkdown/core@^6", "@milkdown/core@^6.2.0", "@milkdown/core@^6.3.2":
   version "6.5.4"
   resolved "https://registry.yarnpkg.com/@milkdown/core/-/core-6.5.4.tgz#4c1bc348aa3616b641c52832e9b7500b91d76939"
   integrity sha512-OGdpNT/IKljYErB1kVp83GTjGBQ9uGePFdV/tj99p6R4gqW7NEhml+BVn95+0XXjf/ey+R8Fh5ISW4x1c7Rg0A==
@@ -1197,7 +1197,7 @@
     tslib "^2.4.0"
     unified "^10.1.0"
 
-"@milkdown/ctx@6.5.4":
+"@milkdown/ctx@6.5.4", "@milkdown/ctx@^6":
   version "6.5.4"
   resolved "https://registry.yarnpkg.com/@milkdown/ctx/-/ctx-6.5.4.tgz#082121230c337189628cc4316de878e0444876f4"
   integrity sha512-5fhRoomLTMl1B9UoWoQQM/PTvPj1SDf2Wja0Gllj50zumgfl7QyMZ73XDFsuiaoMlbECU9GTtSRFeq+Jm1depQ==
@@ -1265,6 +1265,14 @@
     tslib "^2.4.0"
     twemoji "^14.0.1"
     unist-util-visit "^4.0.0"
+
+"@milkdown/plugin-history@^6.5.4":
+  version "6.5.4"
+  resolved "https://registry.yarnpkg.com/@milkdown/plugin-history/-/plugin-history-6.5.4.tgz#995f68d66f27b20ca6771f3b7f68ca4c471f8dd9"
+  integrity sha512-pffeubQsi60Ypg0w9rU9TuASwjzp/JgngKML4Jhjif0U4R8odwuGu6PIPyhsMKJnZekCKcJjT06gAapd0SYH2A==
+  dependencies:
+    "@milkdown/utils" "6.5.4"
+    tslib "^2.4.0"
 
 "@milkdown/plugin-listener@^6.3.2":
   version "6.5.4"
@@ -1353,7 +1361,7 @@
     prosemirror-view "^1.26.0"
     tslib "^2.3.1"
 
-"@milkdown/prose@^6.3.2":
+"@milkdown/prose@^6", "@milkdown/prose@^6.3.2":
   version "6.5.4"
   resolved "https://registry.yarnpkg.com/@milkdown/prose/-/prose-6.5.4.tgz#e6a96040f8d682d229f168c13fe0014211e594f9"
   integrity sha512-ITtlbRtcAFwDIkvKUPDcAV3h5hgbISo5SvV4zqEPZ4KpGFvsVNnjVbT5c7FPwZ+JhwZSY5poJNh8XF5DkPDE2w==
@@ -7869,6 +7877,15 @@ micromatch@^4.0.2, micromatch@^4.0.4, micromatch@^4.0.5:
   dependencies:
     braces "^3.0.2"
     picomatch "^2.3.1"
+
+milkdown-plugin-placeholder@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/milkdown-plugin-placeholder/-/milkdown-plugin-placeholder-0.1.2.tgz#16c1ad6b4495bba1843bdb31232a04fef665d5c3"
+  integrity sha512-ZFKLdVtm6gkkcRnCOcsmh3qDtafqeJ70pJSHOzzX/TA22bJOxUVcChy7rCF3MOcK1Cx80kGU/7MegE/x9eBRLQ==
+  dependencies:
+    "@milkdown/core" "^6"
+    "@milkdown/ctx" "^6"
+    "@milkdown/prose" "^6"
 
 mime-db@1.52.0:
   version "1.52.0"

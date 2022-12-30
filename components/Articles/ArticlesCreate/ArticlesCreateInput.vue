@@ -2,7 +2,10 @@
   <div class="w-full flex flex-col gap-y-3 items-center pt-3 md:mt-10 bg-background-alt p-4 md:p-10 lg:p-14 rounded-3xl shadow-sm">
     <!-- Title -->
     <div class="w-full flex flex-col items-center group my-6">
-      <label for="title" class="text-primary-text-light font-bold self-start text-base pl-2 group-focus-within:block hidden pb-1">
+      <label
+        for="title"
+        class="text-primary-text-light font-bold self-start text-base pl-2 group-focus-within:block hidden pb-1"
+      >
         Title
       </label>
       <input
@@ -16,7 +19,10 @@
     </div>
     <!-- Subtitle -->
     <div class="w-full flex flex-col items-center group my-6">
-      <label for="title" class="text-primary-text-light font-bold self-start text-base pl-2 group-focus-within:block hidden pb-1">
+      <label
+        for="title"
+        class="text-primary-text-light font-bold self-start text-base pl-2 group-focus-within:block hidden pb-1"
+      >
         Subtitle
       </label>
       <textarea

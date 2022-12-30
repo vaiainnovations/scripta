@@ -61,6 +61,7 @@
     "vitest": "^0.13.1"
   },
   "dependencies": {
+    "@milkdown/plugin-history": "^6.5.4",
     "@nuxtjs/composition-api": "^0.33.1",
     "@pinia/nuxt": "^0.4.1",
     "@rollup/plugin-inject": "^4.0.4",
@@ -68,6 +69,7 @@
     "buffer": "^6.0.3",
     "bufferutil": "^4.0.6",
     "events": "^3.3.0",
+    "milkdown-plugin-placeholder": "^0.1.2",
     "pinia": "^2.0.21",
     "qrcode.vue": "^3.3.3",
     "stream-browserify": "^3.0.0",
