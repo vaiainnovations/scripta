@@ -189,6 +189,7 @@ async function deleteArticle () {
   };
   const success = await $useTransaction().directTx([msgDeletePost], [{
     id: useDraftStore().id,
+    externalId: useDraftStore().externalId,
     scriptaOp: "MsgDeletePost"
   }]);
   if (success) {
