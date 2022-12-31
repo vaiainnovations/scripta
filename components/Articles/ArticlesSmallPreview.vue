@@ -5,7 +5,7 @@
   >
     <!-- Desktop -->
     <div class=" mx-auto hidden sm:block">
-      <div class="flex max-w-full mx-auto overflow-hidden bg-background-alt rounded-3xl shadow-md dark:bg-gray-800">
+      <div class="flex max-w-full mx-auto overflow-hidden bg-background-alt rounded-2xl shadow-md dark:bg-gray-800">
         <div class="w-1/3 h-48">
           <img
             alt="Article cover picture"

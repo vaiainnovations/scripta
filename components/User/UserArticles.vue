@@ -45,9 +45,10 @@ const props = defineProps<Props>();
 const articles = ref([] as PostExtended[]);
 
 const isLoadingArticles = ref(true);
-if (props.user && props.user.account && process.client) {
+if (process.client && props.user && props.user.account) {
+  const address = props.user.account.base_vesting_account?.base_account?.address || props.user.account.address || props.user;
   useUserStore()
-    .getUserArticles(props.user.account.address)
+    .getUserArticles(address)
     .then((posts) => {
       isLoadingArticles.value = false;
       articles.value = posts;

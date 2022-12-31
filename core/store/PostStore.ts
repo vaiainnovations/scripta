@@ -100,6 +100,7 @@ export const usePostStore = defineStore({
 
       const draftStore = useDraftStore();
       const extId = useDraftStore().externalId || uuidv4();
+      useDraftStore().externalId = extId;
 
       const msgCreatePost: MsgCreatePostEncodeObject = {
         typeUrl: "/desmos.posts.v2.MsgCreatePost",

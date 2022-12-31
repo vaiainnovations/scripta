@@ -81,9 +81,10 @@ async function publish () {
   isPublishing.value = true;
   const success = await usePostStore().savePost();
   if (success) {
+    const extId = useDraftStore().externalId;
     await usePostStore().updateUserPosts();
     useDraftStore().$reset();
-    useRouter().push(`/@${useAccountStore().profile.dtag}/${useDraftStore().externalId}`);
+    useRouter().push(`/@${useAccountStore().profile.dtag}/${extId}`);
   }
   isPublishing.value = false;
 }
