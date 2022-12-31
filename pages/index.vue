@@ -15,9 +15,7 @@ useHead({
       <LandingHero />
 
       <!-- trending -->
-      <section v-if="useConfigStore().isBetaVersion">
-        <LandingTrendingSection />
-      </section>
+      <LandingTrendingSection />
       <TheFooter />
     </NuxtLayout>
   </div>

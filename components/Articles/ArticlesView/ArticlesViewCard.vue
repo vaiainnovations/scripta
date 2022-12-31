@@ -89,7 +89,7 @@ const showComments = ref(false);
 if (process.client) {
   showComments.value = true;
 }
-const sharingUrl = (useConfigStore().isBetaVersion) ? `https://beta.scripta.network${useRoute().fullPath}` : `https://scripta.network${useRoute().fullPath}`;
+const sharingUrl = `https://scripta.network${useRoute().fullPath}`;
 const sharingUrlEncoded = encodeURIComponent(sharingUrl);
 
 useHead({

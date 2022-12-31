@@ -1,5 +1,5 @@
 <template>
-  <div v-if="useConfigStore().isBetaVersion">
+  <div>
     <NavBarCard />
     <div
       class="relative z-10"

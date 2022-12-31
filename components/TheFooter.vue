@@ -5,25 +5,6 @@ import { useConfigStore } from "~~/core/store/ConfigStore";
   <section>
     <footer class="bg-white">
       <div class="px-4 py-16 mx-auto max-w-screen-xl sm:px-6 lg:px-8">
-        <!-- CTA -->
-        <div  v-if="!useConfigStore().isBetaVersion" class="flex flex-col items-center p-6 bg-indigo-600 rounded-lg shadow-4xl gap-4 sm:flex-row sm:justify-between order-1">
-          <strong class="text-xl text-white sm:text-xl">
-            Try the Beta Now!
-          </strong>
-
-          <a
-            class="inline-flex items-center px-8 py-3 text-indigo-600 bg-white border border-white rounded-full hover:bg-transparent hover:text-white active:bg-white/90 focus:outline-none focus:ring"
-            href="https://beta.scripta.network"
-          >
-            <span class="text-sm font-medium"> Let's Get Started </span>
-
-            <img
-              class="w-5 h-5 ml-3"
-              src="/icons/linear/arrow-right.svg"
-            >
-          </a>
-        </div>
-
         <!-- Links -->
         <div class="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <!-- About -->
@@ -204,7 +185,7 @@ import { useConfigStore } from "~~/core/store/ConfigStore";
               class="h-10"
               src="/logo/logo_lettering.svg"
             >
-            <span v-if="useConfigStore().isBetaVersion" class="font-serif">
+            <span class="font-serif">
               beta
             </span>
           </div>

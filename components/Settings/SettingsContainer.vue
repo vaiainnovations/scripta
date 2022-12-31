@@ -84,7 +84,7 @@
               Scripta
             </h6>
             <h6 v-if="$useDesmosNetwork" class="text-xs text-gray-dark">
-              {{ $useDesmosNetwork().chainId }}
+              {{ $useDesmosNetwork().chainInfo.chainName }}
             </h6>
           </div>
         </div>

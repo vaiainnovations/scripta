@@ -25,28 +25,8 @@
                 </NuxtLink>
               </div>
             </div>
-            <div
-              v-if="!useConfigStore().isBetaVersion"
-              class="flex flex-col bg-background items-center p-6 m-2 bg-indigo-600 rounded-lg shadow-4xl gap-4 sm:flex-row sm:justify-between order-1 mt-10"
-            >
-              <strong class="text-3xl text-white lg:text-3xl text-center">
-                Available <span class="text-xs align-top">(very)</span> Soon!
-              </strong>
-
-              <a
-                class="inline-flex items-center px-8 py-3 text-indigo-600 bg-white border border-white rounded-full hover:bg-transparent hover:text-white active:bg-white/90 focus:outline-none focus:ring"
-                href="https://beta.scripta.network"
-              >
-                <span class="text-xs font-medium"> Try the Beta! </span>
-
-                <img
-                  class="w-5 h-5 ml-3"
-                  src="/icons/linear/arrow-right.svg"
-                >
-              </a>
-            </div>
           </div>
-          <div class="hidden md:block w-full mx-auto md:flex-1 mt-auto md:pt-0 2xl:pl-20">
+          <div class="my-auto hidden md:block w-full mx-auto md:flex-1 mt-auto md:pt-0 2xl:pl-20 select-none pointer-events-none">
             <img
               src="https://cdn.discordapp.com/attachments/956124846750834719/1019643475194548224/3_med.png"
               class="2xl:w-3/5 "
