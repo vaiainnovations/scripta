@@ -166,6 +166,11 @@ navBarReading.value.title = props.article.text;
 navBarReading.value.date = new Date(props.article.creationDate);
 
 function handleNavbarChange (event: Event) {
+  // disable navbar on small screens
+  if (window.innerWidth < 1024) {
+    navBarReading.value.show = false;
+    return;
+  }
   const { scrollTop } = (event.target as HTMLDivElement);
   if (scrollTop > 120) {
     navBarReading.value.show = true;
