@@ -33,6 +33,16 @@ export const useAccountStore = defineStore({
   getters: {
   },
   actions: {
+    /**
+     * Update the DSM account balance
+     */
+    async updateBalance () {
+      const { $useWallet, $useDesmosNetwork } = useNuxtApp();
+      const balance = await (await $useWallet().wallet.client).getBalance(this.address, $useDesmosNetwork().ucoinDenom);
+
+      // update the store
+      this.balance = Number(balance.amount) / 1_000_000;
+    },
     async getUserSection (forceCreateSection = false) {
       try {
         const res = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}user/get/${this.address}`, "POST", {
