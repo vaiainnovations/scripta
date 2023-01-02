@@ -53,10 +53,7 @@ import { useUserStore } from "~~/core/store/UserStore";
 
 const isLoadingArticles = ref(true);
 
-useUserStore()
-  .getUserArticles(useAccountStore().address)
-  .then((posts) => {
-    isLoadingArticles.value = false;
-    usePostStore().userPosts = posts;
-  });
+usePostStore().updateUserPosts().then(() => {
+  isLoadingArticles.value = false;
+});
 </script>

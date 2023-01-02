@@ -198,7 +198,7 @@ import { useConfigStore } from "~~/core/store/ConfigStore";
         <!-- Copyright & Socials -->
         <div class="pt-6 mt-6 border-t border-gray-100 sm:justify-between sm:items-center sm:flex">
           <p class="text-sm text-center text-gray-500 sm:text-left">
-            Copyright &copy; 2022. All rights reserved.<br>
+            Copyright &copy; 2023. All rights reserved.<br>
             <span class="text-xs">Built by Vaia Innovations</span>
           </p>
 

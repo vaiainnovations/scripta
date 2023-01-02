@@ -7,11 +7,10 @@
     >
       {{ useDraftStore().lastSave.toLocaleString() }}
     </p>
+    <!-- Input form -->
+    <ArticlesCreateInput />
     <!-- Tags -->
     <ArticlesCreateTags class="pt-6" />
-    <!-- Input form -->
-    <!-- TODO: implement loading skeleton -->
-    <ArticlesCreateInput />
     <!-- Submit buttons -->
     <ArticlesCreateButtons
       :draft="true"

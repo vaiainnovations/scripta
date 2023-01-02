@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col pl-6 gap-y-2">
+  <div class="flex flex-col pl-6">
     <p class="text-2xl font-bold">
       Wallet
     </p>
@@ -12,6 +12,7 @@
         {{ useAccountStore().balance.toLocaleString() }} {{ coinDenom }}
       </p>
     </div>
+    <a class="text-xs hover:underline text-gray hover:text-primary-text" href="https://app.osmosis.zone/?from=ATOM&to=DSM" target="_blank">Buy ${{ coinDenom }}</a>
   </div>
 </template>
 
