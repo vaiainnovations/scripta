@@ -8,6 +8,7 @@ import { generateUsername } from "unique-username-generator";
 import { decodeTxRaw } from "@cosmjs/proto-signing";
 import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
 import { useWalletStore } from "./wallet/WalletStore";
+import { usePostStore } from "./PostStore";
 import { SupportedSigner } from "./wallet/SupportedSigner";
 import { useAccountStore } from "./AccountStore";
 import { useBackendStore } from "./BackendStore";
@@ -254,14 +255,17 @@ export const useAuthStore = defineStore({
           useAccountStore().profile = newProfile;
         }
 
-        // TODO: to consider accounts with no balance
-        const balance = await (await useWalletStore().wallet.client).getBalance(account.address, useDesmosStore().ucoinDenom);
+        await useAccountStore().updateBalance();
 
-        // update the store
-        useAccountStore().balance = Number(balance.amount) / 1_000_000;
+        usePostStore().updateUserPosts();
 
         // Route to the profile page only if coming from auth
         if (useRouter().currentRoute.value.path.includes("auth")) {
+          await navigateTo("/auth/session");
+        }
+
+        if (!this.hasValidAuthAuthorization()) {
+          // If the authorization is expired, request a new one
           await navigateTo("/auth/session");
         }
       }

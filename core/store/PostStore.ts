@@ -145,9 +145,6 @@ export const usePostStore = defineStore({
         urls: [ipfsEntityUrl]
       };
 
-      /* $useTransaction().push(msgCreatePost);
-      const signedBytes = await $useTransaction().execute(); */
-
       // if is a new user and has no profile, create one with the randomly generated username
       const msgs: EncodeObject[] = [];
       const msgsDetails: any[] = [];
@@ -226,7 +223,12 @@ export const usePostStore = defineStore({
       }
     },
     async updateUserPosts (): Promise<void> {
-      this.userPosts = await useUserStore().getUserArticles(useAccountStore().address);
+      try {
+        this.userPosts = await useUserStore().getUserArticles(useAccountStore().address);
+      } catch (e) {
+        this.userPosts = [];
+        console.log(e);
+      }
     }
   }
 });

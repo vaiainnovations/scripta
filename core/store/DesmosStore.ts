@@ -71,7 +71,7 @@ export const useDesmosStore = defineStore({
     },
     async updateChainStatus (): Promise<void> {
       try {
-        this.chainStatus = (await (await fetch(`${useConfigStore().rpcUrl}/status`)).json() as any).result as ChainStatus;
+        this.chainStatus = (await (await fetch(`${useConfigStore().rpcUrl}status`)).json() as any).result as ChainStatus;
       } catch (e) {}
     },
     async updateDesmosPrice () {
