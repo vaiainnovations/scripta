@@ -36,12 +36,12 @@ updateArticleComments();
 async function updateArticleComments () {
   const { $useDesmosNetwork } = useNuxtApp();
   const query = `query PostReplies {
-  comments: post_reference(where: {reference: {subspace_id: {_eq: ${$useDesmosNetwork().subspaceId}}, id: {_eq: ${props.referencedPost.toString()}}}}, order_by:{reference: {creation_date:desc}}) {
+  comments: post_reference(where: {postByReferenceRowId:{id:{_eq: ${props.referencedPost.toString()}}}, _and:{post:{subspace_id:{_eq: ${$useDesmosNetwork().subspaceId}}}}}, order_by:{post: {creation_date:desc}}) {
     comment: post {
       id
       text
       creation_date
-      author {
+      author: post_author {
         address
         dtag
         nickname
