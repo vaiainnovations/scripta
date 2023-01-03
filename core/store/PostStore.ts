@@ -102,6 +102,9 @@ export const usePostStore = defineStore({
       const extId = useDraftStore().externalId || uuidv4();
       useDraftStore().externalId = extId;
 
+      // filter out empty tags
+      const tags = useDraftStore().tags.filter(tag => tag.content.value !== "" ? tag.content.value : null);
+
       const msgCreatePost: MsgCreatePostEncodeObject = {
         typeUrl: "/desmos.posts.v2.MsgCreatePost",
         value: {
@@ -111,7 +114,7 @@ export const usePostStore = defineStore({
           author: useAccountStore().address,
           text: draftStore.title,
           sectionId: useAccountStore().sectionId,
-          tags: useDraftStore().tags.map(tag => tag.content.value),
+          tags: tags.map(tag => tag.content.value),
           conversationId: Long.fromNumber(0),
           referencedPosts: [],
           replySettings: 1

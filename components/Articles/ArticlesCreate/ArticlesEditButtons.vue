@@ -95,6 +95,8 @@ async function editArticle () {
   const draftStore = await useDraftStore();
   const extId = draftStore.externalId;
   isPublishing.value = true;
+  // filter out empty tags
+  const tags = draftStore.tags.filter(tag => tag.content.value !== "" ? tag.content.value : null);
 
   const msgEditPost: MsgEditPostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgEditPost",
@@ -102,7 +104,7 @@ async function editArticle () {
       subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
       editor: useAccountStore().address,
       postId: draftStore.id,
-      tags: draftStore.tags.map(tag => tag.content.value),
+      tags: tags.map(tag => tag.content.value),
       text: draftStore.title
     }
   };
@@ -118,7 +120,6 @@ async function editArticle () {
   const postCid = await $useIpfs().uploadPost(JSON.stringify(ipfsPost));
 
   const postIpfsUrl = `${$useIpfs().gateway}${postCid}`;
-  console.log(postIpfsUrl);
 
   const ipfsEntityUrl = {
     displayUrl: "IPFS",
@@ -140,7 +141,7 @@ async function editArticle () {
     author: useAccountStore().address,
     sectionId: useAccountStore().sectionId,
     text: draftStore.title,
-    tags: draftStore.tags.map(tag => tag.content.value),
+    tags: tags.map(tag => tag.content.value),
     subtitle: draftStore.subtitle,
     content: draftStore.content,
     entities: JSON.stringify(msgEditPost.value.entities),
