@@ -1,6 +1,7 @@
 
 import { Buffer } from "buffer";
 import { MsgGrantEncodeObject, MsgRevokeEncodeObject } from "@desmoslabs/desmjs";
+import { GenericSubspaceAuthorization } from "@desmoslabs/desmjs-types/desmos/subspaces/v3/authz/authz";
 import { Timestamp } from "cosmjs-types/google/protobuf/timestamp";
 import { GenericAuthorization } from "cosmjs-types/cosmos/authz/v1beta1/authz";
 import { defineStore } from "pinia";
@@ -13,6 +14,7 @@ import { SupportedSigner } from "./wallet/SupportedSigner";
 import { useAccountStore } from "./AccountStore";
 import { useBackendStore } from "./BackendStore";
 import { useDesmosStore } from "./DesmosStore";
+import { useConfigStore } from "./ConfigStore";
 import { registerModuleHMR } from ".";
 
 export enum AuthLevel {
@@ -325,23 +327,45 @@ export const useAuthStore = defineStore({
     async grantAuthorizations () {
       const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
       const grants = [] as MsgGrantEncodeObject[];
+      const authorizations = [] as {typeUrl: string, value: Uint8Array}[];
       await useAccountStore().getUserInfo();
 
       const authzConfig = await this.getAuthzConfig();
 
-      useAccountStore().authz.DEFAULT_AUTHORIZATIONS.forEach((authorization) => {
+      // Create Subspace authorizations
+      useAccountStore();
+
+      // Generate Subspace authorizations
+      useAccountStore().authz.DEFAULT_SUBSPACE_AUTHORIZATIONS.forEach((authorization) => {
+        authorizations.push(
+          {
+            typeUrl: "/desmos.subspaces.v3.authz.GenericSubspaceAuthorization",
+            value: GenericSubspaceAuthorization.encode({
+              subspacesIds: [useConfigStore().subspaceId],
+              msg: authorization
+            }).finish()
+          });
+      });
+
+      // Generate Generica authorizations
+      useAccountStore().authz.DEFAULT_GENERIC_AUTHORIZATIONS.forEach((authorization) => {
+        authorizations.push(
+          {
+            typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
+            value: GenericAuthorization.encode(GenericAuthorization.fromPartial({
+              msg: authorization
+            })).finish()
+          });
+      });
+
+      authorizations.forEach((authorization) => {
         grants.push({
           typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
           value: {
             grantee: authzConfig.grantee,
             granter: useAccountStore().address,
             grant: {
-              authorization: {
-                typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
-                value: GenericAuthorization.encode(GenericAuthorization.fromPartial({
-                  msg: authorization
-                })).finish()
-              },
+              authorization,
               expiration: Timestamp.fromPartial({
                 nanos: 0,
                 seconds: (+new Date() / 1000) + 60 * 60 * 24 * 3 // + 1 day
@@ -378,7 +402,8 @@ export const useAuthStore = defineStore({
     async revokeAuthorizations (): Promise<boolean> {
       const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
       const revokes = [] as MsgRevokeEncodeObject[];
-      useAccountStore().authz.DEFAULT_AUTHORIZATIONS.forEach((revokeType) => {
+      const authorizations = [...useAccountStore().authz.DEFAULT_GENERIC_AUTHORIZATIONS, ...useAccountStore().authz.DEFAULT_SUBSPACE_AUTHORIZATIONS];
+      authorizations.forEach((revokeType) => {
         revokes.push({
           typeUrl: "/cosmos.authz.v1beta1.MsgRevoke",
           value: {

@@ -103,7 +103,7 @@ export const useTransactionStore = defineStore({
           this.status = QueueStatus.FAILED;
           this.errorText = `${broadcastResult.rawLog}`;
           this.hash = broadcastResult.transactionHash;
-          this.resetQueueWithTimer(15, false);
+          this.resetQueueWithTimer(8, false);
         } else {
           this.status = QueueStatus.SUCCESS;
           this.resetQueueWithTimer(5, true);
@@ -113,7 +113,7 @@ export const useTransactionStore = defineStore({
       } catch (e) {
         this.status = QueueStatus.FAILED;
         this.errorText = `${e}`;
-        this.resetQueueWithTimer(10, true);
+        this.resetQueueWithTimer(6, true);
       }
       useAccountStore().updateBalance();
       return txBytes;
@@ -145,8 +145,8 @@ export const useTransactionStore = defineStore({
         } catch (e) {
           console.log(e);
         }
-        this.hash = broadcastResult.transactionHash;
         useAccountStore().updateBalance();
+        this.status = QueueStatus.WAITING;
         return broadcastResult?.transactionHash || false;
       } catch (e) {
         // handle tx error or wallet signing rejection
@@ -191,7 +191,7 @@ export const useTransactionStore = defineStore({
         console.log(e);
         this.status = QueueStatus.FAILED;
         this.errorText = `${e}`;
-        this.resetQueueWithTimer(10);
+        this.resetQueueWithTimer(6);
       }
     },
     resetQueueWithTimer (s: number, reset = false): void {
