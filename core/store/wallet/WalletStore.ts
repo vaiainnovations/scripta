@@ -98,23 +98,32 @@ export const useWalletStore = defineStore({
       try {
         this.wallet.client = await DesmosClient.connectWithSigner(useConfigStore().rpcUrl, this.wallet.signer as Signer);
       } catch (e) {
-        console.log(e);
+        await authStore.logout("/auth/error");
         // abort if the client fails to connect
         return;
       }
       // get Wallet account
-      const account = await this.wallet.signer.getCurrentAccount();
-      console.log(this.wallet.client);
+      let account = undefined as any | undefined;
+      try {
+        account = await this.wallet.signer.getCurrentAccount();
+      } catch (e) {
+        await authStore.logout("/auth/error");
+      }
 
       // if the account does not exists, abort
-      if (!account) {
-        console.error("Keplr account does not exists");
+      if (!account || !account.address) {
+        await authStore.logout("/auth/error");
+        console.error("Account does not exists");
         return;
       }
 
       // Start the final step of the login process
       console.log("called WalletStore onWalletConnected");
-      await authStore.login(true);
+      try {
+        await authStore.login(true);
+      } catch (e) {
+        await authStore.logout("/auth/error");
+      }
     },
 
     async onWalletNotConnected () {

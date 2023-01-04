@@ -82,18 +82,22 @@ export class AuthStorage {
    * Delete local stored auth data
    */
   static delete (address = ""): void {
-    if (address) {
-      const storedAuthData = JSON.parse(localStorage.getItem(AuthStorage.STORAGE_KEY)) as StoredAuthData;
-      storedAuthData.signer = null;
-      if (storedAuthData && storedAuthData.version === this.STORAGE_VERSION && storedAuthData.accounts && storedAuthData?.accounts?.length > 0) {
-        const index = storedAuthData.accounts.findIndex(account => account.address === address);
-        if (index >= 0) {
-          storedAuthData.accounts.splice(index, 1);
-          localStorage.setItem(AuthStorage.STORAGE_KEY, JSON.stringify(storedAuthData));
+    try {
+      if (address) {
+        const storedAuthData = JSON.parse(localStorage.getItem(AuthStorage.STORAGE_KEY)) as StoredAuthData;
+        storedAuthData.signer = null;
+        if (storedAuthData && storedAuthData.version === this.STORAGE_VERSION && storedAuthData.accounts && storedAuthData?.accounts?.length > 0) {
+          const index = storedAuthData.accounts.findIndex(account => account.address === address);
+          if (index >= 0) {
+            storedAuthData.accounts.splice(index, 1);
+            localStorage.setItem(AuthStorage.STORAGE_KEY, JSON.stringify(storedAuthData));
+          }
         }
+      } else {
+        localStorage.removeItem(AuthStorage.STORAGE_KEY);
       }
-    } else {
-      localStorage.removeItem(AuthStorage.STORAGE_KEY);
+    } catch (e) {
+      console.log(e);
     }
   }
 }
