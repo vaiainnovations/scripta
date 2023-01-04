@@ -10,7 +10,7 @@ module.exports = {
       "primary-text": "#000000",
       "primary-text-light": "#696969",
       "background-alt": "#FFFCF9",
-      danger: "#EE9898",
+      danger: "#d94e4e",
       success: "#75FF83",
       blue: "#1fb6ff",
       purple: "#7e5bef",

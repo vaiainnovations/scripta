@@ -92,10 +92,10 @@
             >
               Draft
             </a>
-            <p class="text-primary-text dark:text-white text-xl font-medium mb-2">
+            <p class="text-primary-text text-xl font-medium mb-2">
               {{ props.content.title }}
             </p>
-            <p class="text-primary-text/80 dark:text-gray-300 font-light text-md">
+            <p class="text-primary-text/80 font-light text-md">
               {{ props.content.description }}
             </p>
             <div class="flex items-center mt-4">

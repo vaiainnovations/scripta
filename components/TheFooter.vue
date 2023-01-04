@@ -6,7 +6,7 @@ import { useConfigStore } from "~~/core/store/ConfigStore";
     <footer class="bg-white">
       <div class="px-4 py-16 mx-auto max-w-screen-xl sm:px-6 lg:px-8">
         <!-- Links -->
-        <div class="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <!-- About -->
           <div class="text-center sm:text-left">
             <p class="text-lg font-medium text-gray-900">
@@ -27,7 +27,7 @@ import { useConfigStore } from "~~/core/store/ConfigStore";
                 <li>
                   <a
                     class="text-gray-dark transition hover:text-gray-dark/75"
-                    href="https://beta.scripta.network/@scripta"
+                    href="/@scripta"
                   >
                     Blog
                   </a>
@@ -57,7 +57,7 @@ import { useConfigStore } from "~~/core/store/ConfigStore";
           </div>
 
           <!-- Features -->
-          <div class="text-center sm:text-left">
+         <!--  <div class="text-center sm:text-left">
             <p class="text-lg font-medium text-gray-900">
               Features
             </p>
@@ -69,7 +69,7 @@ import { useConfigStore } from "~~/core/store/ConfigStore";
                     class="text-gray-dark transition hover:text-gray-dark/75"
                     href="/#features"
                   >
-                    Create
+                    Write
                   </a>
                 </li>
 
@@ -101,7 +101,7 @@ import { useConfigStore } from "~~/core/store/ConfigStore";
                 </li>
               </ul>
             </nav>
-          </div>
+          </div> -->
 
           <!-- Resources -->
           <div class="text-center sm:text-left">
@@ -116,7 +116,16 @@ import { useConfigStore } from "~~/core/store/ConfigStore";
                     class="text-gray-dark transition hover:text-gray-dark/75"
                     href="https://desmos.network"
                   >
-                    Desmos ($DSM)
+                    Desmos
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="text-gray-dark transition hover:text-gray-dark/75"
+                    target="_blank"
+                    href="https://frontier.osmosis.zone/?from=ATOM&to=DSM"
+                  >
+                    Buy $DSM
                   </a>
                 </li>
                 <!-- <li>
@@ -131,6 +140,7 @@ import { useConfigStore } from "~~/core/store/ConfigStore";
                 <li>
                   <a
                     class="text-gray-dark transition hover:text-gray-dark/75"
+                    target="_blank"
                     href="https://keplr.app/"
                   >
                     Keplr
@@ -140,6 +150,7 @@ import { useConfigStore } from "~~/core/store/ConfigStore";
                 <li>
                   <a
                     class="text-gray-dark transition hover:text-gray-dark/75"
+                    target="_blank"
                     href="https://dpm.desmos.network/"
                   >
                     DPM
@@ -199,7 +210,7 @@ import { useConfigStore } from "~~/core/store/ConfigStore";
         <div class="pt-6 mt-6 border-t border-gray-100 sm:justify-between sm:items-center sm:flex">
           <p class="text-sm text-center text-gray-500 sm:text-left">
             Copyright &copy; 2023. All rights reserved.<br>
-            <span class="text-xs">Built by Vaia Innovations</span>
+            <span class="text-xs">Built by <a href="//vaiainnovations.com" target="_blank" class="hover:underline">Vaia Innovations</a></span>
           </p>
 
           <SocialsRow />

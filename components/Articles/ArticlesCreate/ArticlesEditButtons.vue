@@ -17,7 +17,7 @@
     <button
       v-if="!isPublishing"
       type="button"
-      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-danger text-xl font-medium"
+      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-danger/70 hover:bg-danger text-xl font-medium"
       @click="deleteArticle()"
     >
       <span v-if="useDraftStore().id">
@@ -32,7 +32,7 @@
         <button
           v-if="useDraftStore().title && useDraftStore().subtitle && useDraftStore().content"
           type="button"
-          class="p-1 w-full h-full rounded-xl text-[#FFFFFF] bg-primary text-xl font-medium"
+          class="p-1 w-full h-full rounded-xl text-[#FFFFFF] bg-primary/90 hover:bg-primary text-xl font-medium"
           @click="publish()"
         >
           <span v-if="useDraftStore().id">
@@ -68,6 +68,8 @@ import { usePostStore } from "~~/core/store/PostStore";
 const isSavingDraft = ref(false);
 const isPublishing = ref(false);
 
+const emit = defineEmits(["isPublishing"]);
+
 function saveDraft () {
   isSavingDraft.value = true;
   useDraftStore().saveDraft().then(() => {
@@ -76,6 +78,7 @@ function saveDraft () {
 }
 
 async function publish () {
+  emit("isPublishing", true);
   isPublishing.value = true;
   if (useDraftStore().id) {
     editArticle();
@@ -83,11 +86,16 @@ async function publish () {
   }
   const success = await usePostStore().savePost();
   if (success) {
-    await usePostStore().updateUserPosts();
-    useDraftStore().$reset();
-    useRouter().push(`/@${useAccountStore().profile.dtag}/${useDraftStore().externalId}`);
+    try {
+      await usePostStore().updateUserPosts();
+      useDraftStore().$reset();
+      useRouter().push(`/@${useAccountStore().profile.dtag}/${useDraftStore().externalId}`);
+    } catch (e) {
+      console.log(e);
+    }
   }
   isPublishing.value = false;
+  emit("isPublishing", false);
 }
 
 async function editArticle () {
@@ -95,6 +103,7 @@ async function editArticle () {
   const draftStore = await useDraftStore();
   const extId = draftStore.externalId;
   isPublishing.value = true;
+  emit("isPublishing", true);
   // filter out empty tags
   const tags = draftStore.tags.filter(tag => tag.content.value !== "" ? tag.content.value : null);
 
@@ -154,10 +163,12 @@ async function editArticle () {
     useRouter().push(`/@${useAccountStore().profile.dtag}/${extId}`);
   }
   isPublishing.value = false;
+  emit("isPublishing", false);
 }
 
 async function deleteArticle () {
   isPublishing.value = true;
+  emit("isPublishing", true);
   const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
 
   // if draft, just delete the draft from the backend
@@ -175,6 +186,7 @@ async function deleteArticle () {
       )
     ).json();
     isPublishing.value = false;
+    emit("isPublishing", false);
     await navigateTo("/profile");
     return;
   }
@@ -199,5 +211,6 @@ async function deleteArticle () {
     useRouter().push("/profile");
   }
   isPublishing.value = false;
+  emit("isPublishing", false);
 }
 </script>

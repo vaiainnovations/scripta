@@ -1,27 +1,45 @@
 <template>
   <div class="bg-background w-full flex flex-col items-center justify-start px-4 lg:px-0 gap-y-3.5 lg:gap-y-2.5">
-    <!-- Last edit -->
-    <p
-      v-if="useDraftStore().lastSave"
-      class="text-primary-text-light text-sm text-left w-full"
+    <span v-if="!isPublishing">
+      <!-- Last edit -->
+      <p
+        v-if="useDraftStore().lastSave"
+        class="text-primary-text-light text-sm text-left w-full pt-2"
+      >
+        {{ useDraftStore().lastSave.toLocaleString() }}
+      </p>
+      <!-- Input form -->
+      <ArticlesCreateInput />
+      <!-- Tags -->
+      <ArticlesCreateTags class="pt-6" />
+      <!-- Submit buttons -->
+      <ArticlesCreateButtons
+        :draft="true"
+        class="mt-6"
+        @is-publishing="isPublishing = $event"
+      />
+    </span>
+    <div
+      v-else
+      class="w-full bg-background-alt rounded-2xl col-span-6 h-64 mt-16 mb-64 flex h-full my-auto"
     >
-      {{ useDraftStore().lastSave.toLocaleString() }}
-    </p>
-    <!-- Input form -->
-    <ArticlesCreateInput />
-    <!-- Tags -->
-    <ArticlesCreateTags class="pt-6" />
-    <!-- Submit buttons -->
-    <ArticlesCreateButtons
-      :draft="true"
-      class="mt-6"
-    />
+      <div class="my-auto w-full mx-auto">
+        <p class="text-3xl xl:text-4xl text-center tracing-wide">
+          Writing,<br> just a second...
+        </p>
+        <img
+          src="/svg/spinner/dots.svg"
+          class="mx-auto h-4 object-contain fill-white my-5"
+        >
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useDraftStore } from "~~/core/store/DraftStore";
 const isDraftLoaded = ref(false);
+const isPublishing = ref(false);
 
 if (process.client) {
   useDraftStore().$reset();

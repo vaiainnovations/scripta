@@ -17,7 +17,7 @@
     <button
       v-if="!isPublishing && (useDraftStore().title || useDraftStore().subtitle || useDraftStore().content || useDraftStore().tags.length>0)"
       type="button"
-      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-danger text-xl font-medium"
+      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-danger/70 hover:bg-danger text-xl font-medium"
       @click="deleteDraft()"
     >
       Delete Draft
@@ -27,7 +27,7 @@
         <button
           v-if="useDraftStore().title && useDraftStore().subtitle && useDraftStore().content"
           type="button"
-          class="p-1 w-full h-full rounded-xl text-[#FFFFFF] bg-primary text-xl font-medium"
+          class="p-1 w-full h-full rounded-xl text-[#FFFFFF] bg-primary/90 hover:bg-primary text-xl font-medium"
           @click="publish()"
         >
           Publish
@@ -47,6 +47,8 @@
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
 import { usePostStore } from "~~/core/store/PostStore";
+
+const emit = defineEmits(["isPublishing"]);
 
 const isPublishing = ref(false);
 const isSavingDraft = ref(false);
@@ -78,14 +80,20 @@ function saveDraft () {
 }
 
 async function publish () {
+  emit("isPublishing", true);
   isPublishing.value = true;
   const success = await usePostStore().savePost();
   if (success) {
-    const extId = useDraftStore().externalId;
-    await usePostStore().updateUserPosts();
-    useDraftStore().$reset();
-    useRouter().push(`/@${useAccountStore().profile.dtag}/${extId}`);
+    try {
+      const extId = useDraftStore().externalId;
+      await usePostStore().updateUserPosts();
+      useDraftStore().$reset();
+      useRouter().push(`/@${useAccountStore().profile.dtag}/${extId}`);
+    } catch (e) {
+      console.error(e);
+    }
   }
   isPublishing.value = false;
+  emit("isPublishing", false);
 }
 </script>

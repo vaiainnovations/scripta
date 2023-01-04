@@ -123,23 +123,24 @@ const isUploadingProfilePic = ref(false);
 
 function saveProfile () {
   const { $useTransaction } = useNuxtApp();
-  const doNotModify = "[do-not-modify]";
   const oldProfile = useAccountStore().profile;
+
+  const defaultUserPic = "https://scripta.infura-ipfs.io/ipfs/QmcoipiMwxYF97JG4EQrRtrGqwHvb5oT8hjLSkb1xBnLLs";
+
+  const dtag = (oldProfile.dtag !== newUsername.value || useAccountStore().isNewProfile) ? newUsername.value : oldProfile.dtag;
+  const nickname = (oldProfile.nickname !== newNickname.value || useAccountStore().isNewProfile) ? newNickname.value : oldProfile.nickname;
+  const bio = (oldProfile.bio !== newBio.value || useAccountStore().isNewProfile) ? newBio.value : oldProfile.bio;
+  const profilePicture = ((oldProfile.pictures.profile !== newProfilePicture.value || useAccountStore().isNewProfile) ? newProfilePicture.value || oldProfile.pictures.profile : oldProfile.pictures.profile) || defaultUserPic;
+  const coverPicture = oldProfile.pictures.cover || defaultUserPic;
+
   const msgSaveProfile: MsgSaveProfileEncodeObject = {
     typeUrl: "/desmos.profiles.v3.MsgSaveProfile",
     value: {
-      dtag:
-        (oldProfile.dtag !== newUsername.value || useAccountStore().isNewProfile) ? newUsername.value : oldProfile.dtag,
-      nickname:
-       (oldProfile.nickname !== newNickname.value || useAccountStore().isNewProfile)
-         ? newNickname.value
-         : oldProfile.nickname,
-      bio: (oldProfile.bio !== newBio.value || useAccountStore().isNewProfile) ? newBio.value : oldProfile.bio,
-      profilePicture:
-       (oldProfile.pictures.profile !== newProfilePicture.value || useAccountStore().isNewProfile)
-         ? newProfilePicture.value || oldProfile.pictures.profile
-         : oldProfile.pictures.profile,
-      coverPicture: doNotModify,
+      dtag,
+      nickname,
+      bio,
+      profilePicture,
+      coverPicture,
       creator: useAccountStore().address
     }
   };
@@ -156,11 +157,11 @@ function saveProfile () {
   };
   $useTransaction().push(msgSaveProfile,
     {
-      dtag: newUsername.value,
-      nickname: newNickname.value,
-      bio: newBio.value,
-      profile: newProfilePicture.value,
-      cover: oldProfile.pictures.cover,
+      dtag,
+      nickname,
+      bio,
+      profile: profilePicture,
+      cover: coverPicture,
       scriptaOp: "MsgSaveProfile"
     });
   emit("userEdited");

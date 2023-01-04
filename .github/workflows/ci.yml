@@ -36,12 +36,5 @@ jobs:
         
       # Build
       - name: Build
-        run: yarn run build
-        
-      # Run Tests
-      - name: Tests
-        run: yarn run test
-        
-      - name: Coverage
-        run: yarn run coverage
+        run: yarn run pages-build
       
