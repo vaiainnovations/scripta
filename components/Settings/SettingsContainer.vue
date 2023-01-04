@@ -25,7 +25,10 @@
               Privacy & Terms
             </h1>
             <p class="font-light">
-              Agree with <a href="" target="_blank" class="underline hover:text-primary-light">Privacy and Terms</a> of the Scripta platform.
+              Agree with
+              <a href="/legal/privacy.pdf" target="_blank" class="underline hover:text-primary-light">Privacy</a> and
+              <a href="/legal/tos.pdf" target="_blank" class="underline hover:text-primary-light">Terms</a>
+              of the Scripta platform.
             </p>
           </SettingsToggle>
           <!-- <SettingsToggle v-model="hasAcceptedAdvertisement" class="py-4 mb-4 bg-background-alt rounded-xl" @click="changePrivacySettings()">
