@@ -28,7 +28,7 @@
               Agree with <a href="" target="_blank" class="underline hover:text-primary-light">Privacy and Terms</a> of the Scripta platform.
             </p>
           </SettingsToggle>
-          <SettingsToggle v-model="hasAcceptedAdvertisement" class="py-4 mb-4 bg-background-alt rounded-xl" @click="changePrivacySettings()">
+          <!-- <SettingsToggle v-model="hasAcceptedAdvertisement" class="py-4 mb-4 bg-background-alt rounded-xl" @click="changePrivacySettings()">
             <h1 class="font-bold text-xl">
               Advertisement
             </h1>
@@ -43,7 +43,7 @@
             <p class="font-light">
               Agree with <a href="" target="_blank" class="underline hover:text-primary-light">Cookies Policy</a> of the Scripta platform.
             </p>
-          </SettingsToggle>
+          </SettingsToggle> -->
 
           <button v-if="arePrivacySettingsChanged" class="rounded-lg bg-primary-light/80 hover:bg-primary-light text-background-alt w-full py-2" @click="savePrivacySettings()">
             Save Changes

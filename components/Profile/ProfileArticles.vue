@@ -25,7 +25,7 @@
           class="px-5 sm:px-20 lg:px-0 2xl:px-48 w-full"
         >
           <NuxtLink :to="`/edit/${article.externalId}`">
-            <ArticlesSmallPreview :content="{description: article.subtitle, title: article.text, image: article.image, content: article.content, tags: article.tags, id: article.id, analytics: {views: article.post_cnt, upvotes: article.reaction_cnt_1, downvotes: article.reaction_cnt_2}}" />
+            <ArticlesSmallPreview :content="{description: article.subtitle, title: article.text, image: article.image, content: article.content, tags: article.tags, id: article.id, analytics: {views: article.post_cnt, upvotes: article.reaction_cnt_1, downvotes: article.reaction_cnt_2, comments: article.comment_cnt}}" />
           </NuxtLink>
         </span>
       </div>

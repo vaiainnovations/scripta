@@ -17,18 +17,30 @@
     <AuthStatusCard>
       <img src="/svg/wallet/keplr/logo.svg" class="object-fill h-32">
       <AuthStatusButton class="bg-[#8C53B2]" @click="connect()">
-        Connect
+        <span v-if="!isConnecting">
+          Connect
+        </span>
+        <span v-else>
+          <SkeletonSpinner />
+        </span>
       </AuthStatusButton>
     </AuthStatusCard>
   </AuthContentCard>
 </template>
 
 <script setup lang="ts">
+const isConnecting = ref(false);
 /**
  * Keplr Connection
  */
 async function connect () {
   const { $useKeplr } = useNuxtApp();
-  await $useKeplr().connect();
+  isConnecting.value = true;
+  try {
+    await $useKeplr().connect();
+  } catch (e) {
+    console.error(e);
+  }
+  isConnecting.value = false;
 }
 </script>

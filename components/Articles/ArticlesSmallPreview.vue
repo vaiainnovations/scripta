@@ -52,17 +52,17 @@
               </div>
 
               <div class="flex">
-                <div class="w-1 h-1 bg-primary-text rounded-full mx-1.5 my-auto" />
+                <img src="/icons/linear/message.svg" class="h-5 mx-1.5">
+                {{ shortNumber(props.content.analytics.comments) }}
               </div>
 
               <div class="flex">
+                <div class="w-1 h-1 bg-primary-text rounded-full mx-1.5 my-auto" />
+              </div>
+
+              <div class="flex mx-1.1">
                 <ArticlesUpvote :reacted="true" />
                 {{ shortNumber(props.content.analytics.upvotes) }}
-              </div>
-
-              <!-- dot separator -->
-              <div class="flex">
-                <div class="w-1 h-1 bg-primary-text rounded-full mx-1.5 my-auto" />
               </div>
 
               <div class="flex">
@@ -119,6 +119,11 @@
               </div>
 
               <div class="flex">
+                <img src="/icons/linear/message.svg" class="h-5 mx-1.5">
+                {{ shortNumber(props.content.analytics.comments) }}
+              </div>
+
+              <div class="flex">
                 <div class="w-1 h-1 bg-primary-text rounded-full mx-1.5 my-auto" />
               </div>
 
@@ -127,12 +132,7 @@
                 {{ shortNumber(props.content.analytics.upvotes) }}
               </div>
 
-              <!-- dot separator -->
-              <div class="flex">
-                <div class="w-1 h-1 bg-primary-text rounded-full mx-1.5 my-auto" />
-              </div>
-
-              <div class="flex">
+              <div class="flex mx-1.5">
                 <ArticlesDownvote :reacted="true" />
                 {{ shortNumber(props.content.analytics.downvotes) }}
               </div>
