@@ -72,6 +72,8 @@ export const useAccountStore = defineStore({
           try {
             if (new Date(res?.grantExpiration) > new Date(Date.now())) {
               this.authz.hasAuthz = true;
+            } else {
+              this.authz.hasAuthz = false;
             }
           } catch (e) {}
         }

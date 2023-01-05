@@ -154,6 +154,7 @@ async function handleAuthzAuthorizationChange () {
     const success = await $useAuth().revokeAuthorizations();
     hasAuthzAuthorization.value = !success;
   }
+  await useAccountStore().getUserInfo(); // update the user info
   isUpdating.value = false;
 }
 </script>

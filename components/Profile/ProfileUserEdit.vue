@@ -129,7 +129,7 @@ function saveProfile () {
 
   const dtag = (oldProfile.dtag !== newUsername.value || useAccountStore().isNewProfile) ? newUsername.value : oldProfile.dtag;
   const nickname = (oldProfile.nickname !== newNickname.value || useAccountStore().isNewProfile) ? newNickname.value : oldProfile.nickname;
-  const bio = (oldProfile.bio !== newBio.value || useAccountStore().isNewProfile) ? newBio.value : oldProfile.bio;
+  const bio = ((oldProfile.bio !== newBio.value || useAccountStore().isNewProfile) ? newBio.value : oldProfile.bio) || " ";
   const profilePicture = ((oldProfile.pictures.profile !== newProfilePicture.value || useAccountStore().isNewProfile) ? newProfilePicture.value || oldProfile.pictures.profile : oldProfile.pictures.profile) || defaultUserPic;
   const coverPicture = oldProfile.pictures.cover || defaultUserPic;
 

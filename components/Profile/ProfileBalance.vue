@@ -3,7 +3,10 @@
     <p class="text-2xl font-bold">
       Wallet
     </p>
-    <div class="flex flex-row gap-x-3">
+    <p class="text-[9px] text-gray">
+      {{ useAccountStore()?.address || '' }}
+    </p>
+    <div class="flex flex-row gap-x-3 py-1">
       <img
         src="/svg/wallet/dpm/logo.svg"
         class="h-5 w-5 object-contain my-auto"
@@ -12,7 +15,11 @@
         {{ useAccountStore().balance.toLocaleString() }} {{ coinDenom }}
       </p>
     </div>
-    <a class="text-xs hover:underline text-gray hover:text-primary-text" href="https://app.osmosis.zone/?from=ATOM&to=DSM" target="_blank">Buy ${{ coinDenom }}</a>
+    <a
+      class="text-xs hover:underline text-gray hover:text-primary-text"
+      href="https://app.osmosis.zone/?from=ATOM&to=DSM"
+      target="_blank"
+    >Buy ${{ coinDenom }}</a>
   </div>
 </template>
 
@@ -24,5 +31,4 @@ const coinDenom = ref("");
 if (process.client) {
   coinDenom.value = $useDesmosNetwork().coinDenom.toUpperCase();
 }
-
 </script>
