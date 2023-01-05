@@ -9,7 +9,8 @@ export const useConfigStore = defineStore({
     lcdUrl: useRuntimeConfig().public.lcdUrl,
     subspaceId: useRuntimeConfig().public.subspaceId,
     ipfsGateway: useRuntimeConfig().public.ipfsGateway,
-    chainId: useRuntimeConfig().public.chainId
+    chainId: useRuntimeConfig().public.chainId,
+    web3AuthClientId: useRuntimeConfig().public.web3AuthClientId
   }),
   actions: {
   }

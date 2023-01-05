@@ -4,11 +4,9 @@ import { defineStore } from "pinia";
 import { EncodeObject } from "@cosmjs/proto-signing";
 import { StdFee } from "@cosmjs/stargate";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
-import { Signer } from "@desmoslabs/desmjs";
 import { useAccountStore } from "./AccountStore";
 import { useBackendStore } from "./BackendStore";
 import { useDesmosStore } from "./DesmosStore";
-import { useWalletStore } from "./wallet/WalletStore";
 import { registerModuleHMR } from ".";
 
 export enum QueueStatus {
@@ -49,7 +47,7 @@ export const useTransactionStore = defineStore({
       }
 
       const balance = useAccountStore().balance;
-      if (balance <= 0.006) {
+      if (balance <= 0.001) {
         this.status = QueueStatus.FAILED;
         this.errorText = `"You don't have enough ${useDesmosStore().coinDenom} to perform this action"`;
         this.resetQueueWithTimer(1, true);
@@ -70,7 +68,7 @@ export const useTransactionStore = defineStore({
             amount: "1000",
             denom: useDesmosStore().ucoinDenom
           }],
-          gas: "200000"
+          gas: "400000"
         };
 
         // sign the messages
@@ -126,12 +124,12 @@ export const useTransactionStore = defineStore({
      * @returns success boolean
      */
     async directTx (messages: EncodeObject[], details: Record<string, unknown>[] = [], skipAuthz = false): Promise<boolean> {
-      const { $useDesmosNetwork } = useNuxtApp();
+      const { $useDesmosNetwork, $useWallet } = useNuxtApp();
       try {
         let signedBytes = new Uint8Array();
         this.status = QueueStatus.SIGNING;
         if (!useAccountStore().authz.hasAuthz || skipAuthz) {
-          signedBytes = await this.directSign(messages, "Signed from Scripta.network", $useDesmosNetwork().defaultFee, useWalletStore().wallet.signer.signingMode);
+          signedBytes = await this.directSign(messages, "Signed from Scripta.network", $useDesmosNetwork().defaultFee, $useWallet().getSigner().signingMode);
         }
 
         let broadcastResult = null as any;
@@ -169,7 +167,7 @@ export const useTransactionStore = defineStore({
       try {
         this.status = QueueStatus.SIGNING;
         const client = await $useWallet().wallet.client;
-        client.setSigner(signMode === 0 ? $useWallet().wallet.aminoSigner as Signer : $useWallet().wallet.signer as Signer);
+        client.setSigner(signMode === 0 ? $useWallet().getSigner(true) : $useWallet().getSigner(false));
         // client.setSigner($useWallet().wallet.signer as Signer);
         const address = useAccountStore().address;
         const accountInfo = await client.getAccount(address).catch(() => { return null; });

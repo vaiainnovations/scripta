@@ -25,7 +25,7 @@ export default defineNuxtPlugin(() => {
     // Note: call useWalletStore().retrieveCurrentWallet every time is slow!
     let address = "";
     try {
-      address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+      address = (await useWalletStore().getSigner().getCurrentAccount()).address;
     } catch (e) {
       // signer not connected, not already connected
     }
@@ -33,7 +33,7 @@ export default defineNuxtPlugin(() => {
     // connect to the wallet if the user is not connected
     if (!address) {
       await useWalletStore().retrieveCurrentWallet(authStorage.signer);
-      address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+      address = (await useWalletStore().getSigner().getCurrentAccount()).address;
     }
 
     // check if the user is authenticated
@@ -65,7 +65,7 @@ export default defineNuxtPlugin(() => {
         // Note: call useWalletStore().retrieveCurrentWallet every time is slow!
         let address = "";
         try {
-          address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+          address = (await useWalletStore().getSigner().getCurrentAccount()).address;
         } catch (e) {
           // signer not connected, not already connected
         }
@@ -73,7 +73,7 @@ export default defineNuxtPlugin(() => {
         // connect to the wallet if the user is not connected
         if (!address) {
           await useWalletStore().retrieveCurrentWallet(authStorage.signer);
-          address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+          address = (await useWalletStore().getSigner().getCurrentAccount()).address;
         }
 
         // check if the user is authenticated

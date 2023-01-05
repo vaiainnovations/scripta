@@ -2,7 +2,6 @@ import { SigningMode } from "@desmoslabs/desmjs";
 import { QRCodeModal, WalletConnect, WalletConnectSigner } from "@desmoslabs/desmjs-walletconnect";
 import { defineStore } from "pinia";
 import { registerModuleHMR } from "..";
-import { useWalletStore } from "./WalletStore";
 
 export const useWalletConnectStore = defineStore({
   id: "WalletConnectStore",
@@ -15,7 +14,7 @@ export const useWalletConnectStore = defineStore({
     * Inizialize WalletConenct connection & listeners
     */
     async connect (qr = false): Promise<WalletConnectSigner> {
-      const walletStore = useWalletStore();
+      const { $useWallet } = useNuxtApp();
 
       // create WalletConnect Signer
       const aminoSigner = new WalletConnectSigner(new WalletConnect({
@@ -33,7 +32,7 @@ export const useWalletConnectStore = defineStore({
       await aminoSigner.connect();
 
       // Connect to the wallet with the WalletConnect signer
-      await walletStore.connect(signer, aminoSigner, "walletconnect");
+      await $useWallet().connect(signer, aminoSigner, "walletconnect");
       return signer;
     }
   }
