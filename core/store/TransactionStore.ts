@@ -46,12 +46,7 @@ export const useTransactionStore = defineStore({
         return;
       }
 
-      const balance = useAccountStore().balance;
-      if (balance <= 0.001) {
-        this.status = QueueStatus.FAILED;
-        this.errorText = `"You don't have enough ${useDesmosStore().coinDenom} to perform this action"`;
-        this.resetQueueWithTimer(1, true);
-      }
+      this.assertBalance();
 
       this.queue.push({ message, details });
     },
@@ -125,6 +120,7 @@ export const useTransactionStore = defineStore({
      */
     async directTx (messages: EncodeObject[], details: Record<string, unknown>[] = [], skipAuthz = false): Promise<boolean> {
       const { $useDesmosNetwork, $useWallet } = useNuxtApp();
+      this.assertBalance();
       try {
         let signedBytes = new Uint8Array();
         this.status = QueueStatus.SIGNING;
@@ -192,17 +188,48 @@ export const useTransactionStore = defineStore({
         this.resetQueueWithTimer(6);
       }
     },
-    resetQueueWithTimer (s: number, reset = false): void {
-      setTimeout(() => {
-        if (reset) {
-          this.$reset();
-        } else {
-          this.status = QueueStatus.WAITING;
-          this.hash = "";
-          this.hash = "";
+
+    /**
+     * Display an error message on the tx modal
+     * @param errorMessage error message to display
+     * @param duration seconds to display the error
+     */
+    async showError (errorMessage: string, duration: number) {
+      this.errorText = errorMessage;
+      this.status = QueueStatus.FAILED;
+      this.hash = "none";
+      await this.resetQueueWithTimer(duration, true);
+    },
+
+    /**
+     * Assert the balance is enough to perform the tx, otherwise throw and show the error.
+     * If a fallback route is provided, it will be used to redirect the user.
+     */
+    assertBalance (fallbackRoute = "") {
+      if (useAccountStore().balance <= 0.001 && !useAccountStore().authz.hasAuthz) {
+        this.showError(`"You don't have enough $${useDesmosStore().coinDenom}"`, 3);
+        if (fallbackRoute) {
+          useRouter().push(fallbackRoute);
         }
-        console.log("TransactionModule reset");
-      }, s * 1000);
+        throw new Error("Not enough balance");
+      }
+    },
+
+    /**
+     * Reset Tx Notification and Queue with a timer
+     * @param s seconds to wait
+     * @param reset `true` if should reset the queue
+     */
+    async resetQueueWithTimer (s: number, reset = false): Promise<void> {
+      // sleep
+      await new Promise(resolve => setTimeout(resolve, s * 1000));
+      if (reset) {
+        this.$reset();
+      } else {
+        this.status = QueueStatus.WAITING;
+        this.hash = "";
+        this.hash = "";
+      }
     }
   }
 });

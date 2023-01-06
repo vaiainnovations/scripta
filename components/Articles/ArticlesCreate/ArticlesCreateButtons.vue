@@ -4,7 +4,7 @@
       v-if="!isPublishing && (useDraftStore().title || useDraftStore().subtitle || useDraftStore().content || useDraftStore().tags.length>0)"
       :disabled="isSavingDraft"
       type="button"
-      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-primary-text text-xl font-medium hover:bg-primary-text/50"
+      class="p-1 col-span-1 rounded-lg text-[#FFFFFF] bg-primary-text text-xl font-medium hover:bg-primary-text/50"
       @click="saveDraft()"
     >
       <span v-if="!isSavingDraft">
@@ -17,7 +17,7 @@
     <button
       v-if="!isPublishing && (useDraftStore().title || useDraftStore().subtitle || useDraftStore().content || useDraftStore().tags.length>0)"
       type="button"
-      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-danger/70 hover:bg-danger text-xl font-medium"
+      class="p-1 col-span-1 rounded-lg text-[#FFFFFF] bg-danger/70 hover:bg-danger text-xl font-medium"
       @click="deleteDraft()"
     >
       Delete Draft
@@ -27,7 +27,7 @@
         <button
           v-if="useDraftStore().title && useDraftStore().subtitle && useDraftStore().content"
           type="button"
-          class="p-1 w-full h-full rounded-xl text-[#FFFFFF] bg-primary/90 hover:bg-primary text-xl font-medium"
+          class="p-1 w-full h-full rounded-lg text-[#FFFFFF] bg-primary/90 hover:bg-primary text-xl font-medium"
           @click="publish()"
         >
           Publish
@@ -80,6 +80,7 @@ function saveDraft () {
 }
 
 async function publish () {
+  const { $useTransaction } = useNuxtApp();
   emit("isPublishing", true);
   isPublishing.value = true;
   const success = await usePostStore().savePost();
@@ -92,6 +93,9 @@ async function publish () {
     } catch (e) {
       console.error(e);
     }
+  } else {
+    await $useTransaction().showError("Ops, something went wrong", 5);
+    await useRouter().push("/profile");
   }
   isPublishing.value = false;
   emit("isPublishing", false);

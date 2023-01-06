@@ -338,6 +338,7 @@ export const useAuthStore = defineStore({
       await useAccountStore().getUserInfo();
 
       const authzConfig = await this.getAuthzConfig();
+      $useTransaction().assertBalance("/settings");
 
       // Create Subspace authorizations
       useAccountStore();
@@ -408,6 +409,7 @@ export const useAuthStore = defineStore({
     },
     async revokeAuthorizations (): Promise<boolean> {
       const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
+      $useTransaction().assertBalance("/settings");
       const revokes = [] as MsgRevokeEncodeObject[];
       const authorizations = [...useAccountStore().authz.DEFAULT_GENERIC_AUTHORIZATIONS, ...useAccountStore().authz.DEFAULT_SUBSPACE_AUTHORIZATIONS];
       authorizations.forEach((revokeType) => {

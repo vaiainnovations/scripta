@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex flex-col gap-y-3 items-center pt-3 md:mt-10 bg-background-alt p-4 md:p-10 lg:p-14 rounded-3xl shadow-sm">
+  <div class="w-full flex flex-col gap-y-3 items-center pt-3 md:mt-10 bg-background-alt p-4 md:p-10 lg:p-14 md:rounded-3xl shadow-sm">
     <!-- Title -->
     <div class="w-full flex flex-col items-center group my-6">
       <label

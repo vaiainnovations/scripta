@@ -44,7 +44,7 @@ export const useAccountStore = defineStore({
       // update the store
       this.balance = Number(balance.amount) / 1_000_000;
     },
-    async getUserSection (forceCreateSection = false) {
+    async getUserSection (forceCreateSection = false): Promise<any> {
       try {
         const res = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}user/get/${this.address}`, "POST", {
           "Content-Type": "application/json"
@@ -52,8 +52,7 @@ export const useAccountStore = defineStore({
           forceCreateSection
         }))).json() as any; // TODO: wrap response as type/obj
         if (res) {
-          this.sectionId = Number(res.sectionId);
-          // TODO: store also the other infos
+          this.sectionId = Number(res.sectionId || -10);
         }
         console.log(res);
       } catch (e) {

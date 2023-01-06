@@ -71,17 +71,21 @@ export const usePostStore = defineStore({
 
     async savePost (): Promise<boolean> {
       const { $useTransaction, $useIpfs, $useDesmosNetwork } = useNuxtApp();
+      $useTransaction().assertBalance("/profile");
 
       // check if the user has a sectionId
       if (useAccountStore().sectionId <= 0) {
         // if not, create one
         if (useAccountStore().sectionId === -10) {
-          await useAccountStore().getUserSection(true);
-          // TODO: handle failure?
+          try {
+            await useAccountStore().getUserSection(true);
+          } catch (e) {
+            $useTransaction().showError("Ops, an error occurred. Please retry later", 5);
+          }
         }
         let attempt = 0;
         // wait 10 attempts to create a sectionId, create the group, and user join it
-        while (attempt < 10 && useAccountStore().sectionId <= 0) {
+        while (attempt < 7 && useAccountStore().sectionId <= 0) {
           // update the sectionId from the user endpoint
           await useAccountStore().getUserSection();
 

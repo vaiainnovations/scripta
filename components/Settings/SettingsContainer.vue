@@ -68,7 +68,7 @@
               Authorize Scripta to sign new posts/comments/reactions on your behalf, you'll <b class="font-semibold">always</b> be the author of that content.
               In this way you will not have to sign every action, but only the authorization that you can revoke whenever you want.
               <div v-if="hasAuthzAuthorization" class="pt-1 text-gray text-sm text-right">
-                Expiration: {{ useAccountStore().authz.grantExpiration.toLocaleString() }}
+                Expiration: {{ useAccountStore().authz.grantExpiration?.toLocaleString() || "" }}
               </div>
             </div>
           </SettingsToggle>
@@ -147,12 +147,17 @@ function updateSettingsValues () {
 async function handleAuthzAuthorizationChange () {
   const { $useAuth } = useNuxtApp();
   isUpdating.value = true;
-  if (hasAuthzAuthorization.value) {
-    const success = await $useAuth().grantAuthorizations();
-    hasAuthzAuthorization.value = success;
-  } else {
-    const success = await $useAuth().revokeAuthorizations();
-    hasAuthzAuthorization.value = !success;
+  try {
+    if (hasAuthzAuthorization.value) {
+      const success = await $useAuth().grantAuthorizations();
+      hasAuthzAuthorization.value = success;
+    } else {
+      const success = await $useAuth().revokeAuthorizations();
+      hasAuthzAuthorization.value = !success;
+    }
+  } catch (e) {
+    hasAuthzAuthorization.value = !hasAuthzAuthorization.value;
+    console.error(e);
   }
   await useAccountStore().getUserInfo(); // update the user info
   isUpdating.value = false;

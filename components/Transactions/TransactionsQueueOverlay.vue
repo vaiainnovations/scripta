@@ -3,7 +3,7 @@ const { $useTransaction } = useNuxtApp();
 </script>
 
 <template>
-  <span v-if="$useTransaction && $useTransaction().queue.length>0">
+  <span v-if="$useTransaction && ($useTransaction().queue.length>0 || $useTransaction().errorText !== '')">
     <div class="w-full bg-background-alt border-2 border-gray-dark py-2 px-2 rounded-2xl text-xl shadow-xl z-40">
       <div v-if="$useTransaction().status==='waiting'">
         <TransactionsQueueOverlayWaiting />

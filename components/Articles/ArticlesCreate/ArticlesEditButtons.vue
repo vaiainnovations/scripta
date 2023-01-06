@@ -4,7 +4,7 @@
       v-if="!isPublishing && (useDraftStore().title || useDraftStore().subtitle || useDraftStore().content || useDraftStore().tags.length>0) && !useDraftStore().id"
       :disabled="isSavingDraft"
       type="button"
-      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-primary-text text-xl font-medium hover:bg-primary-text/50"
+      class="p-1 col-span-1 rounded-lg text-[#FFFFFF] bg-primary-text text-xl font-medium hover:bg-primary-text/50"
       @click="saveDraft()"
     >
       <span v-if="!isSavingDraft">
@@ -17,7 +17,7 @@
     <button
       v-if="!isPublishing"
       type="button"
-      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-danger/70 hover:bg-danger text-xl font-medium"
+      class="p-1 col-span-1 rounded-lg text-[#FFFFFF] bg-danger/70 hover:bg-danger text-xl font-medium"
       @click="deleteArticle()"
     >
       <span v-if="useDraftStore().id">
@@ -32,7 +32,7 @@
         <button
           v-if="useDraftStore().title && useDraftStore().subtitle && useDraftStore().content"
           type="button"
-          class="p-1 w-full h-full rounded-xl text-[#FFFFFF] bg-primary/90 hover:bg-primary text-xl font-medium"
+          class="p-1 w-full h-full rounded-lg text-[#FFFFFF] bg-primary/90 hover:bg-primary text-xl font-medium"
           @click="publish()"
         >
           <span v-if="useDraftStore().id">
@@ -78,6 +78,7 @@ function saveDraft () {
 }
 
 async function publish () {
+  const { $useTransaction } = useNuxtApp();
   emit("isPublishing", true);
   isPublishing.value = true;
   if (useDraftStore().id) {
@@ -93,6 +94,9 @@ async function publish () {
     } catch (e) {
       console.log(e);
     }
+  } else {
+    await $useTransaction().showError("Ops, something went wrong", 5);
+    await useRouter().push("/profile");
   }
   isPublishing.value = false;
   emit("isPublishing", false);
@@ -144,6 +148,7 @@ async function editArticle () {
     urls: [ipfsEntityUrl]
   };
 
+  $useTransaction().assertBalance("/profile");
   const success = await $useTransaction().directTx([msgEditPost], [{
     id: draftStore.id,
     externalId: extId,
@@ -161,6 +166,9 @@ async function editArticle () {
     await usePostStore().updateUserPosts();
     useDraftStore().$reset();
     useRouter().push(`/@${useAccountStore().profile.dtag}/${extId}`);
+  } else {
+    await $useTransaction().showError("Ops, something went wrong", 5);
+    await useRouter().push("/profile");
   }
   isPublishing.value = false;
   emit("isPublishing", false);
@@ -190,6 +198,7 @@ async function deleteArticle () {
     await navigateTo("/profile");
     return;
   }
+  $useTransaction().assertBalance("/profile");
 
   // otherwise, delete the post from the chain & the backend
   const msgDeletePost: MsgDeletePostEncodeObject = {
@@ -207,8 +216,10 @@ async function deleteArticle () {
   }]);
   if (success) {
     await usePostStore().updateUserPosts();
-    useDraftStore().$reset();
-    useRouter().push("/profile");
+    await useRouter().push("/profile");
+  } else {
+    await $useTransaction().showError("Ops, something went wrong", 5);
+    await useRouter().push("/profile");
   }
   isPublishing.value = false;
   emit("isPublishing", false);
