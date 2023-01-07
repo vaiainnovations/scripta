@@ -17,7 +17,7 @@
     </div>
     <a
       class="text-xs hover:underline text-gray hover:text-primary-text"
-      href="https://app.osmosis.zone/?from=ATOM&to=DSM"
+      href="https://frontier.osmosis.zone/?from=ATOM&to=DSM"
       target="_blank"
     >Buy ${{ coinDenom }}</a>
   </div>
