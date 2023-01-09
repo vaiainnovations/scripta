@@ -10,6 +10,13 @@
         class="mt-6"
         @is-publishing="isPublishing = $event"
       />
+      <!-- Last edit -->
+      <p
+        v-if="useDraftStore().lastSave"
+        class="text-primary-text-light text-xs text-left w-full py-2"
+      >
+        Last save: {{ useDraftStore().lastSave.toLocaleString() }}
+      </p>
     </span>
     <div
       v-else
@@ -29,5 +36,7 @@
 </template>
 
 <script setup lang="ts">
+import { useDraftStore } from "~~/core/store/DraftStore";
+
 const isPublishing = ref(false);
 </script>

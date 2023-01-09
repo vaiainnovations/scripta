@@ -1,23 +1,22 @@
 <template>
   <div class="bg-background w-full flex flex-col items-center justify-start px-4 lg:px-0 gap-y-3.5 lg:gap-y-2.5">
     <span v-if="!isPublishing">
-      <!-- Last edit -->
-      <p
-        v-if="useDraftStore().lastSave"
-        class="text-primary-text-light text-sm text-left w-full pt-2"
-      >
-        {{ useDraftStore().lastSave.toLocaleString() }}
-      </p>
       <!-- Input form -->
       <ArticlesCreateInput />
       <!-- Tags -->
       <ArticlesCreateTags class="pt-6" />
-      <!-- Submit buttons -->
       <ArticlesCreateButtons
         :draft="true"
         class="mt-6"
         @is-publishing="isPublishing = $event"
       />
+      <!-- Last edit -->
+      <p
+        v-if="useDraftStore().lastSave"
+        class="text-primary-text-light text-xs text-left w-full py-2"
+      >
+        Last save: {{ useDraftStore().lastSave.toLocaleString() }}
+      </p>
     </span>
     <div
       v-else
