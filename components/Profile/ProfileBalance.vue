@@ -3,9 +3,15 @@
     <p class="text-2xl font-bold">
       Wallet
     </p>
-    <p class="text-[9px] text-gray">
-      {{ useAccountStore()?.address || '' }}
-    </p>
+    <div v-if="useAccountStore()?.address">
+      <p class="text-xs text-gray truncate flex cursor-pointer hover:underline" @click="copyAddress(useAccountStore()?.address || '')">
+        <img
+          src="/icons/linear/copy.svg"
+          class="h-3 w-3 object-contain my-auto mr-1"
+        >
+        {{ useAccountStore()?.address || '' }}
+      </p>
+    </div>
     <div class="flex flex-row gap-x-3 py-1">
       <img
         src="/svg/wallet/dpm/logo.svg"
@@ -30,5 +36,13 @@ const coinDenom = ref("");
 
 if (process.client) {
   coinDenom.value = $useDesmosNetwork().coinDenom.toUpperCase();
+}
+
+/**
+ * Copy address to clipboard
+ */
+function copyAddress (address = "") {
+  navigator.clipboard.writeText(address);
+  useNuxtApp().$useNotification().push("Address Copied", "", 1, "");
 }
 </script>
