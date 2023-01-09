@@ -10,7 +10,7 @@
             >
           </div>
           <p class="text-2xl font-bold tracking-widest text-primary-text-light">
-            Ops, something went wrong
+            Ops, an error
           </p>
           <AuthStatusButton class="bg-primary" @click="onErrorAction">
             Go Back

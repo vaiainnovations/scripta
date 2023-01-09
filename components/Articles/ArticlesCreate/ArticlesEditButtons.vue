@@ -78,7 +78,7 @@ function saveDraft () {
 }
 
 async function publish () {
-  const { $useTransaction } = useNuxtApp();
+  const { $useNotification } = useNuxtApp();
   emit("isPublishing", true);
   isPublishing.value = true;
   if (useDraftStore().id) {
@@ -95,7 +95,7 @@ async function publish () {
       console.log(e);
     }
   } else {
-    await $useTransaction().showError("Ops, something went wrong", 5);
+    $useNotification().error("Ops, an error", "An error occurred while writing on chain", 7);
     await useRouter().push("/profile");
   }
   isPublishing.value = false;
@@ -103,7 +103,7 @@ async function publish () {
 }
 
 async function editArticle () {
-  const { $useIpfs, $useTransaction, $useDesmosNetwork } = useNuxtApp();
+  const { $useIpfs, $useTransaction, $useDesmosNetwork, $useNotification } = useNuxtApp();
   const draftStore = await useDraftStore();
   const extId = draftStore.externalId;
   isPublishing.value = true;
@@ -167,7 +167,7 @@ async function editArticle () {
     useDraftStore().$reset();
     useRouter().push(`/@${useAccountStore().profile.dtag}/${extId}`);
   } else {
-    await $useTransaction().showError("Ops, something went wrong", 5);
+    $useNotification().error("Ops, an error", "An error occurred while writing on chain", 7);
     await useRouter().push("/profile");
   }
   isPublishing.value = false;
@@ -177,7 +177,7 @@ async function editArticle () {
 async function deleteArticle () {
   isPublishing.value = true;
   emit("isPublishing", true);
-  const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
+  const { $useTransaction, $useDesmosNetwork, $useNotification } = useNuxtApp();
 
   // if draft, just delete the draft from the backend
   if (!useDraftStore().id) {
@@ -218,7 +218,7 @@ async function deleteArticle () {
     await usePostStore().updateUserPosts();
     await useRouter().push("/profile");
   } else {
-    await $useTransaction().showError("Ops, something went wrong", 5);
+    $useNotification().error("Ops, an error", "An error occurred while writing on chain", 7);
     await useRouter().push("/profile");
   }
   isPublishing.value = false;

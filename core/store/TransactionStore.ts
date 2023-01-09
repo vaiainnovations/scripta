@@ -188,26 +188,13 @@ export const useTransactionStore = defineStore({
         this.resetQueueWithTimer(6);
       }
     },
-
-    /**
-     * Display an error message on the tx modal
-     * @param errorMessage error message to display
-     * @param duration seconds to display the error
-     */
-    async showError (errorMessage: string, duration: number) {
-      this.errorText = errorMessage;
-      this.status = QueueStatus.FAILED;
-      this.hash = "none";
-      await this.resetQueueWithTimer(duration, true);
-    },
-
     /**
      * Assert the balance is enough to perform the tx, otherwise throw and show the error.
      * If a fallback route is provided, it will be used to redirect the user.
      */
     assertBalance (fallbackRoute = "") {
       if (useAccountStore().balance <= 0.001 && !useAccountStore().authz.hasAuthz) {
-        this.showError(`"You don't have enough $${useDesmosStore().coinDenom}"`, 3);
+        useNuxtApp().$useNotification().error("Low Balance", `You don't have enough ${useDesmosStore().coinDenom}`, 4);
         if (fallbackRoute) {
           useRouter().push(fallbackRoute);
         }

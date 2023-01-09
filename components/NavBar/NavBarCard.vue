@@ -19,7 +19,7 @@
       <slot name="right">
         <NavBarProfile />
       </slot>
-      <TransactionsQueueOverlay class="absolute top-28 md:top-20 right-8" />
+      <NotificationsOverlay class="absolute top-28 md:top-20 right-8" />
     </div>
   </div>
 </template>

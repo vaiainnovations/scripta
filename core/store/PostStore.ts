@@ -70,7 +70,7 @@ export const usePostStore = defineStore({
     },
 
     async savePost (): Promise<boolean> {
-      const { $useTransaction, $useIpfs, $useDesmosNetwork } = useNuxtApp();
+      const { $useTransaction, $useIpfs, $useDesmosNetwork, $useNotification } = useNuxtApp();
       $useTransaction().assertBalance("/profile");
 
       // check if the user has a sectionId
@@ -80,7 +80,7 @@ export const usePostStore = defineStore({
           try {
             await useAccountStore().getUserSection(true);
           } catch (e) {
-            $useTransaction().showError("Ops, an error occurred. Please retry later", 5);
+            $useNotification().error("Ops, an error", "Please retry later", 7);
           }
         }
         let attempt = 0;

@@ -80,7 +80,7 @@ function saveDraft () {
 }
 
 async function publish () {
-  const { $useTransaction } = useNuxtApp();
+  const { $useNotification } = useNuxtApp();
   emit("isPublishing", true);
   isPublishing.value = true;
   const success = await usePostStore().savePost();
@@ -94,7 +94,7 @@ async function publish () {
       console.error(e);
     }
   } else {
-    await $useTransaction().showError("Ops, something went wrong", 5);
+    $useNotification().error("Ops, an error", "An error occurred while writing on chain", 7);
     await useRouter().push("/profile");
   }
   isPublishing.value = false;
