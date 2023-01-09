@@ -93,9 +93,9 @@
       </div>
 
       <!-- Save -->
-      <div v-if="isValidUsername&&!isUploadingProfilePic" class="w-full">
+      <div v-if="isValidUsername&&!isUploadingProfilePic&&(newBio !== previousProfile?.bio || newNickname !== previousProfile?.nickname || newUsername !== previousProfile?.dtag || newProfilePicture !== previousProfile?.pictures?.profile)" class="w-full">
         <button
-          class="rounded-xl w-full border-primary-text-light border bg-primary text-background-alt text-xl px-7 py-1"
+          class="rounded-xl w-full bg-primary/90 hover:bg-primary text-background-alt text-xl px-7 py-1"
           @click="saveProfile"
         >
           Save
@@ -110,6 +110,8 @@ import { MsgSaveProfileEncodeObject } from "@desmoslabs/desmjs";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useConfigStore } from "~~/core/store/ConfigStore";
 const emit = defineEmits(["userEdited"]);
+
+const previousProfile = ref(useAccountStore().profile);
 const newNickname = ref(useAccountStore().profile?.nickname || "");
 const newUsername = ref(useAccountStore().profile?.dtag || "");
 const newBio = ref(useAccountStore().profile?.bio || "");
@@ -131,7 +133,7 @@ function saveProfile () {
   const nickname = (oldProfile.nickname !== newNickname.value || useAccountStore().isNewProfile) ? newNickname.value : oldProfile.nickname;
   const bio = ((oldProfile.bio !== newBio.value || useAccountStore().isNewProfile) ? newBio.value : oldProfile.bio) || " ";
   const profilePicture = ((oldProfile.pictures.profile !== newProfilePicture.value || useAccountStore().isNewProfile) ? newProfilePicture.value || oldProfile.pictures.profile : oldProfile.pictures.profile) || defaultUserPic;
-  const coverPicture = oldProfile.pictures.cover || defaultUserPic;
+  const coverPicture = oldProfile.pictures.cover || "[do-not-modify]";
 
   const msgSaveProfile: MsgSaveProfileEncodeObject = {
     typeUrl: "/desmos.profiles.v3.MsgSaveProfile",
@@ -165,6 +167,7 @@ function saveProfile () {
       scriptaOp: "MsgSaveProfile"
     });
   emit("userEdited");
+  previousProfile.value = useAccountStore().profile;
 }
 
 /**
