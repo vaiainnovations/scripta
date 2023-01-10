@@ -3,9 +3,9 @@ import type { Node } from "prosemirror-model";
 
 // Fake iamge upload
 async function UploadAPI (image: File) {
-  const { $useIpfs } = useNuxtApp();
-  const res = await $useIpfs().uploadFile(image);
-  return `${$useIpfs().gateway}${res}`;
+  const { $useIpfsUploader } = useNuxtApp();
+  const res = await $useIpfsUploader().uploadFile(image);
+  return `${$useIpfsUploader().gateway}${res}`;
 }
 
 export const customUploader: Uploader = async (files, schema) => {

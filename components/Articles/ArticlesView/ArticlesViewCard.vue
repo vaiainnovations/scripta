@@ -16,7 +16,8 @@
     />
     <div class="bg-background">
       <div>
-        <a v-if="ipfsSourceUrl" :href="ipfsSourceUrl" target="_blank" class="text-xs">IPFS source</a>
+        <a v-if="ipfsSourceUrl" :href="ipfsSourceUrl" target="_blank" class="text-xs pr-2 text-gray hover:text-primary-text">IPFS-1</a>
+        <a v-if="ipfsSourceAlt" :href="ipfsSourceAlt" target="_blank" class="text-xs pr-2 text-gray hover:text-primary-text">IPFS-2</a>
       </div>
       <div class="grid grid-cols-2 place-content-between gap-y-3 lg:grid-cols-4 xl:grid-cols-12 lg:gap-x-2">
         <div v-if="useAccountStore().address" class="flex flex-row gap-x-1.5 lg:col-span-1">
@@ -73,9 +74,10 @@
 import { Ref } from "vue";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useConfigStore } from "~~/core/store/ConfigStore";
+import { useIpfsStore } from "~~/core/store/IpfsStore";
 import { usePostStore } from "~~/core/store/PostStore";
 import { NavBarReadingType } from "~~/layouts/readingCustom.vue";
-import { PostExtended, searchFirstContentImage } from "~~/types/PostExtended";
+import { PostExtended } from "~~/types/PostExtended";
 import { ArticleSearch } from "~~/types/SearchResults";
 import { TagType } from "~~/types/TagType";
 
@@ -108,7 +110,7 @@ useHead({
     {
       hid: "image",
       name: "image",
-      content: searchFirstContentImage(props.article.content)
+      content: usePostStore().searchFirstContentImage(props.article.content)
     },
     {
       hid: "og:title",
@@ -123,7 +125,7 @@ useHead({
     {
       hid: "og:image",
       property: "og:image",
-      content: searchFirstContentImage(props.article.content)
+      content: usePostStore().searchFirstContentImage(props.article.content)
     },
     {
       hid: "og:url",
@@ -143,7 +145,7 @@ useHead({
     {
       hid: "twitter:image",
       name: "twitter:image",
-      content: searchFirstContentImage(props.article.content)
+      content: usePostStore().searchFirstContentImage(props.article.content)
     },
     {
       hid: "twitter:card",
@@ -155,8 +157,10 @@ useHead({
 
 const tags = (props.article.tags && props.article.tags.length > 0) ? new Array(props.article.tags.length).fill(0).map((_, i) => ({ i, content: { value: props.article.tags[i] } as TagType })) : [];
 let ipfsSourceUrl = "";
+let ipfsSourceAlt = "";
 if (props.article.entities && (props.article.entities as any).urls) {
   ipfsSourceUrl = (props.article.entities as any)?.urls[0]?.url;
+  ipfsSourceAlt = useIpfsStore().ipfsUrlToGatewayRead(ipfsSourceUrl) || "";
 }
 
 const navBarReading : Ref<NavBarReadingType> = inject("navBarReading");

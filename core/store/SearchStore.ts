@@ -1,8 +1,9 @@
 import { defineStore } from "pinia";
 import { useBackendStore } from "./BackendStore";
 import { useUserStore } from "./UserStore";
+import { usePostStore } from "./PostStore";
 import { registerModuleHMR } from ".";
-import { PostExtended, searchFirstContentImage } from "~~/types/PostExtended";
+import { PostExtended } from "~~/types/PostExtended";
 import { AuthorSearch } from "~~/types/SearchResults";
 
 export const useSearchStore = defineStore({

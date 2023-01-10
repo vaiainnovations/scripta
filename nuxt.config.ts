@@ -31,6 +31,7 @@ export default defineNuxtConfig({
       lcdUrl: process.env.NUXT_LCD_URL,
       subspaceId: process.env.NUXT_SUBSPACE_ID,
       ipfsGateway: process.env.NUXT_IPFS_GATEWAY,
+      ipfsGatewayRead: process.env.NUXT_IPFS_GATEWAY_READ,
       chainId: process.env.NUXT_CHAIN_ID,
       web3AuthClientId: process.env.NUXT_WEB3AUTH_CLIENT_ID
     }

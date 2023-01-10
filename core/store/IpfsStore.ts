@@ -1,36 +1,40 @@
 import { defineStore } from "pinia";
-import { create } from "ipfs-http-client";
 import { useConfigStore } from "./ConfigStore";
-import { useBackendStore } from "./BackendStore";
 import { registerModuleHMR } from ".";
 
 export const useIpfsStore = defineStore({
   id: "IpfsStore",
   state: () => ({
-    gateway: useConfigStore().ipfsGateway,
-    client: create({
-      url: `${useBackendStore().apiUrl}ipfs`
-    })
+    gatewayRead: useConfigStore().ipfsGatewayRead
   }),
   actions: {
     /**
-     * Upload generif content to IPFS
-     * @param content string of the post content to upload
-     * @returns CID of the uploaded content, empty string otherwise
-    */
-    async uploadPost (content: string): Promise<string> {
+     * Resolve IPFS url to CID
+     * @param url Complete IPFS url
+     * @returns CID or false if not found
+     */
+    resolveUrlCid (url: string): string | false {
       try {
-        return (await this.client.add(content)).path;
+        const cid = url.split(useConfigStore().ipfsGateway)[1];
+        if (cid.length <= 64) {
+          return cid;
+        }
       } catch (e) {
-        return "";
+        // nothing
       }
+      return false;
     },
-    async uploadFile (content: File): Promise<string> {
-      try {
-        return (await this.client.add(content)).path;
-      } catch (e) {
-        return "";
+    /**
+     * Resolve IPFS url to Gateway url
+     * @param url Complete IPFS url
+     * @returns Gateway IPFS url or false if not found
+     */
+    ipfsUrlToGatewayRead (url: string): string | false {
+      const cid = this.resolveUrlCid(url);
+      if (cid) {
+        return `${this.gatewayRead}${cid}`;
       }
+      return false;
     }
   }
 });

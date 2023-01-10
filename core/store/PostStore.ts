@@ -4,18 +4,21 @@ import { v4 as uuidv4 } from "uuid";
 import { MsgCreatePostEncodeObject, EncodeObject, MsgSaveProfileEncodeObject } from "@desmoslabs/desmjs";
 import Long from "long";
 import { useAccountStore } from "./AccountStore";
+import { useIpfsStore } from "./IpfsStore";
 import { useBackendStore } from "./BackendStore";
 import { useUserStore } from "./UserStore";
 import { useDraftStore } from "./DraftStore";
+import { useConfigStore } from "./ConfigStore";
 import { registerModuleHMR } from ".";
 import { PostKv } from "~~/types/PostKv";
-import { PostExtended, searchFirstContentImage } from "~~/types/PostExtended";
+import { PostExtended } from "~~/types/PostExtended";
 import { TrendingPostsKv } from "~~/types/TrendingPostsKv";
 
 export const usePostStore = defineStore({
   id: "PostStore",
   state: () => ({
     trendings: useState("trendings", () => [] as PostExtended[]),
+    suggested: useState("suggested", () => [] as PostExtended[]),
     userPosts: [] as any[],
     cachedPosts: new Map<string, any>()
   }),
@@ -35,6 +38,7 @@ export const usePostStore = defineStore({
       } else {
         try {
           cachedPost = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${externalID}`, "GET", {}, "")).json() as PostExtended;
+          cachedPost.content = cachedPost.content.replaceAll(useConfigStore().ipfsGateway, useConfigStore().ipfsGatewayRead);
         } catch (e) {
           console.log(e);
         }
@@ -70,7 +74,7 @@ export const usePostStore = defineStore({
     },
 
     async savePost (): Promise<boolean> {
-      const { $useTransaction, $useIpfs, $useDesmosNetwork, $useNotification } = useNuxtApp();
+      const { $useTransaction, $useIpfsUploader, $useDesmosNetwork, $useNotification } = useNuxtApp();
       $useTransaction().assertBalance("/profile");
 
       // check if the user has a sectionId
@@ -133,9 +137,9 @@ export const usePostStore = defineStore({
       };
 
       // upload the post to IPFS (without CID attachment), get the returned CID
-      const postCid = await $useIpfs().uploadPost(JSON.stringify(ipfsPost));
+      const postCid = await $useIpfsUploader().uploadPost(JSON.stringify(ipfsPost));
 
-      const postIpfsUrl = `${$useIpfs().gateway}${postCid}`;
+      const postIpfsUrl = `${$useIpfsUploader().gateway}${postCid}`;
       console.log(postIpfsUrl);
 
       const ipfsEntityUrl = {
@@ -225,9 +229,28 @@ export const usePostStore = defineStore({
 
       if (this.trendings.length > 0) {
         for (let i = 0; i < this.trendings.length; i++) {
-          this.trendings[i].image = searchFirstContentImage(this.trendings[i].content) || "/img/author_pic.png";
+          this.trendings[i].image = this.searchFirstContentImage(this.trendings[i].content) || "/img/author_pic.png";
         }
       }
+    },
+
+    searchFirstContentImage (content: string): string {
+      const match = /!\[[^\]]*\]\((?<filename>.*?)(?="|\))(?<optionalpart>".*")?\)/.exec(content);
+      if (match) {
+        let img = match[1];
+        // handle the case where the image is base64 format
+        img = img.replace("data\\:", "data:");
+        try {
+          const ipfsUrl = (useIpfsStore().ipfsUrlToGatewayRead(img));
+          if (ipfsUrl !== false) {
+            return ipfsUrl;
+          }
+        } catch (e) {
+          // nothing
+        }
+        return img;
+      }
+      return "";
     },
     async updateUserPosts (): Promise<void> {
       try {

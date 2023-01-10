@@ -201,7 +201,7 @@ async function checkUsername () {
 }
 
 async function uploadProfilePic () {
-  const { $useIpfs } = useNuxtApp();
+  const { $useIpfsUploader } = useNuxtApp();
   const file: File = (fileUploadProfilePic.value as any).files[0];
 
   // support only image files
@@ -216,7 +216,7 @@ async function uploadProfilePic () {
   // upload the file to IPFS
   let cid = {};
   try {
-    cid = await useNuxtApp().$useIpfs().client.add(file);
+    cid = await useNuxtApp().$useIpfsUploader().client.add(file);
   } catch (e) {
     // TODO: improve error message
     alert("ops, an error occurred while uploading the file");
@@ -227,7 +227,7 @@ async function uploadProfilePic () {
   }
 
   // set as image the ipfs url
-  newProfilePicture.value = `${$useIpfs().gateway}${cid.path}`;
+  newProfilePicture.value = `${$useIpfsUploader().gateway}${cid.path}`;
   isUploadingProfilePic.value = false;
 }
 </script>

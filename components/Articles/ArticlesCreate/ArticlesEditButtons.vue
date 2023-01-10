@@ -103,7 +103,7 @@ async function publish () {
 }
 
 async function editArticle () {
-  const { $useIpfs, $useTransaction, $useDesmosNetwork, $useNotification } = useNuxtApp();
+  const { $useIpfsUploader, $useTransaction, $useDesmosNetwork, $useNotification } = useNuxtApp();
   const draftStore = await useDraftStore();
   const extId = draftStore.externalId;
   isPublishing.value = true;
@@ -130,9 +130,9 @@ async function editArticle () {
   };
 
   // upload the post to IPFS (without CID attachment), get the returned CID
-  const postCid = await $useIpfs().uploadPost(JSON.stringify(ipfsPost));
+  const postCid = await $useIpfsUploader().uploadPost(JSON.stringify(ipfsPost));
 
-  const postIpfsUrl = `${$useIpfs().gateway}${postCid}`;
+  const postIpfsUrl = `${$useIpfsUploader().gateway}${postCid}`;
 
   const ipfsEntityUrl = {
     displayUrl: "IPFS",
