@@ -6,6 +6,7 @@ import rollupNodePolyFill from "rollup-plugin-node-polyfills";
 import builtins from "rollup-plugin-node-builtins";
 import inject from "@rollup/plugin-inject";
 const path = require("path");
+const pjson = require("./package.json");
 const mode = process.env.NODE_ENV === "production" ? "production" : "development";
 
 // Use a custom Nitro configuration on production mode for Cloudflare SSR, otherwise use the default
@@ -33,7 +34,9 @@ export default defineNuxtConfig({
       ipfsGateway: process.env.NUXT_IPFS_GATEWAY,
       ipfsGatewayRead: process.env.NUXT_IPFS_GATEWAY_READ,
       chainId: process.env.NUXT_CHAIN_ID,
-      web3AuthClientId: process.env.NUXT_WEB3AUTH_CLIENT_ID
+      web3AuthClientId: process.env.NUXT_WEB3AUTH_CLIENT_ID,
+      gitHash: process.env.NUXT_CURRENT_GIT_SHA,
+      version: pjson.version
     }
   },
   alias: {

@@ -4,6 +4,7 @@ import { registerModuleHMR } from ".";
 export const useConfigStore = defineStore({
   id: "ConfigStore",
   state: () => ({
+    version: useRuntimeConfig().public.version,
     restApiUrl: useRuntimeConfig().public.restApiUrl,
     rpcUrl: useRuntimeConfig().public.rpcUrl,
     lcdUrl: useRuntimeConfig().public.lcdUrl,
@@ -11,7 +12,8 @@ export const useConfigStore = defineStore({
     ipfsGateway: useRuntimeConfig().public.ipfsGateway,
     ipfsGatewayRead: useRuntimeConfig().public.ipfsGatewayRead,
     chainId: useRuntimeConfig().public.chainId,
-    web3AuthClientId: useRuntimeConfig().public.web3AuthClientId
+    web3AuthClientId: useRuntimeConfig().public.web3AuthClientId,
+    gitHash: useRuntimeConfig().public.gitHash
   }),
   actions: {
   }

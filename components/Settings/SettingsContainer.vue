@@ -89,6 +89,9 @@
             <h6 v-if="$useDesmosNetwork" class="text-xs text-gray-dark">
               {{ $useDesmosNetwork().chainInfo.chainName }}
             </h6>
+            <a class="text-[0.6rem] text-gray-dark" target="_blank" :href="`https://github.com/vaiainnovations/scripta/commit/${useConfigStore().gitHash}`">
+              v{{ useConfigStore().version }} #{{ useConfigStore().gitHash }}
+            </a>
           </div>
         </div>
       </div>
@@ -99,6 +102,7 @@
 <script lang="ts" setup>
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useBackendStore } from "~~/core/store/BackendStore";
+import { useConfigStore } from "~~/core/store/ConfigStore";
 const { $useDesmosNetwork } = useNuxtApp();
 
 const isUpdating = ref(false);
