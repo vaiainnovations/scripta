@@ -3,8 +3,8 @@
     <div class="text-right w-full">
       <ArticlesActionsOverlay :article="props.article" />
     </div>
-    <div class="flex h-6 flex-row items-center justify-start gap-x-4 py-0.5">
-      <ArticlesViewTag v-for="tag in tags" :key="tag.i" :content="tag.content" class="w-36" />
+    <div class="flex h-6 flex-row items-center justify-start py-0.5 gap-2">
+      <ArticlesViewTag v-for="tag in tags" :key="tag.i" :content="tag.content" class="max-w-fit" />
     </div>
     <ArticlesViewContent
       :external-id="props.article.externalId"

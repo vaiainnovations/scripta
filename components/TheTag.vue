@@ -1,6 +1,6 @@
 <template>
   <span>
-    <NuxtLink :to="`/tag/${tag}`" class="text-xs sm:text-sm md:text-base rounded-lg bg-gray-light hover:bg-gray-light/70 rounded-lg px-4 lg:px-8 py-0.5 lg:py-1 cursor-pointer">
+    <NuxtLink :to="`/tag/${tag}`" class="text-xs sm:text-sm md:text-base bg-gray-light hover:bg-gray-light/70 rounded-lg px-4 lg:px-8 py-0.5 lg:py-1 cursor-pointer">
       {{ props.tag }}
     </NuxtLink>
   </span>
