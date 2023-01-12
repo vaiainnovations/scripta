@@ -199,7 +199,11 @@ export const useAuthStore = defineStore({
     async logout (route?: string): Promise<void> {
       const { $useWallet } = useNuxtApp();
       AuthStorage.delete(useAccountStore().address);
-      await $useWallet().disconnect(); // disconnect the wallet (signer and client)
+      try {
+        await $useWallet().disconnect(); // disconnect the wallet (signer and client)
+      } catch (e) {
+        // nothig, probably already disconnected
+      }
       useAccountStore().$reset();
       useAuthStore().$reset();
       $useWallet().$reset();
