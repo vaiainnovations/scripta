@@ -8,7 +8,7 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "current-git-sha": "NUXT_CURRENT_GIT_SHA=`git rev-parse --short HEAD`",
-    "pages-build": " yarn run current-git-sha; NODE_OPTIONS='--max-old-space-size=8192' NITRO_PRESET=cloudflare_pages yarn build",
+    "pages-build": "NODE_OPTIONS='--max-old-space-size=8192' NITRO_PRESET=cloudflare_pages NUXT_CURRENT_GIT_SHA=`git rev-parse --short HEAD` yarn build",
     "pages-publish": "rm -R ./node_modules/.cache/wrangler/;npx wrangler pages publish .output/public",
     "pages-dev": "npx wrangler pages dev .output/public -k KV_TESTNET_TRENDING_POSTS --port 8789"
   },
