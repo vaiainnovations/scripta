@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
+import { Url } from "@desmoslabs/desmjs-types/desmos/posts/v2/models";
 import { v4 as uuidv4 } from "uuid";
 import { MsgCreatePostEncodeObject, EncodeObject, MsgSaveProfileEncodeObject } from "@desmoslabs/desmjs";
 import Long from "long";
@@ -140,20 +141,34 @@ export const usePostStore = defineStore({
       const postCid = await $useIpfsUploader().uploadPost(JSON.stringify(ipfsPost));
 
       const postIpfsUrl = `${$useIpfsUploader().gateway}${postCid}`;
-      console.log(postIpfsUrl);
 
+      const entityUrls = [] as Url[];
       const ipfsEntityUrl = {
         displayUrl: "IPFS",
         start: Long.fromNumber(0),
         end: Long.fromNumber(1),
         url: postIpfsUrl
       };
+      entityUrls.push(ipfsEntityUrl);
+
+      if (!draftStore.previewImage) {
+        draftStore.previewImage = usePostStore().searchFirstContentImage(draftStore.content);
+      }
+      if (draftStore.previewImage) {
+        const ipfsImagePreviewUrl = {
+          displayUrl: "preview",
+          start: Long.fromNumber(2),
+          end: Long.fromNumber(3),
+          url: draftStore.previewImage
+        };
+        entityUrls.push(ipfsImagePreviewUrl);
+      }
 
       // attach the CID to the Post as an entity
       msgCreatePost.value.entities = {
         hashtags: [],
         mentions: [],
-        urls: [ipfsEntityUrl]
+        urls: entityUrls
       };
 
       // if is a new user and has no profile, create one with the randomly generated username
@@ -229,7 +244,7 @@ export const usePostStore = defineStore({
 
       if (this.trendings.length > 0) {
         for (let i = 0; i < this.trendings.length; i++) {
-          this.trendings[i].image = this.searchFirstContentImage(this.trendings[i].content) || "/img/author_pic.png";
+          this.trendings[i].image = this.getArticlePreviewImage(this.trendings[i]) || "/img/author_pic.png";
         }
       }
     },
@@ -251,6 +266,21 @@ export const usePostStore = defineStore({
         return img;
       }
       return "";
+    },
+
+    getArticlePreviewImage (article: PostExtended): string | false {
+      // get the preview image from the content or from the entity (with priority)
+      let previewImage = usePostStore().searchFirstContentImage(article?.content || "") || "";
+      try {
+        article?.entities?.urls?.forEach((entity) => {
+          if (entity.display_url === "preview" || entity.displayUrl === "preview") {
+            previewImage = entity.url;
+          }
+        });
+      } catch (e) {
+        // no entity preview
+      }
+      return previewImage || false;
     },
     async updateUserPosts (): Promise<void> {
       try {

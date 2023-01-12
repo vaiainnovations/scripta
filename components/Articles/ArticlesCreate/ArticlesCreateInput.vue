@@ -1,7 +1,11 @@
 <template>
-  <div class="w-full flex flex-col gap-y-3 items-center pt-3 md:mt-10 bg-background-alt p-4 md:p-10 lg:p-14 md:rounded-3xl shadow-sm">
+  <div class="w-full flex flex-col items-center pt-3 md:mt-10 xl:mt-6 bg-background-alt p-4 md:p-10 lg:px-14 md:rounded-3xl shadow-sm">
+    <!-- Preview Image -->
+    <div class="w-full flex flex-col items-center group mb-6">
+      <ArticlesCreateInputPreviewImage />
+    </div>
     <!-- Title -->
-    <div class="w-full flex flex-col items-center group my-6">
+    <div class="w-full flex flex-col items-center group mb-6">
       <label
         for="title"
         class="text-primary-text-light font-bold self-start text-base pl-2 group-focus-within:block hidden pb-1"
@@ -9,16 +13,16 @@
         Title
       </label>
       <input
+        id="title"
         :value="useDraftStore().title"
         type="text"
-        id="title"
         class="group h-20 w-full font-bold text-xl bg-background-alt text-primary-text px-7 lg:text-5xl outline-none focus:border-l-background focus:border-l-2"
         placeholder="Title"
         @input="(evt)=> useDraftStore().title = evt.target.value"
       >
     </div>
     <!-- Subtitle -->
-    <div class="w-full flex flex-col items-center group my-6">
+    <div class="w-full flex flex-col items-center group mb-6">
       <label
         for="title"
         class="text-primary-text-light font-bold self-start text-base pl-2 group-focus-within:block hidden pb-1"
@@ -39,7 +43,10 @@
       <!-- <p class="text-primary-text-light font-medium text-xs self-start lg:text-sm">
         Content
       </p> -->
-      <MarkDownEditor :read-only="false" :content="useDraftStore().content || 'Write your article...'" />
+      <MarkDownEditor
+        :read-only="false"
+        :content="useDraftStore().content || 'Write your article...'"
+      />
     </div>
   </div>
 </template>

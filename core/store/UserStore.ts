@@ -37,7 +37,7 @@ export const useUserStore = defineStore({
         JSON.stringify({ q: "", author: address })
         )).json() as PostExtended [];
         for (let i = 0; i < posts.length; i++) {
-          posts[i].image = usePostStore().searchFirstContentImage(posts[i].content) || "/img/author_pic.png";
+          posts[i].image = usePostStore().getArticlePreviewImage(posts[i]) || "/img/author_pic.png";
         }
       } catch (e) { return []; }
       return (posts.length > 0 ? posts : []);

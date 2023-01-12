@@ -28,7 +28,7 @@ export const useSearchStore = defineStore({
       // retrieve article first image
       for (let i = 0; i < articles.length; i++) {
         articles[i].author = await useUserStore().getUser(articles[i].author, true);
-        articles[i].image = searchFirstContentImage(articles[i].content) || "/img/author_pic.png";
+        articles[i].image = usePostStore().getArticlePreviewImage(articles[i]) || "/img/author_pic.png";
       }
       return articles;
     }

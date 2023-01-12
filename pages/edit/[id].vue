@@ -22,7 +22,7 @@ const route = useRoute();
 const externalId = route.params.id as string;
 const article = await usePostStore().getPost(externalId);
 if (!article) {
-  useRouter().replace("/profile");
+  await useRouter().push("/profile");
 }
 // prevent to open edit page of other user's article
 if (article.id !== null && useAccountStore().address !== article.author.address && useAccountStore().profile?.dtag !== article.author) {
@@ -39,6 +39,7 @@ if (article.tags) {
     }
   }));
 }
+
 useDraftStore().$state = {
   id: article.id,
   externalId: article.externalId,
@@ -46,6 +47,7 @@ useDraftStore().$state = {
   lastSave: new Date(article.lastEditedDate) || null,
   title: article.text,
   subtitle: article.subtitle,
+  previewImage: usePostStore().getArticlePreviewImage(article) || "",
   tags
 };
 </script>

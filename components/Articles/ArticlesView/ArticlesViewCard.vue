@@ -110,7 +110,7 @@ useHead({
     {
       hid: "image",
       name: "image",
-      content: usePostStore().searchFirstContentImage(props.article.content)
+      content: usePostStore().getArticlePreviewImage(props.article)
     },
     {
       hid: "og:title",
@@ -125,7 +125,7 @@ useHead({
     {
       hid: "og:image",
       property: "og:image",
-      content: usePostStore().searchFirstContentImage(props.article.content)
+      content: usePostStore().getArticlePreviewImage(props.article)
     },
     {
       hid: "og:url",
@@ -145,7 +145,7 @@ useHead({
     {
       hid: "twitter:image",
       name: "twitter:image",
-      content: usePostStore().searchFirstContentImage(props.article.content)
+      content: usePostStore().getArticlePreviewImage(props.article)
     },
     {
       hid: "twitter:card",

@@ -46,7 +46,7 @@ const articleImage = ref("/img/author_pic.png");
 const authorImage = ref("/img/author_pic.png");
 const authorNickname = ref(article.value.author);
 
-const image = usePostStore().searchFirstContentImage(props.post.content);
+const image = usePostStore().getArticlePreviewImage(props.post);
 if (image) {
   articleImage.value = image;
 }

@@ -60,8 +60,8 @@ const saveDraftInterval = setInterval(() => {
   }
 }, 30 * 1000);
 
-onBeforeUnmount(() => {
-  saveDraft();
+onBeforeUnmount(async () => {
+  await saveDraft();
   clearInterval(saveDraftInterval);
 });
 
@@ -72,9 +72,9 @@ async function deleteDraft () {
   useRouter().push("/profile");
 }
 
-function saveDraft () {
+async function saveDraft () {
   isSavingDraft.value = true;
-  useDraftStore().saveDraft().then(() => {
+  await useDraftStore().saveDraft().then(() => {
     isSavingDraft.value = false;
   });
 }

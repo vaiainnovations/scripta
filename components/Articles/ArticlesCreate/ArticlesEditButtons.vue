@@ -59,6 +59,7 @@ import {
   MsgDeletePostEncodeObject,
   MsgEditPostEncodeObject
 } from "@desmoslabs/desmjs";
+import { Url } from "@desmoslabs/desmjs-types/desmos/posts/v2/models";
 import Long from "long";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
@@ -134,18 +135,36 @@ async function editArticle () {
 
   const postIpfsUrl = `${$useIpfsUploader().gateway}${postCid}`;
 
+  const entityUrls = [] as Url[];
+
   const ipfsEntityUrl = {
     displayUrl: "IPFS",
     start: Long.fromNumber(0),
     end: Long.fromNumber(1),
     url: postIpfsUrl
   };
+  entityUrls.push(ipfsEntityUrl);
+
+  // attach the article preview image
+  if (!draftStore.previewImage) {
+    draftStore.previewImage = usePostStore().searchFirstContentImage(draftStore.content);
+  }
+
+  if (draftStore.previewImage) {
+    const ipfsImagePreviewUrl = {
+      displayUrl: "preview",
+      start: Long.fromNumber(2),
+      end: Long.fromNumber(3),
+      url: draftStore.previewImage
+    };
+    entityUrls.push(ipfsImagePreviewUrl);
+  }
 
   // attach the CID to the Post as an entity
   msgEditPost.value.entities = {
     hashtags: [],
     mentions: [],
-    urls: [ipfsEntityUrl]
+    urls: entityUrls
   };
 
   $useTransaction().assertBalance("/profile");
