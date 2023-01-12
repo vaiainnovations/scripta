@@ -71,5 +71,5 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const trendings = useState("ctrendings", () => usePostStore().trendings.slice(0, props.n || 12));
+const trendings = useState("ctrendings", () => usePostStore().trendings.sort(() => 0.5 - Math.random()).slice(0, props.n || 12));
 </script>

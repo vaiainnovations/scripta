@@ -41,7 +41,7 @@
                   <div
                     v-for="tag, index in props.content.tags"
                     :key="index"
-                    class="p-0.5"
+                    class="p-1"
                   >
                     <TheTag :tag="tag" />
                   </div>
