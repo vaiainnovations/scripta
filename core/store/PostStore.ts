@@ -20,6 +20,7 @@ export const usePostStore = defineStore({
   state: () => ({
     trendings: useState("trendings", () => [] as PostExtended[]),
     suggested: useState("suggested", () => [] as PostExtended[]),
+    latest: useState("latest", () => [] as PostExtended[]),
     userPosts: [] as any[],
     cachedPosts: new Map<string, any>()
   }),
@@ -248,7 +249,30 @@ export const usePostStore = defineStore({
         }
       }
     },
+    /**
+     * Get the latest published posts
+     * @param refresh true to force a refresh from the backend
+     * @returns latest posts
+     */
+    async getLatestPosts (refresh = false): Promise<PostExtended[]> {
+      if (this.latest.length > 0 && !refresh) {
+        return this.latest;
+      }
 
+      // fetch the latest posts from the backend
+      try {
+        this.latest = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}latest/posts`, "POST", {
+          "Content-Type": "application/json"
+        })).json() as PostExtended[];
+        // handle preview images
+        for (let i = 0; i < this.latest.length; i++) {
+          this.latest[i].image = this.getArticlePreviewImage(this.latest[i]) || "/img/author_pic.png";
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      return this.latest;
+    },
     searchFirstContentImage (content: string): string {
       const match = /!\[[^\]]*\]\((?<filename>.*?)(?="|\))(?<optionalpart>".*")?\)/.exec(content);
       if (match) {

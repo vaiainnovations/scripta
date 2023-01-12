@@ -6,7 +6,10 @@
           <TrendingTags />
         </section>
         <section class="py-8">
-          <TrendingArticles :n="12" />
+          <TrendingArticles :n="16" />
+        </section>
+        <section class="py-8">
+          <LatestArticles :n="24" />
         </section>
       </div>
     </NuxtLayout>
