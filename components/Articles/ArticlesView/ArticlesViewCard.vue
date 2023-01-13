@@ -28,33 +28,18 @@
         </div>
         <div class="flex flex-row gap-x-3 lg:col-end-12 lg:place-self-end my-auto">
           <NuxtLayout name="tooltip" :title="'Share on Twitter'" :position="'Bottom'">
-            <div>
-              <a
-                target="_blank"
-                :href="`https://twitter.com/intent/tweet?text=${props.article.text}&url=${sharingUrl}`"
-              >
-                <img src="/brands/twitter/logo.svg" class="w-5 h-5 object-contain">
-              </a>
+            <div @click="shareArticle(`https://twitter.com/intent/tweet?text=${props.article.text}&url=${sharingUrl}`)">
+              <img src="/brands/twitter/logo.svg" class="w-5 h-5 object-contain cursor-pointer">
             </div>
           </NuxtLayout>
           <NuxtLayout name="tooltip" :title="'Share on Facebook'" :position="'Bottom'">
-            <div>
-              <a
-                target="_blank"
-                :href="`https://www.facebook.com/sharer/sharer.php?u=#${sharingUrl}`"
-              >
-                <img src="/brands/facebook/logo.svg" class="w-5 h-5 object-contain">
-              </a>
+            <div @click="shareArticle(`https://www.facebook.com/sharer/sharer.php?u=#${sharingUrl}`)">
+              <img src="/brands/facebook/logo.svg" class="w-5 h-5 object-contain cursor-pointer">
             </div>
           </NuxtLayout>
           <NuxtLayout name="tooltip" :title="'Share on Linkedin'" :position="'Bottom'">
-            <div>
-              <a
-                target="_blank"
-                :href="`https://www.linkedin.com/sharing/share-offsite/?url=${sharingUrlEncoded}`"
-              >
-                <img src="/brands/linkedin/logo.svg" class="w-5 h-5 object-contain">
-              </a>
+            <div @click="shareArticle(`https://www.linkedin.com/sharing/share-offsite/?url=${sharingUrlEncoded}`)">
+              <img src="/brands/linkedin/logo.svg" class="w-5 h-5 object-contain cursor-pointer">
             </div>
           </NuxtLayout>
         </div>
@@ -98,7 +83,6 @@ interface Props {
   article: PostExtended;
 }
 const props = defineProps<Props>();
-
 const showComments = ref(false);
 if (process.client) {
   showComments.value = true;
@@ -193,5 +177,9 @@ function handleNavbarChange (event: Event) {
   } else {
     navBarReading.value.show = false;
   }
+}
+
+function shareArticle (fallbackUrl: string) {
+  useNuxtApp().$useShare().share(`${useRoute().fullPath}`, fallbackUrl, `${props.article.text}`, `${props.article.subtitle}`);
 }
 </script>
