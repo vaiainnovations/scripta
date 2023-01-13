@@ -15,7 +15,7 @@
       :date="new Date(props.article.creationDate)"
     />
     <div class="bg-background">
-      <div>
+      <div class="mb-3">
         <a v-if="ipfsSourceUrl" :href="ipfsSourceUrl" target="_blank" class="text-xs pr-2 text-gray hover:text-primary-text">IPFS-1</a>
         <a v-if="ipfsSourceAlt" :href="ipfsSourceAlt" target="_blank" class="text-xs pr-2 text-gray hover:text-primary-text">IPFS-2</a>
       </div>
@@ -27,24 +27,36 @@
           <ArticlesTipsButton :author="props.article.author.address" />
         </div>
         <div class="flex flex-row gap-x-3 lg:col-end-12 lg:place-self-end my-auto">
-          <a
-            target="_blank"
-            :href="`https://twitter.com/intent/tweet?text=${props.article.text}&url=${sharingUrl}`"
-          >
-            <img src="/brands/twitter/logo.svg" class="w-5 h-5 object-contain">
-          </a>
-          <a
-            target="_blank"
-            :href="`https://www.facebook.com/sharer/sharer.php?u=#${sharingUrl}`"
-          >
-            <img src="/brands/facebook/logo.svg" class="w-5 h-5 object-contain">
-          </a>
-          <a
-            target="_blank"
-            :href="`https://www.linkedin.com/sharing/share-offsite/?url=${sharingUrlEncoded}`"
-          >
-            <img src="/brands/linkedin/logo.svg" class="w-5 h-5 object-contain">
-          </a>
+          <NuxtLayout name="tooltip" :title="'Share on Twitter'" :position="'Bottom'">
+            <div>
+              <a
+                target="_blank"
+                :href="`https://twitter.com/intent/tweet?text=${props.article.text}&url=${sharingUrl}`"
+              >
+                <img src="/brands/twitter/logo.svg" class="w-5 h-5 object-contain">
+              </a>
+            </div>
+          </NuxtLayout>
+          <NuxtLayout name="tooltip" :title="'Share on Facebook'" :position="'Bottom'">
+            <div>
+              <a
+                target="_blank"
+                :href="`https://www.facebook.com/sharer/sharer.php?u=#${sharingUrl}`"
+              >
+                <img src="/brands/facebook/logo.svg" class="w-5 h-5 object-contain">
+              </a>
+            </div>
+          </NuxtLayout>
+          <NuxtLayout name="tooltip" :title="'Share on Linkedin'" :position="'Bottom'">
+            <div>
+              <a
+                target="_blank"
+                :href="`https://www.linkedin.com/sharing/share-offsite/?url=${sharingUrlEncoded}`"
+              >
+                <img src="/brands/linkedin/logo.svg" class="w-5 h-5 object-contain">
+              </a>
+            </div>
+          </NuxtLayout>
         </div>
       </div>
       <!-- <div class="h-11 w-full bg-primary" /> -->
@@ -166,7 +178,7 @@ if (props.article.entities && (props.article.entities as any).urls) {
 const navBarReading : Ref<NavBarReadingType> = inject("navBarReading");
 // eslint-disable-next-line vue/no-setup-props-destructure
 navBarReading.value.title = props.article.text;
-// eslint-disable-next-line vue/no-setup-props-destructure
+
 navBarReading.value.date = new Date(props.article.creationDate);
 
 function handleNavbarChange (event: Event) {
