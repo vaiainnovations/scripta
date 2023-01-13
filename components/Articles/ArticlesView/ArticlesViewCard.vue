@@ -1,9 +1,9 @@
 <template>
-  <div class="flex h-full flex-col gap-y-6 overflow-y-scroll bg-background px-4 py-5 md:px-32 lg:py-10 xl:py-0 2xl:w-5/6 2xl:px-14" @scroll="handleNavbarChange">
+  <div class="flex h-full flex-col gap-y-1 lg:gap-y-4 overflow-y-scroll bg-background px-4 py-5 md:px-32 lg:py-10 xl:py-0 2xl:w-5/6 2xl:px-14" @scroll="handleNavbarChange">
     <div class="text-right w-full">
       <ArticlesActionsOverlay :article="props.article" />
     </div>
-    <div class="flex h-6 flex-row items-center justify-start py-0.5 gap-2">
+    <div class="flex flex-wrap flex-row items-center justify-start pb-0.5 gap-1.5 md:gap-4">
       <ArticlesViewTag v-for="tag in tags" :key="tag.i" :content="tag.content" class="max-w-fit" />
     </div>
     <ArticlesViewContent
@@ -75,11 +75,9 @@ import { useIpfsStore } from "~~/core/store/IpfsStore";
 import { usePostStore } from "~~/core/store/PostStore";
 import { NavBarReadingType } from "~~/layouts/readingCustom.vue";
 import { PostExtended } from "~~/types/PostExtended";
-import { ArticleSearch } from "~~/types/SearchResults";
 import { TagType } from "~~/types/TagType";
 
 interface Props {
-  suggestedArticles: Array<{ id: number; content: ArticleSearch }>;
   article: PostExtended;
 }
 const props = defineProps<Props>();
