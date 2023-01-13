@@ -8,9 +8,9 @@ import { history } from "@milkdown/plugin-history";
 import { diagram } from "@milkdown/plugin-diagram";
 import { emoji } from "@milkdown/plugin-emoji";
 import { directiveFallback } from "@ezone-devops/milkdown-plugin-directive-fallback";
+import { placeholderCtx, placeholder as placeholderPlugin } from "milkdown-plugin-placeholder";
 import { customBlock } from "~~/types/MilkDown/Block";
 import { extendedMathBlock, extendedFootnoteDef } from "~~/types/MilkDown/CustomCommands";
-
 import { customTheme } from "~~/types/MilkDown";
 import { customMenu } from "~~/types/MilkDown/Menu";
 import { useDraftStore } from "~~/core/store/DraftStore";
@@ -55,11 +55,13 @@ export default defineNuxtPlugin(() => {
             .use(customTooltip)
             .use(customTheme(readOnly))
             .use(listener)
+            .use(placeholderPlugin)
             .use(directiveFallback)
             .use(customBlock)
             .config((ctx) => {
               ctx.set(rootCtx, root);
               ctx.set(defaultValueCtx, content || "");
+              ctx.set(placeholderCtx, "Start writing your article...");
               ctx.get(listenerCtx).markdownUpdated((_, markdown) => {
                 useDraftStore().content = markdown;
               });
