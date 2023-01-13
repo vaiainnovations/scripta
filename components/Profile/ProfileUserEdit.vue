@@ -5,11 +5,8 @@
         <div class="flex-none">
           <div class="mb-10 lg:mb-5">
             <div class="h-32 w-32 md:h-44 md:w-44 relative mx-auto md:mx-0">
-              <div class="absolute inset-0 bg-cover bg-center z-0 rounded-full hover:scale-150">
-                <img
-                  :src="newProfilePicture || '/img/author_pic.png'"
-                  class="h-32 w-32 md:h-44 md:w-44 object-contain border-2 shadow-md rounded-full border-[#EDEEFF] relative"
-                >
+              <div class="absolute inset-0 bg-cover bg-center z-0 rounded-full">
+                <ProfileUserPic />
               </div>
               <span v-if="!isUploadingProfilePic">
                 <label class="opacity-0 hover:opacity-100 hover:bg-opacity-40 hover:bg-primary-text duration-300 absolute inset-0 z-10 flex justify-center items-center font-semibold rounded-full cursor-pointer" for="fileUploadProfilePic" @click="uploadProfilePic()">
@@ -44,6 +41,7 @@
             <input
               id="inputNickname"
               v-model="newNickname"
+              placeholder="nickname"
               type="text"
               class="rounded-xl w-full border-primary-text-light border bg-background-alt font-bold text-xl text-primary-text px-7 py-1 lg:text-xl"
             >
@@ -95,9 +93,9 @@
       </div>
 
       <!-- Save -->
-      <div v-if="isValidUsername&&!isUploadingProfilePic" class="w-full">
+      <div v-if="isValidUsername&&!isUploadingProfilePic&&(newBio !== previousProfile?.bio || newNickname !== previousProfile?.nickname || newUsername !== previousProfile?.dtag || newProfilePicture !== previousProfile?.pictures?.profile)" class="w-full">
         <button
-          class="rounded-xl w-full border-primary-text-light border bg-primary text-background-alt text-xl px-7 py-1"
+          class="rounded-xl w-full bg-primary/90 hover:bg-primary text-background-alt text-xl px-7 py-1"
           @click="saveProfile"
         >
           Save
@@ -110,7 +108,10 @@
 <script setup lang="ts">
 import { MsgSaveProfileEncodeObject } from "@desmoslabs/desmjs";
 import { useAccountStore } from "~~/core/store/AccountStore";
+import { useConfigStore } from "~~/core/store/ConfigStore";
 const emit = defineEmits(["userEdited"]);
+
+const previousProfile = ref(useAccountStore().profile);
 const newNickname = ref(useAccountStore().profile?.nickname || "");
 const newUsername = ref(useAccountStore().profile?.dtag || "");
 const newBio = ref(useAccountStore().profile?.bio || "");
@@ -124,23 +125,24 @@ const isUploadingProfilePic = ref(false);
 
 function saveProfile () {
   const { $useTransaction } = useNuxtApp();
-  const doNotModify = "[do-not-modify]";
   const oldProfile = useAccountStore().profile;
+
+  const defaultUserPic = "https://scripta.infura-ipfs.io/ipfs/QmcoipiMwxYF97JG4EQrRtrGqwHvb5oT8hjLSkb1xBnLLs";
+
+  const dtag = (oldProfile.dtag !== newUsername.value || useAccountStore().isNewProfile) ? newUsername.value : oldProfile.dtag;
+  const nickname = (oldProfile.nickname !== newNickname.value || useAccountStore().isNewProfile) ? newNickname.value : oldProfile.nickname;
+  const bio = ((oldProfile.bio !== newBio.value || useAccountStore().isNewProfile) ? newBio.value : oldProfile.bio) || " ";
+  const profilePicture = ((oldProfile.pictures.profile !== newProfilePicture.value || useAccountStore().isNewProfile) ? newProfilePicture.value || oldProfile.pictures.profile : oldProfile.pictures.profile) || defaultUserPic;
+  const coverPicture = oldProfile.pictures.cover || "[do-not-modify]";
+
   const msgSaveProfile: MsgSaveProfileEncodeObject = {
     typeUrl: "/desmos.profiles.v3.MsgSaveProfile",
     value: {
-      dtag:
-        (oldProfile.dtag !== newUsername.value || useAccountStore().isNewProfile) ? newUsername.value : doNotModify,
-      nickname:
-       (oldProfile.nickname !== newNickname.value || useAccountStore().isNewProfile)
-         ? newNickname.value
-         : doNotModify,
-      bio: (oldProfile.bio !== newBio.value || useAccountStore().isNewProfile) ? newBio.value : doNotModify,
-      profilePicture:
-       (oldProfile.pictures.profile !== newProfilePicture.value || useAccountStore().isNewProfile)
-         ? newProfilePicture.value
-         : doNotModify,
-      coverPicture: doNotModify,
+      dtag,
+      nickname,
+      bio,
+      profilePicture,
+      coverPicture,
       creator: useAccountStore().address
     }
   };
@@ -157,14 +159,15 @@ function saveProfile () {
   };
   $useTransaction().push(msgSaveProfile,
     {
-      dtag: newUsername.value,
-      nickname: newNickname.value,
-      bio: newBio.value,
-      profile: newProfilePicture.value,
-      cover: oldProfile.pictures.cover,
+      dtag,
+      nickname,
+      bio,
+      profile: profilePicture,
+      cover: coverPicture,
       scriptaOp: "MsgSaveProfile"
     });
   emit("userEdited");
+  previousProfile.value = useAccountStore().profile;
 }
 
 /**
@@ -186,7 +189,7 @@ async function checkUsername () {
   }
 
   try {
-    const res = await (await fetch(`${$useDesmosNetwork().lcd}desmos/profiles/v3/profiles/${username}`)).json() as any;
+    const res = await (await fetch(`${useConfigStore().lcdUrl}desmos/profiles/v3/profiles/${username}`)).json() as any;
     if (res?.profile) {
       isValidUsername.value = false;
       return;
@@ -198,7 +201,7 @@ async function checkUsername () {
 }
 
 async function uploadProfilePic () {
-  const { $useIpfs } = useNuxtApp();
+  const { $useIpfsUploader } = useNuxtApp();
   const file: File = (fileUploadProfilePic.value as any).files[0];
 
   // support only image files
@@ -213,7 +216,7 @@ async function uploadProfilePic () {
   // upload the file to IPFS
   let cid = {};
   try {
-    cid = await useNuxtApp().$useIpfs().client.add(file);
+    cid = await useNuxtApp().$useIpfsUploader().client.add(file);
   } catch (e) {
     // TODO: improve error message
     alert("ops, an error occurred while uploading the file");
@@ -224,7 +227,7 @@ async function uploadProfilePic () {
   }
 
   // set as image the ipfs url
-  newProfilePicture.value = `${$useIpfs().gateway}${cid.path}`;
+  newProfilePicture.value = `${$useIpfsUploader().gateway}${cid.path}`;
   isUploadingProfilePic.value = false;
 }
 </script>

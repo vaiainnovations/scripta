@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full pt-14 lg:pt-0 lg:fixed z-40 bg-background-alt">
+  <div class="w-full pt-14 lg:pt-0 lg:fixed bg-background-alt">
     <div class="py-6 px-4 md:px-20 xl:px-32">
       <div class="flex">
         <NuxtLink v-if="p.props.to" :to="p.props.to">

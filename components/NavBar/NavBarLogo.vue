@@ -18,7 +18,7 @@
       class="ml-4 my-auto hover:underline cursor-pointer flex"
       to="/explore"
     >
-      <img src="/icons/bold/bubble.svg" class="h-8 w-8 md:h-5 md:w-5">
+      <img src="/icons/bold/bubble.svg" class="h-8 w-8 md:h-5 md:w-5 ml-0 md:ml-2 lg:ml-1">
       <span class="hidden md:block pl-1 my-auto">
         Explore
       </span>

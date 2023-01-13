@@ -4,6 +4,7 @@ import { gfm, link, image, footnoteDefinition } from "@milkdown/preset-gfm";
 import { listenerCtx, listener } from "@milkdown/plugin-listener";
 import { upload, uploadPlugin } from "@milkdown/plugin-upload";
 import { math, mathBlock } from "@milkdown/plugin-math";
+import { history } from "@milkdown/plugin-history";
 import { diagram } from "@milkdown/plugin-diagram";
 import { emoji } from "@milkdown/plugin-emoji";
 import { directiveFallback } from "@ezone-devops/milkdown-plugin-directive-fallback";
@@ -64,6 +65,7 @@ export default defineNuxtPlugin(() => {
               });
               ctx.set(editorViewOptionsCtx, { editable: () => !readOnly });
             })
+            .use(history) // cmd+z history
         );
       }
     }

@@ -1,10 +1,8 @@
 import { defineStore } from "pinia";
-import { DesmosTestnet } from "@desmoslabs/desmjs";
+import { DesmosTestnet, DesmosMainnet } from "@desmoslabs/desmjs";
 import { useConfigStore } from "./ConfigStore";
 import { useBackendStore } from "./BackendStore";
 import { registerModuleHMR } from ".";
-
-const chainInfo = DesmosTestnet;
 
 export interface NodeInfo {
   id: string;
@@ -36,32 +34,45 @@ export const useDesmosStore = defineStore({
   id: "DesmosStore",
   state: () => ({
     chainStatus: null as ChainStatus,
-    chainInfo,
-    explorer: "https://morpheus.desmos.network/",
-    coinDenom: chainInfo.currencies[chainInfo.currencies.length - 1].coinDenom,
-    ucoinDenom: chainInfo.currencies[0].coinMinimalDenom,
-    subspaceId: 8,
+    chainInfo: null as any,
+    explorer: "https://explorer.desmos.network/",
+    coinDenom: "",
+    ucoinDenom: "",
+    subspaceId: useConfigStore().subspaceId,
     // eslint-disable-next-line prefer-regex-literals
     usernameRegexp: new RegExp("^[A-Za-z0-9_]{6,30}$"),
     defaultFee: {
       amount: [{
         amount: "1000",
-        denom: chainInfo.currencies[0].coinMinimalDenom
+        denom: ""
       }],
       gas: "300000"
     },
     desmosPrice: 0
   }),
   actions: {
-    async init () {
+    init () {
       try {
-        await this.updateChainStatus();
+        switch (useConfigStore().chainId) {
+        case "morpheus-apollo-2":
+          this.chainInfo = DesmosTestnet;
+          break;
+        default:
+          this.chainInfo = DesmosMainnet;
+          break;
+        }
+        this.coinDenom = this.chainInfo.currencies[this.chainInfo.currencies.length - 1].coinDenom;
+        this.ucoinDenom = this.chainInfo.currencies[0].coinMinimalDenom;
+        this.defaultFee.amount[0].denom = this.ucoinDenom;
+        this.updateChainStatus();
       } catch (e) {
         // TODO: Handle error
       }
     },
     async updateChainStatus (): Promise<void> {
-      this.chainStatus = (await (await fetch(`${useConfigStore().rpcUrl}/status`)).json() as any).result as ChainStatus;
+      try {
+        this.chainStatus = (await (await fetch(`${useConfigStore().rpcUrl}status`)).json() as any).result as ChainStatus;
+      } catch (e) {}
     },
     async updateDesmosPrice () {
       this.desmosPrice = (await (await useBackendStore().fetch("https://api.coingecko.com/api/v3/simple/price?ids=desmos&vs_currencies=usd", "GET", {})).json() as any).desmos.usd;

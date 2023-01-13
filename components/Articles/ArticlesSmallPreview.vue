@@ -5,7 +5,7 @@
   >
     <!-- Desktop -->
     <div class=" mx-auto hidden sm:block">
-      <div class="flex max-w-full mx-auto overflow-hidden bg-background-alt rounded-3xl shadow-md dark:bg-gray-800">
+      <div class="flex max-w-full mx-auto overflow-hidden bg-background-alt rounded-2xl shadow-md dark:bg-gray-800">
         <div class="w-1/3 h-48">
           <img
             alt="Article cover picture"
@@ -52,17 +52,17 @@
               </div>
 
               <div class="flex">
-                <div class="w-1 h-1 bg-primary-text rounded-full mx-1.5 my-auto" />
+                <img src="/icons/linear/message.svg" class="h-5 mx-1.5">
+                {{ shortNumber(props.content.analytics.comments) }}
               </div>
 
               <div class="flex">
+                <div class="w-1 h-1 bg-primary-text rounded-full mx-1.5 my-auto" />
+              </div>
+
+              <div class="flex mx-1.1">
                 <ArticlesUpvote :reacted="true" />
                 {{ shortNumber(props.content.analytics.upvotes) }}
-              </div>
-
-              <!-- dot separator -->
-              <div class="flex">
-                <div class="w-1 h-1 bg-primary-text rounded-full mx-1.5 my-auto" />
               </div>
 
               <div class="flex">
@@ -92,10 +92,10 @@
             >
               Draft
             </a>
-            <p class="text-primary-text dark:text-white text-xl font-medium mb-2">
+            <p class="text-primary-text text-xl font-medium mb-2">
               {{ props.content.title }}
             </p>
-            <p class="text-primary-text/80 dark:text-gray-300 font-light text-md">
+            <p class="text-primary-text/80 font-light text-md">
               {{ props.content.description }}
             </p>
             <div class="flex items-center mt-4">
@@ -119,6 +119,11 @@
               </div>
 
               <div class="flex">
+                <img src="/icons/linear/message.svg" class="h-5 mx-1.5">
+                {{ shortNumber(props.content.analytics.comments) }}
+              </div>
+
+              <div class="flex">
                 <div class="w-1 h-1 bg-primary-text rounded-full mx-1.5 my-auto" />
               </div>
 
@@ -127,12 +132,7 @@
                 {{ shortNumber(props.content.analytics.upvotes) }}
               </div>
 
-              <!-- dot separator -->
-              <div class="flex">
-                <div class="w-1 h-1 bg-primary-text rounded-full mx-1.5 my-auto" />
-              </div>
-
-              <div class="flex">
+              <div class="flex mx-1.5">
                 <ArticlesDownvote :reacted="true" />
                 {{ shortNumber(props.content.analytics.downvotes) }}
               </div>

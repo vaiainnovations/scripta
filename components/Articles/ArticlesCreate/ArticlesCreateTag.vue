@@ -4,7 +4,7 @@
       <input
         :value="modelValue"
         type="text"
-        class="bg-primary-light text-left text-background-alt w-full rounded-xl px-2"
+        class="bg-gray-light text-left text-primary-color w-full rounded-xl px-2"
         maxlength="15"
         :readonly="!enableEdit"
         @input="handleInput"
@@ -12,9 +12,11 @@
         @blur.stop="() => switchInput(false)"
       >
     </ArticlesViewTag>
-    <button class="rounded-full text-center bg-primary-text h-5 w-5 text-[#FFFFFF] absolute right-0 inset-y-0" @click="$emit('removeTag')">
-      -
-    </button>
+    <img
+      src="/icons/bold/minus-circle.svg"
+      class="w-6 h-6 object-contain cursor-pointer absolute right-0 top-0"
+      @click="$emit('removeTag')"
+    >
   </div>
 </template>
 

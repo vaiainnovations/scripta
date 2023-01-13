@@ -1,10 +1,10 @@
 <template>
-  <div class="flex h-full flex-col gap-y-6 overflow-y-scroll bg-background px-4 py-5 md:px-32 lg:py-10 2xl:w-5/6 2xl:px-14 2xl:border border-primary-text-light" @scroll="handleNavbarChange">
+  <div class="flex h-full flex-col gap-y-6 overflow-y-scroll bg-background px-4 py-5 md:px-32 lg:py-10 xl:py-0 2xl:w-5/6 2xl:px-14" @scroll="handleNavbarChange">
     <div class="text-right w-full">
       <ArticlesActionsOverlay :article="props.article" />
     </div>
-    <div class="flex h-6 flex-row items-center justify-start gap-x-4 py-0.5">
-      <ArticlesViewTag v-for="tag in tags" :key="tag.i" :content="tag.content" class="w-36" />
+    <div class="flex h-6 flex-row items-center justify-start py-0.5 gap-2">
+      <ArticlesViewTag v-for="tag in tags" :key="tag.i" :content="tag.content" class="max-w-fit" />
     </div>
     <ArticlesViewContent
       :external-id="props.article.externalId"
@@ -16,7 +16,8 @@
     />
     <div class="bg-background">
       <div>
-        <a v-if="ipfsSourceUrl" :href="ipfsSourceUrl" target="_blank" class="text-xs">IPFS source</a>
+        <a v-if="ipfsSourceUrl" :href="ipfsSourceUrl" target="_blank" class="text-xs pr-2 text-gray hover:text-primary-text">IPFS-1</a>
+        <a v-if="ipfsSourceAlt" :href="ipfsSourceAlt" target="_blank" class="text-xs pr-2 text-gray hover:text-primary-text">IPFS-2</a>
       </div>
       <div class="grid grid-cols-2 place-content-between gap-y-3 lg:grid-cols-4 xl:grid-cols-12 lg:gap-x-2">
         <div v-if="useAccountStore().address" class="flex flex-row gap-x-1.5 lg:col-span-1">
@@ -73,9 +74,10 @@
 import { Ref } from "vue";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useConfigStore } from "~~/core/store/ConfigStore";
+import { useIpfsStore } from "~~/core/store/IpfsStore";
 import { usePostStore } from "~~/core/store/PostStore";
 import { NavBarReadingType } from "~~/layouts/readingCustom.vue";
-import { PostExtended, searchFirstContentImage } from "~~/types/PostExtended";
+import { PostExtended } from "~~/types/PostExtended";
 import { ArticleSearch } from "~~/types/SearchResults";
 import { TagType } from "~~/types/TagType";
 
@@ -89,7 +91,7 @@ const showComments = ref(false);
 if (process.client) {
   showComments.value = true;
 }
-const sharingUrl = (useConfigStore().isBetaVersion) ? `https://beta.scripta.network${useRoute().fullPath}` : `https://scripta.network${useRoute().fullPath}`;
+const sharingUrl = `https://scripta.network${useRoute().fullPath}`;
 const sharingUrlEncoded = encodeURIComponent(sharingUrl);
 
 useHead({
@@ -108,7 +110,7 @@ useHead({
     {
       hid: "image",
       name: "image",
-      content: searchFirstContentImage(props.article.content)
+      content: usePostStore().getArticlePreviewImage(props.article)
     },
     {
       hid: "og:title",
@@ -123,7 +125,7 @@ useHead({
     {
       hid: "og:image",
       property: "og:image",
-      content: searchFirstContentImage(props.article.content)
+      content: usePostStore().getArticlePreviewImage(props.article)
     },
     {
       hid: "og:url",
@@ -143,7 +145,7 @@ useHead({
     {
       hid: "twitter:image",
       name: "twitter:image",
-      content: searchFirstContentImage(props.article.content)
+      content: usePostStore().getArticlePreviewImage(props.article)
     },
     {
       hid: "twitter:card",
@@ -155,8 +157,10 @@ useHead({
 
 const tags = (props.article.tags && props.article.tags.length > 0) ? new Array(props.article.tags.length).fill(0).map((_, i) => ({ i, content: { value: props.article.tags[i] } as TagType })) : [];
 let ipfsSourceUrl = "";
+let ipfsSourceAlt = "";
 if (props.article.entities && (props.article.entities as any).urls) {
   ipfsSourceUrl = (props.article.entities as any)?.urls[0]?.url;
+  ipfsSourceAlt = useIpfsStore().ipfsUrlToGatewayRead(ipfsSourceUrl) || "";
 }
 
 const navBarReading : Ref<NavBarReadingType> = inject("navBarReading");
@@ -166,6 +170,11 @@ navBarReading.value.title = props.article.text;
 navBarReading.value.date = new Date(props.article.creationDate);
 
 function handleNavbarChange (event: Event) {
+  // disable navbar on small screens
+  if (window.innerWidth < 1024) {
+    navBarReading.value.show = false;
+    return;
+  }
   const { scrollTop } = (event.target as HTMLDivElement);
   if (scrollTop > 120) {
     navBarReading.value.show = true;

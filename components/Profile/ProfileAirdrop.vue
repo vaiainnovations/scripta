@@ -54,14 +54,14 @@ async function claimFaucet () {
       {},
       ""
     );
-    if (res.status === 200) {
-      console.log("Faucet claimed");
+    if (res.status !== 200) {
+      useNuxtApp().$useNotification().error("Claim Error", "An error occurred during the request, try later");
     }
     isClaimingFaucet.value = false;
     $useAuth().login(true); // refresh all profile infos
   } catch (e) {
     isClaimingFaucet.value = false;
-    console.log(e);
+    useNuxtApp().$useNotification().error("Claim Error", "An error occurred during the request, try later");
   }
 }
 </script>

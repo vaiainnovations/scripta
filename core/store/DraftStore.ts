@@ -1,8 +1,10 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import Long from "long";
+import { Url } from "@desmoslabs/desmjs-types/desmos/posts/v2/models";
 import { useBackendStore } from "./BackendStore";
 import { useAccountStore } from "./AccountStore";
+import { usePostStore } from "./PostStore";
 import { registerModuleHMR } from ".";
 import { TagType } from "~~/types/TagType";
 
@@ -20,6 +22,7 @@ export const useDraftStore = defineStore({
     title: "",
     subtitle: "",
     content: "",
+    previewImage: "",
     lastSave: null as Date // as timestamp
   }),
   actions: {
@@ -33,7 +36,19 @@ export const useDraftStore = defineStore({
         this.externalId = uuidv4();
       }
 
-      localStorage.setItem("drafts", this.externalId);
+      const entityUrls = [] as Url[];
+      if (!this.previewImage) {
+        this.previewImage = usePostStore().searchFirstContentImage(this.content);
+      }
+      if (this.previewImage) {
+        const ipfsImagePreviewUrl = {
+          displayUrl: "preview",
+          start: Long.fromNumber(1),
+          end: Long.fromNumber(2),
+          url: this.previewImage
+        };
+        entityUrls.push(ipfsImagePreviewUrl);
+      }
 
       // save the draft
       const success = await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${this.externalId}`, "POST", {
@@ -44,8 +59,12 @@ export const useDraftStore = defineStore({
         subtitle: this.subtitle,
         content: this.content,
         author: useAccountStore().address,
-        sectionId: 0,
-        entities: {},
+        sectionId: useAccountStore()?.sectionId || 0,
+        entities: {
+          hashtags: [],
+          mentions: [],
+          urls: entityUrls
+        },
         creationDate: new Date(Date.now()),
         lastEditedDate: new Date(Date.now()),
         tags: this.tags.map(tag => tag.content.value)
@@ -60,32 +79,6 @@ export const useDraftStore = defineStore({
       this.lastSave = new Date(Date.now()); // update with the current timestamp
     },
 
-    async loadDraft (): Promise<void> {
-      // load the draft
-      useDraftStore().$reset(); // remove previous draft
-      const localExternalId = localStorage.getItem("drafts") || "";
-      if (localExternalId) {
-        const draft = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${localExternalId}`, "GET", {}, "")).json() as any;
-        if (!draft) {
-          return; // no drafts found
-        }
-        this.externalId = draft.externalId;
-        this.title = draft.text;
-        this.subtitle = draft.subtitle;
-        this.content = draft.content;
-        this.entities = draft.entities;
-        this.lastSave = new Date(draft.lastEditedDate);
-        draft.tags.forEach((tagRaw, index) => {
-          const tag: EditorTag = {
-            id: index,
-            content: {
-              value: tagRaw
-            }
-          };
-          this.tags.push(tag);
-        });
-      }
-    },
     async deleteDraft () {
       await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${this.externalId}`, "POST", {
         "Content-Type": "application/json"
@@ -94,7 +87,6 @@ export const useDraftStore = defineStore({
         draft: true
       })
       );
-      localStorage.removeItem("drafts");
       useDraftStore().$reset();
     }
   }

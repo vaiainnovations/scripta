@@ -1,13 +1,12 @@
-/* eslint-disable no-unused-vars */
+
 import { Buffer } from "buffer";
 import { defineStore } from "pinia";
 import { EncodeObject } from "@cosmjs/proto-signing";
 import { StdFee } from "@cosmjs/stargate";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
-import { Signer } from "@desmoslabs/desmjs";
 import { useAccountStore } from "./AccountStore";
 import { useBackendStore } from "./BackendStore";
-import { useWalletStore } from "./wallet/WalletStore";
+import { useDesmosStore } from "./DesmosStore";
 import { registerModuleHMR } from ".";
 
 export enum QueueStatus {
@@ -38,14 +37,22 @@ export const useTransactionStore = defineStore({
         return;
       }
 
-      // TODO: add controls to prevent pushing same message twice, and same operations (ex. 2 profile updates, works but is not ideal)
       if (this.status === QueueStatus.FAILED) {
         this.$reset();
       }
+
+      const duplicatedMsg = this.queue.find(el => JSON.stringify(el.message) === JSON.stringify(message));
+      if (duplicatedMsg) {
+        return;
+      }
+
+      this.assertBalance();
+
       this.queue.push({ message, details });
     },
     async execute (): Promise<Uint8Array> {
       const { $useWallet } = useNuxtApp();
+      let txBytes: Uint8Array = new Uint8Array();
       // check if the draft is not empty
       try {
         this.status = QueueStatus.SIGNING;
@@ -54,16 +61,15 @@ export const useTransactionStore = defineStore({
         const defaultFee: StdFee = {
           amount: [{
             amount: "1000",
-            denom: "udaric"
+            denom: useDesmosStore().ucoinDenom
           }],
-          gas: "200000"
+          gas: "400000"
         };
 
         // sign the messages
         const msgs = (this.queue as TransactionQueueMsg[]).map((el: TransactionQueueMsg) => el.message);
         const details = (this.queue as TransactionQueueMsg[]).map((el: TransactionQueueMsg) => el.details);
 
-        let txBytes: Uint8Array = null;
         if (!useAccountStore().authz.hasAuthz) {
           const signed = await client.sign(address, msgs, defaultFee, "Signed from Scripta.network");
           txBytes = TxRaw.encode(signed).finish();
@@ -72,7 +78,6 @@ export const useTransactionStore = defineStore({
 
         // broadcast the messages
         this.status = QueueStatus.PENDING;
-        // const broadcastResult = await client.broadcastTx(txBytes, 10000, 2000);
 
         let broadcastResult = null as any;
         try {
@@ -85,26 +90,26 @@ export const useTransactionStore = defineStore({
         } catch (e) {
           console.log(e);
         }
-        console.log(broadcastResult);
 
         // parse the result
         if (!broadcastResult?.transactionHash) {
           this.status = QueueStatus.FAILED;
           this.errorText = `${broadcastResult.rawLog}`;
           this.hash = broadcastResult.transactionHash;
-          // this.resetQueueWithTimer(8);
+          this.resetQueueWithTimer(8, false);
         } else {
           this.status = QueueStatus.SUCCESS;
           this.resetQueueWithTimer(5, true);
         }
         this.hash = broadcastResult.transactionHash;
-        return txBytes;
         // TODO: ask for a profile refresh
       } catch (e) {
         this.status = QueueStatus.FAILED;
         this.errorText = `${e}`;
-        this.resetQueueWithTimer(10, true);
+        this.resetQueueWithTimer(6, true);
       }
+      useAccountStore().updateBalance();
+      return txBytes;
     },
     /**
      * Sign and broadcast messages directy avoiding the queue
@@ -114,12 +119,13 @@ export const useTransactionStore = defineStore({
      * @returns success boolean
      */
     async directTx (messages: EncodeObject[], details: Record<string, unknown>[] = [], skipAuthz = false): Promise<boolean> {
-      const { $useDesmosNetwork } = useNuxtApp();
+      const { $useDesmosNetwork, $useWallet } = useNuxtApp();
+      this.assertBalance();
       try {
         let signedBytes = new Uint8Array();
         this.status = QueueStatus.SIGNING;
         if (!useAccountStore().authz.hasAuthz || skipAuthz) {
-          signedBytes = await this.directSign(messages, "Signed from Scripta.network", $useDesmosNetwork().defaultFee, useWalletStore().wallet.signer.signingMode);
+          signedBytes = await this.directSign(messages, "Signed from Scripta.network", $useDesmosNetwork().defaultFee, $useWallet().getSigner().signingMode);
         }
 
         let broadcastResult = null as any;
@@ -133,11 +139,13 @@ export const useTransactionStore = defineStore({
         } catch (e) {
           console.log(e);
         }
-        this.hash = broadcastResult.transactionHash;
+        useAccountStore().updateBalance();
+        this.status = QueueStatus.WAITING;
         return broadcastResult?.transactionHash || false;
       } catch (e) {
         // handle tx error or wallet signing rejection
         console.log(e);
+        useAccountStore().updateBalance();
         return false;
       }
     },
@@ -155,7 +163,7 @@ export const useTransactionStore = defineStore({
       try {
         this.status = QueueStatus.SIGNING;
         const client = await $useWallet().wallet.client;
-        client.setSigner(signMode === 0 ? $useWallet().wallet.aminoSigner as Signer : $useWallet().wallet.signer as Signer);
+        client.setSigner(signMode === 0 ? $useWallet().getSigner(true) : $useWallet().getSigner(false));
         // client.setSigner($useWallet().wallet.signer as Signer);
         const address = useAccountStore().address;
         const accountInfo = await client.getAccount(address).catch(() => { return null; });
@@ -177,20 +185,38 @@ export const useTransactionStore = defineStore({
         console.log(e);
         this.status = QueueStatus.FAILED;
         this.errorText = `${e}`;
-        this.resetQueueWithTimer(10);
+        this.resetQueueWithTimer(6);
       }
     },
-    resetQueueWithTimer (s: number, reset = false): void {
-      setTimeout(() => {
-        if (reset) {
-          this.$reset();
-        } else {
-          this.status = QueueStatus.WAITING;
-          this.hash = "";
-          this.hash = "";
+    /**
+     * Assert the balance is enough to perform the tx, otherwise throw and show the error.
+     * If a fallback route is provided, it will be used to redirect the user.
+     */
+    assertBalance (fallbackRoute = "") {
+      if (useAccountStore().balance <= 0.001 && !useAccountStore().authz.hasAuthz) {
+        useNuxtApp().$useNotification().error("Low Balance", `You don't have enough ${useDesmosStore().coinDenom}`, 4);
+        if (fallbackRoute) {
+          useRouter().push(fallbackRoute);
         }
-        console.log("TransactionModule reset");
-      }, s * 1000);
+        throw new Error("Not enough balance");
+      }
+    },
+
+    /**
+     * Reset Tx Notification and Queue with a timer
+     * @param s seconds to wait
+     * @param reset `true` if should reset the queue
+     */
+    async resetQueueWithTimer (s: number, reset = false): Promise<void> {
+      // sleep
+      await new Promise(resolve => setTimeout(resolve, s * 1000));
+      if (reset) {
+        this.$reset();
+      } else {
+        this.status = QueueStatus.WAITING;
+        this.hash = "";
+        this.hash = "";
+      }
     }
   }
 });

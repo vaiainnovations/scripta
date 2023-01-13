@@ -45,8 +45,9 @@
 </template>
 
 <script setup lang="ts">
+import { usePostStore } from "~~/core/store/PostStore";
 import { useUserStore } from "~~/core/store/UserStore";
-import { PostExtended, searchFirstContentImage } from "~~/types/PostExtended";
+import { PostExtended } from "~~/types/PostExtended";
 
 interface Props {
   post: PostExtended;
@@ -58,14 +59,13 @@ const articleImage = ref("/img/author_pic.png");
 const authorImage = ref("/img/author_pic.png");
 const authorNickname = ref(article.value.author);
 
-const image = searchFirstContentImage(props.post.content);
+const image = usePostStore().getArticlePreviewImage(props.post);
 if (image) {
   articleImage.value = image;
 }
 
 useUserStore().$subscribe(() => {
   const authorProfile = useUserStore().users.get(props.post.author);
-  console.log(authorProfile);
   if (authorProfile) {
     authorImage.value = authorProfile.pictures?.profile;
     authorNickname.value = authorProfile.nickname;

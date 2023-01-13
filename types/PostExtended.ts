@@ -17,11 +17,3 @@ export interface PostExtended {
     reaction_cnt_1?: number;
     reaction_cnt_2?: number;
 }
-
-export function searchFirstContentImage (content: string): string {
-  const match = /!\[[^\]]*\]\((?<filename>.*?)(?="|\))(?<optionalpart>".*")?\)/.exec(content);
-  if (match) {
-    return match[1];
-  }
-  return "";
-}

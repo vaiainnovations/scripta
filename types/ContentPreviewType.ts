@@ -9,5 +9,6 @@ export interface ContentPreviewType {
     views: number;
     upvotes: number;
     downvotes: number;
+    comments: number;
   }
 }

@@ -24,7 +24,8 @@ export const useAccountStore = defineStore({
       hasAcceptedCookies: false
     },
     authz: {
-      DEFAULT_AUTHORIZATIONS: ["/desmos.posts.v2.MsgCreatePost", "/desmos.posts.v2.MsgEditPost", "/desmos.posts.v2.MsgDeletePost", "/desmos.profiles.v3.MsgSaveProfile", "/desmos.reactions.v1.MsgRemoveReaction", "/desmos.reactions.v1.MsgAddReaction", "/desmos.reports.v1.MsgCreateReport"],
+      DEFAULT_SUBSPACE_AUTHORIZATIONS: ["/desmos.posts.v2.MsgCreatePost", "/desmos.posts.v2.MsgEditPost", "/desmos.posts.v2.MsgDeletePost", "/desmos.reactions.v1.MsgRemoveReaction", "/desmos.reactions.v1.MsgAddReaction", "/desmos.reports.v1.MsgCreateReport"],
+      DEFAULT_GENERIC_AUTHORIZATIONS: ["/desmos.profiles.v3.MsgSaveProfile"],
       hasAuthz: false,
       grantExpiration: null as Date || null,
       grantGrantee: ""
@@ -33,7 +34,17 @@ export const useAccountStore = defineStore({
   getters: {
   },
   actions: {
-    async getUserSection (forceCreateSection = false) {
+    /**
+     * Update the DSM account balance
+     */
+    async updateBalance () {
+      const { $useWallet, $useDesmosNetwork } = useNuxtApp();
+      const balance = await (await $useWallet().wallet.client).getBalance(this.address, $useDesmosNetwork().ucoinDenom);
+
+      // update the store
+      this.balance = Number(balance.amount) / 1_000_000;
+    },
+    async getUserSection (forceCreateSection = false): Promise<any> {
       try {
         const res = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}user/get/${this.address}`, "POST", {
           "Content-Type": "application/json"
@@ -41,8 +52,7 @@ export const useAccountStore = defineStore({
           forceCreateSection
         }))).json() as any; // TODO: wrap response as type/obj
         if (res) {
-          this.sectionId = Number(res.sectionId);
-          // TODO: store also the other infos
+          this.sectionId = Number(res.sectionId || -10);
         }
         console.log(res);
       } catch (e) {
@@ -61,6 +71,8 @@ export const useAccountStore = defineStore({
           try {
             if (new Date(res?.grantExpiration) > new Date(Date.now())) {
               this.authz.hasAuthz = true;
+            } else {
+              this.authz.hasAuthz = false;
             }
           } catch (e) {}
         }

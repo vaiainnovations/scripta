@@ -1,7 +1,7 @@
 <template>
   <span>
     <div class="flex pb-4">
-      <img src="/icons/linear/trend-up-circle.svg">
+      <img src="/icons/linear/trend-up-circle.svg" class="w-8 h-8">
       <h1 class="ml-2 text-3xl font-extrabold el-icon-arrow-right">
         Trending Articles
       </h1>
@@ -71,5 +71,5 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const trendings = useState("ctrendings", () => usePostStore().trendings.slice(0, props.n || 12));
+const trendings = useState("ctrendings", () => usePostStore().trendings.sort(() => 0.5 - Math.random()).slice(0, props.n || 12));
 </script>

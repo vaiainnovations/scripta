@@ -1,29 +1,21 @@
 <script lang="ts" setup>
 // Globally executed on every page load
 
-import { useConfigStore } from "./core/store/ConfigStore";
 import { usePostStore } from "./core/store/PostStore";
-const isBetaAlertDismissed = ref(true);
 
 if (process.client) {
   const { $useAuth } = useNuxtApp();
-  isBetaAlertDismissed.value = window.localStorage.getItem("isBetaAlertDismissed") === "true" || !useConfigStore().isBetaVersion;
-  await useNuxtApp().$useDesmosNetwork().init();
+  useNuxtApp().$useDesmosNetwork().init();
   $useAuth().init();
 }
 await usePostStore().loadTrendings();
 
-function dismissBetaAlert () {
-  window.localStorage.setItem("isBetaAlertDismissed", "true");
-  isBetaAlertDismissed.value = true;
-}
 </script>
 
 <template>
   <div>
     <NuxtLayout>
       <NuxtPage />
-      <LandingBetaAlert v-if="!isBetaAlertDismissed" @close-beta-alert="dismissBetaAlert()" />
     </NuxtLayout>
   </div>
 </template>

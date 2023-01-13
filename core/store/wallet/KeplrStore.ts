@@ -74,6 +74,7 @@ export const useKeplrStore = defineStore({
       // If Keplr + Ledger, sign out the user
       const isLedgerKeplrUser = (await client.getKey($useDesmosNetwork().chainId)).isNanoLedger;
       if (isLedgerKeplrUser) {
+        useNuxtApp().$useNotification().error("Keplr Error", "Keplr + Ledger is currently not supported", 10);
         await $useAuth().logout();
         await navigateTo({
           path: "/auth/desmos-app"

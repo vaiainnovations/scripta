@@ -1,21 +1,26 @@
 import { defineStore } from "pinia";
 import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
+import { Url } from "@desmoslabs/desmjs-types/desmos/posts/v2/models";
 import { v4 as uuidv4 } from "uuid";
 import { MsgCreatePostEncodeObject, EncodeObject, MsgSaveProfileEncodeObject } from "@desmoslabs/desmjs";
 import Long from "long";
 import { useAccountStore } from "./AccountStore";
+import { useIpfsStore } from "./IpfsStore";
 import { useBackendStore } from "./BackendStore";
 import { useUserStore } from "./UserStore";
 import { useDraftStore } from "./DraftStore";
+import { useConfigStore } from "./ConfigStore";
 import { registerModuleHMR } from ".";
 import { PostKv } from "~~/types/PostKv";
-import { PostExtended, searchFirstContentImage } from "~~/types/PostExtended";
+import { PostExtended } from "~~/types/PostExtended";
 import { TrendingPostsKv } from "~~/types/TrendingPostsKv";
 
 export const usePostStore = defineStore({
   id: "PostStore",
   state: () => ({
     trendings: useState("trendings", () => [] as PostExtended[]),
+    suggested: useState("suggested", () => [] as PostExtended[]),
+    latest: useState("latest", () => [] as PostExtended[]),
     userPosts: [] as any[],
     cachedPosts: new Map<string, any>()
   }),
@@ -25,7 +30,7 @@ export const usePostStore = defineStore({
      * @param externalId Post `externalId`
      * @returns Post
      */
-    async getPost (externalID: string): Promise<PostExtended> {
+    async getPost (externalID: string): Promise<PostExtended | null> {
       let cachedPost: PostExtended | false = false;
       if (!process.client) {
         /* cachedPost = await PostKv.get(externalID); */
@@ -35,6 +40,7 @@ export const usePostStore = defineStore({
       } else {
         try {
           cachedPost = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${externalID}`, "GET", {}, "")).json() as PostExtended;
+          cachedPost.content = cachedPost.content.replaceAll(useConfigStore().ipfsGateway, useConfigStore().ipfsGatewayRead);
         } catch (e) {
           console.log(e);
         }
@@ -43,13 +49,13 @@ export const usePostStore = defineStore({
         const author: Profile = await useUserStore().getUser(cachedPost.author as any, true);
         if (author) {
           cachedPost.author = {
-            address: (author.account as any).address,
+            address: (author.account as any).address || cachedPost.author,
             bio: author.bio,
             dtag: author.dtag,
             nickname: author.nickname,
             pictures: {
-              cover: author.pictures.cover,
-              profile: author.pictures.profile
+              cover: author.pictures?.cover || "",
+              profile: author.pictures?.profile || ""
             }
           };
         }
@@ -70,18 +76,22 @@ export const usePostStore = defineStore({
     },
 
     async savePost (): Promise<boolean> {
-      const { $useTransaction, $useIpfs, $useDesmosNetwork } = useNuxtApp();
+      const { $useTransaction, $useIpfsUploader, $useDesmosNetwork, $useNotification } = useNuxtApp();
+      $useTransaction().assertBalance("/profile");
 
       // check if the user has a sectionId
       if (useAccountStore().sectionId <= 0) {
         // if not, create one
         if (useAccountStore().sectionId === -10) {
-          await useAccountStore().getUserSection(true);
-          // TODO: handle failure?
+          try {
+            await useAccountStore().getUserSection(true);
+          } catch (e) {
+            $useNotification().error("Ops, an error", "Please retry later", 7);
+          }
         }
         let attempt = 0;
         // wait 10 attempts to create a sectionId, create the group, and user join it
-        while (attempt < 10 && useAccountStore().sectionId <= 0) {
+        while (attempt < 7 && useAccountStore().sectionId <= 0) {
           // update the sectionId from the user endpoint
           await useAccountStore().getUserSection();
 
@@ -100,6 +110,10 @@ export const usePostStore = defineStore({
 
       const draftStore = useDraftStore();
       const extId = useDraftStore().externalId || uuidv4();
+      useDraftStore().externalId = extId;
+
+      // filter out empty tags
+      const tags = useDraftStore().tags.filter(tag => tag.content.value !== "" ? tag.content.value : null);
 
       const msgCreatePost: MsgCreatePostEncodeObject = {
         typeUrl: "/desmos.posts.v2.MsgCreatePost",
@@ -110,7 +124,7 @@ export const usePostStore = defineStore({
           author: useAccountStore().address,
           text: draftStore.title,
           sectionId: useAccountStore().sectionId,
-          tags: useDraftStore().tags.map(tag => tag.content.value),
+          tags: tags.map(tag => tag.content.value),
           conversationId: Long.fromNumber(0),
           referencedPosts: [],
           replySettings: 1
@@ -125,27 +139,38 @@ export const usePostStore = defineStore({
       };
 
       // upload the post to IPFS (without CID attachment), get the returned CID
-      const postCid = await $useIpfs().uploadPost(JSON.stringify(ipfsPost));
+      const postCid = await $useIpfsUploader().uploadPost(JSON.stringify(ipfsPost));
 
-      const postIpfsUrl = `${$useIpfs().gateway}${postCid}`;
-      console.log(postIpfsUrl);
+      const postIpfsUrl = `${$useIpfsUploader().gateway}${postCid}`;
 
+      const entityUrls = [] as Url[];
       const ipfsEntityUrl = {
         displayUrl: "IPFS",
         start: Long.fromNumber(0),
         end: Long.fromNumber(1),
         url: postIpfsUrl
       };
+      entityUrls.push(ipfsEntityUrl);
+
+      if (!draftStore.previewImage) {
+        draftStore.previewImage = usePostStore().searchFirstContentImage(draftStore.content);
+      }
+      if (draftStore.previewImage) {
+        const ipfsImagePreviewUrl = {
+          displayUrl: "preview",
+          start: Long.fromNumber(2),
+          end: Long.fromNumber(3),
+          url: draftStore.previewImage
+        };
+        entityUrls.push(ipfsImagePreviewUrl);
+      }
 
       // attach the CID to the Post as an entity
       msgCreatePost.value.entities = {
         hashtags: [],
         mentions: [],
-        urls: [ipfsEntityUrl]
+        urls: entityUrls
       };
-
-      /* $useTransaction().push(msgCreatePost);
-      const signedBytes = await $useTransaction().execute(); */
 
       // if is a new user and has no profile, create one with the randomly generated username
       const msgs: EncodeObject[] = [];
@@ -207,7 +232,9 @@ export const usePostStore = defineStore({
       }
 
       // Merge the two trending posts
-      this.trendings = trendingPosts.concat(kvTrendingPosts);
+      if (kvTrendingPosts.length > 0 || trendingPosts.length > 0) {
+        this.trendings = trendingPosts.concat(kvTrendingPosts);
+      }
 
       // remove duplicates
       this.trendings = this.trendings.filter((value, index, self) =>
@@ -218,12 +245,74 @@ export const usePostStore = defineStore({
 
       if (this.trendings.length > 0) {
         for (let i = 0; i < this.trendings.length; i++) {
-          this.trendings[i].image = searchFirstContentImage(this.trendings[i].content) || "/img/author_pic.png";
+          this.trendings[i].image = this.getArticlePreviewImage(this.trendings[i]) || "/img/author_pic.png";
         }
       }
     },
+    /**
+     * Get the latest published posts
+     * @param refresh true to force a refresh from the backend
+     * @returns latest posts
+     */
+    async getLatestPosts (refresh = false): Promise<PostExtended[]> {
+      if (this.latest.length > 0 && !refresh) {
+        return this.latest;
+      }
+
+      // fetch the latest posts from the backend
+      try {
+        this.latest = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}latest/posts`, "POST", {
+          "Content-Type": "application/json"
+        })).json() as PostExtended[];
+        // handle preview images
+        for (let i = 0; i < this.latest.length; i++) {
+          this.latest[i].image = this.getArticlePreviewImage(this.latest[i]) || "/img/author_pic.png";
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      return this.latest;
+    },
+    searchFirstContentImage (content: string): string {
+      const match = /!\[[^\]]*\]\((?<filename>.*?)(?="|\))(?<optionalpart>".*")?\)/.exec(content);
+      if (match) {
+        let img = match[1];
+        // handle the case where the image is base64 format
+        img = img.replace("data\\:", "data:");
+        try {
+          const ipfsUrl = (useIpfsStore().ipfsUrlToGatewayRead(img));
+          if (ipfsUrl !== false) {
+            return ipfsUrl;
+          }
+        } catch (e) {
+          // nothing
+        }
+        return img;
+      }
+      return "";
+    },
+
+    getArticlePreviewImage (article: PostExtended): string | false {
+      // get the preview image from the content or from the entity (with priority)
+      let previewImage = usePostStore().searchFirstContentImage(article?.content || "") || "";
+      try {
+        article?.entities?.urls?.forEach((entity) => {
+          if (entity.display_url === "preview" || entity.displayUrl === "preview") {
+            previewImage = entity.url;
+          }
+        });
+      } catch (e) {
+        // no entity preview
+      }
+      return previewImage || false;
+    },
     async updateUserPosts (): Promise<void> {
-      this.userPosts = await useUserStore().getUserArticles(useAccountStore().address);
+      try {
+        this.userPosts = await useUserStore().getUserArticles(useAccountStore().address);
+      } catch (e) {
+        this.userPosts = [];
+        console.log(e);
+      }
     }
   }
 });

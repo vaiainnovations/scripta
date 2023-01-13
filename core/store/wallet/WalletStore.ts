@@ -6,12 +6,14 @@ import { useConfigStore } from "../ConfigStore";
 import { useWalletConnectStore } from "./WalletConnectStore";
 import { useKeplrStore } from "./KeplrStore";
 import { SupportedSigner } from "./SupportedSigner";
+import { useWeb3AuthStore } from "./Web3AuthStore";
 
 class Wallet {
   public client = DesmosClient.connectWithSigner(useConfigStore().rpcUrl, new NoOpSigner());
-  public signer: Signer = new NoOpSigner();
-  public aminoSigner: Signer = new NoOpSigner();
 }
+
+let signer = new NoOpSigner() as Signer;
+let aminoSigner = new NoOpSigner() as Signer;
 
 /**
  * Store used to manage the integration with all the different supported Wallets
@@ -38,6 +40,9 @@ export const useWalletStore = defineStore({
       case SupportedSigner.WalletConnect:
         await useWalletConnectStore().connect();
         break;
+      case SupportedSigner.Web3Auth:
+        await useWeb3AuthStore().connect();
+        break;
 
       default:
         break;
@@ -48,23 +53,29 @@ export const useWalletStore = defineStore({
     * Connect to the wallet with the requested signer
     * @param signer Wallet Signer
     */
-    async connect (signer: Signer, aminoSigner: Signer, signerId: SupportedSigner) {
-      // update the signer
-      this.wallet.signer = signer;
-      this.wallet.aminoSigner = aminoSigner;
+    async connect (newSigner: Signer, newAminoSigner: Signer, signerId: SupportedSigner) {
       this.signerId = signerId;
+      if (this.signerId !== SupportedSigner.Web3Auth) {
+      // update the signer
+        signer = newSigner;
+        aminoSigner = newAminoSigner;
+        try {
+          await signer.connect();
+          await aminoSigner.connect();
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        // handle Web3Auth signers connections
+        // first connect to the Amino Sogner
+        aminoSigner = newAminoSigner;
+        await aminoSigner.connect();
 
-      // connect the signer
-      try {
-        await this.wallet.signer.connect();
-        await this.wallet.aminoSigner.connect();
-      } catch (e) {
-        console.log(e);
+        signer = aminoSigner;
       }
 
       // listen for signer status changes
-      this.wallet.signer.addStatusListener(async () => {
-        console.log("onConnect listener");
+      signer.addStatusListener(async () => {
         await this.onWalletUpdate();
       });
 
@@ -72,7 +83,7 @@ export const useWalletStore = defineStore({
     },
 
     async onWalletUpdate () {
-      switch (this.wallet.signer.status) {
+      switch (signer.status) {
       case SignerStatus.Connected:
         await this.onWalletConnected();
         break;
@@ -92,29 +103,42 @@ export const useWalletStore = defineStore({
     async onWalletConnected () {
       // const accountStore = useAccountStore();
       const authStore = useAuthStore();
+      const signer = this.getSigner(false);
       // accountStore.reset();
 
       // create the Desmos Client
       try {
-        this.wallet.client = await DesmosClient.connectWithSigner(useConfigStore().rpcUrl, this.wallet.signer as Signer);
+        this.wallet.client = await DesmosClient.connectWithSigner(useConfigStore().rpcUrl, signer);
       } catch (e) {
         console.log(e);
+        await authStore.logout("/auth/error");
         // abort if the client fails to connect
         return;
       }
       // get Wallet account
-      const account = await this.wallet.signer.getCurrentAccount();
-      console.log(this.wallet.client);
+      let account = undefined as any | undefined;
+      try {
+        account = await signer.getCurrentAccount();
+      } catch (e) {
+        console.log(e);
+        await authStore.logout("/auth/error");
+      }
 
       // if the account does not exists, abort
-      if (!account) {
-        console.error("Keplr account does not exists");
+      if (!account || !account.address) {
+        await authStore.logout("/auth/error");
+        console.error("Account does not exists");
         return;
       }
 
       // Start the final step of the login process
       console.log("called WalletStore onWalletConnected");
-      await authStore.login(true);
+      try {
+        await authStore.login(true);
+      } catch (e) {
+        console.log(e);
+        await authStore.logout("/auth/error");
+      }
     },
 
     async onWalletNotConnected () {
@@ -125,9 +149,10 @@ export const useWalletStore = defineStore({
     * Disconnect from the wallet
     */
     async disconnect () {
-      if (this.wallet.signer.isConnected) {
+      const signer = this.getSigner();
+      if (signer.isConnected) {
         // disconnect the signer
-        await this.wallet.signer.disconnect();
+        await signer.disconnect();
 
         // disconnect the client
         (await this.wallet.client).disconnect();
@@ -137,6 +162,10 @@ export const useWalletStore = defineStore({
           signerId: SupportedSigner.Noop
         };
       }
+    },
+
+    getSigner (amino = false): Signer {
+      return amino ? aminoSigner as Signer : signer as Signer;
     }
   }
 });

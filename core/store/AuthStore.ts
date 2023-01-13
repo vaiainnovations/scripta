@@ -1,16 +1,19 @@
 
 import { Buffer } from "buffer";
 import { MsgGrantEncodeObject, MsgRevokeEncodeObject } from "@desmoslabs/desmjs";
+import { GenericSubspaceAuthorization } from "@desmoslabs/desmjs-types/desmos/subspaces/v3/authz/authz";
 import { Timestamp } from "cosmjs-types/google/protobuf/timestamp";
 import { GenericAuthorization } from "cosmjs-types/cosmos/authz/v1beta1/authz";
 import { defineStore } from "pinia";
 import { generateUsername } from "unique-username-generator";
 import { decodeTxRaw } from "@cosmjs/proto-signing";
 import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
-import { useWalletStore } from "./wallet/WalletStore";
+import { usePostStore } from "./PostStore";
 import { SupportedSigner } from "./wallet/SupportedSigner";
 import { useAccountStore } from "./AccountStore";
 import { useBackendStore } from "./BackendStore";
+import { useDesmosStore } from "./DesmosStore";
+import { useConfigStore } from "./ConfigStore";
 import { registerModuleHMR } from ".";
 
 export enum AuthLevel {
@@ -78,18 +81,22 @@ export class AuthStorage {
    * Delete local stored auth data
    */
   static delete (address = ""): void {
-    if (address) {
-      const storedAuthData = JSON.parse(localStorage.getItem(AuthStorage.STORAGE_KEY)) as StoredAuthData;
-      storedAuthData.signer = null;
-      if (storedAuthData && storedAuthData.version === this.STORAGE_VERSION && storedAuthData.accounts && storedAuthData?.accounts?.length > 0) {
-        const index = storedAuthData.accounts.findIndex(account => account.address === address);
-        if (index >= 0) {
-          storedAuthData.accounts.splice(index, 1);
-          localStorage.setItem(AuthStorage.STORAGE_KEY, JSON.stringify(storedAuthData));
+    try {
+      if (address) {
+        const storedAuthData = JSON.parse(localStorage.getItem(AuthStorage.STORAGE_KEY)) as StoredAuthData;
+        storedAuthData.signer = null;
+        if (storedAuthData && storedAuthData.version === this.STORAGE_VERSION && storedAuthData.accounts && storedAuthData?.accounts?.length > 0) {
+          const index = storedAuthData.accounts.findIndex(account => account.address === address);
+          if (index >= 0) {
+            storedAuthData.accounts.splice(index, 1);
+            localStorage.setItem(AuthStorage.STORAGE_KEY, JSON.stringify(storedAuthData));
+          }
         }
+      } else {
+        localStorage.removeItem(AuthStorage.STORAGE_KEY);
       }
-    } else {
-      localStorage.removeItem(AuthStorage.STORAGE_KEY);
+    } catch (e) {
+      console.log(e);
     }
   }
 }
@@ -108,12 +115,13 @@ export const useAuthStore = defineStore({
   },
   actions: {
     async init (): Promise<void> {
+      const { $useWallet } = useNuxtApp();
       const storedAuth = AuthStorage.get(); // just check if there is any stored auth data
       if (storedAuth) {
         this.authLevel = AuthLevel.Memory;
         if (storedAuth.signer) {
-          await useWalletStore().retrieveCurrentWallet(storedAuth.signer);
-          const storedAuthAccount = AuthStorage.get((await useWalletStore().wallet.signer.getCurrentAccount()).address);
+          await $useWallet().retrieveCurrentWallet(storedAuth.signer);
+          const storedAuthAccount = AuthStorage.get((await $useWallet().getSigner().getCurrentAccount()).address);
           if (!storedAuthAccount) {
             this.logout("/auth");
           }
@@ -189,11 +197,16 @@ export const useAuthStore = defineStore({
      * @param route New route after the logout. Don't re-route if omitted
      */
     async logout (route?: string): Promise<void> {
+      const { $useWallet } = useNuxtApp();
       AuthStorage.delete(useAccountStore().address);
-      await useWalletStore().disconnect(); // disconnect the wallet (signer and client)
+      try {
+        await $useWallet().disconnect(); // disconnect the wallet (signer and client)
+      } catch (e) {
+        // nothig, probably already disconnected
+      }
       useAccountStore().$reset();
       useAuthStore().$reset();
-      useWalletStore().$reset();
+      $useWallet().$reset();
       localStorage.removeItem("walletconnect");
       if (route) {
         await navigateTo(route);
@@ -203,11 +216,12 @@ export const useAuthStore = defineStore({
      * Sign in
      */
     async login (force = false): Promise<void> {
+      const { $useWallet } = useNuxtApp();
       // prevent from multiple login attempts if the user is already logged in, unless forced (ex. Keplr wallet switch)
       if (this.authLevel > AuthLevel.None && !force) {
         return;
       }
-      if (useWalletStore().signerId !== SupportedSigner.Noop) {
+      if ($useWallet().signerId !== SupportedSigner.Noop) {
         this.authLevel = AuthLevel.Wallet; // Wallet is connected
 
         if (useRouter().currentRoute.value.path.includes("auth")) {
@@ -215,14 +229,14 @@ export const useAuthStore = defineStore({
         }
 
         // Get the user address
-        const account = await useWalletStore().wallet.signer.getCurrentAccount();
+        const account = await $useWallet().getSigner().getCurrentAccount();
         useAccountStore().address = account.address;
 
         // update auth info (authz, etc) from the backend
         await useAccountStore().getUserInfo();
 
         // Retrieve the Desmos profile, if exists
-        const profile = await (await useWalletStore().wallet.client).getProfile(account.address);
+        const profile = await (await $useWallet().wallet.client).getProfile(account.address);
 
         if (profile) {
           useAccountStore().profile = profile;
@@ -253,21 +267,24 @@ export const useAuthStore = defineStore({
           useAccountStore().profile = newProfile;
         }
 
-        // TODO: to consider accounts with no balance
-        const balance = await (await useWalletStore().wallet.client).getBalance(account.address, "udaric");
+        await useAccountStore().updateBalance();
 
-        // update the store
-        useAccountStore().balance = Number(balance.amount) / 1_000_000;
+        usePostStore().updateUserPosts();
 
         // Route to the profile page only if coming from auth
         if (useRouter().currentRoute.value.path.includes("auth")) {
+          await navigateTo("/auth/session");
+        }
+
+        if (!this.hasValidAuthAuthorization()) {
+          // If the authorization is expired, request a new one
           await navigateTo("/auth/session");
         }
       }
     },
 
     async authorize (): Promise<boolean> {
-      const { $useTransaction } = useNuxtApp();
+      const { $useTransaction, $useWallet } = useNuxtApp();
       let signedBytes = new Uint8Array();
       try {
         signedBytes = await $useTransaction().directSign(
@@ -279,18 +296,19 @@ export const useAuthStore = defineStore({
             gas: "0",
             amount: [
               {
-                denom: "udaric",
+                denom: useDesmosStore().ucoinDenom,
                 amount: "0"
               }
             ]
-          }
+          },
+          0
         );
-        const address = (await useWalletStore().wallet.signer.getCurrentAccount()).address;
+        const address = (await $useWallet().getSigner().getCurrentAccount()).address;
         const token = Buffer.from(signedBytes).toString("base64");// Store the auth data locally
-        const accountInfo = await (await useWalletStore().wallet.client).getAccount(address).catch(() => { return null; });
+        const accountInfo = await (await $useWallet().wallet.client).getAccount(address).catch(() => { return null; });
         const storedAuthAccount: StoreAuthAccount = {
           address,
-          signer: useWalletStore().signerId,
+          signer: $useWallet().signerId,
           authorization: token,
           accountNumber: accountInfo?.accountNumber || 0
         };
@@ -320,26 +338,49 @@ export const useAuthStore = defineStore({
     async grantAuthorizations () {
       const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
       const grants = [] as MsgGrantEncodeObject[];
+      const authorizations = [] as {typeUrl: string, value: Uint8Array}[];
       await useAccountStore().getUserInfo();
 
       const authzConfig = await this.getAuthzConfig();
+      $useTransaction().assertBalance("/settings");
 
-      useAccountStore().authz.DEFAULT_AUTHORIZATIONS.forEach((authorization) => {
+      // Create Subspace authorizations
+      useAccountStore();
+
+      // Generate Subspace authorizations
+      useAccountStore().authz.DEFAULT_SUBSPACE_AUTHORIZATIONS.forEach((authorization) => {
+        authorizations.push(
+          {
+            typeUrl: "/desmos.subspaces.v3.authz.GenericSubspaceAuthorization",
+            value: GenericSubspaceAuthorization.encode({
+              subspacesIds: [useConfigStore().subspaceId],
+              msg: authorization
+            }).finish()
+          });
+      });
+
+      // Generate Generica authorizations
+      useAccountStore().authz.DEFAULT_GENERIC_AUTHORIZATIONS.forEach((authorization) => {
+        authorizations.push(
+          {
+            typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
+            value: GenericAuthorization.encode(GenericAuthorization.fromPartial({
+              msg: authorization
+            })).finish()
+          });
+      });
+
+      authorizations.forEach((authorization) => {
         grants.push({
           typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
           value: {
             grantee: authzConfig.grantee,
             granter: useAccountStore().address,
             grant: {
-              authorization: {
-                typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
-                value: GenericAuthorization.encode(GenericAuthorization.fromPartial({
-                  msg: authorization
-                })).finish()
-              },
+              authorization,
               expiration: Timestamp.fromPartial({
                 nanos: 0,
-                seconds: (+new Date() / 1000) + 60 * 60 * 24 * 3 // + 1 day
+                seconds: (+new Date() / 1000) + 60 * 60 * 24 * 7 // + 7 days
               })
             }
           }
@@ -372,8 +413,10 @@ export const useAuthStore = defineStore({
     },
     async revokeAuthorizations (): Promise<boolean> {
       const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
+      $useTransaction().assertBalance("/settings");
       const revokes = [] as MsgRevokeEncodeObject[];
-      useAccountStore().authz.DEFAULT_AUTHORIZATIONS.forEach((revokeType) => {
+      const authorizations = [...useAccountStore().authz.DEFAULT_GENERIC_AUTHORIZATIONS, ...useAccountStore().authz.DEFAULT_SUBSPACE_AUTHORIZATIONS];
+      authorizations.forEach((revokeType) => {
         revokes.push({
           typeUrl: "/cosmos.authz.v1beta1.MsgRevoke",
           value: {

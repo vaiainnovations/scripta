@@ -1,8 +1,9 @@
 import { defineStore } from "pinia";
 import { useBackendStore } from "./BackendStore";
 import { useUserStore } from "./UserStore";
+import { usePostStore } from "./PostStore";
 import { registerModuleHMR } from ".";
-import { PostExtended, searchFirstContentImage } from "~~/types/PostExtended";
+import { PostExtended } from "~~/types/PostExtended";
 import { AuthorSearch } from "~~/types/SearchResults";
 
 export const useSearchStore = defineStore({
@@ -27,7 +28,7 @@ export const useSearchStore = defineStore({
       // retrieve article first image
       for (let i = 0; i < articles.length; i++) {
         articles[i].author = await useUserStore().getUser(articles[i].author, true);
-        articles[i].image = searchFirstContentImage(articles[i].content) || "/img/author_pic.png";
+        articles[i].image = usePostStore().getArticlePreviewImage(articles[i]) || "/img/author_pic.png";
       }
       return articles;
     }

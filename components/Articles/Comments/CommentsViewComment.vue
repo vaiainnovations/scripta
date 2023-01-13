@@ -51,15 +51,19 @@ const isEditing = ref(false);
   <span v-if="!isEditing">
     <div class="p-3">
       <div class="flex">
-        <img
-          :src="profilePic"
-          onerror="this.onerror=null;this.src='/img/author_pic.png'"
-          class="h-7 w-7 md:h-10 md:w-10 rounded-full mr-1 lg:mr-3 mt-2"
-        >
-        <div class="w-full">
+        <NuxtLink :to="`/@${props.comment.author?.dtag || props.comment.author}`">
+          <img
+            :src="profilePic"
+            onerror="this.onerror=null;this.src='/img/author_pic.png'"
+            class="h-10 w-10 md:h-10 md:w-10 rounded-full object-cover"
+          >
+        </NuxtLink>
+        <div class="w-full ml-3">
           <div class="flex text-sm">
             <div class="flex-1 p-0.5">
-              {{ nickname }}
+              <NuxtLink :to="`/@${props.comment.author?.dtag || props.comment.author}`">
+                {{ nickname }}
+              </NuxtLink>
               <span class="text-primary-text-light text-xs">
                 - {{ creationDateString }}
               </span>

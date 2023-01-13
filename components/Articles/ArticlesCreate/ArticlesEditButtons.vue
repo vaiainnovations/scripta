@@ -4,7 +4,7 @@
       v-if="!isPublishing && (useDraftStore().title || useDraftStore().subtitle || useDraftStore().content || useDraftStore().tags.length>0) && !useDraftStore().id"
       :disabled="isSavingDraft"
       type="button"
-      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-primary-text text-xl font-medium hover:bg-primary-text/50"
+      class="p-1 col-span-1 rounded-lg text-[#FFFFFF] bg-primary-text text-xl font-medium hover:bg-primary-text/50"
       @click="saveDraft()"
     >
       <span v-if="!isSavingDraft">
@@ -17,7 +17,7 @@
     <button
       v-if="!isPublishing"
       type="button"
-      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-danger text-xl font-medium"
+      class="p-1 col-span-1 rounded-lg text-[#FFFFFF] bg-danger/70 hover:bg-danger text-xl font-medium"
       @click="deleteArticle()"
     >
       <span v-if="useDraftStore().id">
@@ -32,7 +32,7 @@
         <button
           v-if="useDraftStore().title && useDraftStore().subtitle && useDraftStore().content"
           type="button"
-          class="p-1 w-full h-full rounded-xl text-[#FFFFFF] bg-primary text-xl font-medium"
+          class="p-1 w-full h-full rounded-lg text-[#FFFFFF] bg-primary/90 hover:bg-primary text-xl font-medium"
           @click="publish()"
         >
           <span v-if="useDraftStore().id">
@@ -59,6 +59,7 @@ import {
   MsgDeletePostEncodeObject,
   MsgEditPostEncodeObject
 } from "@desmoslabs/desmjs";
+import { Url } from "@desmoslabs/desmjs-types/desmos/posts/v2/models";
 import Long from "long";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
@@ -68,6 +69,8 @@ import { usePostStore } from "~~/core/store/PostStore";
 const isSavingDraft = ref(false);
 const isPublishing = ref(false);
 
+const emit = defineEmits(["isPublishing"]);
+
 function saveDraft () {
   isSavingDraft.value = true;
   useDraftStore().saveDraft().then(() => {
@@ -76,6 +79,8 @@ function saveDraft () {
 }
 
 async function publish () {
+  const { $useNotification } = useNuxtApp();
+  emit("isPublishing", true);
   isPublishing.value = true;
   if (useDraftStore().id) {
     editArticle();
@@ -83,18 +88,29 @@ async function publish () {
   }
   const success = await usePostStore().savePost();
   if (success) {
-    await usePostStore().updateUserPosts();
-    useDraftStore().$reset();
-    useRouter().push(`/@${useAccountStore().profile.dtag}/${useDraftStore().externalId}`);
+    try {
+      await usePostStore().updateUserPosts();
+      useDraftStore().$reset();
+      useRouter().push(`/@${useAccountStore().profile.dtag}/${useDraftStore().externalId}`);
+    } catch (e) {
+      console.log(e);
+    }
+  } else {
+    $useNotification().error("Ops, an error", "An error occurred while writing on chain", 7);
+    await useRouter().push("/profile");
   }
   isPublishing.value = false;
+  emit("isPublishing", false);
 }
 
 async function editArticle () {
-  const { $useIpfs, $useTransaction, $useDesmosNetwork } = useNuxtApp();
+  const { $useIpfsUploader, $useTransaction, $useDesmosNetwork, $useNotification } = useNuxtApp();
   const draftStore = await useDraftStore();
   const extId = draftStore.externalId;
   isPublishing.value = true;
+  emit("isPublishing", true);
+  // filter out empty tags
+  const tags = draftStore.tags.filter(tag => tag.content.value !== "" ? tag.content.value : null);
 
   const msgEditPost: MsgEditPostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgEditPost",
@@ -102,7 +118,7 @@ async function editArticle () {
       subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
       editor: useAccountStore().address,
       postId: draftStore.id,
-      tags: draftStore.tags.map(tag => tag.content.value),
+      tags: tags.map(tag => tag.content.value),
       text: draftStore.title
     }
   };
@@ -115,10 +131,11 @@ async function editArticle () {
   };
 
   // upload the post to IPFS (without CID attachment), get the returned CID
-  const postCid = await $useIpfs().uploadPost(JSON.stringify(ipfsPost));
+  const postCid = await $useIpfsUploader().uploadPost(JSON.stringify(ipfsPost));
 
-  const postIpfsUrl = `${$useIpfs().gateway}${postCid}`;
-  console.log(postIpfsUrl);
+  const postIpfsUrl = `${$useIpfsUploader().gateway}${postCid}`;
+
+  const entityUrls = [] as Url[];
 
   const ipfsEntityUrl = {
     displayUrl: "IPFS",
@@ -126,21 +143,38 @@ async function editArticle () {
     end: Long.fromNumber(1),
     url: postIpfsUrl
   };
+  entityUrls.push(ipfsEntityUrl);
+
+  // attach the article preview image
+  if (!draftStore.previewImage) {
+    draftStore.previewImage = usePostStore().searchFirstContentImage(draftStore.content);
+  }
+
+  if (draftStore.previewImage) {
+    const ipfsImagePreviewUrl = {
+      displayUrl: "preview",
+      start: Long.fromNumber(2),
+      end: Long.fromNumber(3),
+      url: draftStore.previewImage
+    };
+    entityUrls.push(ipfsImagePreviewUrl);
+  }
 
   // attach the CID to the Post as an entity
   msgEditPost.value.entities = {
     hashtags: [],
     mentions: [],
-    urls: [ipfsEntityUrl]
+    urls: entityUrls
   };
 
+  $useTransaction().assertBalance("/profile");
   const success = await $useTransaction().directTx([msgEditPost], [{
     id: draftStore.id,
     externalId: extId,
     author: useAccountStore().address,
     sectionId: useAccountStore().sectionId,
     text: draftStore.title,
-    tags: draftStore.tags.map(tag => tag.content.value),
+    tags: tags.map(tag => tag.content.value),
     subtitle: draftStore.subtitle,
     content: draftStore.content,
     entities: JSON.stringify(msgEditPost.value.entities),
@@ -151,13 +185,18 @@ async function editArticle () {
     await usePostStore().updateUserPosts();
     useDraftStore().$reset();
     useRouter().push(`/@${useAccountStore().profile.dtag}/${extId}`);
+  } else {
+    $useNotification().error("Ops, an error", "An error occurred while writing on chain", 7);
+    await useRouter().push("/profile");
   }
   isPublishing.value = false;
+  emit("isPublishing", false);
 }
 
 async function deleteArticle () {
   isPublishing.value = true;
-  const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
+  emit("isPublishing", true);
+  const { $useTransaction, $useDesmosNetwork, $useNotification } = useNuxtApp();
 
   // if draft, just delete the draft from the backend
   if (!useDraftStore().id) {
@@ -174,9 +213,11 @@ async function deleteArticle () {
       )
     ).json();
     isPublishing.value = false;
+    emit("isPublishing", false);
     await navigateTo("/profile");
     return;
   }
+  $useTransaction().assertBalance("/profile");
 
   // otherwise, delete the post from the chain & the backend
   const msgDeletePost: MsgDeletePostEncodeObject = {
@@ -189,13 +230,17 @@ async function deleteArticle () {
   };
   const success = await $useTransaction().directTx([msgDeletePost], [{
     id: useDraftStore().id,
+    externalId: useDraftStore().externalId,
     scriptaOp: "MsgDeletePost"
   }]);
   if (success) {
     await usePostStore().updateUserPosts();
-    useDraftStore().$reset();
-    useRouter().push("/profile");
+    await useRouter().push("/profile");
+  } else {
+    $useNotification().error("Ops, an error", "An error occurred while writing on chain", 7);
+    await useRouter().push("/profile");
   }
   isPublishing.value = false;
+  emit("isPublishing", false);
 }
 </script>

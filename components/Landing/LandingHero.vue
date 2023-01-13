@@ -1,6 +1,6 @@
 <template>
   <section class="md:min-h-[55vh] px-10 2xl:px-40 bg-gradient-to-tr from-[#e5007e8b] to-[#f2910096] pt-40 md:pt-32 background-animate text-primary-text">
-    <div class="h-full w-full">
+    <div class="h-full w-full pb-2">
       <!-- bg-[rgba(244,184,73,0.54)] -->
       <div class="container mx-auto px-4 h-full flex justify-center">
         <div class="md:flex">
@@ -14,39 +14,19 @@
               </div>
             </div>
             <div class="pt-8 text-lg text-2xl xl:text-3xl font-extralight xl:mr-64">
-              Explore stories, thoughts, and insights on any topics, without having worries about your privacy
+              Explore stories, thoughts, and insights on any topics, without having worries about your privacy.
 
-              <div class="gradient-text h-12 rounded-xl bg-white sm:px-5 md:px-10 mt-8 w-full md:w-1/2 flex justify-center">
+              <div class="gradient-text h-12 rounded-xl bg-white sm:px-5 md:px-10 xl:px-2 mt-8 w-full md:w-1/2 flex justify-center">
                 <NuxtLink
                   to="/explore"
-                  class="bg-gradient-to-r to-[#e5007e] from-[#f29100] bg-clip-text bg-background text-2xl font-semibold my-auto"
+                  class="bg-gradient-to-r to-[#e5007e] from-[#f29100] bg-clip-text bg-background text-xl xl:text-2xl font-semibold my-auto"
                 >
                   Start Reading
                 </NuxtLink>
               </div>
             </div>
-            <div
-              v-if="!useConfigStore().isBetaVersion"
-              class="flex flex-col bg-background items-center p-6 m-2 bg-indigo-600 rounded-lg shadow-4xl gap-4 sm:flex-row sm:justify-between order-1 mt-10"
-            >
-              <strong class="text-3xl text-white lg:text-3xl text-center">
-                Available <span class="text-xs align-top">(very)</span> Soon!
-              </strong>
-
-              <a
-                class="inline-flex items-center px-8 py-3 text-indigo-600 bg-white border border-white rounded-full hover:bg-transparent hover:text-white active:bg-white/90 focus:outline-none focus:ring"
-                href="https://beta.scripta.network"
-              >
-                <span class="text-xs font-medium"> Try the Beta! </span>
-
-                <img
-                  class="w-5 h-5 ml-3"
-                  src="/icons/linear/arrow-right.svg"
-                >
-              </a>
-            </div>
           </div>
-          <div class="hidden md:block w-full mx-auto md:flex-1 mt-auto md:pt-0 2xl:pl-20">
+          <div class="my-auto hidden md:block w-full mx-auto md:flex-1 mt-auto md:pt-0 2xl:pl-20 select-none pointer-events-none">
             <img
               src="https://cdn.discordapp.com/attachments/956124846750834719/1019643475194548224/3_med.png"
               class="2xl:w-3/5 "

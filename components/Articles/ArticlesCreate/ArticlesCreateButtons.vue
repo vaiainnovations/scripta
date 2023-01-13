@@ -4,7 +4,7 @@
       v-if="!isPublishing && (useDraftStore().title || useDraftStore().subtitle || useDraftStore().content || useDraftStore().tags.length>0)"
       :disabled="isSavingDraft"
       type="button"
-      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-primary-text text-xl font-medium hover:bg-primary-text/50"
+      class="p-1 col-span-1 rounded-lg text-[#FFFFFF] bg-primary-text text-xl font-medium hover:bg-primary-text/50"
       @click="saveDraft()"
     >
       <span v-if="!isSavingDraft">
@@ -17,7 +17,7 @@
     <button
       v-if="!isPublishing && (useDraftStore().title || useDraftStore().subtitle || useDraftStore().content || useDraftStore().tags.length>0)"
       type="button"
-      class="p-1 col-span-1 rounded-xl text-[#FFFFFF] bg-danger text-xl font-medium"
+      class="p-1 col-span-1 rounded-lg text-[#FFFFFF] bg-danger/70 hover:bg-danger text-xl font-medium"
       @click="deleteDraft()"
     >
       Delete Draft
@@ -27,7 +27,7 @@
         <button
           v-if="useDraftStore().title && useDraftStore().subtitle && useDraftStore().content"
           type="button"
-          class="p-1 w-full h-full rounded-xl text-[#FFFFFF] bg-primary text-xl font-medium"
+          class="p-1 w-full h-full rounded-lg text-[#FFFFFF] bg-primary/90 hover:bg-primary text-xl font-medium"
           @click="publish()"
         >
           Publish
@@ -48,6 +48,8 @@ import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
 import { usePostStore } from "~~/core/store/PostStore";
 
+const emit = defineEmits(["isPublishing"]);
+
 const isPublishing = ref(false);
 const isSavingDraft = ref(false);
 
@@ -58,8 +60,8 @@ const saveDraftInterval = setInterval(() => {
   }
 }, 30 * 1000);
 
-onBeforeUnmount(() => {
-  saveDraft();
+onBeforeUnmount(async () => {
+  await saveDraft();
   clearInterval(saveDraftInterval);
 });
 
@@ -70,21 +72,32 @@ async function deleteDraft () {
   useRouter().push("/profile");
 }
 
-function saveDraft () {
+async function saveDraft () {
   isSavingDraft.value = true;
-  useDraftStore().saveDraft().then(() => {
+  await useDraftStore().saveDraft().then(() => {
     isSavingDraft.value = false;
   });
 }
 
 async function publish () {
+  const { $useNotification } = useNuxtApp();
+  emit("isPublishing", true);
   isPublishing.value = true;
   const success = await usePostStore().savePost();
   if (success) {
-    await usePostStore().updateUserPosts();
-    useDraftStore().$reset();
-    useRouter().push(`/@${useAccountStore().profile.dtag}/${useDraftStore().externalId}`);
+    try {
+      const extId = useDraftStore().externalId;
+      await usePostStore().updateUserPosts();
+      useDraftStore().$reset();
+      useRouter().push(`/@${useAccountStore().profile.dtag}/${extId}`);
+    } catch (e) {
+      console.error(e);
+    }
+  } else {
+    $useNotification().error("Ops, an error", "An error occurred while writing on chain", 7);
+    await useRouter().push("/profile");
   }
   isPublishing.value = false;
+  emit("isPublishing", false);
 }
 </script>

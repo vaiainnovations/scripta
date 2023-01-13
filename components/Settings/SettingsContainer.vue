@@ -25,10 +25,13 @@
               Privacy & Terms
             </h1>
             <p class="font-light">
-              Agree with <a href="" target="_blank" class="underline hover:text-primary-light">Privacy and Terms</a> of the Scripta platform.
+              Agree with
+              <a href="/legal/privacy.pdf" target="_blank" class="underline hover:text-primary-light">Privacy</a> and
+              <a href="/legal/tos.pdf" target="_blank" class="underline hover:text-primary-light">Terms</a>
+              of the Scripta platform.
             </p>
           </SettingsToggle>
-          <SettingsToggle v-model="hasAcceptedAdvertisement" class="py-4 mb-4 bg-background-alt rounded-xl" @click="changePrivacySettings()">
+          <!-- <SettingsToggle v-model="hasAcceptedAdvertisement" class="py-4 mb-4 bg-background-alt rounded-xl" @click="changePrivacySettings()">
             <h1 class="font-bold text-xl">
               Advertisement
             </h1>
@@ -43,7 +46,7 @@
             <p class="font-light">
               Agree with <a href="" target="_blank" class="underline hover:text-primary-light">Cookies Policy</a> of the Scripta platform.
             </p>
-          </SettingsToggle>
+          </SettingsToggle> -->
 
           <button v-if="arePrivacySettingsChanged" class="rounded-lg bg-primary-light/80 hover:bg-primary-light text-background-alt w-full py-2" @click="savePrivacySettings()">
             Save Changes
@@ -65,7 +68,7 @@
               Authorize Scripta to sign new posts/comments/reactions on your behalf, you'll <b class="font-semibold">always</b> be the author of that content.
               In this way you will not have to sign every action, but only the authorization that you can revoke whenever you want.
               <div v-if="hasAuthzAuthorization" class="pt-1 text-gray text-sm text-right">
-                Expiration: {{ useAccountStore().authz.grantExpiration.toLocaleString() }}
+                Expiration: {{ useAccountStore().authz.grantExpiration?.toLocaleString() || "" }}
               </div>
             </div>
           </SettingsToggle>
@@ -81,11 +84,14 @@
           >
           <div class="text-center pt-2">
             <h6 class="text-sm">
-              Scripta v1.0.0 ()
+              Scripta
             </h6>
-            <h6 class="text-xs text-gray-dark">
-              {{ $useDesmosNetwork().chainId }}
+            <h6 v-if="$useDesmosNetwork" class="text-xs text-gray-dark">
+              {{ $useDesmosNetwork().chainInfo.chainName }}
             </h6>
+            <a class="text-[0.6rem] text-gray-dark" target="_blank" :href="`https://github.com/vaiainnovations/scripta/commit/${useConfigStore().gitHash}`">
+              v{{ useConfigStore().version }} #{{ useConfigStore().gitHash }}
+            </a>
           </div>
         </div>
       </div>
@@ -96,6 +102,7 @@
 <script lang="ts" setup>
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useBackendStore } from "~~/core/store/BackendStore";
+import { useConfigStore } from "~~/core/store/ConfigStore";
 const { $useDesmosNetwork } = useNuxtApp();
 
 const isUpdating = ref(false);
@@ -130,7 +137,6 @@ async function savePrivacySettings () {
     privacyNotifications: hasAcceptedPrivacy.value,
     privacyTracking: hasAcceptedCookies.value
   }));
-  console.log(success);
   arePrivacySettingsChanged.value = false;
   isUpdating.value = false;
 }
@@ -145,13 +151,19 @@ function updateSettingsValues () {
 async function handleAuthzAuthorizationChange () {
   const { $useAuth } = useNuxtApp();
   isUpdating.value = true;
-  if (hasAuthzAuthorization.value) {
-    const success = await $useAuth().grantAuthorizations();
-    hasAuthzAuthorization.value = success;
-  } else {
-    const success = await $useAuth().revokeAuthorizations();
-    hasAuthzAuthorization.value = !success;
+  try {
+    if (hasAuthzAuthorization.value) {
+      const success = await $useAuth().grantAuthorizations();
+      hasAuthzAuthorization.value = success;
+    } else {
+      const success = await $useAuth().revokeAuthorizations();
+      hasAuthzAuthorization.value = !success;
+    }
+  } catch (e) {
+    hasAuthzAuthorization.value = !hasAuthzAuthorization.value;
+    console.error(e);
   }
+  await useAccountStore().getUserInfo(); // update the user info
   isUpdating.value = false;
 }
 </script>

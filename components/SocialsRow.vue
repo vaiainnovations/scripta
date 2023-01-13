@@ -49,6 +49,21 @@
           >
         </a>
       </li>
+      <li>
+        <a
+          href="https://www.youtube.com/@scripta.network"
+          rel="noopener noreferrer"
+          target="_blank"
+          class="text-teal-700 transition hover:text-teal-700/75"
+        >
+          <span class="sr-only">Youtube</span>
+          <img
+            src="/brands/youtube/logo.svg"
+            alt="youtube"
+            class="w-6 h-6"
+          >
+        </a>
+      </li>
 
       <li>
         <a
