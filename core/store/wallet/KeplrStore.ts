@@ -25,7 +25,10 @@ export const useKeplrStore = defineStore({
         if (device.isChrome) {
           try {
             await fetch("chrome-extension://dmkamcknogkgcdfhhbddcghachkejeap/injectedScript.bundle.js"); // check if the js bundle is available
-            window.location.reload(); // if it is, the extension is installed, reload the page to load the extension
+            // prevent infinite loop
+            if (useRoute().query.refresh !== "false") {
+              window.location.href = `${useRoute().fullPath}?refresh=false`; // if it is, the extension is installed, reload the page to load the extension
+            }
           } catch (e) {
             console.log("Keplr extension is not installed");
           }
