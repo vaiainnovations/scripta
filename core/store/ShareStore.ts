@@ -12,8 +12,9 @@ export const useShareStore = defineStore({
      * @param fallbackUrl url to share as fallback
      * @param title title of the share
      * @param text text of the share
+     * @param copyValue value to copy to clipboard
      */
-    async share (url: string, fallbackUrl: string, title?: string, text?: string): Promise<void> {
+    async share (url: string, fallbackUrl: string, title?: string, text?: string, copyValue?: string): Promise<void> {
       // Attempt to use the Web Share API
       try {
         await window.navigator.share({
@@ -22,7 +23,12 @@ export const useShareStore = defineStore({
           url
         });
       } catch (e) {
-        window.open(fallbackUrl, "_blank");
+        if (fallbackUrl) {
+          window.open(fallbackUrl, "_blank");
+        } else if (copyValue) {
+          navigator.clipboard.writeText(copyValue);
+          useNuxtApp().$useNotification().push("Copied Share Link", "", 4, "");
+        }
       }
     }
   }
