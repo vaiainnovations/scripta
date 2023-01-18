@@ -240,6 +240,10 @@ export const useAuthStore = defineStore({
 
         if (profile) {
           useAccountStore().profile = profile;
+          // if possitble, replace the user's profile picture with the one from the IPFS Read gateway
+          try {
+            profile.pictures!.profile = profile.pictures!.profile.replace(useConfigStore().ipfsGateway, useConfigStore().ipfsGatewayRead);
+          } catch (e) { /* ignore */ }
           useAccountStore().isNewProfile = false;
         }
 

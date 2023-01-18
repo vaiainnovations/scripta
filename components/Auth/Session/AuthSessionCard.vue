@@ -119,6 +119,8 @@ async function continueWithoutAuthz () {
       window.location.href = "/profile";
     }
     await navigateTo("/profile");
+  } else {
+    await navigateTo("/");
   }
 }
 async function continueWithAuthz () {

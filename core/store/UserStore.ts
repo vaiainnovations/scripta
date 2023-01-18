@@ -20,6 +20,12 @@ export const useUserStore = defineStore({
         const res = (await (await fetch(`${useConfigStore().lcdUrl}desmos/profiles/v3/profiles/${username}`)).json() as any);
         if (res.profile) {
           const user = res.profile as any;
+
+          // if possitble, replace the user's profile picture with the one from the IPFS Read gateway
+          try {
+            user.pictures.profile = user.pictures.profile.replace(useConfigStore().ipfsGateway, useConfigStore().ipfsGatewayRead);
+          } catch (e) { /* ignore */ }
+
           this.users.set(username, user);
           return user;
         }

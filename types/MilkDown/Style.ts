@@ -306,10 +306,15 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   // Editor style
   // TODO add table
   const editorStyle = css`
+    @media screen and (min-width: 768px) {
+      .editor {
+        padding-left: 2rem;
+        padding-right: 2rem;
+      }
+    }
     .editor {
       height: 100%;
       overflow-y: auto;
-      padding: 1.75rem;
       outline: none;
       position: relative;
 

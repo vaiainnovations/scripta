@@ -45,7 +45,7 @@
       </p> -->
       <MarkDownEditor
         :read-only="false"
-        :content="useDraftStore().content || 'Write your article...'"
+        :content="useDraftStore().content || ''"
       />
     </div>
   </div>

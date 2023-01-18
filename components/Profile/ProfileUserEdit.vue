@@ -206,6 +206,14 @@ async function uploadProfilePic () {
 
   // support only image files
   if (!file.type.startsWith("image")) {
+    useNuxtApp().$useNotification().error("Upload Error", "File is not supported", 6);
+    return;
+  }
+
+  const fileSize = file.size / 1024 / 1024;
+  const maxFileSize = 2;
+  if (fileSize > maxFileSize) {
+    useNuxtApp().$useNotification().error("Upload Error", `File is too heavy. Limit is ${maxFileSize}MB`, 6);
     return;
   }
 
@@ -218,8 +226,7 @@ async function uploadProfilePic () {
   try {
     cid = await useNuxtApp().$useIpfsUploader().client.add(file);
   } catch (e) {
-    // TODO: improve error message
-    alert("ops, an error occurred while uploading the file");
+    useNuxtApp().$useNotification().error("Upload Error", "An error occurred while uploading the file", 6);
   }
   if (!cid) {
     newProfilePicture.value = useAccountStore().profile.pictures.profile;

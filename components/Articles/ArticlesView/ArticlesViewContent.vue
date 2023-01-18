@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col gap-y-3">
-    <p class="text-3xl font-bold text-primary-text lg:text-5xl xl:text-6xl">
+    <p class="text-3xl font-semibold text-primary-text lg:text-5xl 2xl:text-6xl pt-6">
       {{ props.title }}
     </p>
-    <p class="text-xl font-medium text-primary-text-light lg:text-2xl xl:text-3xl">
+    <p class="text-lg font-medium text-primary-text-light lg:text-2xl 2xl:text-3xl">
       {{ props.subtitle }}
     </p>
     <ArticlesViewUser
@@ -23,7 +23,7 @@
         </NuxtLink>
       </div>
     </div>
-    <div class="pt-7">
+    <div class="pt-7 lg:pt-0">
       <MarkDownEditor
         :read-only="true"
         :content="props.content"
