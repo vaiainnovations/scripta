@@ -299,6 +299,8 @@ export const usePostStore = defineStore({
         article?.entities?.urls?.forEach((entity) => {
           if (entity.display_url === "preview" || entity.displayUrl === "preview") {
             previewImage = entity.url;
+            // replace the ipfs gateway with the read one
+            previewImage = previewImage.replace(useConfigStore().ipfsGateway, useConfigStore().ipfsGatewayRead);
           }
         });
       } catch (e) {
