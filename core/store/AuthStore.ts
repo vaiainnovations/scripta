@@ -271,9 +271,7 @@ export const useAuthStore = defineStore({
           useAccountStore().profile = newProfile;
         }
 
-        await useAccountStore().updateBalance();
-
-        usePostStore().updateUserPosts();
+        await useAccountStore().updateUserAccount();
 
         // Route to the profile page only if coming from auth
         if (useRouter().currentRoute.value.path.includes("auth")) {
