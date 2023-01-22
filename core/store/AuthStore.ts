@@ -120,12 +120,23 @@ export const useAuthStore = defineStore({
       if (storedAuth) {
         this.authLevel = AuthLevel.Memory;
         if (storedAuth.signer) {
-          await $useWallet().retrieveCurrentWallet(storedAuth.signer);
-          const storedAuthAccount = AuthStorage.get((await $useWallet().getSigner().getCurrentAccount()).address);
-          if (!storedAuthAccount) {
-            this.logout("/auth");
+          // attempt to retrieve the cached wallet
+          try {
+            await $useWallet().retrieveCurrentWallet(storedAuth.signer);
+          } catch (e) {
+            await this.logout();
           }
-          await useAccountStore().getUserInfo();
+
+          // attempt to access the cached account from the wallet
+          try {
+            const storedAuthAccount = AuthStorage.get((await $useWallet().getSigner().getCurrentAccount()).address);
+            if (!storedAuthAccount) {
+              this.logout("/auth");
+            }
+            await useAccountStore().getUserInfo();
+          } catch (e) {
+            await this.logout();
+          }
         }
         if (this.authLevel !== AuthLevel.None) {
           this.login();

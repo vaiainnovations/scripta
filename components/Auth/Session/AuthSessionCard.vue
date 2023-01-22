@@ -95,10 +95,15 @@ const suggestAuthz = ref(false);
 
 // may be unnecessary since ensured by the [not-direct-route] guard
 if (process.client) {
-  const { $useAuth } = useNuxtApp();
+  const { $useAuth, $useWallet } = useNuxtApp();
   isLoading.value = false;
   hasAuthz.value = useAccountStore().authz.hasAuthz;
   hasValidAuthorization.value = $useAuth().hasValidAuthAuthorization();
+
+  // auto sign the authorization if the user is using web3auth & no authz suggestion
+  if ($useWallet().signerId === "web3auth" && !suggestAuthz.value) {
+    await continueWithoutAuthz();
+  }
 }
 
 function logout () {

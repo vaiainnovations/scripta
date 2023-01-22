@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { SigningMode, PrivateKeySigner } from "@desmoslabs/desmjs";
-import { Web3Auth } from "@web3auth/modal";
+import { ModalConfig, Web3Auth } from "@web3auth/modal";
+import { WALLET_ADAPTERS } from "@web3auth/base";
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 import { useConfigStore } from "../ConfigStore";
 import { registerModuleHMR } from "..";
@@ -17,9 +18,27 @@ export const useWeb3AuthStore = defineStore({
     /**
     * Inizialize WalletConenct connection & listeners
     */
-    async connect (): Promise<void> {
+    async connect (forceClean = false): Promise<void> {
       const { $useWallet } = useNuxtApp();
 
+      if (forceClean) {
+        localStorage.removeItem("openlogin_store");
+      }
+
+      let web3authSigner = this.createWeb3AuthClient(SigningMode.AMINO);
+
+      if (useNuxtApp().$useAuth().hasAuthStorage() && localStorage.getItem("openlogin_store")) {
+        web3authSigner = this.createWeb3AuthClient(SigningMode.DIRECT);
+        this.signignMode = SigningMode.DIRECT;
+      }
+      // Connect to the wallet with the Web3Auth signer
+      try {
+        await $useWallet().connect(web3authSigner, web3authSigner, "web3auth");
+      } catch (e) {
+        console.log("fail");
+      }
+    },
+    createWeb3AuthClient (signingMode: SigningMode): PrivateKeySigner {
       const web3auth = new Web3Auth({
         authMode: "DAPP",
         clientId: useConfigStore().web3AuthClientId,
@@ -37,6 +56,7 @@ export const useWeb3AuthStore = defineStore({
           theme: "light"
         }
       });
+
       const openloginAdapter = new OpenloginAdapter({
         adapterSettings: {
           network: "cyan",
@@ -48,23 +68,25 @@ export const useWeb3AuthStore = defineStore({
           }
         }
       });
-      web3auth.configureAdapter(openloginAdapter);
-      const signerAmino = new Web3AuthPrivateKeyProvider(web3auth, {
-        logoutOptions: { cleanup: true }
-      });
+
+      const modalConfig: Record<string, ModalConfig> = {
+        [WALLET_ADAPTERS.OPENLOGIN]: {
+          label: "openlogin",
+          loginMethods: {
+          },
+          // setting it to false will hide all social login methods from modal.
+          showOnModal: true
+        }
+      };
+
+      web3auth.configureAdapter(openloginAdapter); // Configure the OpenLogin adapter (?)
+
       const signer = new Web3AuthPrivateKeyProvider(web3auth, {
-        logoutOptions: { cleanup: true }
+        logoutOptions: { cleanup: true },
+        modalConfig: { ...modalConfig }
       });
 
-      let web3authSignerAmino = new PrivateKeySigner(signerAmino, SigningMode.AMINO);
-      let web3authSigner = new PrivateKeySigner(signer, SigningMode.AMINO);
-      if (useNuxtApp().$useAuth().hasAuthStorage()) {
-        web3authSignerAmino = new PrivateKeySigner(signerAmino, SigningMode.DIRECT);
-        web3authSigner = new PrivateKeySigner(signer, SigningMode.DIRECT);
-        this.signignMode = SigningMode.DIRECT;
-      }
-      // Connect to the wallet with the Web3Auth signer
-      await $useWallet().connect(web3authSigner, web3authSignerAmino, "web3auth");
+      return new PrivateKeySigner(signer, signingMode);
     }
   }
 });

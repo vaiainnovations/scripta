@@ -55,6 +55,22 @@ export const useWalletStore = defineStore({
     */
     async connect (newSigner: Signer, newAminoSigner: Signer, signerId: SupportedSigner) {
       this.signerId = signerId;
+
+      if (this.signerId === SupportedSigner.Web3Auth) {
+        // handle Web3Auth signers connections
+        // first connect to the Amino Sogner
+        aminoSigner = newAminoSigner;
+        try {
+          await aminoSigner.connect();
+        } catch (e) {
+          console.log(e);
+          await this.disconnect();
+          return;
+        }
+
+        signer = aminoSigner;
+      }
+
       if (this.signerId !== SupportedSigner.Web3Auth) {
       // update the signer
         signer = newSigner;
@@ -65,13 +81,6 @@ export const useWalletStore = defineStore({
         } catch (e) {
           console.log(e);
         }
-      } else {
-        // handle Web3Auth signers connections
-        // first connect to the Amino Sogner
-        aminoSigner = newAminoSigner;
-        await aminoSigner.connect();
-
-        signer = aminoSigner;
       }
 
       // listen for signer status changes
@@ -152,10 +161,14 @@ export const useWalletStore = defineStore({
       const signer = this.getSigner();
       if (signer.isConnected) {
         // disconnect the signer
-        await signer.disconnect();
+        try {
+          await signer.disconnect();
+        } catch (e) { }
 
         // disconnect the client
-        (await this.wallet.client).disconnect();
+        try {
+          (await this.wallet.client).disconnect();
+        } catch (e) { }
 
         this.wallet = {
           wallet: new Wallet(),
