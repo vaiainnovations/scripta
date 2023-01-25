@@ -55,15 +55,6 @@ export const useKeplrStore = defineStore({
       await $DesmjsKeplr.KeplrSigner.setupChainNetwork(await useNuxtApp().$DesmjsKeplr.setupChainInfo(chainInfo));
 
       // Create the Keplr Signer with the currrent configuration
-      const keplrAminoSigner = new $DesmjsKeplr.KeplrSigner(client, {
-        signingMode: 0,
-        signOptions: {
-          disableBalanceCheck: false,
-          preferNoSetFee: false,
-          preferNoSetMemo: false
-        },
-        chainInfo
-      });
       const keplrSigner = new $DesmjsKeplr.KeplrSigner(client, {
         signingMode: 1,
         signOptions: {
@@ -85,7 +76,7 @@ export const useKeplrStore = defineStore({
         return;
       }
 
-      await $useWallet().connect(keplrSigner, keplrAminoSigner, SupportedSigner.Keplr);
+      await $useWallet().connect(keplrSigner, SupportedSigner.Keplr);
     }
   }
 });

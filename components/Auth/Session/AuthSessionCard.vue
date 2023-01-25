@@ -119,10 +119,6 @@ async function continueWithoutAuthz () {
   isLoading.value = false;
 
   if (success) {
-    // Web3Auth needs a refresh since needs to reload the signing mode: amino->direct
-    if (useNuxtApp().$useAuth().hasValidAuthAuthorization() && useNuxtApp().$useWallet().signerId === SupportedSigner.Web3Auth && useNuxtApp().$useWeb3Auth().signignMode !== 1) {
-      window.location.href = "/profile";
-    }
     await navigateTo("/profile");
   } else {
     await navigateTo("/");

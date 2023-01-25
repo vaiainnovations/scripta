@@ -10,7 +10,6 @@ import { Web3AuthPrivateKeyProvider } from "./Web3AuthAdapter";
 export const useWeb3AuthStore = defineStore({
   id: "Web3AuthStore",
   state: () => ({
-    signignMode: SigningMode.AMINO
   }),
   getters: {
   },
@@ -25,15 +24,11 @@ export const useWeb3AuthStore = defineStore({
         localStorage.removeItem("openlogin_store");
       }
 
-      let web3authSigner = this.createWeb3AuthClient(SigningMode.AMINO);
+      const web3authSigner = this.createWeb3AuthClient(SigningMode.DIRECT);
 
-      if (useNuxtApp().$useAuth().hasAuthStorage() && localStorage.getItem("openlogin_store")) {
-        web3authSigner = this.createWeb3AuthClient(SigningMode.DIRECT);
-        this.signignMode = SigningMode.DIRECT;
-      }
       // Connect to the wallet with the Web3Auth signer
       try {
-        await $useWallet().connect(web3authSigner, web3authSigner, "web3auth");
+        await $useWallet().connect(web3authSigner, "web3auth");
       } catch (e) {
         console.log("fail");
       }
