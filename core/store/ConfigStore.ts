@@ -13,6 +13,7 @@ export const useConfigStore = defineStore({
     ipfsGatewayRead: useRuntimeConfig().public.ipfsGatewayRead,
     chainId: useRuntimeConfig().public.chainId,
     web3AuthClientId: useRuntimeConfig().public.web3AuthClientId,
+    walletConnectProjectId: useRuntimeConfig().public.walletConnectProjectId,
     gitHash: useRuntimeConfig().public.gitHash
   }),
   actions: {

@@ -15,32 +15,17 @@
       </div>
     </AuthDescription>
     <AuthStatusCard>
-      <QrcodeVue :value="wcUrl" :size="200" background="#FCF4E8" level="L" />
+      <img src="/svg/wallet/dpm/logo.svg" class="object-fill h-32">
+      <AuthStatusButton class="bg-orange-light" @click="connect()">
+        Connect
+      </AuthStatusButton>
     </AuthStatusCard>
   </AuthContentCard>
 </template>
 
 <script setup lang="ts">
-import { WalletConnectSigner } from "@desmoslabs/desmjs-walletconnect";
-import QrcodeVue from "qrcode.vue";
-import { SupportedSigner } from "~~/core/store/wallet/SupportedSigner";
-
-const { $useWalletConnect, $useWallet } = useNuxtApp();
-// Create and initializer the WalletConnect signer without QR modal
-const signer = await $useWalletConnect().connect();
-
-const wcUrl = ref(getWalletConnectUrl(signer));
-console.log(wcUrl.value);
-await $useWallet().connect(signer, signer, SupportedSigner.WalletConnect);
-
-/**
- * Generate WalletConnect socket URL to display as QR code.
- * @param signer WalletConnect signer
- * @return WalletConnect socket URL
- */
-function getWalletConnectUrl (signer: WalletConnectSigner): string {
-  const wc = (signer as any).client;
-  const key = (wc.key as Int32Array).toString();
-  return `wc:${wc.handshakeTopic}@1?bridge=${encodeURIComponent(wc.bridge)}&key=${key}`;
+async function connect () {
+  const { $useWalletConnect } = useNuxtApp();
+  await $useWalletConnect().connect();
 }
 </script>

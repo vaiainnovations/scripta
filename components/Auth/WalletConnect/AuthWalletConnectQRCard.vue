@@ -26,6 +26,6 @@
 <script setup lang="ts">
 async function connect () {
   const { $useWalletConnect } = useNuxtApp();
-  await $useWalletConnect().connect(true);
+  await $useWalletConnect().connect();
 }
 </script>

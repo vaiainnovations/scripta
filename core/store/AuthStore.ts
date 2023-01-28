@@ -191,7 +191,6 @@ export const useAuthStore = defineStore({
 
         // Check if the authorization is expired
         if (+new Date() < authorizationExp) {
-          // TODO: check if the authorization signature is valid?
           return true;
         }
 
