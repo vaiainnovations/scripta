@@ -53,7 +53,7 @@ export const useReactionStore = defineStore({
         typeUrl: "/desmos.reactions.v1.MsgAddReaction",
         value: {
           subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
-          postId,
+          postId: Long.fromNumber(postId),
           user: useAccountStore().address,
           value: reactionValue
         }

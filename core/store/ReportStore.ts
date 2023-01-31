@@ -39,6 +39,12 @@ export const useReportStore = defineStore({
   actions: {
     addPostReport (postId: Long, reasonsIds: number[], message: string) {
       const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
+      const target = {
+        typeUrl: "/desmos.reports.v1.PostTarget",
+        value: PostTarget.encode({
+          postId: Long.fromNumber(postId)
+        }).finish()
+      };
       const msgAddReport: MsgCreateReportEncodeObject = {
         typeUrl: "/desmos.reports.v1.MsgCreateReport",
         value: {
@@ -46,12 +52,7 @@ export const useReportStore = defineStore({
           message,
           reasonsIds,
           reporter: useAccountStore().address,
-          target: {
-            typeUrl: "/desmos.reports.v1.PostTarget",
-            value: PostTarget.encode({
-              postId
-            }).finish()
-          }
+          target
         }
       };
       $useTransaction().push(msgAddReport, {

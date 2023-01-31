@@ -30,7 +30,7 @@ export const useWalletConnectStore = defineStore({
         // Id of the chain you are connecting to
         chain: `desmos:${useDesmosStore().chainId}`,
         // Signer sign mode
-        signingMode: SigningMode.DIRECT,
+        signingMode: SigningMode.AMINO,
         // Controller used to display the QR Code that can be scanned from a wallet
         qrCodeModalController: QRCodeModal
       });

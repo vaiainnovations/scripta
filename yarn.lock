@@ -731,22 +731,22 @@
   resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-2.0.2.tgz#1bfafe4b7ed0f3e4105837e056e0a89b108ebe36"
   integrity sha512-IkpVW/ehM1hWKln4fCA3NzJU8KwD+kIOvPZA4cqxoJHtE21CCzjyp+Kxbu0i5I4tBNOlXPL9mjwnWlL0VEG4Fg==
 
-"@desmoslabs/desmjs-keplr@4.7.5":
-  version "4.7.5"
-  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-keplr/-/desmjs-keplr-4.7.5.tgz#b8d370aa62e1d7710cd3038f71787118ed938a9c"
-  integrity sha512-mcqaRYlenxY+QqSwrDS78UtzpRrfcE0mC96oN0fbx+X3JgPhhOHwJdFNtDL5+hFRKd8/gEm1lkR69yRVjJ2Bpw==
+"@desmoslabs/desmjs-keplr@4.7.6":
+  version "4.7.6"
+  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-keplr/-/desmjs-keplr-4.7.6.tgz#b309bd70c4db6372239aa59142bd78f75f13878a"
+  integrity sha512-fqkNOWRHfqtmYivOH/091Wz5PXXXkOV5JDP8KXTo98lpN+eVbPjQ9lcgelxZoGk1K49fJEHrOpwFexCitFYeLg==
   dependencies:
     "@cosmjs/amino" "^0.29.5"
     "@cosmjs/proto-signing" "^0.29.5"
     "@cosmjs/utils" "^0.29.5"
     "@desmoslabs/desmjs" "workspace:packages/core"
-    "@keplr-wallet/types" "0.11.34"
+    "@keplr-wallet/types" "0.11.38"
     cosmjs-types "^0.5.2"
 
-"@desmoslabs/desmjs-types@4.7.5":
-  version "4.7.5"
-  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-types/-/desmjs-types-4.7.5.tgz#5dc1945fd2521de3aef214bac9ff63c8fe44f761"
-  integrity sha512-q+x/EctkF8Sm6RZd8yq3GcIBCFjBiWsCCQgRR6ROpKS07t0YpN1Fab5qLZfBBEsL+Nzh4Ajoqd4yqn3mLFf5dA==
+"@desmoslabs/desmjs-types@4.7.6":
+  version "4.7.6"
+  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-types/-/desmjs-types-4.7.6.tgz#b1d04293a3e7072eeb8e57c113778b6e386cf151"
+  integrity sha512-ogWGkAVgOr2/uLGVqWSqszurUgFK3gIJSVx862Wsk3F/Oz2hAE9G78eJ5k9ynbRM99r6cbZcjJX5mPLKEEeL1Q==
   dependencies:
     long "^4.0.0"
     protobufjs "^7.2.0"
@@ -759,10 +759,10 @@
     long "^4.0.0"
     protobufjs "^7.1.2"
 
-"@desmoslabs/desmjs-walletconnect-v2@^4.7.5":
-  version "4.7.5"
-  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-walletconnect-v2/-/desmjs-walletconnect-v2-4.7.5.tgz#2ff95306e2280ccdff90366a9010cf41f14f84fa"
-  integrity sha512-5s0ncalHT6Qh2H98SBs/ck5n/fw2sXunQyhY15J4LHGOg6WzfUtUoSlqyheirJSIYp3LTHWKM5LvkviHPi9B+Q==
+"@desmoslabs/desmjs-walletconnect-v2@^4.7.6":
+  version "4.7.6"
+  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs-walletconnect-v2/-/desmjs-walletconnect-v2-4.7.6.tgz#7552da18690e49798daa58f42bb18afa2fef6065"
+  integrity sha512-RKdNrlnowfvxwHIyWLkTvoWU0O/bWhQuKwmp6CvPMM7gVD9Aigu3EXiOyQ8BScxLaW9BKYYVG3tGQf3Xgx3s5g==
   dependencies:
     "@cosmjs/amino" "^0.29.5"
     "@cosmjs/encoding" "^0.29.5"
@@ -771,16 +771,16 @@
     "@cosmjs/utils" "^0.29.5"
     "@desmoslabs/desmjs" "workspace:packages/core"
     "@walletconnect/qrcode-modal" "^1.8.0"
-    "@walletconnect/sign-client" "^2.3.1"
+    "@walletconnect/sign-client" "^2.3.2"
     "@walletconnect/types" "^2.1.4"
-    "@walletconnect/utils" "^2.3.1"
+    "@walletconnect/utils" "^2.3.2"
     cosmjs-types "^0.5.2"
     long "^4.0.0"
 
-"@desmoslabs/desmjs@4.7.5":
-  version "4.7.5"
-  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs/-/desmjs-4.7.5.tgz#596eb49e4463a2262e3731938ccd530390e80541"
-  integrity sha512-9jZMhqRcwp525euNVnfpzOVqSRU8gISm+midpkiYfnPWNm1lo3EGE5VuUjcszj9zxPh73wbA5qdOx58OGouxDw==
+"@desmoslabs/desmjs@4.7.6":
+  version "4.7.6"
+  resolved "https://registry.yarnpkg.com/@desmoslabs/desmjs/-/desmjs-4.7.6.tgz#741b41df9c41cc582cb36b61303d74c466722abc"
+  integrity sha512-EWMtia5rVhP2E3qoHfxCBuppBJynfq4y7E7v3zlKD/GNZr0kXvAXoTiukt7j3WQnB3uTP9QWGl3yzEqlYSK1EQ==
   dependencies:
     "@cosmjs/amino" "^0.29.5"
     "@cosmjs/cosmwasm-stargate" "^0.29.5"
@@ -1497,10 +1497,10 @@
     long "^4.0.0"
     secretjs "^0.17.0"
 
-"@keplr-wallet/types@0.11.34":
-  version "0.11.34"
-  resolved "https://registry.yarnpkg.com/@keplr-wallet/types/-/types-0.11.34.tgz#e6aea3a65a9063b2fd188dabaf13f8e7f71b3286"
-  integrity sha512-aQr1eJZfX8J2b69xed0zx4nnL1R2shVAa+qjpuGtSdSFaHxZUAh2dgoHvdUFun8ghQVE23GvhHdO8hOv6+yzRQ==
+"@keplr-wallet/types@0.11.38":
+  version "0.11.38"
+  resolved "https://registry.yarnpkg.com/@keplr-wallet/types/-/types-0.11.38.tgz#cfaaa4686d0c5b901ba987e6806ac9a17162f0a0"
+  integrity sha512-Lcfkh3OsQMdZ9zKQeV/P4tz+ig7SjKDIY9u5MdqairDAPLPCk4qenh9wDZguNW4CWzlW/FI1A/RqltqtJQGyLg==
   dependencies:
     axios "^0.27.2"
     long "^4.0.0"
@@ -3572,7 +3572,7 @@
   dependencies:
     tslib "1.14.1"
 
-"@walletconnect/sign-client@^2.3.1":
+"@walletconnect/sign-client@^2.3.2":
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/@walletconnect/sign-client/-/sign-client-2.3.2.tgz#e1d6597aaeacd1e2e0f0f1659d5b2f69b680ea4c"
   integrity sha512-j40KzTVjxBYSMbU8fvqua38aWt+uW9XTYvIIQ+uxoXhhq18cIZe84nA+bcdtkUakua3V5XjlRsqJI7vMNHajwQ==
@@ -3634,7 +3634,7 @@
     "@walletconnect/logger" "^2.0.1"
     events "^3.3.0"
 
-"@walletconnect/utils@2.3.2", "@walletconnect/utils@^2.3.1":
+"@walletconnect/utils@2.3.2", "@walletconnect/utils@^2.3.2":
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/@walletconnect/utils/-/utils-2.3.2.tgz#a1faf622515dd3d558766fe76020d0d88d5bbc36"
   integrity sha512-eyYzJelFD7OhWJIylAiZ4/pH6zLLJDN5QvidkbgXKK3fIIRLqCwAQIK38PqOyC+I5/Hi8UQHY0iU2yQJAsFbdA==
