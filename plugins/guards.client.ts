@@ -32,8 +32,13 @@ export default defineNuxtPlugin(() => {
 
     // connect to the wallet if the user is not connected
     if (!address) {
-      await useWalletStore().retrieveCurrentWallet(authStorage.signer);
-      address = (await useWalletStore().getSigner().getCurrentAccount()).address;
+      try {
+        await useWalletStore().retrieveCurrentWallet(authStorage.signer);
+        address = (await useWalletStore().getSigner().getCurrentAccount()).address;
+      } catch (e) {
+        // signer not connected, not already connected
+        return await navigateTo("/auth");
+      }
     }
 
     // check if the user is authenticated

@@ -13,7 +13,6 @@ class Wallet {
 }
 
 let signer = new NoOpSigner() as Signer;
-let aminoSigner = new NoOpSigner() as Signer;
 
 /**
  * Store used to manage the integration with all the different supported Wallets
@@ -53,25 +52,15 @@ export const useWalletStore = defineStore({
     * Connect to the wallet with the requested signer
     * @param signer Wallet Signer
     */
-    async connect (newSigner: Signer, newAminoSigner: Signer, signerId: SupportedSigner) {
+    async connect (newSigner: Signer, signerId: SupportedSigner) {
       this.signerId = signerId;
-      if (this.signerId !== SupportedSigner.Web3Auth) {
       // update the signer
-        signer = newSigner;
-        aminoSigner = newAminoSigner;
-        try {
-          await signer.connect();
-          await aminoSigner.connect();
-        } catch (e) {
-          console.log(e);
-        }
-      } else {
-        // handle Web3Auth signers connections
-        // first connect to the Amino Sogner
-        aminoSigner = newAminoSigner;
-        await aminoSigner.connect();
+      signer = newSigner;
 
-        signer = aminoSigner;
+      try {
+        await signer.connect();
+      } catch (e) {
+        console.log(e);
       }
 
       // listen for signer status changes
@@ -103,7 +92,7 @@ export const useWalletStore = defineStore({
     async onWalletConnected () {
       // const accountStore = useAccountStore();
       const authStore = useAuthStore();
-      const signer = this.getSigner(false);
+      const signer = this.getSigner();
       // accountStore.reset();
 
       // create the Desmos Client
@@ -152,10 +141,14 @@ export const useWalletStore = defineStore({
       const signer = this.getSigner();
       if (signer.isConnected) {
         // disconnect the signer
-        await signer.disconnect();
+        try {
+          await signer.disconnect();
+        } catch (e) { }
 
         // disconnect the client
-        (await this.wallet.client).disconnect();
+        try {
+          (await this.wallet.client).disconnect();
+        } catch (e) { }
 
         this.wallet = {
           wallet: new Wallet(),
@@ -164,8 +157,8 @@ export const useWalletStore = defineStore({
       }
     },
 
-    getSigner (amino = false): Signer {
-      return amino ? aminoSigner as Signer : signer as Signer;
+    getSigner (): Signer {
+      return signer;
     }
   }
 });

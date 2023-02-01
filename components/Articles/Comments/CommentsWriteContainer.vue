@@ -17,6 +17,7 @@ const isCommentPublishing = ref(false);
 function postComment () {
   const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
   const extId = uuidv4();
+  const referencedPost = Long.fromNumber(props.referencedPost);
   const msgCreateComment: MsgCreatePostEncodeObject = {
     typeUrl: "/desmos.posts.v2.MsgCreatePost",
     value: {
@@ -27,10 +28,10 @@ function postComment () {
       text: comment.value,
       sectionId: props.sectionId,
       tags: [],
-      conversationId: props.referencedPost,
+      conversationId: referencedPost,
       referencedPosts: [{
         type: 1 /* PostReferenceType.POST_REFERENCE_TYPE_REPLY */,
-        postId: props.referencedPost,
+        postId: referencedPost,
         position: Long.fromNumber(0)
       }],
       replySettings: 1

@@ -32,12 +32,17 @@ export const usePostStore = defineStore({
      */
     async getPost (externalID: string): Promise<PostExtended | null> {
       let cachedPost: PostExtended | false = false;
-      if (!process.client) {
-        /* cachedPost = await PostKv.get(externalID); */
+      if (process.server) {
+        try {
+          cachedPost = await PostKv.get(externalID);
+        } catch (e) {
+          console.log("Error accessing Cloudflare KV");
+        }
         if (!cachedPost) {
           console.log("No KV cached post found for", externalID);
         }
-      } else {
+      }
+      if (!cachedPost) {
         try {
           cachedPost = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${externalID}`, "GET", {}, "")).json() as PostExtended;
           cachedPost.content = cachedPost.content.replaceAll(useConfigStore().ipfsGateway, useConfigStore().ipfsGatewayRead);
@@ -299,6 +304,8 @@ export const usePostStore = defineStore({
         article?.entities?.urls?.forEach((entity) => {
           if (entity.display_url === "preview" || entity.displayUrl === "preview") {
             previewImage = entity.url;
+            // replace the ipfs gateway with the read one
+            previewImage = previewImage.replace(useConfigStore().ipfsGateway, useConfigStore().ipfsGatewayRead);
           }
         });
       } catch (e) {

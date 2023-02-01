@@ -3,6 +3,7 @@ import { EncodeObject } from "@cosmjs/proto-signing";
 import { MsgRevoke } from "cosmjs-types/cosmos/authz/v1beta1/tx";
 /* import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile"; */
 import { useBackendStore } from "./BackendStore";
+import { usePostStore } from "./PostStore";
 import { registerModuleHMR } from ".";
 
 export interface MsgRevokeEncodeObject extends EncodeObject {
@@ -34,6 +35,14 @@ export const useAccountStore = defineStore({
   getters: {
   },
   actions: {
+    /**
+     * Update User account
+     */
+    async updateUserAccount () {
+      await this.updateBalance();
+      await usePostStore().updateUserPosts();
+      useNuxtApp().$useReward().updateUserRewardsHistory();
+    },
     /**
      * Update the DSM account balance
      */

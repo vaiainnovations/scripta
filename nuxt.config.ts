@@ -35,6 +35,7 @@ export default defineNuxtConfig({
       ipfsGatewayRead: process.env.NUXT_IPFS_GATEWAY_READ,
       chainId: process.env.NUXT_CHAIN_ID,
       web3AuthClientId: process.env.NUXT_WEB3AUTH_CLIENT_ID,
+      walletConnectProjectId: process.env.NUXT_WALLETCONNECT_PROJECT_ID,
       gitHash: process.env.NUXT_CURRENT_GIT_SHA,
       version: pjson.version
     }

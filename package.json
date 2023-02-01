@@ -1,6 +1,6 @@
 {
   "name": "scripta",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
     "dev": "yarn run current-git-sha nuxt dev",
@@ -9,15 +9,15 @@
     "coverage": "vitest run --coverage",
     "current-git-sha": "NUXT_CURRENT_GIT_SHA=`git rev-parse --short HEAD`",
     "pages-build": "NODE_OPTIONS='--max-old-space-size=8192' NITRO_PRESET=cloudflare_pages NUXT_CURRENT_GIT_SHA=`git rev-parse --short HEAD` yarn build",
-    "pages-publish": "rm -R ./node_modules/.cache/wrangler/;npx wrangler pages publish .output/public",
-    "pages-dev": "npx wrangler pages dev .output/public -k KV_TESTNET_TRENDING_POSTS --port 8789"
+    "pages-publish": "rm -R ./node_modules/.cache/wrangler/;npx wrangler pages publish .output/public --branch dev",
+    "pages-dev": "npx wrangler pages dev .output/public -k KV_MAINNET_POSTS --port 8789"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.16.0",
-    "@desmoslabs/desmjs": "4.7.2",
-    "@desmoslabs/desmjs-keplr": "4.7.2",
-    "@desmoslabs/desmjs-types": "4.7.2",
-    "@desmoslabs/desmjs-walletconnect": "4.7.2",
+    "@desmoslabs/desmjs": "4.7.6",
+    "@desmoslabs/desmjs-keplr": "4.7.6",
+    "@desmoslabs/desmjs-types": "4.7.6",
+    "@desmoslabs/desmjs-walletconnect-v2": "^4.7.6",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
     "@ezone-devops/milkdown-plugin-directive-fallback": "^6.2.2",
@@ -40,6 +40,7 @@
     "@nuxtjs/device": "^3.0.0",
     "@nuxtjs/eslint-config-typescript": "^12.0.0",
     "@nuxtjs/tailwindcss": "6.1.3",
+    "@walletconnect/types": "^2.2.1",
     "@tailwindcss/typography": "0.5.8",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",

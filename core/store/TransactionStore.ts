@@ -73,7 +73,6 @@ export const useTransactionStore = defineStore({
         if (!useAccountStore().authz.hasAuthz) {
           const signed = await client.sign(address, msgs, defaultFee, "Signed from Scripta.network");
           txBytes = TxRaw.encode(signed).finish();
-          console.log(Buffer.from(txBytes).toString("base64"));
         }
 
         // broadcast the messages
@@ -163,18 +162,17 @@ export const useTransactionStore = defineStore({
       try {
         this.status = QueueStatus.SIGNING;
         const client = await $useWallet().wallet.client;
-        client.setSigner(signMode === 0 ? $useWallet().getSigner(true) : $useWallet().getSigner(false));
         // client.setSigner($useWallet().wallet.signer as Signer);
         const address = useAccountStore().address;
         const accountInfo = await client.getAccount(address).catch(() => { return null; });
         // sign the messages
-        const signed = await client.sign(address, messages, fees, memo, accountInfo === null
-          ? {
-            accountNumber: 0,
+        const signed = await client.sign(address, messages, fees, memo,
+          {
+            accountNumber: accountInfo?.accountNumber || 0,
             chainId: $useDesmosNetwork().chainId,
-            sequence: 0
+            sequence: accountInfo?.sequence || 0
           }
-          : null);
+        );
         const txBytes = TxRaw.encode(signed).finish();
 
         // broadcast the messages
@@ -187,6 +185,7 @@ export const useTransactionStore = defineStore({
         this.errorText = `${e}`;
         this.resetQueueWithTimer(6);
       }
+      return new Uint8Array();
     },
     /**
      * Assert the balance is enough to perform the tx, otherwise throw and show the error.

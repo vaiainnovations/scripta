@@ -25,7 +25,10 @@ export const useKeplrStore = defineStore({
         if (device.isChrome) {
           try {
             await fetch("chrome-extension://dmkamcknogkgcdfhhbddcghachkejeap/injectedScript.bundle.js"); // check if the js bundle is available
-            window.location.reload(); // if it is, the extension is installed, reload the page to load the extension
+            // prevent infinite loop
+            if (useRoute().query.refresh !== "false") {
+              window.location.href = `${useRoute().fullPath}?refresh=false`; // if it is, the extension is installed, reload the page to load the extension
+            }
           } catch (e) {
             console.log("Keplr extension is not installed");
           }
@@ -52,15 +55,6 @@ export const useKeplrStore = defineStore({
       await $DesmjsKeplr.KeplrSigner.setupChainNetwork(await useNuxtApp().$DesmjsKeplr.setupChainInfo(chainInfo));
 
       // Create the Keplr Signer with the currrent configuration
-      const keplrAminoSigner = new $DesmjsKeplr.KeplrSigner(client, {
-        signingMode: 0,
-        signOptions: {
-          disableBalanceCheck: false,
-          preferNoSetFee: false,
-          preferNoSetMemo: false
-        },
-        chainInfo
-      });
       const keplrSigner = new $DesmjsKeplr.KeplrSigner(client, {
         signingMode: 1,
         signOptions: {
@@ -82,7 +76,7 @@ export const useKeplrStore = defineStore({
         return;
       }
 
-      await $useWallet().connect(keplrSigner, keplrAminoSigner, SupportedSigner.Keplr);
+      await $useWallet().connect(keplrSigner, SupportedSigner.Keplr);
     }
   }
 });

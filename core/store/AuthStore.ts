@@ -120,12 +120,23 @@ export const useAuthStore = defineStore({
       if (storedAuth) {
         this.authLevel = AuthLevel.Memory;
         if (storedAuth.signer) {
-          await $useWallet().retrieveCurrentWallet(storedAuth.signer);
-          const storedAuthAccount = AuthStorage.get((await $useWallet().getSigner().getCurrentAccount()).address);
-          if (!storedAuthAccount) {
-            this.logout("/auth");
+          // attempt to retrieve the cached wallet
+          try {
+            await $useWallet().retrieveCurrentWallet(storedAuth.signer);
+          } catch (e) {
+            await this.logout();
           }
-          await useAccountStore().getUserInfo();
+
+          // attempt to access the cached account from the wallet
+          try {
+            const storedAuthAccount = AuthStorage.get((await $useWallet().getSigner().getCurrentAccount()).address);
+            if (!storedAuthAccount) {
+              this.logout("/auth");
+            }
+            await useAccountStore().getUserInfo();
+          } catch (e) {
+            await this.logout();
+          }
         }
         if (this.authLevel !== AuthLevel.None) {
           this.login();
@@ -180,7 +191,6 @@ export const useAuthStore = defineStore({
 
         // Check if the authorization is expired
         if (+new Date() < authorizationExp) {
-          // TODO: check if the authorization signature is valid?
           return true;
         }
 
@@ -271,9 +281,7 @@ export const useAuthStore = defineStore({
           useAccountStore().profile = newProfile;
         }
 
-        await useAccountStore().updateBalance();
-
-        usePostStore().updateUserPosts();
+        await useAccountStore().updateUserAccount();
 
         // Route to the profile page only if coming from auth
         if (useRouter().currentRoute.value.path.includes("auth")) {

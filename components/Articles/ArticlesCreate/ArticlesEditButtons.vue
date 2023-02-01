@@ -117,7 +117,7 @@ async function editArticle () {
     value: {
       subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
       editor: useAccountStore().address,
-      postId: draftStore.id,
+      postId: Long.fromNumber(draftStore.id),
       tags: tags.map(tag => tag.content.value),
       text: draftStore.title
     }
@@ -224,7 +224,7 @@ async function deleteArticle () {
     typeUrl: "/desmos.posts.v2.MsgDeletePost",
     value: {
       subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
-      postId: useDraftStore().id,
+      postId: Long.fromNumber(useDraftStore().id),
       signer: useAccountStore().address
     }
   };

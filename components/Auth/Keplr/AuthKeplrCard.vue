@@ -18,7 +18,12 @@
 import { useKeplrStore } from "~~/core/store/wallet/KeplrStore";
 const maxPages = 1;
 const count = ref(0);
+const hasKeplr = computed(() => useKeplrStore().isAvailable);
 
+// If Keplr is available, skip the download page
+if (hasKeplr) {
+  editCount(1);
+}
 function editCount (n: number) {
   if (n > 0 && count.value < maxPages) {
     count.value += n;

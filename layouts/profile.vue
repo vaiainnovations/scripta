@@ -14,7 +14,7 @@
             <div class="flex-none bottom-0">
               <ProfileActions />
               <ProfileAirdrop />
-              <ProfileBalance class="pt-4" />
+              <ProfileBalance />
             </div>
           </div>
         </span>

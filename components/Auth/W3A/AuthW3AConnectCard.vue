@@ -37,7 +37,7 @@ async function connect () {
   const { $useWeb3Auth } = useNuxtApp();
   isConnecting.value = true;
   try {
-    await $useWeb3Auth().connect();
+    await $useWeb3Auth().connect(true);
   } catch (e) {
     console.error(e);
   }

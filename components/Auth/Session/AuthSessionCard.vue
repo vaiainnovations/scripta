@@ -95,10 +95,15 @@ const suggestAuthz = ref(false);
 
 // may be unnecessary since ensured by the [not-direct-route] guard
 if (process.client) {
-  const { $useAuth } = useNuxtApp();
+  const { $useAuth, $useWallet } = useNuxtApp();
   isLoading.value = false;
   hasAuthz.value = useAccountStore().authz.hasAuthz;
   hasValidAuthorization.value = $useAuth().hasValidAuthAuthorization();
+
+  // auto sign the authorization if the user is using web3auth & no authz suggestion
+  if ($useWallet().signerId === "web3auth" && !suggestAuthz.value) {
+    await continueWithoutAuthz();
+  }
 }
 
 function logout () {
@@ -114,10 +119,6 @@ async function continueWithoutAuthz () {
   isLoading.value = false;
 
   if (success) {
-    // Web3Auth needs a refresh since needs to reload the signing mode: amino->direct
-    if (useNuxtApp().$useAuth().hasValidAuthAuthorization() && useNuxtApp().$useWallet().signerId === SupportedSigner.Web3Auth && useNuxtApp().$useWeb3Auth().signignMode !== 1) {
-      window.location.href = "/profile";
-    }
     await navigateTo("/profile");
   } else {
     await navigateTo("/");
