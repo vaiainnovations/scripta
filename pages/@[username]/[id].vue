@@ -1,7 +1,10 @@
 <template>
   <section>
     <NuxtLayout name="reading-custom">
-      <ArticlesViewContainer v-if="post!==null" :post="post" />
+      <ArticlesViewContainer v-if="!isLoading&&post" :post="post" />
+      <span v-else>
+        <SkeletonArticlePage />
+      </span>
     </NuxtLayout>
   </section>
 </template>
@@ -13,6 +16,7 @@ import { PostExtended } from "~~/types/PostExtended";
 const route = useRoute();
 const externalId = route.params.id as string;
 
+const isLoading = useState("isLoading", () => true);
 const post = useState("post", () => null as PostExtended | null); // create shared client/server state for the post
 const isServerFetched = useState("isPostServerFetched", () => false); // shared state to know if the post has been fetched on the server cache
 
@@ -21,13 +25,22 @@ if (post.value && post.value.externalId !== externalId) {
   post.value = null;
 }
 
-// Fetch only if the post is not already in the store or fetched by the server
-if (!post.value) {
+// If SSR, fetch the post from KV with backend fallback
+if (!post.value && process.server && useDevice().isCrawler) {
   post.value = await usePostStore().getPost(externalId);
+  isLoading.value = false;
+}
+
+// Fetch only if the post is not already in the store or fetched by the server
+if (!post.value && process.client) {
+  usePostStore().getPost(externalId).then((p) => {
+    post.value = p;
+    isLoading.value = false;
+  });
 }
 // Fetch the post
 if (process.server) {
-  // if server, fetch from KV
+  // if server, is fetched from KV
   if (post.value) {
     isServerFetched.value = true;
   }
@@ -46,39 +59,39 @@ if (!post) {
     message: "Article Not Found",
     data: "You might have the wrong address, or the article may have been deleted."
   });
-} else {
+} else if (post.value) {
   useHead({
-    title: `${post.value!.text} - @${post.value!.author.dtag} on Scripta`,
+    title: `${post.value.text} - @${post.value.author.dtag} on Scripta`,
     meta: [
       {
         hid: "title",
         name: "title",
-        content: post.value!.text
+        content: post.value.text
       },
       {
         hid: "description",
         name: "description",
-        content: post.value!.subtitle
+        content: post.value.subtitle
       },
       {
         hid: "image",
         name: "image",
-        content: usePostStore().getArticlePreviewImage(post.value!)
+        content: usePostStore().getArticlePreviewImage(post.value)
       },
       {
         hid: "og:title",
         property: "og:title",
-        content: post.value!.text
+        content: post.value.text
       },
       {
         hid: "og:description",
         property: "og:description",
-        content: post.value!.subtitle
+        content: post.value.subtitle
       },
       {
         hid: "og:image",
         property: "og:image",
-        content: usePostStore().getArticlePreviewImage(post.value!)
+        content: usePostStore().getArticlePreviewImage(post.value)
       },
       {
         hid: "og:url",
@@ -88,17 +101,17 @@ if (!post) {
       {
         hid: "twitter:title",
         name: "twitter:title",
-        content: post.value!.text
+        content: post.value.text
       },
       {
         hid: "twitter:description",
         name: "twitter:description",
-        content: post.value!.subtitle
+        content: post.value.subtitle
       },
       {
         hid: "twitter:image",
         name: "twitter:image",
-        content: usePostStore().getArticlePreviewImage(post.value!)
+        content: usePostStore().getArticlePreviewImage(post.value)
       },
       {
         hid: "twitter:card",

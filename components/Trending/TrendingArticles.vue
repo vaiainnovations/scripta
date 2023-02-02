@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span v-if="!isLoading">
     <div class="flex pb-4">
       <img src="/icons/linear/trend-up-circle.svg" class="w-8 h-8">
       <h1 class="ml-2 text-3xl font-extrabold el-icon-arrow-right">
@@ -61,15 +61,29 @@
       </div>
     </div>
   </span>
+  <span v-else>
+    <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-2 w-full">
+      <div v-for="x in 12" :key="x" class="col-span-1 m-3">
+        <div class="bg-background w-full animate-pulse h-32 rounded-2xl" />
+      </div>
+    </div>
+  </span>
 </template>
 
 <script setup lang="ts">
 import { usePostStore } from "~~/core/store/PostStore";
+import { PostExtended } from "~~/types/PostExtended";
 interface Props {
   n?: number;
 }
 
 const props = defineProps<Props>();
+const trendings = ref([] as PostExtended[]);
+const isLoading = ref(true);
 
-const trendings = useState("ctrendings", () => usePostStore().trendings.sort(() => 0.5 - Math.random()).slice(0, props.n || 12));
+// loaded async
+onMounted(() => {
+  trendings.value = (usePostStore().trendings).slice(0, props.n || 18);
+  isLoading.value = false;
+});
 </script>

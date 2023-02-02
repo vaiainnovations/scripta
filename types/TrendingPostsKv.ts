@@ -9,8 +9,15 @@ export class TrendingPostsKv {
    */
   public static async get (id: string): Promise<PostExtended[]> {
     try {
-      return JSON.parse(await KV_TRENDING_POSTS.get(id)) as PostExtended[];
+      const cached = await KV_TRENDING_POSTS.get(id);
+      if (cached) {
+        return JSON.parse(cached) as PostExtended[];
+      } else {
+        console.warn(`[cache] Trendings ${id} miss`);
+        return [];
+      }
     } catch (e) {
+      console.warn(`[cache] Trendings ${id} miss`);
       return [];
     }
   }

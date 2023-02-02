@@ -8,11 +8,21 @@
         <section class="py-8">
           <div class="flex pb-4">
             <!-- Go back button -->
-            <NuxtLink class="self-end" to="/explore">
-              <img src="/icons/bold/close-circle.svg" alt="Back" class="w-7 h-7 mr-2">
+            <NuxtLink
+              class="self-end"
+              to="/explore"
+            >
+              <img
+                src="/icons/bold/close-circle.svg"
+                alt="Back"
+                class="w-7 h-7 mr-2"
+              >
             </NuxtLink>
             <h1 class="ml-2 text-3xl font-extrabold">
-              <TheTag :tag="tag" class="my-auto h-full" />
+              <TheTag
+                :tag="tag"
+                class="my-auto h-full"
+              />
             </h1>
           </div>
 
@@ -35,6 +45,9 @@ import { useSearchStore } from "~~/core/store/SearchStore";
 
 const route = useRoute();
 const tag = route.params.tag;
+const articles = useState("articlesByTag", () => []);
 
-const articles = await useSearchStore().searchByTags(tag);
+if (process.client) {
+  articles.value = await useSearchStore().searchByTags(tag);
+}
 </script>

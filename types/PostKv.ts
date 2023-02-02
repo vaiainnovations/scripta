@@ -9,7 +9,13 @@ export class PostKv {
    */
   public static async get (id: string): Promise<PostExtended | false> {
     try {
-      return JSON.parse(await KV_POSTS.get(id)) as PostExtended;
+      const cached = await KV_POSTS.get(id);
+      if (cached) {
+        return JSON.parse(cached) as PostExtended;
+      } else {
+        console.warn(`[cache] Post ${id} miss`);
+        return false;
+      }
     } catch (e) {
       console.warn(`[cache] Post ${id} miss`);
       return false;
