@@ -12,20 +12,20 @@
           v-for="x in trendings"
           :key="x.externalId"
           :to="`/@${x.author}/${x.externalId}`"
-          class="col-span-1 sm:flex px-4 py-2 my-4 md:my-2 p-1 bg-background-light/20 hover:bg-white/60 rounded-2xl cursor-pointer"
+          class="col-span-1 sm:flex px-4 py-2 my-4 md:my-2 p-1 bg-background-light/20 hover:bg-white/60 rounded-2xl cursor-pointer group"
         >
           <img
-            class="object-cover my-2 w-2/4 sm:w-1/3 lg:w-36 sm:mx-6 mx-auto rounded-xl h-40 lg:aspect-square aspect-video lg:h-36 flex-none my-auto"
+            class="object-cover my-auto w-2/4 sm:w-1/3 lg:w-36 sm:mx-6 mx-auto rounded-xl h-40 lg:aspect-square aspect-video lg:h-36 flex-none"
             :src="x.image ||'/img/author_pic.png'"
             onerror="this.src='/img/author_pic.png'"
             loading="lazy"
           >
           <div class="flex-1 my-3 xl:my-4">
-            <h2 class="mb-1 text-xl md:text-lg font-bold leading-snug text-gray-800">
+            <h2 class="mb-1 text-xl md:text-lg font-semibold text-gray-800" :class="x.text.length>60?'group-hover:truncate group-hover:text-base group-hover:w-96':''">
               {{ x.text }}
             </h2>
-            <p class="text-lg md:text-sm font-normal text-gray-500">
-              {{ x.subtitle }}
+            <p class="text-lg md:text-sm font-normal text-gray-500" :class="x.text.length>60?'group-hover:block hidden':'block'">
+              {{ x.subtitle.length<=140? x.subtitle : x.subtitle.substring(0,140) + '...' }}
             </p>
             <div class="py-1">
               <div v-if="(x.tags && x.tags.length>0)" class="flex flex-wrap">

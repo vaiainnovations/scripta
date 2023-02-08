@@ -17,6 +17,7 @@
         :value="useDraftStore().title"
         type="text"
         class="group h-20 w-full font-bold text-xl bg-background-alt text-primary-text px-7 lg:text-5xl outline-none focus:border-l-background focus:border-l-2"
+        maxlength="90"
         placeholder="Title"
         @input="(evt)=> useDraftStore().title = evt.target.value"
       >
