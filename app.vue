@@ -7,8 +7,8 @@ if (process.client) {
   const { $useAuth } = useNuxtApp();
   useNuxtApp().$useDesmosNetwork().init();
   $useAuth().init();
+  await usePostStore().loadTrendings();
 }
-await usePostStore().loadTrendings();
 
 </script>
 

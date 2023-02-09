@@ -1,6 +1,6 @@
 {
   "name": "scripta",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "scripts": {
     "dev": "yarn run current-git-sha nuxt dev",

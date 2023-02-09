@@ -32,6 +32,7 @@ export const usePostStore = defineStore({
      */
     async getPost (externalID: string): Promise<PostExtended | null> {
       let cachedPost: PostExtended | false = false;
+      // If SSR, try to get the post from KV
       if (process.server) {
         try {
           cachedPost = await PostKv.get(externalID);
@@ -42,6 +43,7 @@ export const usePostStore = defineStore({
           console.log("No KV cached post found for", externalID);
         }
       }
+      // If not SSR or not found in KV, get it from the backend
       if (!cachedPost) {
         try {
           cachedPost = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}posts/${externalID}`, "GET", {}, "")).json() as PostExtended;
@@ -50,19 +52,23 @@ export const usePostStore = defineStore({
           console.log(e);
         }
       }
+      // If found, get the author profile
       if (cachedPost) {
-        const author: Profile = await useUserStore().getUser(cachedPost.author as any, true);
-        if (author) {
-          cachedPost.author = {
-            address: (author.account as any).address || cachedPost.author,
-            bio: author.bio,
-            dtag: author.dtag,
-            nickname: author.nickname,
-            pictures: {
-              cover: author.pictures?.cover || "",
-              profile: author.pictures?.profile || ""
-            }
-          };
+        // if client, query all the user profile info
+        if (process.client) {
+          const author: Profile = await useUserStore().getUser(cachedPost.author as any, true);
+          if (author) {
+            cachedPost.author = {
+              address: (author.account as any).address || cachedPost.author,
+              bio: author.bio,
+              dtag: author.dtag,
+              nickname: author.nickname,
+              pictures: {
+                cover: author.pictures?.cover || "",
+                profile: author.pictures?.profile || ""
+              }
+            };
+          }
         }
       }
       return cachedPost || null;

@@ -6,7 +6,7 @@
         Trending Topics
       </h1>
     </div>
-    <div class="flex flex-wrap md:-m-2 -m-1">
+    <div v-if="!isLoading" class="flex flex-wrap md:-m-2 -m-1">
       <div
         v-for="topic in tags"
         :key="topic"
@@ -17,25 +17,26 @@
         </div>
       </div>
     </div>
+    <div v-else class="grid grid-cols-2">
+      <div
+        v-for="i in 15"
+        :key="i"
+        class="md:p-2 p-1 col-span-1"
+      >
+        <div class="bg-gray-light/70 mx-auto w-full animate-pulse h-5 md:h-8 rounded-lg" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { useBackendStore } from "~~/core/store/BackendStore";
-import { usePostStore } from "~~/core/store/PostStore";
 
 // take the tags from the trending articles
-let tags = [];
-usePostStore().trendings.forEach((x) => {
-  x.tags.forEach((y) => {
-    if (!tags.includes(y)) {
-      tags.push(y);
-    }
-  });
-});
-tags.sort(() => Math.random() - 0.5);
+const tags = useState("trendingTags", () => []);
+const isLoading = ref(true);
 
-await useBackendStore()
+useBackendStore()
   .fetch(`${useBackendStore().apiUrl}tags`, "POST", {})
   .then(async (res) => {
     const trendingTags = await res.json();
@@ -43,7 +44,8 @@ await useBackendStore()
     trendingTags.forEach((tag) => {
       newTrendingTags.push(tag.tag);
     });
-    tags = newTrendingTags;
-    tags.sort(() => Math.random() - 0.5);
+    // set tags to the first 10 trending tags
+    tags.value = newTrendingTags.slice(0, 20);
+    isLoading.value = false;
   });
 </script>
