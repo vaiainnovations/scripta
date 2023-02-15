@@ -3,4 +3,5 @@ export enum SupportedSigner {
     WalletConnect = "walletconnect",
     Keplr = "keplr",
     Web3Auth = "web3auth",
+    Ledger = "ledger"
 }

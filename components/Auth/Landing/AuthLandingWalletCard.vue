@@ -5,7 +5,7 @@
     <NuxtLink :to="props.wallet.route" class="w-full">
       <div class="flex flex-row items-center justify-between">
         <div class="flex flex-row items-center justify-start gap-x-4">
-          <img :src="props.wallet.img" class="h-10 rounded-full object-fill">
+          <img :src="props.wallet.img" class="h-10 w-10  object-fill">
           <p class="text-primary-text xl:text-lg">
             {{ props.wallet.name }}
           </p>

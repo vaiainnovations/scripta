@@ -7,6 +7,7 @@ import { useWalletConnectStore } from "./WalletConnectStore";
 import { useKeplrStore } from "./KeplrStore";
 import { SupportedSigner } from "./SupportedSigner";
 import { useWeb3AuthStore } from "./Web3AuthStore";
+import { useLedgerStore } from "./LedgerStore";
 
 class Wallet {
   public client = DesmosClient.connectWithSigner(useConfigStore().rpcUrl, new NoOpSigner());
@@ -42,6 +43,9 @@ export const useWalletStore = defineStore({
       case SupportedSigner.Web3Auth:
         await useWeb3AuthStore().connect();
         break;
+      case SupportedSigner.Ledger:
+        await useLedgerStore().connect();
+        break;
 
       default:
         break;
@@ -57,6 +61,7 @@ export const useWalletStore = defineStore({
       // update the signer
       signer = newSigner;
 
+      console.log(newSigner);
       try {
         await signer.connect();
       } catch (e) {
