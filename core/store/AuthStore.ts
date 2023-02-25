@@ -382,6 +382,20 @@ export const useAuthStore = defineStore({
           });
       });
 
+      // Generate MsgGrant expiration time
+      let expiration = Timestamp.fromPartial({
+        nanos: 0,
+        seconds: (+new Date() / 1000) + 60 * 60 * 24 * 14 // + 14 days
+      });
+
+      // If the user is using amino encoding, needs another value for the same expiration
+      if (useNuxtApp().$useWallet().getSigner().signingMode === 0) {
+        expiration = Timestamp.fromPartial({
+          nanos: 0,
+          seconds: (+new Date()) + 1000 * 60 * 60 * 24 * 14 // + 14 days
+        });
+      }
+
       authorizations.forEach((authorization) => {
         grants.push({
           typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
@@ -390,10 +404,7 @@ export const useAuthStore = defineStore({
             granter: useAccountStore().address,
             grant: {
               authorization,
-              expiration: Timestamp.fromPartial({
-                nanos: 0,
-                seconds: (+new Date() / 1000) + 60 * 60 * 24 * 7 // + 7 days
-              })
+              expiration
             }
           }
         }

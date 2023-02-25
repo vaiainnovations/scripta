@@ -56,7 +56,7 @@
                 class="text-md text-primary-text-light hover:text-primary-text py-0.5 flex justify-center"
                 :href="`${useNuxtApp().$useDesmosNetwork().explorer}/accounts/${useAccountStore().address}`"
                 target="_blank"
-              >Transaction History <img
+              >Transactions History <img
                 src="/icons/linear/link.svg"
                 class="ml-2 my-auto w-5 h-5"
               ></a>

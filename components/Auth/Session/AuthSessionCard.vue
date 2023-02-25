@@ -71,9 +71,14 @@
                 class="h-8 object-contain"
               >
             </div>
-            <p class="pt-10 text-2xl font-bold tracking-widest text-primary-text-light">
-              Loading
-            </p>
+            <div class="pt-10">
+              <p class="text-2xl text-center font-bold tracking-widest text-primary-text-light">
+                Loading
+              </p>
+              <span class="pt-4 text-sm font-normal text-primary-text-light">
+                Unlock and Approve the session request in your Wallet
+              </span>
+            </div>
           </div>
         </AuthContentCard>
       </span>
