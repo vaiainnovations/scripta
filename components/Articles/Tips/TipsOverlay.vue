@@ -58,7 +58,7 @@
           Tipping...
         </h4>
       </div>
-      <div v-if="tipStatus === 'SUCCESS'" class="text-center">
+      <div v-if="tipStatus === 'SUCCESS'" class="text-center p-2">
         <img
           src="/icons/linear/tick-circle.svg"
           class="h-16 p-2 mx-auto object-contain"

@@ -21,11 +21,11 @@
             loading="lazy"
           >
           <div class="flex-1 my-auto">
-            <h2 class="mb-1 text-xl md:text-lg font-semibold text-gray-800" :class="x.text.length>60?'group-hover:truncate group-hover:text-base group-hover:w-80':''">
+            <h2 class="mb-1 text-xl md:text-lg font-semibold text-gray-800" :class="x.text.length>50?'group-hover:truncate group-hover:text-base group-hover:w-80':''">
               {{ x.text }}
             </h2>
-            <p class="text-lg md:text-sm font-normal text-gray-500" :class="x.text.length>60?'group-hover:block hidden':'block'">
-              {{ x.subtitle.length<=140? x.subtitle : x.subtitle.substring(0,140) + '...' }}
+            <p class="text-lg md:text-sm font-normal text-gray-500" :class="x.text.length>50?'group-hover:block hidden':'block'">
+              {{ x.subtitle.length<=90? x.subtitle : x.subtitle.substring(0,90) + '...' }}
             </p>
             <div class="py-1">
               <div v-if="(x.tags && x.tags.length>0)" class="flex flex-wrap">

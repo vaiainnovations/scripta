@@ -25,13 +25,13 @@
         <img
           v-if="!useAccountStore().profile?.pictures.profile"
           src="/icons/linear/profile-circle.svg"
-          class="max-w-11 w-11 h-11 object-cover rounded-full shadow-md border border-background"
+          class="max-w-11 min-w-[2.75rem] w-11 h-11 object-cover rounded-full shadow-md border border-background"
         >
         <img
           v-if="useAccountStore().profile?.pictures.profile"
           :src="useAccountStore().profile?.pictures.profile"
           onerror="this.onerror=null;this.src='/img/author_pic.png'"
-          class="max-w-11 w-11 h-11 object-cover rounded-full shadow-md border border-background"
+          class="max-w-11 min-w-[2.75rem] w-11 h-11 object-cover rounded-full shadow-md border border-background"
         >
       </div>
     </NuxtLink>
