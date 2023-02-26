@@ -27,5 +27,6 @@
 async function connect () {
   const { $useWalletConnect } = useNuxtApp();
   await $useWalletConnect().connect();
+  useRouter().push("/profile");
 }
 </script>

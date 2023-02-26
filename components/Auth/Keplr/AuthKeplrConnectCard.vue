@@ -38,6 +38,7 @@ async function connect () {
   isConnecting.value = true;
   try {
     await $useKeplr().connect();
+    useRouter().push("/profile");
   } catch (e) {
     console.error(e);
   }

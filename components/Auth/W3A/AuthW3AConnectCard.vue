@@ -38,6 +38,7 @@ async function connect () {
   isConnecting.value = true;
   try {
     await $useWeb3Auth().connect(true);
+    useRouter().push("/profile");
   } catch (e) {
     console.error(e);
   }

@@ -11,6 +11,7 @@ import { registerModuleHMR } from ".";
 
 export enum QueueStatus {
   WAITING = "waiting",
+  CONNECTING_WALLET = "connecting_wallet",
   SIGNING = "signing",
   PENDING = "pending",
   SUCCESS = "success",
@@ -52,6 +53,8 @@ export const useTransactionStore = defineStore({
     },
     async execute (): Promise<Uint8Array> {
       const { $useWallet } = useNuxtApp();
+      this.status = QueueStatus.CONNECTING_WALLET;
+      await $useWallet().waitWalletActivation(); // recover the wallet signer & wait for it to be ready
       let txBytes: Uint8Array = new Uint8Array();
       // check if the draft is not empty
       try {
@@ -119,6 +122,8 @@ export const useTransactionStore = defineStore({
      */
     async directTx (messages: EncodeObject[], details: Record<string, unknown>[] = [], skipAuthz = false): Promise<boolean> {
       const { $useDesmosNetwork, $useWallet } = useNuxtApp();
+      this.status = QueueStatus.CONNECTING_WALLET;
+      await $useWallet().waitWalletActivation(); // recover the wallet signer & wait for it to be ready
       this.assertBalance();
       try {
         let signedBytes = new Uint8Array();
@@ -158,6 +163,9 @@ export const useTransactionStore = defineStore({
      */
     async directSign (messages: EncodeObject[], memo = "Signed from Scripta.network", fees = useNuxtApp().$useDesmosNetwork().defaultFee, signMode: 0 | 1 = 0): Promise<Uint8Array> {
       const { $useWallet, $useDesmosNetwork } = useNuxtApp();
+      this.status = QueueStatus.CONNECTING_WALLET;
+      await $useWallet().waitWalletActivation(true);
+
       // check if the draft is not empty
       try {
         this.status = QueueStatus.SIGNING;

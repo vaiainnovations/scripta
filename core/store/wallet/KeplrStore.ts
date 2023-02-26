@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { registerModuleHMR } from "..";
-import { SupportedSigner } from "./SupportedSigner";
+import { SupportedSigner } from "../../../types/SupportedSigner";
 
 export const useKeplrStore = defineStore({
   id: "KeplrStore",

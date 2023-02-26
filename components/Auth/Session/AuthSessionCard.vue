@@ -22,6 +22,8 @@
               </p>
             </span>
 
+            Show wich wallet is used + method
+
             <div class="pt-12">
               <div v-if="!hasAuthz&&suggestAuthz" class="text-center p-4">
                 <button
@@ -88,7 +90,6 @@
 
 <script setup lang="ts">
 import { useAccountStore } from "~~/core/store/AccountStore";
-import { SupportedSigner } from "~~/core/store/wallet/SupportedSigner";
 
 const isLoading = ref(true);
 const hasAuthz = ref(false);
@@ -121,7 +122,6 @@ async function continueWithoutAuthz () {
   isLoading.value = true;
   const { $useAuth } = useNuxtApp();
   const success = await $useAuth().authorize();
-  isLoading.value = false;
 
   if (success) {
     await navigateTo("/profile");

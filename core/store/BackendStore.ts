@@ -18,7 +18,7 @@ export const useBackendStore = defineStore({
       // if is a client and is logged, set authorization and accountNumber (as an) headers
       if (process.client) {
         const { $useAuth } = useNuxtApp();
-        const authStorage = $useAuth().getAuthStorageAccount(useAccountStore().address);
+        const authStorage = $useAuth().storeAuthAccount;
 
         if (authStorage) {
           if (authStorage.authorization) {

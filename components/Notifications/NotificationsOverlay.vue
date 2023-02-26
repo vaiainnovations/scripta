@@ -10,6 +10,9 @@ const { $useNotification } = useNuxtApp();
           <div v-if="$useTransaction().status==='waiting'">
             <TransactionsQueueOverlayWaiting />
           </div>
+          <div v-if="$useTransaction().status==='connecting_wallet'">
+            <TransactionsQueueOverlayConnectingWallet />
+          </div>
           <div v-if="$useTransaction().status==='signing'">
             <TransactionsQueueOverlaySigning />
           </div>
