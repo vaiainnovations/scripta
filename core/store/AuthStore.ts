@@ -135,7 +135,7 @@ export const useAuthStore = defineStore({
         return;
       }
 
-      const accountData = await (await $useWallet().wallet.client).getAccount(account.address);
+      const accountData = await (await $useWallet().wallet.client).getAccount(account.address).catch(() => { return null; });
       const storedAccount = AuthStorage.getByAddress(account.address);
 
       // if the account is the same as the stored one, use the stored authorization
