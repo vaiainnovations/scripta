@@ -29,15 +29,16 @@
 </template>
 
 <script setup lang="ts">
+import { SupportedSigner } from "../../../types/SupportedSigner";
 const isConnecting = ref(false);
 /**
  * Keplr Connection
  */
 async function connect () {
-  const { $useWeb3Auth } = useNuxtApp();
+  const { $useWallet } = useNuxtApp();
   isConnecting.value = true;
   try {
-    await $useWeb3Auth().connect(true);
+    await $useWallet().initWalletConnection(SupportedSigner.Web3Auth);
     useRouter().push("/profile");
   } catch (e) {
     console.error(e);

@@ -9,7 +9,7 @@
           Connecting wallet
         </div>
         <span class="pt-4 text-sm font-normal text-primary-text-light">
-          Open and Unlock your Wallet
+          Open and Unlock your Wallet {{ useNuxtApp().$useWallet().signerId === 'walletconnect' ? 'App' : '' }}
         </span>
         <div class="text-center text-xs">
           {{ $useTransaction().errorText }}

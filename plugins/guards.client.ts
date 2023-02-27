@@ -5,7 +5,7 @@ export default defineNuxtPlugin(() => {
    * Ensure user is authenticated, otherwise redirect to auth page
    */
   addRouteMiddleware("authenticated", async (to) => {
-    useAuthStore().init(); // Ensure auth store is initialized and auth level is set
+    useAuthStore().initOfflineSession(); // Ensure auth store is initialized and auth level is set
 
     if (useAuthStore().authLevel === AuthLevel.None) {
       console.log(`[Guard] ${to.path} not authenticated (no auth storage), re-routing`);
@@ -18,7 +18,7 @@ export default defineNuxtPlugin(() => {
    * Ensure user is not authenticated, otherwise redirect to home page
    */
   addRouteMiddleware("not-authenticated", async (to) => {
-    useAuthStore().init(); // Ensure auth store is initialized and auth level is set
+    useAuthStore().initOfflineSession(); // Ensure auth store is initialized and auth level is set
 
     if (useAuthStore().authLevel >= AuthLevel.Session) {
       console.log(`[Guard] ${to.path} authenticated, re-routing`);

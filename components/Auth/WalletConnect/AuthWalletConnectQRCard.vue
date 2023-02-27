@@ -24,9 +24,10 @@
 </template>
 
 <script setup lang="ts">
+import { SupportedSigner } from "../../../types/SupportedSigner";
+
 async function connect () {
-  const { $useWalletConnect } = useNuxtApp();
-  await $useWalletConnect().connect();
-  useRouter().push("/profile");
+  const { $useWallet } = useNuxtApp();
+  await $useWallet().initWalletConnection(SupportedSigner.WalletConnect);
 }
 </script>

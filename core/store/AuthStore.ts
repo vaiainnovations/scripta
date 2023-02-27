@@ -5,10 +5,7 @@ import { GenericSubspaceAuthorization } from "@desmoslabs/desmjs-types/desmos/su
 import { Timestamp } from "cosmjs-types/google/protobuf/timestamp";
 import { GenericAuthorization } from "cosmjs-types/cosmos/authz/v1beta1/authz";
 import { defineStore } from "pinia";
-import { generateUsername } from "unique-username-generator";
 import { decodeTxRaw } from "@cosmjs/proto-signing";
-import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
-import { SupportedSigner } from "../../types/SupportedSigner";
 import { AuthStorage, StoreAuthAccount } from "../../types/AuthStorage";
 import { useAccountStore } from "./AccountStore";
 import { useBackendStore } from "./BackendStore";
@@ -18,8 +15,9 @@ import { registerModuleHMR } from ".";
 
 export enum AuthLevel {
   None = -1, // unauthenticated user
-  Session = 1, // authenticated user with a stored account & session
-  Wallet = 2, // authenticated user with a stored account & session and a fast wallet connected
+  ExpiredSession = 1, // authenticated user with a stored account
+  Session = 2, // authenticated user with a stored account & session
+  Wallet = 3, // authenticated user with a stored account & session and a fast wallet connected
 }
 
 /**
@@ -36,33 +34,42 @@ export const useAuthStore = defineStore({
 
   },
   actions: {
+    login () {
+      this.initOfflineSession();
+      if (["keplr"].includes(this.storeAuthAccount?.signer || "")) {
+        this.initWalletSession();
+      }
+    },
     /**
-     * Initializes the auth store by checking if there is a stored auth and if it is still valid.
+     * Initializes the Offline auth store by checking if there is a stored auth and if it is still valid.
      * It sets the AuthLevel accordingly if the stored auth is still valid.
      */
-    init () {
+    initOfflineSession () {
       AuthStorage.migrate();
+      const previous = this.storeAuthAccount;
       this.storeAuthAccount = AuthStorage.getBySessionIndex();
 
       // If there is no stored auth, there is nothing to do
       if (this.storeAuthAccount == null) {
+        this.authLevel = AuthLevel.None;
         return;
       }
-
-      useAccountStore().init();
 
       // If there is a stored auth, check if it is still valid
       if (this.hasValidAuthAuthorization()) {
         this.authLevel = AuthLevel.Session;
       } else {
+        this.authLevel = AuthLevel.ExpiredSession;
         useRouter().push("/auth/session");
+      }
+
+      // If the stored auth is the same as the previous one, there is nothing to do
+      if (previous?.address !== this.storeAuthAccount.address) {
+        console.log("AuthStore: same account, no need to re-init");
         return;
       }
-      // TODO: consider a more appropriate location to handle this
-      // if the signer is one of the given ones, set the auth level to wallet since can interact directly with the wallet without delays
-      if (["keplr", "web3auth"].includes(this.storeAuthAccount.signer)) {
-        this.authLevel = AuthLevel.Wallet;
-      }
+      useAccountStore().init(); // update async account info (dtag, bio, etc..)
+      console.log("init Offline Session");
     },
     /**
      * Check if the user has a valid authorization
@@ -114,18 +121,12 @@ export const useAuthStore = defineStore({
       }
     },
     /**
-     * Sign in
+     * Sign in by Wallet connection
      */
-    async login (force = false): Promise<void> {
+    async initWalletSession (): Promise<void> {
       const { $useWallet } = useNuxtApp();
-      // prevent from multiple login attempts if the user is already logged in, unless forced (ex. Keplr wallet switch)
-      if ($useWallet().signerId === SupportedSigner.Noop) {
-        console.log("cannot login, no wallet connected");
-      }
 
-      /* if (useRouter().currentRoute.value.path.includes("auth")) {
-        await navigateTo("/auth/loading");
-      } */
+      await $useWallet().retrieveCurrentWallet();
 
       // Get the user address
       const account = await $useWallet().getSigner().getCurrentAccount();
@@ -135,21 +136,26 @@ export const useAuthStore = defineStore({
       }
 
       const accountData = await (await $useWallet().wallet.client).getAccount(account.address);
+      const storedAccount = AuthStorage.getByAddress(account.address);
+
+      // if the account is the same as the stored one, use the stored authorization
+      const authorization = accountData?.address === storedAccount?.address || "" ? storedAccount?.authorization || "" : "";
       AuthStorage.setAccount({
         address: account.address,
         accountNumber: accountData?.accountNumber || 0,
-        authorization: this.storeAuthAccount?.authorization || "",
+        authorization,
         signer: $useWallet().signerId
       });
-
-      /* if (!this.hasValidAuthAuthorization() && useRouter().currentRoute.value.path.includes("auth")) {
-        // If the authorization is expired, request a new one
-        await navigateTo("/auth/session");
-      } */
+      this.initOfflineSession();
+      await useAccountStore().init();
     },
 
     async authorize (): Promise<boolean> {
       const { $useTransaction, $useWallet } = useNuxtApp();
+      if (!this.storeAuthAccount) {
+        console.log("cannot authorize, no account stored");
+        return false;
+      }
       let signedBytes = new Uint8Array();
       try {
         signedBytes = await $useTransaction().directSign(
@@ -168,14 +174,13 @@ export const useAuthStore = defineStore({
           },
           0
         );
-        const address = (await $useWallet().getSigner().getCurrentAccount()).address;
+        const address = this.storeAuthAccount.address;
         const token = Buffer.from(signedBytes).toString("base64");// Store the auth data locally
-        const accountInfo = await (await $useWallet().wallet.client).getAccount(address).catch(() => { return null; });
         const storedAuthAccount: StoreAuthAccount = {
           address,
           signer: $useWallet().signerId,
           authorization: token,
-          accountNumber: accountInfo?.accountNumber || 0
+          accountNumber: this.storeAuthAccount.accountNumber || 0
         };
         AuthStorage.setAccount(storedAuthAccount);
         await useAccountStore().getUserInfo();

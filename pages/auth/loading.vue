@@ -6,6 +6,6 @@
 
 <script setup lang="ts">
 definePageMeta({
-  middleware: ["not-authenticated", "not-direct-route"]
+  middleware: ["not-direct-route"]
 });
 </script>

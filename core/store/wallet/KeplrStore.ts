@@ -45,14 +45,18 @@ export const useKeplrStore = defineStore({
     async connect (): Promise<void> {
       const { $useWallet, $DesmjsKeplr, $useDesmosNetwork, $useAuth } = useNuxtApp();
       const client = window.keplr;
-      if (!client) {
-        return;
+      if (!client || client === undefined) {
+        throw new Error("Keplr is not available");
       }
       this.isAvailable = true;
 
       await $useDesmosNetwork().updateChainStatus();
       const chainInfo = $useDesmosNetwork().chainInfo;
       await $DesmjsKeplr.KeplrSigner.setupChainNetwork(await useNuxtApp().$DesmjsKeplr.setupChainInfo(chainInfo));
+
+      window.addEventListener("keplr_keystorechange", () => {
+        $useAuth().initWalletSession();
+      });
 
       // Create the Keplr Signer with the currrent configuration
       const keplrSigner = new $DesmjsKeplr.KeplrSigner(client, {

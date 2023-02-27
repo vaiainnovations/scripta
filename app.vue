@@ -6,7 +6,7 @@ import { usePostStore } from "./core/store/PostStore";
 if (process.client) {
   const { $useAuth } = useNuxtApp();
   useNuxtApp().$useDesmosNetwork().init();
-  $useAuth().init();
+  $useAuth().login();
   await usePostStore().loadTrendings();
 }
 

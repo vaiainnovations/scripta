@@ -44,7 +44,7 @@ export const useWalletConnectStore = defineStore({
             console.log("Connecting to previous session");
             await signer.connectToSession(sessions[0]);
           }
-        } catch (e) { /* no previous session */console.log(e); }
+        } catch (e) { console.log(e); }
       }
 
       await $useWallet().connect(signer, "walletconnect");
