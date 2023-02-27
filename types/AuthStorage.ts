@@ -29,6 +29,12 @@ export class AuthStorage {
       localStorage.removeItem(AuthStorage.STORAGE_KEY); // remove the old storage
       authStorage.version = 3; // update the version
       authStorage.sessionIndex = -1; // set the default session index
+      if (authStorage.accounts.length > 0) { // if there are accounts
+        const v2signer = authStorage.signer || ""; // get the signer of the v2 storage
+        if (v2signer !== "") { // if the signer is not empty
+          authStorage.sessionIndex = authStorage.accounts.findIndex(account => account.signer === v2signer); // search the index of the account with the same signer
+        }
+      }
       delete authStorage.signer; // delete the old signer field
       AuthStorage.setStoredAuthData(authStorage);
       break;
@@ -97,6 +103,7 @@ export class AuthStorage {
     } else {
       // if the account is not stored, we add it
       storedAuthData.accounts.push(value);
+      index = storedAuthData.accounts.length - 1;
     }
     storedAuthData.sessionIndex = index; // set the index of the current session auth account
     AuthStorage.setStoredAuthData(storedAuthData); // store the new auth storage
