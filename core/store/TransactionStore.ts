@@ -29,7 +29,8 @@ export const useTransactionStore = defineStore({
     queue: [] as TransactionQueueMsg[],
     status: QueueStatus.WAITING,
     errorText: "",
-    hash: ""
+    hash: "",
+    isSigning: false
   }),
   actions: {
     push (message: EncodeObject, details: Record<string, unknown> = {}): void {
@@ -54,6 +55,7 @@ export const useTransactionStore = defineStore({
     async execute (): Promise<Uint8Array> {
       const { $useWallet } = useNuxtApp();
       this.status = QueueStatus.CONNECTING_WALLET;
+      this.isSigning = true;
 
       try {
         await $useWallet().waitWalletActivation(); // recover the wallet signer & wait for it to be ready
@@ -61,6 +63,7 @@ export const useTransactionStore = defineStore({
         this.status = QueueStatus.FAILED;
         this.errorText = "Wallet not connected or locked";
         this.resetQueueWithTimer(5, false);
+        this.isSigning = false;
         return new Uint8Array();
       }
 
@@ -86,6 +89,7 @@ export const useTransactionStore = defineStore({
           const signed = await client.sign(address, msgs, defaultFee, "Signed from Scripta.network");
           txBytes = TxRaw.encode(signed).finish();
         }
+        this.isSigning = false;
 
         // broadcast the messages
         this.status = QueueStatus.PENDING;
@@ -132,12 +136,14 @@ export const useTransactionStore = defineStore({
     async directTx (messages: EncodeObject[], details: Record<string, unknown>[] = [], skipAuthz = false): Promise<boolean> {
       const { $useDesmosNetwork, $useWallet } = useNuxtApp();
       this.status = QueueStatus.CONNECTING_WALLET;
+      this.isSigning = true;
       try {
         await $useWallet().waitWalletActivation(); // recover the wallet signer & wait for it to be ready
       } catch (error) {
         this.status = QueueStatus.FAILED;
         this.errorText = "Wallet not connected or locked";
         this.resetQueueWithTimer(5, false);
+        this.isSigning = false;
         return false;
       }
       this.assertBalance();
@@ -148,6 +154,7 @@ export const useTransactionStore = defineStore({
           signedBytes = await this.directSign(messages, "Signed from Scripta.network", $useDesmosNetwork().defaultFee, $useWallet().getSigner().signingMode);
         }
 
+        this.isSigning = false;
         let broadcastResult = null as any;
         try {
           broadcastResult = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}broadcast`, "POST", {
@@ -165,6 +172,7 @@ export const useTransactionStore = defineStore({
       } catch (e) {
         // handle tx error or wallet signing rejection
         console.log(e);
+        this.isSigning = false;
         useAccountStore().updateBalance();
         return false;
       }
@@ -180,12 +188,14 @@ export const useTransactionStore = defineStore({
     async directSign (messages: EncodeObject[], memo = "Signed from Scripta.network", fees = useNuxtApp().$useDesmosNetwork().defaultFee, signMode: 0 | 1 = 0): Promise<Uint8Array> {
       const { $useWallet, $useDesmosNetwork } = useNuxtApp();
       this.status = QueueStatus.CONNECTING_WALLET;
+      this.isSigning = true;
       try {
         await $useWallet().waitWalletActivation(true); // recover the wallet signer & wait for it to be ready
       } catch (error) {
         this.status = QueueStatus.FAILED;
         this.errorText = "Wallet not connected or locked";
         this.resetQueueWithTimer(5, false);
+        this.isSigning = false;
         return new Uint8Array();
       }
 
@@ -209,6 +219,7 @@ export const useTransactionStore = defineStore({
         // broadcast the messages
         this.status = QueueStatus.SUCCESS;
         this.resetQueueWithTimer(0);
+        this.isSigning = false;
         return txBytes;
       } catch (e) {
         console.log(e);
@@ -216,6 +227,7 @@ export const useTransactionStore = defineStore({
         this.errorText = `${e}`;
         this.resetQueueWithTimer(6);
       }
+      this.isSigning = false;
       return new Uint8Array();
     },
     /**

@@ -23,13 +23,30 @@
       class="w-full bg-background-alt rounded-2xl col-span-6 h-64 mt-16 mb-64 flex h-full my-auto"
     >
       <div class="my-auto w-full mx-auto">
-        <p class="text-3xl xl:text-4xl text-center tracing-wide">
-          Writing,<br> just a second...
-        </p>
-        <img
-          src="/svg/spinner/dots.svg"
-          class="mx-auto h-4 object-contain fill-white my-5"
-        >
+        <span v-if="!useNuxtApp().$useTransaction().isSigning">
+          <p class="text-3xl xl:text-4xl text-center tracing-wide">
+            Writing the Article<br>
+          </p>
+          <p class="pt-2 text-sm font-normal text-primary-text-light text-center">
+            Just a second...
+          </p>
+          <img
+            src="/svg/spinner/dots.svg"
+            class="mx-auto h-4 object-contain fill-white my-5"
+          >
+        </span>
+        <span v-else>
+          <p class="text-3xl xl:text-4xl text-center tracing-wide">
+            Sign the Transaction
+          </p>
+          <p class="pt-2 text-sm font-normal text-primary-text-light text-center">
+            Unlock and Approve the transaction in your Wallet
+          </p>
+          <img
+            src="/svg/spinner/dots.svg"
+            class="mx-auto h-4 object-contain fill-white my-5"
+          >
+        </span>
       </div>
     </div>
   </div>

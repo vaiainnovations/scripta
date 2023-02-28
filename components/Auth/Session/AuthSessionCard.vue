@@ -22,8 +22,6 @@
               </p>
             </span>
 
-            Show wich wallet is used + method
-
             <div class="pt-12">
               <div v-if="!hasAuthz&&suggestAuthz" class="text-center p-4">
                 <button

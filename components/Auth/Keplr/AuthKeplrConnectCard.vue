@@ -37,7 +37,11 @@ const isConnecting = ref(false);
 async function connect () {
   const { $useWallet } = useNuxtApp();
   isConnecting.value = true;
-  await $useWallet().initWalletConnection(SupportedSigner.Keplr);
+  try {
+    await $useWallet().initWalletConnection(SupportedSigner.Keplr);
+  } catch (e) {
+    await new Promise(resolve => setTimeout(resolve, 200)); // little delay
+  }
   isConnecting.value = false;
 }
 </script>

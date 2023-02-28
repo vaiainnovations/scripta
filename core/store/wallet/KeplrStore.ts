@@ -43,9 +43,10 @@ export const useKeplrStore = defineStore({
     * Get the Keplr Signer from the window, and connect it to the wallet
     */
     async connect (): Promise<void> {
-      const { $useWallet, $DesmjsKeplr, $useDesmosNetwork, $useAuth } = useNuxtApp();
+      const { $useWallet, $DesmjsKeplr, $useDesmosNetwork, $useAuth, $useNotification } = useNuxtApp();
       const client = window.keplr;
       if (!client || client === undefined) {
+        $useNotification().error("Keplr Locked", "Make sure is installed and unlocked", 10);
         throw new Error("Keplr is not available");
       }
       this.isAvailable = true;
