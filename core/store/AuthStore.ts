@@ -46,7 +46,7 @@ export const useAuthStore = defineStore({
      */
     initOfflineSession () {
       AuthStorage.migrate();
-      const previous = this.storeAuthAccount;
+      const previous = Object.assign({}, this.storeAuthAccount);
       this.storeAuthAccount = AuthStorage.getBySessionIndex();
 
       // If there is no stored auth, there is nothing to do
@@ -125,6 +125,7 @@ export const useAuthStore = defineStore({
      */
     async initWalletSession (): Promise<void> {
       const { $useWallet } = useNuxtApp();
+      console.log("init Wallet Session");
 
       await $useWallet().retrieveCurrentWallet();
 
@@ -139,7 +140,7 @@ export const useAuthStore = defineStore({
       const storedAccount = AuthStorage.getByAddress(account.address);
 
       // if the account is the same as the stored one, use the stored authorization
-      const authorization = accountData?.address === storedAccount?.address || "" ? storedAccount?.authorization || "" : "";
+      const authorization = account.address === storedAccount?.address || "" ? storedAccount?.authorization || "" : "";
       AuthStorage.setAccount({
         address: account.address,
         accountNumber: accountData?.accountNumber || 0,

@@ -58,7 +58,7 @@ async function claimFaucet () {
       useNuxtApp().$useNotification().error("Claim Error", "An error occurred during the request, try later");
     }
     isClaimingFaucet.value = false;
-    $useAuth().login(true); // refresh all profile infos
+    useAccountStore().updateUserAccount(); // refresh all profile infos
   } catch (e) {
     isClaimingFaucet.value = false;
     useNuxtApp().$useNotification().error("Claim Error", "An error occurred during the request, try later");
