@@ -30,6 +30,15 @@ export const useShareStore = defineStore({
           useNuxtApp().$useNotification().push("Copied Share Link", "", 4, "");
         }
       }
+    },
+    /**
+     * Copy a value to the clipboard
+     * @param value content to copy
+     * @param title title of the success notification
+     */
+    copy (value:string, title = "Copied Share Link") {
+      navigator.clipboard.writeText(value);
+      useNuxtApp().$useNotification().push(title, "", 4, "");
     }
   }
 });
