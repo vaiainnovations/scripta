@@ -88,7 +88,6 @@
 
 <script setup lang="ts">
 import { useAccountStore } from "~~/core/store/AccountStore";
-import { SupportedSigner } from "~~/core/store/wallet/SupportedSigner";
 
 const isLoading = ref(true);
 const hasAuthz = ref(false);
@@ -121,7 +120,6 @@ async function continueWithoutAuthz () {
   isLoading.value = true;
   const { $useAuth } = useNuxtApp();
   const success = await $useAuth().authorize();
-  isLoading.value = false;
 
   if (success) {
     await navigateTo("/profile");

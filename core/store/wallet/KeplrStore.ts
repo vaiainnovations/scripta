@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { registerModuleHMR } from "..";
-import { SupportedSigner } from "./SupportedSigner";
+import { SupportedSigner } from "../../../types/SupportedSigner";
 
 export const useKeplrStore = defineStore({
   id: "KeplrStore",
@@ -43,16 +43,21 @@ export const useKeplrStore = defineStore({
     * Get the Keplr Signer from the window, and connect it to the wallet
     */
     async connect (): Promise<void> {
-      const { $useWallet, $DesmjsKeplr, $useDesmosNetwork, $useAuth } = useNuxtApp();
+      const { $useWallet, $DesmjsKeplr, $useDesmosNetwork, $useAuth, $useNotification } = useNuxtApp();
       const client = window.keplr;
-      if (!client) {
-        return;
+      if (!client || client === undefined) {
+        $useNotification().error("Keplr Locked", "Make sure is installed and unlocked", 10);
+        throw new Error("Keplr is not available");
       }
       this.isAvailable = true;
 
       await $useDesmosNetwork().updateChainStatus();
       const chainInfo = $useDesmosNetwork().chainInfo;
       await $DesmjsKeplr.KeplrSigner.setupChainNetwork(await useNuxtApp().$DesmjsKeplr.setupChainInfo(chainInfo));
+
+      window.addEventListener("keplr_keystorechange", () => {
+        $useAuth().initWalletSession();
+      });
 
       // Create the Keplr Signer with the currrent configuration
       const keplrSigner = new $DesmjsKeplr.KeplrSigner(client, {

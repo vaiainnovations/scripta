@@ -29,17 +29,18 @@
 </template>
 
 <script setup lang="ts">
+import { SupportedSigner } from "../../../types/SupportedSigner";
 const isConnecting = ref(false);
 /**
  * Keplr Connection
  */
 async function connect () {
-  const { $useKeplr } = useNuxtApp();
+  const { $useWallet } = useNuxtApp();
   isConnecting.value = true;
   try {
-    await $useKeplr().connect();
+    await $useWallet().initWalletConnection(SupportedSigner.Keplr);
   } catch (e) {
-    console.error(e);
+    await new Promise(resolve => setTimeout(resolve, 200)); // little delay
   }
   isConnecting.value = false;
 }

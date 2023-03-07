@@ -2,10 +2,11 @@ import { defineStore } from "pinia";
 import { DesmosClient, NoOpSigner, Signer, SignerStatus } from "@desmoslabs/desmjs";
 import { registerModuleHMR } from "..";
 import { useAuthStore } from "../AuthStore";
+import { useAccountStore } from "../AccountStore";
+import { SupportedSigner } from "../../../types/SupportedSigner";
 import { useConfigStore } from "../ConfigStore";
 import { useWalletConnectStore } from "./WalletConnectStore";
 import { useKeplrStore } from "./KeplrStore";
-import { SupportedSigner } from "./SupportedSigner";
 import { useWeb3AuthStore } from "./Web3AuthStore";
 
 class Wallet {
@@ -26,18 +27,58 @@ export const useWalletStore = defineStore({
   getters: {
   },
   actions: {
+    async initWalletConnection (id: string) {
+      const { $useAuth, $useKeplr, $useWalletConnect, $useWeb3Auth } = useNuxtApp();
+
+      switch (id) {
+      case SupportedSigner.Keplr:
+        await $useKeplr().connect();
+        break;
+      case SupportedSigner.WalletConnect:
+        await $useWalletConnect().connect();
+        break;
+      case SupportedSigner.Web3Auth:
+        await $useWeb3Auth().connect(true);
+        break;
+      }
+
+      await $useAuth().initWalletSession();
+      $useAuth().initOfflineSession();
+      useRouter().push("/profile");
+    },
+
+    /**
+     * Wait for the wallet to be activated. Authz users are not required to have a wallet connected
+     * @param skipAuthz Skip the authz check (ex. necessary when the user has to sign the authorization)
+     */
+    async waitWalletActivation (skipAuthz = false) {
+      if (useAccountStore().authz.hasAuthz && !skipAuthz) {
+        return;
+      }
+      try {
+        await this.retrieveCurrentWallet();
+      } catch (e) {
+        throw new Error(" Wallet not connected");
+      }
+    },
 
     /**
     * Check if there is a wallet connected, and try to reconnect
     */
-    async retrieveCurrentWallet (signerId: string = this.signerId) {
+    async retrieveCurrentWallet () {
+      const signerId = this.retrieveSessionSignerId();
       // Attempt to retrieve the client
       switch (signerId) {
       case SupportedSigner.Keplr:
         await useKeplrStore().connect();
         break;
       case SupportedSigner.WalletConnect:
-        await useWalletConnectStore().connect();
+        try {
+          await useWalletConnectStore().connect(true);
+        } catch (e) {
+          console.log(e);
+          await useWalletConnectStore().connect();
+        }
         break;
       case SupportedSigner.Web3Auth:
         await useWeb3AuthStore().connect();
@@ -46,6 +87,11 @@ export const useWalletStore = defineStore({
       default:
         break;
       }
+    },
+    retrieveSessionSignerId (): SupportedSigner | null {
+      const { $useAuth } = useNuxtApp();
+      const storedAuthAccount = $useAuth().storeAuthAccount;
+      return storedAuthAccount?.signer || null;
     },
 
     /**
@@ -117,16 +163,6 @@ export const useWalletStore = defineStore({
       if (!account || !account.address) {
         await authStore.logout("/auth/error");
         console.error("Account does not exists");
-        return;
-      }
-
-      // Start the final step of the login process
-      console.log("called WalletStore onWalletConnected");
-      try {
-        await authStore.login(true);
-      } catch (e) {
-        console.log(e);
-        await authStore.logout("/auth/error");
       }
     },
 

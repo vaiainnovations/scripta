@@ -15,8 +15,9 @@ export const useWalletConnectStore = defineStore({
     /**
     * Inizialize WalletConenct connection & listeners
     */
-    async connect (): Promise<WalletConnectSigner> {
+    async connect (recoverConnection = false): Promise<WalletConnectSigner> {
       const { $useWallet } = useNuxtApp();
+
       const signClient = await SignClient.init({
         projectId: useConfigStore().walletConnectProjectId,
         metadata: {
@@ -36,13 +37,15 @@ export const useWalletConnectStore = defineStore({
       });
 
       // Try to connect to a previous session
-      try {
-        const sessions = signClient.session.values;
-        if (sessions[0]) {
-          console.log("Connecting to previous session");
-          await signer.connectToSession(sessions[0]);
-        }
-      } catch (e) { /* no previous session */console.log(e); }
+      if (recoverConnection) {
+        try {
+          const sessions = signClient.session.values;
+          if (sessions[0]) {
+            console.log("Connecting to previous session");
+            await signer.connectToSession(sessions[0]);
+          }
+        } catch (e) { console.log(e); }
+      }
 
       await $useWallet().connect(signer, "walletconnect");
       return signer;

@@ -7,7 +7,12 @@
       </div>
       <div class="mx-auto text-center w-full rounded-2xl mb-32 md:mb-0">
         <p class="text-lg text-primary-text/70 font-medium p-3">
-          Updating
+          <span v-if="!useNuxtApp().$useTransaction().isSigning">
+            Updating...
+          </span>
+          <span v-else>
+            Unlock and Approve the transaction in your Wallet
+          </span>
         </p>
         <img class="animate-pulse mx-auto w-10" src="/svg/spinner/dots.svg">
       </div>

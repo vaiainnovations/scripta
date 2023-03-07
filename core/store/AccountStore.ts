@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
 import { EncodeObject } from "@cosmjs/proto-signing";
 import { MsgRevoke } from "cosmjs-types/cosmos/authz/v1beta1/tx";
-/* import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile"; */
+import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
+import { generateUsername } from "unique-username-generator";
 import { useBackendStore } from "./BackendStore";
 import { usePostStore } from "./PostStore";
+import { useConfigStore } from "./ConfigStore";
 import { registerModuleHMR } from ".";
 
 export interface MsgRevokeEncodeObject extends EncodeObject {
@@ -35,6 +37,54 @@ export const useAccountStore = defineStore({
   getters: {
   },
   actions: {
+    async init () {
+      const { $useAuth, $useWallet } = useNuxtApp();
+
+      if ($useAuth().storeAuthAccount === null) {
+        return;
+      }
+
+      useAccountStore().address = $useAuth().storeAuthAccount!.address; // set the address in the account store
+      await useAccountStore().getUserInfo(); // update auth info (authz, etc) from the backend
+
+      // Retrieve the Desmos profile, if exists
+      const profile = await (await $useWallet().wallet.client).getProfile(this.address); // can use the wallet client since works also with the noop
+
+      if (profile) {
+        useAccountStore().profile = profile;
+        // if possitble, replace the user's profile picture with the one from the IPFS Read gateway
+        try {
+            profile.pictures!.profile = profile.pictures!.profile.replace(useConfigStore().ipfsGateway, useConfigStore().ipfsGatewayRead);
+        } catch (e) { /* ignore */ }
+        useAccountStore().isNewProfile = false;
+      }
+
+      if (!profile && (!useAccountStore().isNewProfile)) { // If no profile or if the new profile has been already generated
+        useAccountStore().isNewProfile = true;
+        // generate a new empty profile with a random username/nickname if the profile does not exists
+
+        // Generate a new valid random username
+        let username = "";
+        while (!/^[A-Za-z0-9_]+$/.test(username)) {
+          username = generateUsername("_", 0, 26).concat("" + Math.floor(Math.random() * 10000).toString());
+        }
+        // generate the nickname from the username
+        const nickname = (username.split("_").map(word => word[0].toUpperCase() + word.slice(1)).join(" ")).replace(/[0-9]/g, "");
+        const newProfile: Profile = {
+          dtag: username,
+          nickname,
+          bio: "",
+          pictures: {
+            cover: "",
+            profile: ""
+          },
+          creationDate: new Date(Date.now())
+        };
+        useAccountStore().profile = newProfile;
+      }
+
+      await useAccountStore().updateUserAccount();
+    },
     /**
      * Update User account
      */
