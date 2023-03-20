@@ -20,7 +20,8 @@ export const useBackendStore = defineStore({
         const { $useAuth } = useNuxtApp();
         const authStorage = $useAuth().storeAuthAccount;
 
-        if (authStorage) {
+        // Only if the authorization is valid and verified, append the `Authorization` and `an` flags
+        if (authStorage && $useAuth().hasValidAuthAuthorization()) {
           if (authStorage.authorization) {
             headers.append("Authorization", authStorage.authorization);
           }
