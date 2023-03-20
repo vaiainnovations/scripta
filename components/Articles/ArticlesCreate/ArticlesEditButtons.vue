@@ -71,6 +71,25 @@ const isPublishing = ref(false);
 
 const emit = defineEmits(["isPublishing"]);
 
+let saveDraftInterval = null as NodeJS.Timer | null;
+
+if (!useDraftStore().id) {
+  saveDraftInterval = setInterval(() => {
+    // ensure that is a draft
+    if (!useDraftStore().id && (useDraftStore().title || useDraftStore().subtitle || useDraftStore().content || useDraftStore().tags.length > 0)) {
+      saveDraft();
+    }
+  }, 20 * 1000);
+}
+
+onBeforeUnmount(async () => {
+  // ensure that is a draft and has an active timer
+  if (!useDraftStore().id && saveDraftInterval) {
+    await saveDraft();
+    clearInterval(saveDraftInterval);
+  }
+});
+
 function saveDraft () {
   isSavingDraft.value = true;
   useDraftStore().saveDraft().then(() => {
