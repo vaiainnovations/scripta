@@ -17,10 +17,13 @@
         :value="useDraftStore().title"
         type="text"
         class="group h-20 w-full font-bold text-xl bg-background-alt text-primary-text px-7 lg:text-5xl outline-none focus:border-l-background focus:border-l-2"
-        maxlength="90"
+        maxlength="75"
         placeholder="Title"
         @input="(evt)=> useDraftStore().title = evt.target.value"
       >
+      <div v-if="useDraftStore().title.length > 0" class="text-[0.65rem] text-gray-dark w-full text-right">
+        {{ useDraftStore().title.length }} / 75
+      </div>
     </div>
     <!-- Subtitle -->
     <div class="w-full flex flex-col items-center group mb-6">
@@ -32,12 +35,15 @@
       </label>
       <textarea
         :value="useDraftStore().subtitle"
-        maxlength="160"
+        maxlength="150"
         type="text"
         class="group h-20 w-full py-2 font-bold text-xl bg-background-alt text-primary-text/50 px-7 lg:text-3xl outline-none focus:border-l-background focus:border-l-2"
         placeholder="Subtitle"
         @input="(evt)=> useDraftStore().subtitle = evt.target.value"
       />
+      <div v-if="useDraftStore().subtitle.length > 0" class="text-[0.65rem] text-gray-dark w-full text-right">
+        {{ useDraftStore().subtitle.length }} / 150
+      </div>
     </div>
     <!-- Content -->
     <div class="w-full flex flex-col items-center group my-3 outline-none">
