@@ -2,11 +2,10 @@
   <div class="max-h-fit overflow-hidden xl:mx-2 hover:bg-gray-light/40 hover:rounded-lg pt-2 pb-2 pl-2.5 xl:pl-0 border-b border-gray-light/70">
     <div class="w-full flex">
       <div class="w-1/4">
-        <img
-          :src="props.post.image"
-          onerror="this.onerror=null;this.src='/img/author_pic.png'"
-          class="w-full pr-1 my-auto mx-auto object-contain max-h-14 rounded-lg"
-        >
+        <ImageWrapper
+          :img-url="props.post.image ||'/img/author_pic.png'"
+          :img-class="'w-full pr-1 my-auto mx-auto object-contain max-h-14 rounded-lgo'"
+        />
       </div>
       <div class="w-3/4">
         <p class="text-[1.07rem] font-bold">

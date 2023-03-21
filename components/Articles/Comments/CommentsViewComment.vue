@@ -52,11 +52,10 @@ const isEditing = ref(false);
     <div class="p-3">
       <div class="flex">
         <NuxtLink :to="`/@${props.comment.author?.dtag || props.comment.author}`">
-          <img
-            :src="profilePic"
-            onerror="this.onerror=null;this.src='/img/author_pic.png'"
-            class="h-10 w-10 md:h-10 md:w-10 rounded-full object-cover"
-          >
+          <ImageWrapper
+            :img-url="profilePic"
+            :img-class="'h-10 w-10 md:h-10 md:w-10 rounded-full object-cover'"
+          />
         </NuxtLink>
         <div class="w-full ml-3">
           <div class="flex text-sm">

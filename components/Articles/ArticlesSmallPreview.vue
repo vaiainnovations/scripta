@@ -7,12 +7,11 @@
     <div class=" mx-auto hidden sm:block">
       <div class="flex max-w-full mx-auto overflow-hidden bg-background-alt rounded-2xl shadow-md dark:bg-gray-800">
         <div class="w-1/3 h-48">
-          <img
+          <ImageWrapper
+            :img-url="props.content.image"
+            :img-class="'w-full h-full object-contain bg-[#FFFF]'"
             alt="Article cover picture"
-            :src="props.content.image"
-            onerror="this.onerror=null;this.src='/img/author_pic.png'"
-            class="w-full h-full object-contain bg-[#FFFF]"
-          >
+          />
         </div>
 
         <div class="w-2/3 p-4 md:p-4">
@@ -79,12 +78,7 @@
     <div class="w-full mx-auto block sm:hidden">
       <div class="overflow-hidden shadow-lg rounded-3xl md:w-80 cursor-pointer m-auto">
         <div class="w-full h-full">
-          <img
-            alt="Article cover picture"
-            :src="props.content.image"
-            onerror="this.onerror=null;this.src='/img/author_pic.png'"
-            class="max-h-56 w-full object-contain"
-          >
+          <ImageWrapper :img-url="props.content.image" :img-class="'max-h-56 w-full object-contain'" alt="Article cover picture" />
           <div class="bg-background-alt dark:bg-gray-800 w-full p-4">
             <a
               v-if="props.content.id <= 0"

@@ -19,12 +19,10 @@
         >
           <div class="grid-cols-12 grid">
             <div class="col-span-12 sm:col-span-4 md:col-span-5 lg:col-span-4 ">
-              <img
-                class="object-cover my-auto mx-auto lg:float-right rounded-xl h-40 lg:aspect-square aspect-video lg:h-36"
-                :src="x.image ||'/img/author_pic.png'"
-                onerror="this.src='/img/author_pic.png'"
-                loading="lazy"
-              >
+              <ImageWrapper
+                :img-url="x.image"
+                :img-class="'object-cover my-auto mx-auto lg:float-right rounded-xl h-40 lg:aspect-square aspect-video lg:h-36'"
+              />
             </div>
             <div class="col-span-12 sm:col-span-8 md:col-span-7 lg:col-span-8 lg:pl-4 pl-4 md:pl-0">
               <h2
