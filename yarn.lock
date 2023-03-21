@@ -3045,6 +3045,14 @@
   resolved "https://registry.yarnpkg.com/@types/resolve/-/resolve-1.20.2.tgz#97d26e00cd4a0423b4af620abecf3e6f442b7975"
   integrity sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==
 
+"@types/rollup-plugin-node-builtins@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@types/rollup-plugin-node-builtins/-/rollup-plugin-node-builtins-2.1.2.tgz#d702de68f4aa7ab072845ab65e51fd7f1c0b4786"
+  integrity sha512-R6dkiJk0JaRavDddmE4zddXOkFjCmSXv8RwqIgkX/1MvQ0SjDfo326+yAHy8HL++JWVNa48yB4EjPYyZeISzGQ==
+  dependencies:
+    "@types/node" "*"
+    rollup "^0.63.4"
+
 "@types/secp256k1@^4.0.1":
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/@types/secp256k1/-/secp256k1-4.0.3.tgz#1b8e55d8e00f08ee7220b4d59a6abe89c37a901c"
@@ -12045,6 +12053,14 @@ rollup-pluginutils@^2.8.1:
   integrity sha512-/qxNTG7FbmefJWoeeYJFbHehJ2HNWnjkAFRKzWN/45eNBBF/r8lo992CwcJXEzyVxs5FmfId+vTSTQDb+bxA+g==
   optionalDependencies:
     fsevents "~2.3.2"
+
+rollup@^0.63.4:
+  version "0.63.5"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.63.5.tgz#5543eecac9a1b83b7e1be598b5be84c9c0a089db"
+  integrity sha512-dFf8LpUNzIj3oE0vCvobX6rqOzHzLBoblyFp+3znPbjiSmSvOoK2kMKx+Fv9jYduG1rvcCfCveSgEaQHjWRF6g==
+  dependencies:
+    "@types/estree" "0.0.39"
+    "@types/node" "*"
 
 rollup@^2.77.2, rollup@^2.79.1:
   version "2.79.1"
