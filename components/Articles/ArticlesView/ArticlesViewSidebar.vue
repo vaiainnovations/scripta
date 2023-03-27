@@ -11,7 +11,7 @@
         :key="post.externalId"
         class="w-full my-2"
       >
-        <NuxtLink :to="`/@${post.author}/${post.externalId}`">
+        <NuxtLink :to="post.author?.dtag ? `/@${post.author.dtag}/${post.externalId}` : `/@${post.author}/${post.externalId}`">
           <ArticlesViewSuggested :post="post" />
         </NuxtLink>
         <div />

@@ -4,7 +4,7 @@
       v-if="trendingPosts.length > 0"
       class="md:col-span-2"
     >
-      <NuxtLink :to="`/@${trendingPosts[0].author}/${trendingPosts[0].externalId}`">
+      <NuxtLink :to="trendingPosts[0].author?.dtag ? `/@${trendingPosts[0].author.dtag}/${trendingPosts[0].externalId}` : `/@${trendingPosts[0].author}/${trendingPosts[0].externalId}`">
         <ArticlesPreview class="col-span-2" :content="{title: trendingPosts[0].text, description: trendingPosts[0].subtitle, image: trendingPosts[0].image, content: trendingPosts[0].content, tags: trendingPosts[0].tags}" />
       </NuxtLink>
     </div>

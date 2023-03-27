@@ -11,7 +11,7 @@
         <NuxtLink
           v-for="x in latest"
           :key="x.externalId"
-          :to="`/@${x.author}/${x.externalId}`"
+          :to="x.author?.dtag ? `/@${x.author.dtag}/${x.externalId}` : `/@${x.author}/${x.externalId}`"
           class="col-span-1 sm:flex px-4 py-2 my-4 md:my-2 p-1 bg-background-light/20 hover:bg-white/60 rounded-2xl cursor-pointer group"
         >
           <ImageWrapper

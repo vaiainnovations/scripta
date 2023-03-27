@@ -18,7 +18,7 @@
           v-for="article in articles"
           :key="article.externalId"
           class="w-full"
-          :to="`/@${article.author}/${article.externalId}`"
+          :to="`/@${props.user?.dtag || article.author}/${article.externalId}`"
         >
           <ArticlesSmallPreview
             v-if="article"

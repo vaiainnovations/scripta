@@ -4,11 +4,13 @@ import { useConfigStore } from "./ConfigStore";
 import { usePostStore } from "./PostStore";
 import { registerModuleHMR } from ".";
 import { PostExtended } from "~~/types/PostExtended";
+import { Author } from "~~/types/Author";
 
 export const useUserStore = defineStore({
   id: "UserStore",
   state: () => ({
-    users: new Map<string, any>()
+    users: new Map<string, any>(),
+    authors: new Map<string, Author>()
   }),
   actions: {
     async getUser (username: string, useCache = false): Promise<any> {
@@ -47,6 +49,44 @@ export const useUserStore = defineStore({
         }
       } catch (e) { return []; }
       return (posts.length > 0 ? posts : []);
+    },
+    /**
+     * Load on authors state the new requested author's profiles
+     * @param usernames array of authors address
+     */
+    async getAuthors (usernames: string[]): Promise<any> {
+      const query = `query profiles {
+        profile_aggregate(where: {address: {_in: ${JSON.stringify(usernames)}}}) {
+          nodes {
+            address
+            dtag
+            nickname
+            bio
+            profile_pic
+            cover_pic
+          }
+        }
+      }`;
+      const usersRaw = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}/graphql`, "POST", {
+        "Content-Type": "application/json"
+      }, JSON.stringify({
+        q: query,
+        type: "desmos"
+      }))).json() as any;
+      if (usersRaw && usersRaw.data && usersRaw.data.profile_aggregate.nodes[0]) {
+        usersRaw.data.profile_aggregate.nodes.forEach((author: any) => {
+          this.authors.set(author.address, {
+            address: author.address,
+            bio: author?.bio || "",
+            dtag: author.dtag,
+            nickname: author?.nickname || "",
+            pictures: {
+              cover: author?.cover_pic || "",
+              profile: author?.profile_pic || ""
+            }
+          });
+        });
+      }
     }
   }
 });

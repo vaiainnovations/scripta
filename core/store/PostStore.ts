@@ -254,10 +254,29 @@ export const usePostStore = defineStore({
         ))
       );
 
+      const authors: [] = [];
       if (this.trendings.length > 0) {
         for (let i = 0; i < this.trendings.length; i++) {
+          const author = useUserStore().authors.get(this.trendings[i].author);
+          if (!this.trendings[i].author?.dtag && !author) {
+            authors.push(this.trendings[i].author);
+          }
           this.trendings[i].image = this.getArticlePreviewImage(this.trendings[i]) || "/img/author_pic.png";
         }
+      }
+
+      // Get or load posts authors profile
+      try {
+        useUserStore().getAuthors(authors).then(() => {
+          for (let i = 0; i < this.trendings.length; i++) {
+            const author = useUserStore().authors.get(this.trendings[i].author);
+            if (author) {
+              this.trendings[i].author = author;
+            }
+          }
+        });
+      } catch (e) {
+        // do nothing
       }
     },
     /**
@@ -269,6 +288,7 @@ export const usePostStore = defineStore({
       if (this.latest.length > 0 && !refresh) {
         return this.latest;
       }
+      const authors: [] = [];
 
       // fetch the latest posts from the backend
       try {
@@ -278,9 +298,27 @@ export const usePostStore = defineStore({
         // handle preview images
         for (let i = 0; i < this.latest.length; i++) {
           this.latest[i].image = this.getArticlePreviewImage(this.latest[i]) || "/img/author_pic.png";
+          const author = useUserStore().authors.get(this.latest[i].author);
+          if (!this.latest[i].author?.dtag && !author) {
+            authors.push(this.latest[i].author);
+          }
         }
       } catch (error) {
         console.error(error);
+      }
+
+      // Get or load posts authors profile
+      try {
+        await useUserStore().getAuthors(authors).then(() => {
+          for (let i = 0; i < this.latest.length; i++) {
+            const author = useUserStore().authors.get(this.latest[i].author);
+            if (author) {
+              this.latest[i].author = author;
+            }
+          }
+        });
+      } catch (e) {
+        // do nothing
       }
       return this.latest;
     },
