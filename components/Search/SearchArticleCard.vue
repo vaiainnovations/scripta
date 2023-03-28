@@ -1,7 +1,7 @@
 <template>
   <!-- Grid container with 6 columns -->
   <NuxtLink
-    :to="`/@${article.author}/${article.externalId}`"
+    :to="authorDtag ? `/@${authorDtag}/${article.externalId}` : `/@${article.author}/${article.externalId}`"
     class="grid h-fit w-full grid-cols-5 items-start justify-center gap-x-2 gap-y-0.5 overflow-hidden rounded-2xl bg-background-alt py-2 px-4 md:rounded-3xl"
   >
     <!-- Title of the article, large the entire container -->
@@ -56,6 +56,7 @@ const article = ref(props.post);
 const articleImage = ref("/img/author_pic.png");
 const authorImage = ref("/img/author_pic.png");
 const authorNickname = ref(article.value.author);
+const authorDtag = ref(article.value.author);
 
 const image = usePostStore().getArticlePreviewImage(props.post);
 if (image) {
@@ -67,6 +68,7 @@ useUserStore().$subscribe(() => {
   if (authorProfile) {
     authorImage.value = authorProfile.pictures?.profile;
     authorNickname.value = authorProfile.nickname;
+    authorDtag.value = authorProfile.dtag;
   }
 });
 </script>
