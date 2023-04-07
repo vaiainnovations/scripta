@@ -1,7 +1,7 @@
 <template>
-  <div class="w-full h-5">
+  <div class="w-full h-4">
     <slot>
-      <TheTag :tag="props.content.value" />
+      <TheTag :tag="props.content.value" :mode="'small'" />
     </slot>
   </div>
 </template>

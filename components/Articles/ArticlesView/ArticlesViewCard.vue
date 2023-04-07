@@ -1,10 +1,7 @@
 <template>
-  <div class="flex h-full flex-col gap-y-1 lg:gap-y-4 overflow-y-scroll bg-background px-4 py-5 md:px-32 lg:py-10 xl:py-0 2xl:w-5/6 2xl:px-14" @scroll="handleNavbarChange">
+  <div class="flex h-full flex-col gap-y-1 lg:gap-y-4 overflow-y-scroll bg-background px-4 py-5 md:px-32 lg:py-10 xl:py-0 2xl:w-5/6 md:rounded-2xl m-1" @scroll="handleNavbarChange">
     <div class="text-right w-full">
       <ArticlesActionsOverlay :article="props.article" />
-    </div>
-    <div class="flex flex-wrap flex-row items-center justify-start pb-0.5 gap-1.5 md:gap-4">
-      <ArticlesViewTag v-for="tag in tags" :key="tag.i" :content="tag.content" class="max-w-fit" />
     </div>
     <ArticlesViewContent
       :external-id="props.article.externalId"
@@ -13,6 +10,8 @@
       :content="props.article.content"
       :address="props.article.author.address"
       :date="new Date(props.article.creationDate)"
+      :preview="previewImage"
+      :tags="tags"
     />
     <div class="bg-background">
       <div class="mb-3">
@@ -52,16 +51,6 @@
           </h3>
           <ArticlesCommentsContainer :referenced-post="article.id" :section-id="article.sectionId" />
         </div>
-        <div class="hidden items-center gap-y-2 lg:flex lg:w-5/12 lg:flex-col 2xl:hidden">
-          <p class="text-sm font-bold text-primary-text-light">
-            Continue your reading
-          </p>
-          <span v-for="post in (usePostStore().trendings)" :key="post.externalId">
-            <NuxtLink :to="`/@${post.author}/${post.externalId}`">
-              <SearchArticleCard :post="post" />
-            </NuxtLink>
-          </span>
-        </div>
       </div>
     </div>
   </div>
@@ -70,7 +59,6 @@
 <script setup lang="ts">
 import { Ref } from "vue";
 import { useAccountStore } from "~~/core/store/AccountStore";
-import { useConfigStore } from "~~/core/store/ConfigStore";
 import { useIpfsStore } from "~~/core/store/IpfsStore";
 import { usePostStore } from "~~/core/store/PostStore";
 import { NavBarReadingType } from "~~/layouts/readingCustom.vue";
@@ -87,6 +75,14 @@ if (process.client) {
 }
 const sharingUrl = `https://scripta.network${useRoute().fullPath}`;
 const sharingUrlEncoded = encodeURIComponent(sharingUrl);
+let previewImage = "";
+
+try {
+  previewImage = props.article.entities?.urls?.find(x => x.displayUrl === "preview")?.url;
+} catch (e) {}
+if (!previewImage) {
+  previewImage = usePostStore().getArticlePreviewImage(props.article) || "";
+}
 
 const tags = (props.article.tags && props.article.tags.length > 0) ? new Array(props.article.tags.length).fill(0).map((_, i) => ({ i, content: { value: props.article.tags[i] } as TagType })) : [];
 let ipfsSourceUrl = "";

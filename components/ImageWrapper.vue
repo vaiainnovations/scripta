@@ -56,14 +56,14 @@ function loadImage () {
       // if not loaded after the max time, handle the failure with a new gateway
       handleError();
     }
-  }, 5000);
+  }, 6500);
 }
 
 function handleError () {
   // check if doesn't already tried all the available gateways
   if (currentGatewayIndex.value < gateways.length - 1 && isIpfs) {
     currentGatewayIndex.value += 1; // select the next gateway
-    console.log(`Requesting a fallback IPFS image at ${gateways[currentGatewayIndex.value]}, failed ${props.imgUrl}`);
+    // console.log(`Requesting a fallback IPFS image at ${gateways[currentGatewayIndex.value]}, failed ${props.imgUrl}`);
     loadImage(); // reload the image with the new gateway
   } else {
     imageSrc.value = "/img/author_pic.png"; // no more tries, use a template image
