@@ -9,7 +9,7 @@
       </div>
       <div class="w-3/4 p-1 flex flex-col">
         <div class="flex-1">
-          <p class="leading-tight group-hover:text-primary-text-light" :class="props.post.text.length + props.post.subtitle.length >= 100 ? 'block group-hover:hidden text-base' : ' text-lg'">
+          <p class="leading-tight pt-0.5 font-medium text-primary-text/75 group-hover:text-primary-text-light" :class="props.post.text.length + props.post.subtitle.length >= 100 ? 'block group-hover:hidden text-base' : ' text-lg'">
             {{ props.post.text.length<=100? props.post.text : props.post.text.substring(0,100) + '...' }}
           </p>
           <p class="h-full overflow-hidden text-sm font-light text-primary-text-light" :class="props.post.text.length + props.post.subtitle.length >= 100 ? 'hidden group-hover:block' : ''">

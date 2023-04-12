@@ -25,8 +25,8 @@
             <p class="text-lg md:text-sm font-normal text-gray-500" :class="x.text.length>50?'group-hover:block hidden':'block'">
               {{ x.subtitle.length<=90? x.subtitle : x.subtitle.substring(0,90) + '...' }}
             </p>
-            <div class="py-1">
-              <div v-if="(x.tags && x.tags.length>0)" class="flex flex-wrap">
+            <!-- <div class="py-1">
+              <div v-if="(x.tags && x.tags.length>0)" class="flex flex-nowrap overflow-hidden">
                 <div
                   v-for="tag, index in x.tags"
                   :key="index"
@@ -39,7 +39,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </NuxtLink>
       </div>

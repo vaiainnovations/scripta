@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-y-3">
-    <div class="w-full  md:min-h-[24rem] mx-auto rounded-3xl shadow bg-[#FFFFFF]">
+    <div class="w-full md:min-h-[24rem] mx-auto rounded-3xl shadow-sm bg-[#FFFFFF]/70">
       <div class="grid grid-cols-12 h-full">
         <div class="col-span-12 md:col-span-7">
           <div class="flex flex-col p-4 md:p-10 h-full">
@@ -61,7 +61,7 @@
         </NuxtLink>
       </div>
     </div>
-    <div class="pt-7 lg:pt-0 mx-2 md:mx-5 lg:mx-20">
+    <div class="pt-7 lg:pt-0 mx-2 md:mx-5 lg:mx-14 xl:mx-20 2xl:mx-32">
       <MarkDownEditor
         :read-only="true"
         :content="props.content"
