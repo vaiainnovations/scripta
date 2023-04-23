@@ -21,7 +21,8 @@
         placeholder="Title"
         @input="(evt)=> useDraftStore().title = evt.target.value"
       >
-      <div v-if="useDraftStore().title.length > 0" class="text-[0.65rem] text-gray-dark w-full text-right">
+      <!-- If does have a title, show the max length -->
+      <div v-if="useDraftStore().title && useDraftStore().title.length > 0" class="text-[0.65rem] text-gray-dark w-full text-right">
         {{ useDraftStore().title.length }} / 75
       </div>
     </div>
@@ -41,7 +42,8 @@
         placeholder="Subtitle"
         @input="(evt)=> useDraftStore().subtitle = evt.target.value"
       />
-      <div v-if="useDraftStore().subtitle.length > 0" class="text-[0.65rem] text-gray-dark w-full text-right">
+      <!-- If does have a subtitle, show the max length -->
+      <div v-if="useDraftStore().subtitle && useDraftStore().subtitle.length > 0" class="text-[0.65rem] text-gray-dark w-full text-right">
         {{ useDraftStore().subtitle.length }} / 150
       </div>
     </div>
