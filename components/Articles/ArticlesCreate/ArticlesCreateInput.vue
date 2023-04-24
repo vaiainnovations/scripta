@@ -48,10 +48,7 @@
       </div>
     </div>
     <!-- Content -->
-    <div class="w-full flex flex-col items-center group my-3 outline-none">
-      <!-- <p class="text-primary-text-light font-medium text-xs self-start lg:text-sm">
-        Content
-      </p> -->
+    <div class="w-full max-w-[80vw] lg:max-w-[60vw] xl:max-w-[65vw] 2xl:max-w-[60vw] flex flex-col items-center group my-3 outline-none">
       <MarkDownEditor
         :read-only="false"
         :content="useDraftStore().content || ''"
