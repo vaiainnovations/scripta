@@ -33,7 +33,7 @@ if (!post.value && process.server && useDevice().isCrawler) {
 
 // Fetch only if the post is not already in the store or fetched by the server
 if (!post.value && process.client) {
-  usePostStore().getPost(externalId).then((p) => {
+  await usePostStore().getPost(externalId).then((p) => {
     post.value = p;
     isLoading.value = false;
   });

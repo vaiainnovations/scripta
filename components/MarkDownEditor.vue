@@ -3,7 +3,9 @@
     v-if="editor"
     class="w-full h-fit relative"
   >
-    <VueEditor :editor="editor.editor" />
+    <ClientOnly>
+      <VueEditor :editor="editor.editor" />
+    </ClientOnly>
   </section>
 </template>
 

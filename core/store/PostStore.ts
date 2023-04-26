@@ -11,9 +11,7 @@ import { useUserStore } from "./UserStore";
 import { useDraftStore } from "./DraftStore";
 import { useConfigStore } from "./ConfigStore";
 import { registerModuleHMR } from ".";
-import { PostKv } from "~~/types/PostKv";
 import { PostExtended } from "~~/types/PostExtended";
-import { TrendingPostsKv } from "~~/types/TrendingPostsKv";
 
 export const usePostStore = defineStore({
   id: "PostStore",
@@ -35,7 +33,10 @@ export const usePostStore = defineStore({
       // If SSR, try to get the post from KV
       if (process.server) {
         try {
-          cachedPost = await PostKv.get(externalID);
+          const postRaw = await useFetch(`/api/kv/post/${externalID}`);
+          if (postRaw && postRaw.data.value && postRaw.data.value.success) {
+            cachedPost = JSON.parse(postRaw.data.value.post) as PostExtended;
+          }
         } catch (e) {
           console.log("Error accessing Cloudflare KV");
         }
@@ -239,7 +240,12 @@ export const usePostStore = defineStore({
       // Load KV trending posts
       let kvTrendingPosts = []; // create shared client/server state for the trending posts
       if (process.server) {
-        kvTrendingPosts = await TrendingPostsKv.get("1") || [];
+        try {
+          const trendingPostsRaw = await useFetch("/api/kv/trendings");
+          if (trendingPostsRaw && trendingPostsRaw.data.value && trendingPostsRaw.data.value.success) {
+            kvTrendingPosts = JSON.parse(trendingPostsRaw.data.value.post) as PostExtended[];
+          }
+        } catch (e) {}
       }
 
       // Merge the two trending posts
