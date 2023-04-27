@@ -8,14 +8,18 @@ const pjson = require("./package.json");
 const mode = process.env.NODE_ENV === "production" ? "production" : "development";
 
 // Use a custom Nitro configuration on production mode for Cloudflare SSR, otherwise use the default
-let nitro = {};
+const nitro = {
+  prerender: {
+    crawlLinks: true,
+    routes: ["/", "sitemap.xml"],
+    ignore: ["/profile", "/settings"]
+  }
+} as any;
 if (mode === "production") {
-  nitro = {
-    rollupConfig: {
-      output: {
-        generatedCode: {
-          symbols: true
-        }
+  nitro.rollupConfig = {
+    output: {
+      generatedCode: {
+        symbols: true
       }
     }
   };
@@ -23,6 +27,30 @@ if (mode === "production") {
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
+  sitemap: {
+    siteUrl: "https://scripta.network",
+    xsl: false,
+    sitemaps: {
+      articles: {
+        include: [
+          "/@/**"
+        ]
+      },
+      pages: {
+        exclude: [
+          "/@/**",
+          "/settings",
+          "/profile/**",
+          "/new",
+          "/wallet",
+          "/auth/session",
+          "/auth/success",
+          "/auth/loading",
+          "/auth/error"
+        ]
+      }
+    }
+  },
   runtimeConfig: {
     public: {
       restApiUrl: process.env.NUXT_REST_API_URL,
@@ -126,7 +154,7 @@ export default defineNuxtConfig({
     "@vue/devtools-api": "@vue/devtools-api",
     util: "util"
   },
-  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt", "@nuxtjs/device"],
+  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt", "@nuxtjs/device", "nuxt-simple-sitemap"],
   experimental: {
     treeshakeClientOnly: true
   }

@@ -54,6 +54,7 @@
     "milkdown-plugin-placeholder": "^0.1.2",
     "miniflare": "^2.6.0",
     "nuxt": "^3.4.2",
+    "nuxt-simple-sitemap": "^2.4.11",
     "playwright": "^1.23.4",
     "postcss-custom-properties": "^13.1.5",
     "prosemirror-model": "^1.18.1",
