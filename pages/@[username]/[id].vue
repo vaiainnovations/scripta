@@ -60,8 +60,9 @@ if (!post) {
     data: "You might have the wrong address, or the article may have been deleted."
   });
 } else if (post.value) {
+  const metaTitle = post.value.author.dtag !== undefined ? `${post.value.text} - @${post.value.author.dtag} on Scripta` : `${post.value.text}`; // if not available hide the username
   useHead({
-    title: `${post.value.text} - @${post.value.author.dtag} on Scripta`,
+    title: metaTitle,
     meta: [
       {
         hid: "title",
