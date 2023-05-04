@@ -24,16 +24,16 @@
                 :img-class="'object-cover my-auto mx-auto lg:float-right rounded-xl h-40 lg:aspect-square aspect-video lg:h-36'"
               />
             </div>
-            <div class="col-span-12 sm:col-span-8 md:col-span-7 lg:col-span-8 lg:pl-4 pl-4 md:pl-0">
+            <div class="col-span-12 sm:col-span-8 md:col-span-7 lg:col-span-8 lg:pl-4 pl-4 md:pl-0 pt-2 md:pt-0">
               <h2
                 class="mb-1 text-xl md:text-lg font-semibold text-gray-800"
-                :class="x.text.length>60?'group-hover:truncate group-hover:text-base':''"
+                :class="x.text.length>60?'sm:group-hover:truncate sm:group-hover:text-base':''"
               >
                 {{ x.text }}
               </h2>
               <p
-                class="text-lg md:text-sm font-normal text-gray-500"
-                :class="x.text.length>60?'group-hover:block hidden':'block'"
+                class="text-sm font-normal text-gray-500"
+                :class="x.text.length>60?'sm:group-hover:block sm:hidden':'block'"
               >
                 {{ x.subtitle.length<=140? x.subtitle : x.subtitle.substring(0,140) + '...' }}
               </p>

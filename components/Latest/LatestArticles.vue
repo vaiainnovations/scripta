@@ -16,13 +16,16 @@
         >
           <ImageWrapper
             :img-url="x.image ||'/img/author_pic.png'"
-            :img-class="'object-cover w-2/4 sm:w-1/3 lg:w-36 2xl:w-24 sm:mx-6 mx-auto rounded-xl  lg:aspect-square aspect-video h-24 flex-none my-auto'"
+            :img-class="'object-cover my-auto mx-auto lg:float-right rounded-xl h-32 lg:aspect-square aspect-video lg:h-28'"
           />
-          <div class="flex-1 my-auto">
-            <h2 class="mb-1 text-xl md:text-lg font-semibold text-gray-800" :class="x.text.length>50?'group-hover:truncate group-hover:text-base group-hover:w-80':''">
+          <div class="flex-1 lg:pl-4 pl-4 md:pl-0 pt-2 md:pt-0">
+            <h2
+              class="mb-1 text-xl md:text-lg font-semibold text-gray-800"
+              :class="x.text.length>50?'sm:group-hover:truncate sm:group-hover:text-base sm:group-hover:w-80':''"
+            >
               {{ x.text }}
             </h2>
-            <p class="text-lg md:text-sm font-normal text-gray-500" :class="x.text.length>50?'group-hover:block hidden':'block'">
+            <p class="text-sm md:text-sm font-normal text-gray-500" :class="x.text.length>50?'sm:group-hover:block sm:hidden':'block'">
               {{ x.subtitle.length<=90? x.subtitle : x.subtitle.substring(0,90) + '...' }}
             </p>
             <!-- <div class="py-1">

@@ -1,17 +1,17 @@
 <template>
   <div class="flex flex-col gap-y-3">
-    <div class="w-full md:min-h-[24rem] mx-auto rounded-3xl shadow-sm bg-[#FFFFFF]/70">
-      <div class="grid grid-cols-12 h-full">
+    <div class="w-full md:min-h-[20rem] mx-auto rounded-3xl shadow-sm bg-[#FFFFFF]/70">
+      <div class="grid grid-cols-12 p-4 md:p-10">
+        <div class="col-span-12 flex flex-wrap flex-row items-center justify-start gap-1.5 md:gap-2">
+          <ArticlesViewTag
+            v-for="tag in props.tags"
+            :key="tag.i"
+            :content="tag.content"
+            class="max-w-fit mb-0.5"
+          />
+        </div>
         <div class="col-span-12 md:col-span-7">
-          <div class="flex flex-col p-4 md:p-10 h-full">
-            <div class="flex flex-wrap flex-row items-center justify-start gap-1.5 md:gap-2">
-              <ArticlesViewTag
-                v-for="tag in props.tags"
-                :key="tag.i"
-                :content="tag.content"
-                class="max-w-fit mb-0.5"
-              />
-            </div>
+          <div class="flex flex-col h-full">
             <div class="flex-1">
               <p class="text-2xl font-medium text-primary-text lg:text-4xl pt-6">
                 {{ props.title }}
@@ -61,7 +61,7 @@
         </NuxtLink>
       </div>
     </div>
-    <div class="pt-7 lg:pt-0 mx-2 md:mx-5 lg:mx-14 xl:mx-20 2xl:mx-32">
+    <div class="pt-7 lg:pt-0 mx-2 md:mx-5 lg:mx-14 xl:mx-16 2xl:mx-32">
       <MarkDownEditor
         :read-only="true"
         :content="props.content"
