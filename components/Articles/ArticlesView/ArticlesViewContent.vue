@@ -34,7 +34,7 @@
         <div class="col-span-12 md:col-span-5 m-auto p-4 w-full">
           <img
             :src="props.preview"
-            class="rounded-xl object-cover min-h-[8rem] max-h-64 aspect-video md:aspect-auto w-full select-none pointer-events-none"
+            class="rounded-xl object-fill min-h-[8rem] max-h-64 aspect-auto w-full select-none pointer-events-none"
           >
         </div>
       </div>
