@@ -9,7 +9,7 @@
         :key="n"
       />
     </span>
-    <span v-else>
+    <span v-else class="w-full">
       <div
         v-if="articles && articles.length>0"
         class="flex flex-col gap-y-9 w-4/5 justify-start items-center lg:w-full lg:gap-y-4 mx-auto"
