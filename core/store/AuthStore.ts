@@ -39,6 +39,23 @@ export const useAuthStore = defineStore({
       if (["keplr"].includes(this.storeAuthAccount?.signer || "")) {
         this.initWalletSession();
       }
+
+      // setup an interval of 10s to check the authorization status
+      window.setInterval(() => {
+        const expiration = this.getAuthorizationExpirationTime(); // get the authorization expiration
+        const now = +new Date();
+        // if null or expired, do nothing
+        if (expiration === null || +expiration < now) {
+          return;
+        }
+        const minutesDiff = (+expiration - +new Date()) / 1000 / 60; // get the remaining minutes to expiration
+        const { $useTransaction, $useNotification } = useNuxtApp();
+        // if expiration is in less then 3 minutes wait the queue to be empty, otherwise just wait that is not signing a tx
+        if ((minutesDiff <= 3 && !$useTransaction().isSigning && $useTransaction().queue.length === 0) || (minutesDiff <= 1 && !$useTransaction().isSigning)) {
+          $useNotification().push("Session expiring", "Please renew the authorization.", 5, "");
+          useRouter().push("/auth/session");
+        }
+      }, 10_000);
     },
     /**
      * Initializes the Offline auth store by checking if there is a stored auth and if it is still valid.
@@ -98,6 +115,20 @@ export const useAuthStore = defineStore({
         // continue, will return false
       }
       return false;
+    },
+    /**
+     * Get the Authorization expiration
+     * @returns the expiration Date or false if the authorization is invalid or expired
+     */
+    getAuthorizationExpirationTime (): Date | null {
+      try {
+        const authStorage = AuthStorage.getBySessionIndex(); // get the StoredAuthAccount of the current/last session
+        const authorization = authStorage!.authorization; // get the authorization
+        const decoded = decodeTxRaw(Buffer.from(authorization, "base64")); // decode the authorization
+        const authorizationExp = JSON.parse(decoded.body.memo).exp; // get the expiration date of the authorization
+        return new Date(authorizationExp);
+      } catch (e) {}
+      return null;
     },
 
     /**
@@ -162,7 +193,7 @@ export const useAuthStore = defineStore({
         signedBytes = await $useTransaction().directSign(
           [],
           JSON.stringify({
-            exp: +new Date() + 1000 * 60 * 60 * 24 * 3 // issued by default for 3 days
+            exp: +new Date() + 1000 * 60 * 60 * 24 * 7 // issued by default for 7 days
           }),
           {
             gas: "0",

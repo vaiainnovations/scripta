@@ -58,7 +58,7 @@ const saveDraftInterval = setInterval(() => {
   if (!useDraftStore().id && (useDraftStore().title || useDraftStore().subtitle || useDraftStore().content || useDraftStore().tags.length > 0)) {
     saveDraft();
   }
-}, 30 * 1000);
+}, 20 * 1000);
 
 onBeforeUnmount(async () => {
   await saveDraft();

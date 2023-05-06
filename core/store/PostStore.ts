@@ -11,9 +11,7 @@ import { useUserStore } from "./UserStore";
 import { useDraftStore } from "./DraftStore";
 import { useConfigStore } from "./ConfigStore";
 import { registerModuleHMR } from ".";
-import { PostKv } from "~~/types/PostKv";
 import { PostExtended } from "~~/types/PostExtended";
-import { TrendingPostsKv } from "~~/types/TrendingPostsKv";
 
 export const usePostStore = defineStore({
   id: "PostStore",
@@ -35,7 +33,10 @@ export const usePostStore = defineStore({
       // If SSR, try to get the post from KV
       if (process.server) {
         try {
-          cachedPost = await PostKv.get(externalID);
+          const postRaw = await useFetch(`/api/kv/post/${externalID}`);
+          if (postRaw && postRaw.data.value && postRaw.data.value.success) {
+            cachedPost = JSON.parse(postRaw.data.value.post) as PostExtended;
+          }
         } catch (e) {
           console.log("Error accessing Cloudflare KV");
         }
@@ -239,7 +240,12 @@ export const usePostStore = defineStore({
       // Load KV trending posts
       let kvTrendingPosts = []; // create shared client/server state for the trending posts
       if (process.server) {
-        kvTrendingPosts = await TrendingPostsKv.get("1") || [];
+        try {
+          const trendingPostsRaw = await useFetch("/api/kv/trendings");
+          if (trendingPostsRaw && trendingPostsRaw.data.value && trendingPostsRaw.data.value.success) {
+            kvTrendingPosts = JSON.parse(trendingPostsRaw.data.value.post) as PostExtended[];
+          }
+        } catch (e) {}
       }
 
       // Merge the two trending posts
@@ -254,10 +260,29 @@ export const usePostStore = defineStore({
         ))
       );
 
+      const authors: [] = [];
       if (this.trendings.length > 0) {
         for (let i = 0; i < this.trendings.length; i++) {
+          const author = useUserStore().authors.get(this.trendings[i].author);
+          if (!this.trendings[i].author?.dtag && !author) {
+            authors.push(this.trendings[i].author);
+          }
           this.trendings[i].image = this.getArticlePreviewImage(this.trendings[i]) || "/img/author_pic.png";
         }
+      }
+
+      // Get or load posts authors profile
+      try {
+        useUserStore().getAuthors(authors).then(() => {
+          for (let i = 0; i < this.trendings.length; i++) {
+            const author = useUserStore().authors.get(this.trendings[i].author);
+            if (author) {
+              this.trendings[i].author = author;
+            }
+          }
+        });
+      } catch (e) {
+        // do nothing
       }
     },
     /**
@@ -269,6 +294,7 @@ export const usePostStore = defineStore({
       if (this.latest.length > 0 && !refresh) {
         return this.latest;
       }
+      const authors: [] = [];
 
       // fetch the latest posts from the backend
       try {
@@ -278,9 +304,27 @@ export const usePostStore = defineStore({
         // handle preview images
         for (let i = 0; i < this.latest.length; i++) {
           this.latest[i].image = this.getArticlePreviewImage(this.latest[i]) || "/img/author_pic.png";
+          const author = useUserStore().authors.get(this.latest[i].author);
+          if (!this.latest[i].author?.dtag && !author) {
+            authors.push(this.latest[i].author);
+          }
         }
       } catch (error) {
         console.error(error);
+      }
+
+      // Get or load posts authors profile
+      try {
+        await useUserStore().getAuthors(authors).then(() => {
+          for (let i = 0; i < this.latest.length; i++) {
+            const author = useUserStore().authors.get(this.latest[i].author);
+            if (author) {
+              this.latest[i].author = author;
+            }
+          }
+        });
+      } catch (e) {
+        // do nothing
       }
       return this.latest;
     },

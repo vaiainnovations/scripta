@@ -11,24 +11,25 @@
         <NuxtLink
           v-for="x in latest"
           :key="x.externalId"
-          :to="`/@${x.author}/${x.externalId}`"
+          :to="x.author?.dtag ? `/@${x.author.dtag}/${x.externalId}` : `/@${x.author}/${x.externalId}`"
           class="col-span-1 sm:flex px-4 py-2 my-4 md:my-2 p-1 bg-background-light/20 hover:bg-white/60 rounded-2xl cursor-pointer group"
         >
-          <img
-            class="object-cover w-2/4 sm:w-1/3 lg:w-36 2xl:w-24 sm:mx-6 mx-auto rounded-xl  lg:aspect-square aspect-video h-24 flex-none my-auto"
-            :src="x.image ||'/img/author_pic.png'"
-            onerror="this.src='/img/author_pic.png'"
-            loading="lazy"
-          >
-          <div class="flex-1 my-auto">
-            <h2 class="mb-1 text-xl md:text-lg font-semibold text-gray-800" :class="x.text.length>50?'group-hover:truncate group-hover:text-base group-hover:w-80':''">
+          <ImageWrapper
+            :img-url="x.image ||'/img/author_pic.png'"
+            :img-class="'object-cover my-auto mx-auto lg:float-right rounded-xl h-32 lg:aspect-square aspect-video lg:h-28'"
+          />
+          <div class="flex-1 lg:pl-4 pl-4 md:pl-0 pt-2 md:pt-0">
+            <h2
+              class="mb-1 text-xl md:text-lg font-semibold text-gray-800"
+              :class="x.text.length>50?'sm:group-hover:truncate sm:group-hover:text-base sm:group-hover:w-80':''"
+            >
               {{ x.text }}
             </h2>
-            <p class="text-lg md:text-sm font-normal text-gray-500" :class="x.text.length>50?'group-hover:block hidden':'block'">
+            <p class="text-sm md:text-sm font-normal text-gray-500" :class="x.text.length>50?'sm:group-hover:block sm:hidden':'block'">
               {{ x.subtitle.length<=90? x.subtitle : x.subtitle.substring(0,90) + '...' }}
             </p>
-            <div class="py-1">
-              <div v-if="(x.tags && x.tags.length>0)" class="flex flex-wrap">
+            <!-- <div class="py-1">
+              <div v-if="(x.tags && x.tags.length>0)" class="flex flex-nowrap overflow-hidden">
                 <div
                   v-for="tag, index in x.tags"
                   :key="index"
@@ -41,7 +42,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </NuxtLink>
       </div>

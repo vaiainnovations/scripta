@@ -23,12 +23,7 @@
                 v-if="props.content.author"
                 class="flex pt-3 md:pt-1"
               >
-                <img
-                  class="h-6 w-6 rounded-full"
-                  :src="props.content.author.pictures?.profile ||'/img/author_pic.png'"
-                  onerror="this.src='/img/author_pic.png'"
-                  loading="lazy"
-                >
+                <ImageWrapper :img-url="props.content.author.pictures?.profile ||'/img/author_pic.png'" :img-class="'h-6 w-6 rounded-full'" alt="Article cover picture" />
                 <h6 class="text-xs pl-2 my-auto">
                   {{ props.content.author?.nickname || props.content.author?.dtag }}
                 </h6>
@@ -50,12 +45,11 @@
             </div>
           </div>
         </div>
-        <img
-          class="mx-auto sm:order-2 object-contain my-2 w-2/4 sm:w-1/3 lg:w-48 sm:mx-6 float-right rounded-xl h-40 aspect-square  lg:h-48 flex-none my-auto"
-          :src="props.content.image ||'/img/author_pic.png'"
-          onerror="this.src='/img/author_pic.png'"
-          loading="lazy"
-        >
+        <ImageWrapper
+          :img-url="props.content.image ||'/img/author_pic.png'"
+          :img-class="'mx-auto sm:order-2 object-contain my-2 w-2/4 sm:w-1/3 lg:w-48 sm:mx-6 float-right rounded-xl h-40 aspect-square  lg:h-48 flex-none my-auto'"
+          alt="Article cover picture"
+        />
       </NuxtLink>
     </div>
   </div>

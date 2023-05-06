@@ -17,10 +17,14 @@
         :value="useDraftStore().title"
         type="text"
         class="group h-20 w-full font-bold text-xl bg-background-alt text-primary-text px-7 lg:text-5xl outline-none focus:border-l-background focus:border-l-2"
-        maxlength="90"
+        maxlength="75"
         placeholder="Title"
         @input="(evt)=> useDraftStore().title = evt.target.value"
       >
+      <!-- If does have a title, show the max length -->
+      <div v-if="useDraftStore().title && useDraftStore().title.length > 0" class="text-[0.65rem] text-gray-dark w-full text-right">
+        {{ useDraftStore().title.length }} / 75
+      </div>
     </div>
     <!-- Subtitle -->
     <div class="w-full flex flex-col items-center group mb-6">
@@ -32,18 +36,19 @@
       </label>
       <textarea
         :value="useDraftStore().subtitle"
-        maxlength="160"
+        maxlength="150"
         type="text"
         class="group h-20 w-full py-2 font-bold text-xl bg-background-alt text-primary-text/50 px-7 lg:text-3xl outline-none focus:border-l-background focus:border-l-2"
         placeholder="Subtitle"
         @input="(evt)=> useDraftStore().subtitle = evt.target.value"
       />
+      <!-- If does have a subtitle, show the max length -->
+      <div v-if="useDraftStore().subtitle && useDraftStore().subtitle.length > 0" class="text-[0.65rem] text-gray-dark w-full text-right">
+        {{ useDraftStore().subtitle.length }} / 150
+      </div>
     </div>
     <!-- Content -->
-    <div class="w-full flex flex-col items-center group my-3 outline-none">
-      <!-- <p class="text-primary-text-light font-medium text-xs self-start lg:text-sm">
-        Content
-      </p> -->
+    <div class="w-full max-w-[80vw] lg:max-w-[60vw] xl:max-w-[65vw] 2xl:max-w-[60vw] flex flex-col items-center group my-3 outline-none">
       <MarkDownEditor
         :read-only="false"
         :content="useDraftStore().content || ''"

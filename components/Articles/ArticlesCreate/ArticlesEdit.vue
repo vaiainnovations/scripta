@@ -1,8 +1,14 @@
 <template>
   <div class="bg-background w-full flex flex-col items-center justify-start px-4 lg:px-0 gap-y-3.5 lg:gap-y-2.5">
     <span v-if="!isPublishing">
+      <!-- Share -->
+      <div v-if="useDraftStore().id" class="pt-2">
+        <ArticlesShareButtons class="py-2" />
+      </div>
       <!-- Input form -->
       <ArticlesCreateInput />
+      <!-- Share -->
+      <ArticlesShareButtons v-if="useDraftStore().id" class="py-2" />
       <!-- Tags -->
       <ArticlesCreateTags class="pt-6" />
       <!-- Submit buttons -->

@@ -39,7 +39,7 @@
           <span v-else>
             <img
               :src="useDraftStore().previewImage"
-              class="rounded-2xl mb-4 max-h-24 mx-auto"
+              class="mb-4 max-h-24 mx-auto"
             >
           </span>
           <p class="m-0 text-sm">

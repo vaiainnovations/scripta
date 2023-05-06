@@ -33,7 +33,7 @@ if (!post.value && process.server && useDevice().isCrawler) {
 
 // Fetch only if the post is not already in the store or fetched by the server
 if (!post.value && process.client) {
-  usePostStore().getPost(externalId).then((p) => {
+  await usePostStore().getPost(externalId).then((p) => {
     post.value = p;
     isLoading.value = false;
   });
@@ -60,8 +60,9 @@ if (!post) {
     data: "You might have the wrong address, or the article may have been deleted."
   });
 } else if (post.value) {
+  const metaTitle = post.value.author.dtag !== undefined ? `${post.value.text} - @${post.value.author.dtag} on Scripta` : `${post.value.text}`; // if not available hide the username
   useHead({
-    title: `${post.value.text} - @${post.value.author.dtag} on Scripta`,
+    title: metaTitle,
     meta: [
       {
         hid: "title",
