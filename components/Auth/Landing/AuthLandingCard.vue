@@ -12,11 +12,10 @@
           </p>
         </AuthDescription>
         <AuthStatusCard>
-          <AuthLandingWalletList :content="supportedAuthWallets.mobile" />
           <AuthLandingWalletList
-            class="hidden md:block"
-            :content="supportedAuthWallets.desktop"
+            :content="supportedAuthWallets.default"
           />
+          <AuthLandingWalletList :content="supportedAuthWallets.mobile" />
         </AuthStatusCard>
       </AuthContentCard>
     </template>
