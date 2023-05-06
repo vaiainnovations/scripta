@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { NuxtError } from "nuxt/dist/app/composables";
+import { NuxtError } from "nuxt/app";
 
 /* const defaultError = createError({
   statusCode: 404,
