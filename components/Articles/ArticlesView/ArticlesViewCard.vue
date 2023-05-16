@@ -1,6 +1,6 @@
 <template>
-  <div class="flex h-full flex-col gap-y-1 lg:gap-y-4 overflow-y-scroll bg-background px-4 py-5 md:px-32 lg:py-10 xl:py-0 2xl:w-5/6 md:rounded-2xl m-1" @scroll="handleNavbarChange">
-    <div class="text-right w-full">
+  <div class="flex h-full flex-col gap-y-1 lg:gap-y-4 overflow-y-scroll bg-background px-4 py-5 md:px-32 lg:py-10 xl:py-0 2xl:w-5/6 md:rounded-2xl m-1">
+    <div class="text-right w-full" @scroll="handleNavbarChange">
       <ArticlesActionsOverlay :article="props.article" />
     </div>
     <ArticlesViewContent

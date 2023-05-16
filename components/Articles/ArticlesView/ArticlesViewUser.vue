@@ -10,7 +10,7 @@
           {{ author.nickname || author.dtag }}
         </p>
         <p class="text-sm font-medium text-primary-text-light">
-          {{ new Date(props.date).toLocaleString() }}
+          {{ new Date(props.date).toLocaleDateString() }}
         </p>
       </div>
     </NuxtLink>

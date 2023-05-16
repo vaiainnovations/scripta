@@ -31,10 +31,10 @@
             </div>
           </div>
         </div>
-        <div class="col-span-12 md:col-span-5 m-auto p-4 w-full">
+        <div class="col-span-12 md:col-span-5 m-auto p-4 w-full ">
           <img
             :src="props.preview"
-            class="rounded-xl object-fill min-h-[8rem] max-h-64 aspect-auto w-full select-none pointer-events-none"
+            class="block mx-auto min-h-[8rem] max-h-64 h-full aspect-auto w-auto select-none pointer-events-none rounded-xl"
           >
         </div>
       </div>
