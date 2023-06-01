@@ -36,7 +36,7 @@ export const useAuthStore = defineStore({
   actions: {
     login () {
       this.initOfflineSession();
-      if (["keplr"].includes(this.storeAuthAccount?.signer || "")) {
+      if (["keplr", "leap"].includes(this.storeAuthAccount?.signer || "")) {
         this.initWalletSession();
       }
 
