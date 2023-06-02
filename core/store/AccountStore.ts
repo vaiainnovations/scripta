@@ -27,7 +27,7 @@ export const useAccountStore = defineStore({
       hasAcceptedCookies: false
     },
     authz: {
-      DEFAULT_SUBSPACE_AUTHORIZATIONS: ["/desmos.posts.v2.MsgCreatePost", "/desmos.posts.v2.MsgEditPost", "/desmos.posts.v2.MsgDeletePost", "/desmos.reactions.v1.MsgRemoveReaction", "/desmos.reactions.v1.MsgAddReaction", "/desmos.reports.v1.MsgCreateReport"],
+      DEFAULT_SUBSPACE_AUTHORIZATIONS: ["/desmos.posts.v3.MsgCreatePost", "/desmos.posts.v3.MsgEditPost", "/desmos.posts.v3.MsgDeletePost", "/desmos.reactions.v1.MsgRemoveReaction", "/desmos.reactions.v1.MsgAddReaction", "/desmos.reports.v1.MsgCreateReport"],
       DEFAULT_GENERIC_AUTHORIZATIONS: ["/desmos.profiles.v3.MsgSaveProfile"],
       hasAuthz: false,
       grantExpiration: null as Date || null,

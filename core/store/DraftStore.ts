@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import Long from "long";
-import { Url } from "@desmoslabs/desmjs-types/desmos/posts/v2/models";
+import { Url } from "@desmoslabs/desmjs-types/desmos/posts/v3/models";
 import { registerModuleHMR } from "~~/core/store";
 import { useBackendStore } from "~~/core/store/BackendStore";
 import { useAccountStore } from "~~/core/store/AccountStore";
