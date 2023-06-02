@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
 
 export const useShareStore = defineStore({
   id: "ShareStore",

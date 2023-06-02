@@ -1,16 +1,16 @@
 import { defineStore } from "pinia";
 import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
-import { Url } from "@desmoslabs/desmjs-types/desmos/posts/v2/models";
+import { Url } from "@desmoslabs/desmjs-types/desmos/posts/v3/models";
 import { v4 as uuidv4 } from "uuid";
 import { MsgCreatePostEncodeObject, EncodeObject, MsgSaveProfileEncodeObject } from "@desmoslabs/desmjs";
 import Long from "long";
-import { useAccountStore } from "./AccountStore";
-import { useIpfsStore } from "./IpfsStore";
-import { useBackendStore } from "./BackendStore";
-import { useUserStore } from "./UserStore";
-import { useDraftStore } from "./DraftStore";
-import { useConfigStore } from "./ConfigStore";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
+import { useAccountStore } from "~~/core/store/AccountStore";
+import { useIpfsStore } from "~~/core/store/IpfsStore";
+import { useUserStore } from "~~/core/store/UserStore";
+import { useDraftStore } from "~~/core/store/DraftStore";
+import { useConfigStore } from "~~/core/store/ConfigStore";
+import { useBackendStore } from "~~/core/store/BackendStore";
 import { PostExtended } from "~~/types/PostExtended";
 
 export const usePostStore = defineStore({
@@ -128,9 +128,9 @@ export const usePostStore = defineStore({
       const tags = useDraftStore().tags.filter(tag => tag.content.value !== "" ? tag.content.value : null);
 
       const msgCreatePost: MsgCreatePostEncodeObject = {
-        typeUrl: "/desmos.posts.v2.MsgCreatePost",
+        typeUrl: "/desmos.posts.v3.MsgCreatePost",
         value: {
-          subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
+          subspaceId: Long.fromNumber(Number($useDesmosNetwork().subspaceId)),
           externalId: extId,
           attachments: [],
           author: useAccountStore().address,

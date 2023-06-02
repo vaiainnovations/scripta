@@ -2,10 +2,10 @@ import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import Long from "long";
 import { Url } from "@desmoslabs/desmjs-types/desmos/posts/v2/models";
-import { useBackendStore } from "./BackendStore";
-import { useAccountStore } from "./AccountStore";
-import { usePostStore } from "./PostStore";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
+import { useBackendStore } from "~~/core/store/BackendStore";
+import { useAccountStore } from "~~/core/store/AccountStore";
+import { usePostStore } from "~~/core/store/PostStore";
 import { TagType } from "~~/types/TagType";
 
 export interface EditorTag {

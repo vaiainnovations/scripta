@@ -1,4 +1,4 @@
-import { AuthWallet } from "./AuthWalletType";
+import { AuthWallet } from "~~/types/AuthWalletType";
 
 interface SupportedAuthWalletType {
     type: string,

@@ -1,4 +1,4 @@
-import { ContentPreviewType } from "./ContentPreviewType";
+import { ContentPreviewType } from "~~/types/ContentPreviewType";
 
 export class PostPreview implements ContentPreviewType {
   id: number;

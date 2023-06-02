@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
-import { useBackendStore } from "./BackendStore";
-import { useUserStore } from "./UserStore";
-import { usePostStore } from "./PostStore";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
+import { useBackendStore } from "~~/core/store/BackendStore";
+import { useUserStore } from "~~/core/store/UserStore";
+import { usePostStore } from "~~/core/store/PostStore";
 import { PostExtended } from "~~/types/PostExtended";
 import { AuthorSearch } from "~~/types/SearchResults";
 

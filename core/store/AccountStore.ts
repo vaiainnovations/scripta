@@ -3,10 +3,10 @@ import { EncodeObject } from "@cosmjs/proto-signing";
 import { MsgRevoke } from "cosmjs-types/cosmos/authz/v1beta1/tx";
 import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
 import { generateUsername } from "unique-username-generator";
-import { useBackendStore } from "./BackendStore";
-import { usePostStore } from "./PostStore";
-import { useConfigStore } from "./ConfigStore";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
+import { useBackendStore } from "~~/core/store/BackendStore";
+import { usePostStore } from "~~/core/store//PostStore";
+import { useConfigStore } from "~~/core/store//ConfigStore";
 
 export interface MsgRevokeEncodeObject extends EncodeObject {
   typeUrl: "/cosmos.authz.v1beta1.MsgRevoke";

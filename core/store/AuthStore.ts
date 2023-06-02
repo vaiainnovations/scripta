@@ -6,12 +6,12 @@ import { Timestamp } from "cosmjs-types/google/protobuf/timestamp";
 import { GenericAuthorization } from "cosmjs-types/cosmos/authz/v1beta1/authz";
 import { defineStore } from "pinia";
 import { decodeTxRaw } from "@cosmjs/proto-signing";
-import { AuthStorage, StoreAuthAccount } from "../../types/AuthStorage";
-import { useAccountStore } from "./AccountStore";
-import { useBackendStore } from "./BackendStore";
-import { useDesmosStore } from "./DesmosStore";
-import { useConfigStore } from "./ConfigStore";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
+import { useAccountStore } from "~~/core/store/AccountStore";
+import { useBackendStore } from "~~/core/store/BackendStore";
+import { useDesmosStore } from "~~/core/store/DesmosStore";
+import { useConfigStore } from "~~/core/store//ConfigStore";
+import { AuthStorage, StoreAuthAccount } from "~~/types/AuthStorage";
 
 export enum AuthLevel {
   None = -1, // unauthenticated user

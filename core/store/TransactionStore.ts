@@ -4,10 +4,10 @@ import { defineStore } from "pinia";
 import { EncodeObject } from "@cosmjs/proto-signing";
 import { StdFee } from "@cosmjs/stargate";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
-import { useAccountStore } from "./AccountStore";
-import { useBackendStore } from "./BackendStore";
-import { useDesmosStore } from "./DesmosStore";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
+import { useAccountStore } from "~~/core/store/AccountStore";
+import { useBackendStore } from "~~/core/store/BackendStore";
+import { useDesmosStore } from "~~/core/store/DesmosStore";
 
 export enum QueueStatus {
   WAITING = "waiting",

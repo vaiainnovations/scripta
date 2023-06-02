@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { SupportedSigner } from "../../../types/SupportedSigner";
+import { SupportedSigner } from "~~/types/SupportedSigner";
 const isConnecting = ref(false);
 /**
  * Leap Connection

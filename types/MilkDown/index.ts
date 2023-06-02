@@ -14,10 +14,10 @@ import {
 } from "@milkdown/core";
 import { useAllPresetRenderer } from "@milkdown/theme-pack-helper";
 
-import { getIcon } from "./Icons";
-import { colors, sizes, fonts } from "./Theme";
-import { getStyle } from "./Style";
-import { getScrollbar } from "./Scrollbar";
+import { getIcon } from "~~/types/MilkDown/Icons";
+import { colors, sizes, fonts } from "~~/types/MilkDown/Theme";
+import { getStyle } from "~~/types/MilkDown/Style";
+import { getScrollbar } from "~~/types/MilkDown/Scrollbar";
 
 export const createTheme = (emotion: Emotion, manager: ThemeManager, readOnly: boolean) => {
   const { css } = emotion;

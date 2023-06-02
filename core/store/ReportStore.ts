@@ -3,8 +3,8 @@ import { defineStore } from "pinia";
 import Long from "long";
 import { PostTarget } from "@desmoslabs/desmjs-types/desmos/reports/v1/models";
 import { MsgCreateReportEncodeObject } from "@desmoslabs/desmjs";
-import { useAccountStore } from "./AccountStore";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
+import { useAccountStore } from "~~/core/store/AccountStore";
 
 export const useReportStore = defineStore({
   id: "ReportStore",
