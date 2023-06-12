@@ -9,7 +9,7 @@
         <p class="text-lg font-medium text-primary-text group-hover:text-primary-text-light">
           {{ author.nickname || author.dtag }}
         </p>
-        <p class="text-sm font-medium text-primary-text-light">
+        <p v-if="props.date && props.date.getTime() != 0" class="text-sm font-medium text-primary-text-light">
           {{ new Date(props.date).toLocaleDateString() }}
         </p>
       </div>

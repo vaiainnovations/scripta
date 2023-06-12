@@ -5,7 +5,7 @@
         Browser Wallet
       </p>
       <p class="text-lg">
-        With Leap you can access Web3 apps from Chrome.
+        With Leap you can access Web3 apps from the Mobile App or Chrome.
       </p>
     </AuthDescription>
     <AuthStatusCard>
