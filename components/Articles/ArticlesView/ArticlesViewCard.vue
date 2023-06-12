@@ -8,7 +8,7 @@
       :title="props.article.text"
       :subtitle="props.article.subtitle"
       :content="props.article.content"
-      :address="props.article.author.address"
+      :address="authorAddress"
       :date="new Date(props.article.creationDate)"
       :preview="previewImage"
       :tags="tags"
@@ -23,7 +23,7 @@
           <ArticlesReactions :article="props.article" />
         </div>
         <div class="flex flex-row gap-x-1.5 place-self-end lg:flex-row-reverse lg:place-self-start">
-          <ArticlesTipsButton :author="props.article.author.address" />
+          <ArticlesTipsButton :author="authorAddress" />
         </div>
         <div class="flex flex-row gap-x-3 lg:col-end-12 lg:place-self-end my-auto">
           <NuxtLayout name="tooltip" :title="'Share on Twitter'" :position="'Bottom'">
@@ -76,6 +76,7 @@ if (process.client) {
 const sharingUrl = `https://scripta.network${useRoute().fullPath}`;
 const sharingUrlEncoded = encodeURIComponent(sharingUrl);
 let previewImage = "";
+const authorAddress: string = props.article.author?.address || props.article.author as any;
 
 try {
   previewImage = props.article.entities?.urls?.find(x => x.displayUrl === "preview")?.url;
