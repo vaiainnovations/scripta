@@ -15,13 +15,14 @@
       </div>
     </NuxtLink>
     <div class="flex-1 my-auto mx-2">
-      <UserFollowButton :dtag="author?.dtag || ''" :address="author?.account?.address || ''" />
+      <UserFollowButton :dtag="author?.dtag || ''" :address="author?.account?.address || ''" :follows="useAccountStore().follows || []" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Ref } from "vue";
+import { useAccountStore } from "~/core/store/AccountStore";
 import { useUserStore } from "~~/core/store/UserStore";
 import { NavBarReadingType } from "~~/layouts/readingCustom.vue";
 

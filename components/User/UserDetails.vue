@@ -12,7 +12,7 @@
         @{{ props.user?.dtag || '' }}
       </p>
       <div class="flex-1 my-auto mx-2">
-        <UserFollowButton :dtag="props.user?.dtag || ''" :address="props.user?.account?.address || ''" />
+        <UserFollowButton :dtag="props.user?.dtag || ''" :address="props.user?.account?.address || ''" :follows="useAccountStore().follows || []" />
       </div>
       <div class="min-h-40 h-40 overflow-hidden">
         <p class="font-light text-xs text-center">
@@ -24,6 +24,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useAccountStore } from "~/core/store/AccountStore";
 
 interface Props {
   user: any

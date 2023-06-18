@@ -1,22 +1,33 @@
 <template>
-  <span>
-    <span v-if="!isAlreadyFollowing">
-      <button
-        class="bg-primary-text hover:bg-primary-text-light text-background-alt px-3 py-0.5 rounded-md"
-        @click="follow(props.address)"
-      >
-        Follow
-      </button>
+  <ClientOnly>
+    <span v-if="useAccountStore().inited && props.address != useAccountStore().address">
+      <span v-if="isLoading">
+        <div
+          class="bg-primary-text-light text-background-alt px-3 py-1 rounded-md w-12"
+        >
+          <SkeletonSpinner class="mx-auto " />
+        </div>
+      </span>
+      <span v-else>
+        <span v-if="!follows.includes(props.address)">
+          <button
+            class="bg-primary-text/75 hover:bg-primary-text text-background-alt px-3 py-0.5 rounded-md"
+            @click="follow(props.address)"
+          >
+            Follow
+          </button>
+        </span>
+        <span v-else>
+          <button
+            class="bg-danger hover:bg-danger/75 text-background-alt px-3 py-0.5 rounded-md"
+            @click="unfollow(props.address)"
+          >
+            Unfollow
+          </button>
+        </span>
+      </span>
     </span>
-    <span v-else>
-      <button
-        class="bg-danger hover:bg-danger/70 text-background-alt px-3 py-0.5 rounded-md"
-        @click="unfollow(props.address)"
-      >
-        Unfollow
-      </button>
-    </span>
-  </span>
+  </ClientOnly>
 </template>
 
 <script lang="ts" setup>
@@ -25,12 +36,14 @@ import { MsgCreateRelationshipEncodeObject, MsgDeleteRelationshipEncodeObject } 
 import { useAccountStore } from "~/core/store/AccountStore";
 
 interface Props {
-    dtag: string
-    address: string
+  dtag: string
+  address: string
+  follows: string[]
 }
 
 const props = defineProps<Props>();
-const isAlreadyFollowing = ref(true);
+const isAlreadyFollowing = ref(props.follows.includes(props.address));
+const isLoading = ref(false);
 
 async function follow (addressToFollow: string) {
   const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
@@ -46,10 +59,13 @@ async function follow (addressToFollow: string) {
     scriptaOp: "MsgCreateRelationship",
     counterparty: addressToFollow
   };
+  isLoading.value = true;
   const success = await $useTransaction().directTx([msgFollow], [msgDetails], false);
   if (success) {
-    isAlreadyFollowing.value = false;
+    await useAccountStore().updateUserFollows(); // update the user follows
+    isAlreadyFollowing.value = useAccountStore().follows.includes(props.address);
   }
+  isLoading.value = false;
 }
 
 async function unfollow (addressToUnfollow: string) {
@@ -66,9 +82,12 @@ async function unfollow (addressToUnfollow: string) {
     scriptaOp: "MsgDeleteRelationship",
     counterparty: addressToUnfollow
   };
+  isLoading.value = true;
   const success = await $useTransaction().directTx([msgUnfollow], [msgDetails], false);
   if (success) {
-    isAlreadyFollowing.value = false;
+    await useAccountStore().updateUserFollows(); // update the user follows
+    isAlreadyFollowing.value = useAccountStore().follows.includes(props.address);
   }
+  isLoading.value = false;
 }
 </script>

@@ -21,6 +21,7 @@ export const useAccountStore = defineStore({
     balance: 0,
     isNewProfile: false,
     sectionId: 0,
+    follows: [] as string[],
     settings: {
       hasAcceptedPrivacy: true,
       hasAcceptedAdvertisement: false,
@@ -84,6 +85,8 @@ export const useAccountStore = defineStore({
       }
 
       await useAccountStore().updateUserAccount();
+
+      await this.updateUserFollows(); // update the user follows
     },
     /**
      * Update User account
@@ -138,6 +141,23 @@ export const useAccountStore = defineStore({
       } catch (e) {
         console.log(e);
       }
+    },
+    async updateUserFollows () {
+      this.follows = await this.getUserRelationships();
+    },
+    async getUserRelationships (): Promise<string[]> {
+      const follows: string[] = [];
+      try {
+        const res = (await (await useBackendStore().fetch(`${useConfigStore().restApiUrl}relationship/${useAccountStore().address}`, "GET", {})).json() as any);
+        if (res) {
+          res.forEach((relationship: any) => {
+            follows.push(relationship.counterparty);
+          });
+        }
+      } catch (e) {
+        // profile not found
+      }
+      return follows;
     }
   }
 });
