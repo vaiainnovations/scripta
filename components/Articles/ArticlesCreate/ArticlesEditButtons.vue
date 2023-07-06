@@ -116,7 +116,7 @@ async function publish () {
     }
   } else {
     $useNotification().error("Ops, an error", "An error occurred while writing on chain", 7);
-    await useRouter().push("/profile");
+    await useRouter().push("/articles");
   }
   isPublishing.value = false;
   emit("isPublishing", false);
@@ -132,7 +132,7 @@ async function editArticle () {
   const tags = draftStore.tags.filter(tag => tag.content.value !== "" ? tag.content.value : null);
 
   const msgEditPost: MsgEditPostEncodeObject = {
-    typeUrl: "/desmos.posts.v2.MsgEditPost",
+    typeUrl: "/desmos.posts.v3.MsgEditPost",
     value: {
       subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
       editor: useAccountStore().address,
@@ -186,7 +186,7 @@ async function editArticle () {
     urls: entityUrls
   };
 
-  $useTransaction().assertBalance("/profile");
+  $useTransaction().assertBalance("/articles");
   const success = await $useTransaction().directTx([msgEditPost], [{
     id: draftStore.id,
     externalId: extId,
@@ -206,7 +206,7 @@ async function editArticle () {
     useRouter().push(`/@${useAccountStore().profile.dtag}/${extId}`);
   } else {
     $useNotification().error("Ops, an error", "An error occurred while writing on chain", 7);
-    await useRouter().push("/profile");
+    await useRouter().push("/articles");
   }
   isPublishing.value = false;
   emit("isPublishing", false);
@@ -233,14 +233,14 @@ async function deleteArticle () {
     ).json();
     isPublishing.value = false;
     emit("isPublishing", false);
-    await navigateTo("/profile");
+    await navigateTo("/articles");
     return;
   }
-  $useTransaction().assertBalance("/profile");
+  $useTransaction().assertBalance("/articles");
 
   // otherwise, delete the post from the chain & the backend
   const msgDeletePost: MsgDeletePostEncodeObject = {
-    typeUrl: "/desmos.posts.v2.MsgDeletePost",
+    typeUrl: "/desmos.posts.v3.MsgDeletePost",
     value: {
       subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
       postId: Long.fromNumber(useDraftStore().id),
@@ -254,10 +254,10 @@ async function deleteArticle () {
   }]);
   if (success) {
     await usePostStore().updateUserPosts();
-    await useRouter().push("/profile");
+    await useRouter().push("/articles");
   } else {
     $useNotification().error("Ops, an error", "An error occurred while writing on chain", 7);
-    await useRouter().push("/profile");
+    await useRouter().push("/articles");
   }
   isPublishing.value = false;
   emit("isPublishing", false);

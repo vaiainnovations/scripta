@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-row items-center justify-start">
-    <NuxtLink to="/profile">
+    <NuxtLink to="/home">
       <div class="flex">
         <img :src="'/icons/bold/arrow-left.svg'">
         <span class="font-semibold">Back</span>

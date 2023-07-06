@@ -1,6 +1,6 @@
 <template>
   <section>
-    <NuxtLayout name="profile" :title="'Edit Article'" :to="'/profile'">
+    <NuxtLayout name="profile" :title="'Edit Article'" :to="'/articles'">
       <ArticlesEdit />
     </NuxtLayout>
   </section>
@@ -22,11 +22,11 @@ const route = useRoute();
 const externalId = route.params.id as string;
 const article = await usePostStore().getPost(externalId);
 if (!article) {
-  await useRouter().push("/profile");
+  await useRouter().push("/articles");
 }
 // prevent to open edit page of other user's article
 if (article.id !== null && useAccountStore().address !== article.author.address && useAccountStore().profile?.dtag !== article.author) {
-  useRouter().push("/profile");
+  useRouter().push("/articles");
 }
 useDraftStore().$reset();
 

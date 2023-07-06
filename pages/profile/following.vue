@@ -1,6 +1,6 @@
 <template>
   <section>
-    <NuxtLayout name="profile" :title="'Following'" :to="'/profile'">
+    <NuxtLayout name="profile" :title="'Following'" :to="'/home'">
       <ProfileUserFollowings />
     </NuxtLayout>
   </section>

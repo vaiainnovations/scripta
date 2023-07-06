@@ -1,7 +1,7 @@
 <template>
   <section>
-    <NuxtLayout name="profile" :title="'Wallet'" :to="'/home'">
-      <WalletContainer />
+    <NuxtLayout name="profile">
+      <ProfileArticles />
     </NuxtLayout>
   </section>
 </template>
@@ -11,6 +11,6 @@ definePageMeta({
   middleware: ["authenticated"]
 });
 useHead({
-  title: "Scripta - Wallet"
+  title: "Scripta"
 });
 </script>

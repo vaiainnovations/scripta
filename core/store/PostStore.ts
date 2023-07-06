@@ -17,7 +17,7 @@ export const usePostStore = defineStore({
   id: "PostStore",
   state: () => ({
     trendings: useState("trendings", () => [] as PostExtended[]),
-    suggested: useState("suggested", () => [] as PostExtended[]),
+    related: useState("related", () => [] as PostExtended[]),
     latest: useState("latest", () => [] as PostExtended[]),
     userPosts: [] as any[],
     cachedPosts: new Map<string, any>()
@@ -284,6 +284,49 @@ export const usePostStore = defineStore({
       } catch (e) {
         // do nothing
       }
+    },
+    /**
+     * Get the latest published posts
+     * @param refresh true to force a refresh from the backend
+     * @returns latest posts
+     */
+    async getRelatedPosts (refresh = false): Promise<PostExtended[]> {
+      if (this.related.length > 0 && !refresh) {
+        return this.related;
+      }
+      const authors: [] = [];
+
+      // fetch the related posts from the backend
+      try {
+        this.related = await (await useBackendStore().fetch(`${useBackendStore().apiUrl}related/posts`, "POST", {
+          "Content-Type": "application/json"
+        })).json() as PostExtended[];
+        // handle preview images
+        for (let i = 0; i < this.related.length; i++) {
+          this.related[i].image = this.getArticlePreviewImage(this.related[i]) || "/img/author_pic.png";
+          const author = useUserStore().authors.get(this.related[i].author);
+          if (!this.related[i].author?.dtag && !author) {
+            authors.push(this.related[i].author);
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+
+      // Get or load posts authors profile
+      try {
+        await useUserStore().getAuthors(authors).then(() => {
+          for (let i = 0; i < this.related.length; i++) {
+            const author = useUserStore().authors.get(this.related[i].author);
+            if (author) {
+              this.related[i].author = author;
+            }
+          }
+        });
+      } catch (e) {
+        // do nothing
+      }
+      return this.related;
     },
     /**
      * Get the latest published posts

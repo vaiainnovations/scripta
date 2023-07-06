@@ -23,7 +23,7 @@ if (process.client) {
 function edit () {
   const { $useTransaction, $useDesmosNetwork } = useNuxtApp();
   const msgEditComment: MsgEditPostEncodeObject = {
-    typeUrl: "/desmos.posts.v2.MsgEditPost",
+    typeUrl: "/desmos.posts.v3.MsgEditPost",
     value: {
       subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
       postId: Long.fromNumber(props.comment.id),

@@ -33,12 +33,16 @@ export const useAccountStore = defineStore({
       hasAuthz: false,
       grantExpiration: null as Date || null,
       grantGrantee: ""
-    }
+    },
+    inited: false
   }),
   getters: {
   },
   actions: {
     async init () {
+      if (this.inited) {
+        return;
+      }
       const { $useAuth, $useWallet } = useNuxtApp();
 
       if ($useAuth().storeAuthAccount === null) {
@@ -87,6 +91,7 @@ export const useAccountStore = defineStore({
       await useAccountStore().updateUserAccount();
 
       await this.updateUserFollows(); // update the user follows
+      this.inited = true;
     },
     /**
      * Update User account

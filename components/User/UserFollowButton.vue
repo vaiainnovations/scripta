@@ -3,7 +3,7 @@
     <span v-if="useAccountStore().inited && props.address != useAccountStore().address">
       <span v-if="isLoading">
         <div
-          class="bg-primary-text-light text-background-alt px-3 py-1 rounded-md w-12"
+          class="bg-primary-text-light text-background-alt p-1 rounded-full w-7"
         >
           <SkeletonSpinner class="mx-auto " />
         </div>
@@ -11,18 +11,26 @@
       <span v-else>
         <span v-if="!follows.includes(props.address)">
           <button
-            class="bg-primary-text/75 hover:bg-primary-text text-background-alt px-3 py-0.5 rounded-md"
+            class="bg-primary-text/75 hover:bg-primary-text text-background-alt p-1 rounded-full"
             @click="follow(props.address)"
           >
-            Follow
+            <img
+              class="h-6 w-6"
+              src="/icons/linear/profile-add.svg"
+              loading="lazy"
+            >
           </button>
         </span>
         <span v-else>
           <button
-            class="bg-danger hover:bg-danger/75 text-background-alt px-3 py-0.5 rounded-md"
+            class="bg-danger hover:bg-danger/75 text-background-alt p-1 rounded-full"
             @click="unfollow(props.address)"
           >
-            Unfollow
+            <img
+              class="h-6 w-6"
+              src="/icons/linear/profile-remove.svg"
+              loading="lazy"
+            >
           </button>
         </span>
       </span>

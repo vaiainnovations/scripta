@@ -19,7 +19,7 @@ function postComment () {
   const extId = uuidv4();
   const referencedPost = Long.fromNumber(props.referencedPost);
   const msgCreateComment: MsgCreatePostEncodeObject = {
-    typeUrl: "/desmos.posts.v2.MsgCreatePost",
+    typeUrl: "/desmos.posts.v3.MsgCreatePost",
     value: {
       subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
       externalId: extId,

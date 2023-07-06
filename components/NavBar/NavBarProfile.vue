@@ -18,7 +18,7 @@
     </NuxtLink>
 
     <NuxtLink
-      to="/profile"
+      to="/home"
       class="w-11"
     >
       <div class="">
