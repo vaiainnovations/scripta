@@ -11,6 +11,6 @@ definePageMeta({
   middleware: ["authenticated"]
 });
 useHead({
-  title: "Scripta"
+  title: "Scripta - Your Articles"
 });
 </script>

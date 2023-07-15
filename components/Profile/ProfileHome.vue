@@ -23,6 +23,13 @@
           </NuxtLink>
         </span>
       </div>
+      <div v-else class="md:flex w-full">
+        <NuxtLink to="/explore" class="w-full bg-background-alt py-10 text-center rounded-2xl">
+          <h1 class="text-xl my-auto hover:underline">
+            Explore and start following new Authors!
+          </h1>
+        </NuxtLink>
+      </div>
     </span>
   </div>
 </template>

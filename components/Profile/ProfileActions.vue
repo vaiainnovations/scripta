@@ -32,18 +32,18 @@ interface Action {
 }
 const actualPath = useRoute().path;
 const profileActions: Action[] = [{
-  display: "Home",
-  icon: "/icons/linear/home.svg",
-  route: "/home",
-  onClick: () => {
-    useRouter().push("/home");
-  }
-}, {
   display: "Profile",
   icon: "/icons/linear/profile-circle.svg",
   route: "/profile",
   onClick: () => {
     useRouter().push("/profile");
+  }
+}, {
+  display: "Following",
+  icon: "/icons/linear/profile-2user.svg",
+  route: "/home",
+  onClick: () => {
+    useRouter().push("/home");
   }
 }, {
   display: "Your Articles",
