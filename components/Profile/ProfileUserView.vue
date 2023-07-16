@@ -1,6 +1,6 @@
 <template>
   <span>
-    <div class="flex flex-col justify-start items-center px-10 gap-y-3.5 h-fit mt-14 lg:mt-2">
+    <div class="flex flex-col justify-start items-center px-10 gap-y-2 h-fit mt-14 lg:mt-2">
       <ProfileUserPic />
       <p class="text-3xl text-center font-bold">
         {{ useAccountStore().profile?.nickname || '' }}
@@ -16,6 +16,13 @@
         >
           <img src="/icons/linear/link-2.svg" class="w-4 h-4">
         </NuxtLayout>
+      </div>
+      <div class="flex text-xs text-gray-dark hover:text-primary-text hover:underline">
+        <NuxtLink
+          to="/profile/following"
+        >
+          {{ useAccountStore().follows.length || 0 }} following
+        </NuxtLink>
       </div>
       <div class="min-h-10 max-h-40 overflow-hidden">
         <p class="font-light text-xs text-center">

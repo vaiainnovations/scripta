@@ -34,16 +34,23 @@ const actualPath = useRoute().path;
 const profileActions: Action[] = [{
   display: "Profile",
   icon: "/icons/linear/profile-circle.svg",
-  route: "/profile/edit",
-  onClick: () => {
-    useRouter().push("/profile/edit");
-  }
-}, {
-  display: "Articles",
-  icon: "/icons/broken/edit.svg",
   route: "/profile",
   onClick: () => {
     useRouter().push("/profile");
+  }
+}, {
+  display: "Following",
+  icon: "/icons/linear/profile-2user.svg",
+  route: "/home",
+  onClick: () => {
+    useRouter().push("/home");
+  }
+}, {
+  display: "Your Articles",
+  icon: "/icons/broken/edit.svg",
+  route: "/articles",
+  onClick: () => {
+    useRouter().push("/articles");
   }
 }, {
   display: "Settings",

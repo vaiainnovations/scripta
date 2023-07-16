@@ -122,7 +122,7 @@ async function continueWithoutAuthz () {
   const success = await $useAuth().authorize();
 
   if (success) {
-    await navigateTo("/profile");
+    await navigateTo("/home");
   } else {
     await navigateTo("/");
   }
@@ -150,7 +150,7 @@ async function continueWithAuthz () {
 
   if (success) {
     await useAccountStore().getUserInfo(); // update the user info
-    await navigateTo("/profile");
+    await navigateTo("/home");
   }
 }
 </script>

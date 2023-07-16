@@ -12,7 +12,7 @@ const nitro = {
   prerender: {
     crawlLinks: true,
     routes: ["/", "sitemap.xml"],
-    ignore: ["/profile", "/settings"]
+    ignore: ["/profile", "/settings", "/articles", "/home"]
   }
 } as any;
 if (mode === "production") {

@@ -11,14 +11,19 @@
             type="button"
             class="bg-gradient-to-r to-[#e5007e] from-[#f29100] bg-clip-text bg-background text-sm 2xl:text-2xl font-semibold"
           >
-            Start Writing
+            <span v-if="useAccountStore().profile">
+              Write
+            </span>
+            <span v-else>
+              Start Writing
+            </span>
           </button>
         </div>
       </div>
     </NuxtLink>
 
     <NuxtLink
-      to="/profile"
+      to="/home"
       class="w-11"
     >
       <div class="">

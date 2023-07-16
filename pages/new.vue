@@ -3,7 +3,7 @@
     <NuxtLayout
       name="profile"
       :title="'Write'"
-      :to="'/profile'"
+      :to="'/articles'"
     >
       <ArticlesCreate />
     </NuxtLayout>
