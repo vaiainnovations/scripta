@@ -1,6 +1,6 @@
 <template>
-  <div class="h-28 my-2 overflow-hidden xl:mx-2 hover:bg-background/60 rounded-lg py-2 pl-2.5 xl:pl-0 group">
-    <div class="w-full flex h-24">
+  <div class="max-h-36 my-2 overflow-hidden xl:mx-2 hover:bg-background/60 rounded-lg py-2 pl-2.5 xl:pl-0 group">
+    <div class="w-full flex max-h-36">
       <div class="w-1/4 p-1 my-auto">
         <ImageWrapper
           :img-url="props.post.image ||'/img/author_pic.png'"
@@ -9,7 +9,7 @@
       </div>
       <div class="w-3/4 p-1 flex flex-col">
         <div class="flex-1">
-          <p class="leading-tight pt-0.5 font-medium text-primary-text/75 group-hover:text-primary-text-light" :class="props.post.text.length + props.post.subtitle.length >= 100 ? 'block group-hover:hidden text-base' : ' text-lg'">
+          <p class="leading-tight  font-medium text-primary-text/75 group-hover:text-primary-text-light" :class="props.post.text.length + props.post.subtitle.length >= 100 ? 'block group-hover:hidden text-base' : ' text-lg'">
             {{ props.post.text.length<=100? props.post.text : props.post.text.substring(0,100) + '...' }}
           </p>
           <p class="h-full overflow-hidden text-sm font-light text-primary-text-light" :class="props.post.text.length + props.post.subtitle.length >= 100 ? 'hidden group-hover:block' : ''">
