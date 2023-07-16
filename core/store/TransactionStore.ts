@@ -33,6 +33,11 @@ export const useTransactionStore = defineStore({
     isSigning: false
   }),
   actions: {
+    /**
+     * Push a Tx message inside the queue
+     * @param message Tx encoded message
+     * @param details Tx BE custom details
+     */
     push (message: EncodeObject, details: Record<string, unknown> = {}): void {
       if (!useAccountStore().address) {
         useRouter().push("/auth");
@@ -48,10 +53,12 @@ export const useTransactionStore = defineStore({
         return;
       }
 
-      this.assertBalance();
-
-      this.queue.push({ message, details });
+      this.assertBalance(); // assert a valid balance to prcess the tx in the future
+      this.queue.push({ message, details }); // add the tx to the queue
     },
+    /**
+     * Execute the transactions inside the queue
+     */
     async execute (): Promise<Uint8Array> {
       const { $useWallet } = useNuxtApp();
       this.status = QueueStatus.CONNECTING_WALLET;
@@ -135,6 +142,11 @@ export const useTransactionStore = defineStore({
      */
     async directTx (messages: EncodeObject[], details: Record<string, unknown>[] = [], skipAuthz = false): Promise<boolean> {
       const { $useDesmosNetwork, $useWallet } = useNuxtApp();
+
+      // if already processing a tx, wait the previous one to finish
+      while (this.status !== QueueStatus.WAITING) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
       this.status = QueueStatus.CONNECTING_WALLET;
       this.isSigning = true;
       try {
