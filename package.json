@@ -14,9 +14,9 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.16.0",
-    "@desmoslabs/desmjs": "5.0.0",
-    "@desmoslabs/desmjs-keplr": "5.0.0",
-    "@desmoslabs/desmjs-types": "5.0.0",
+    "@desmoslabs/desmjs": "6.0.0",
+    "@desmoslabs/desmjs-keplr": "6.0.0",
+    "@desmoslabs/desmjs-types": "6.0.0",
     "@desmoslabs/desmjs-walletconnect-v2": "5.0.0",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
