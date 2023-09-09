@@ -1,10 +1,8 @@
 <template>
   <ClientOnly>
-    <span v-if="useAccountStore().inited && props.address != useAccountStore().address">
+    <span v-if="useAccountStore().inited && props.address && props.address != useAccountStore().address">
       <span v-if="isLoading">
-        <div
-          class="bg-primary-text-light text-background-alt p-1 rounded-full w-7"
-        >
+        <div class="bg-primary-text-light text-background-alt p-1 rounded-full w-7">
           <SkeletonSpinner class="mx-auto " />
         </div>
       </span>
@@ -14,11 +12,7 @@
             class="bg-primary-text/75 hover:bg-primary-text text-background-alt p-1 rounded-full"
             @click="follow(props.address)"
           >
-            <img
-              class="h-6 w-6"
-              src="/icons/linear/profile-add.svg"
-              loading="lazy"
-            >
+            <img class="h-6 w-6" src="/icons/linear/profile-add.svg" loading="lazy">
           </button>
         </span>
         <span v-else>
@@ -26,11 +20,7 @@
             class="bg-danger hover:bg-danger/75 text-background-alt p-1 rounded-full"
             @click="unfollow(props.address)"
           >
-            <img
-              class="h-6 w-6"
-              src="/icons/linear/profile-remove.svg"
-              loading="lazy"
-            >
+            <img class="h-6 w-6" src="/icons/linear/profile-remove.svg" loading="lazy">
           </button>
         </span>
       </span>
