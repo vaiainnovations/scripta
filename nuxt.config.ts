@@ -63,7 +63,10 @@ export default defineNuxtConfig({
       web3AuthClientId: process.env.NUXT_WEB3AUTH_CLIENT_ID,
       walletConnectProjectId: process.env.NUXT_WALLETCONNECT_PROJECT_ID,
       gitHash: process.env.NUXT_CURRENT_GIT_SHA,
-      version: pjson.version
+      version: pjson.version,
+      features: {
+        follow: process.env.NUXT_FEATURES_FOLLOW
+      }
     }
   },
   alias: {

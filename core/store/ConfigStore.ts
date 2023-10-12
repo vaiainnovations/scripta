@@ -1,6 +1,10 @@
 import { defineStore } from "pinia";
 import { registerModuleHMR } from "~~/core/store";
 
+export interface ConfigFeatures {
+  follow: boolean
+}
+
 export const useConfigStore = defineStore({
   id: "ConfigStore",
   state: () => ({
@@ -14,7 +18,10 @@ export const useConfigStore = defineStore({
     chainId: useRuntimeConfig().public.chainId,
     web3AuthClientId: useRuntimeConfig().public.web3AuthClientId,
     walletConnectProjectId: useRuntimeConfig().public.walletConnectProjectId,
-    gitHash: useRuntimeConfig().public.gitHash
+    gitHash: useRuntimeConfig().public.gitHash,
+    features: {
+      follow: useRuntimeConfig().public.features.follow === "true"
+    } as ConfigFeatures
   }),
   actions: {
   }

@@ -1,6 +1,6 @@
 <template>
   <ClientOnly>
-    <span v-if="useAccountStore().inited && props.address && props.address != useAccountStore().address">
+    <span v-if="useAccountStore().inited && useConfigStore().features.follow && props.address && (props.address != useAccountStore().address || props.dtag != useAccountStore().profile.dtag)">
       <span v-if="isLoading">
         <div class="bg-primary-text-light text-background-alt p-1 rounded-full w-7">
           <SkeletonSpinner class="mx-auto " />
@@ -32,6 +32,8 @@
 import Long from "long";
 import { MsgCreateRelationshipEncodeObject, MsgDeleteRelationshipEncodeObject } from "@desmoslabs/desmjs";
 import { useAccountStore } from "~/core/store/AccountStore";
+import { useConfigStore } from "~/core/store/ConfigStore";
+import { useUserStore } from "~/core/store/dist/UserStore";
 
 interface Props {
   dtag: string

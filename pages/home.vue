@@ -2,12 +2,14 @@
   <section>
     <NuxtLayout name="profile">
       <!-- <ProfileUserEdit /> -->
-      <ProfileHome />
+      <ProfileHome v-if="useConfigStore().features.follow" />
+      <ProfileArticles v-if="!useConfigStore().features.follow" />
     </NuxtLayout>
   </section>
 </template>
 
 <script setup lang="ts">
+import { useConfigStore } from "~/core/store/ConfigStore";
 definePageMeta({
   middleware: ["authenticated"]
 });

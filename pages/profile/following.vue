@@ -7,8 +7,13 @@
 </template>
 
 <script setup lang="ts">
+import { useConfigStore } from "~/core/store/ConfigStore";
+
 definePageMeta({
-  middleware: ["authenticated"]
+  middleware: ["authenticated"],
+  validate: () => {
+    return useConfigStore().features.follow;
+  }
 });
 
 useHead({
