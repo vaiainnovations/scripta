@@ -1,12 +1,13 @@
 <template>
   <section>
-    <NuxtLayout name="profile" :title="'Edit Article'" :to="'/articles'">
+    <NuxtLayout name="profile" :title="'Edit Article'" :to="routingHome">
       <ArticlesEdit />
     </NuxtLayout>
   </section>
 </template>
 
 <script setup lang="ts">
+import { useConfigStore } from "~/core/store/ConfigStore";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useDraftStore } from "~~/core/store/DraftStore";
 import { usePostStore } from "~~/core/store/PostStore";
@@ -21,12 +22,13 @@ definePageMeta({
 const route = useRoute();
 const externalId = route.params.id as string;
 const article = await usePostStore().getPost(externalId);
+const routingHome = useConfigStore().features.follow ? "/articles" : "/home";
 if (!article) {
-  await useRouter().push("/articles");
+  await useRouter().push(routingHome);
 }
 // prevent to open edit page of other user's article
 if (article.id !== null && useAccountStore().address !== article.author.address && useAccountStore().profile?.dtag !== article.author) {
-  useRouter().push("/articles");
+  useRouter().push(routingHome);
 }
 useDraftStore().$reset();
 

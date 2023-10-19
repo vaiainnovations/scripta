@@ -1,10 +1,19 @@
 <template>
   <section>
-    <NuxtLayout name="profile">
-      <!-- <ProfileUserEdit /> -->
-      <ProfileHome v-if="useConfigStore().features.follow" />
-      <ProfileArticles v-if="!useConfigStore().features.follow" />
-    </NuxtLayout>
+    <span v-if="!useConfigStore().features.follow">
+      <NuxtLayout name="profile">
+        <div class="pt-10 lg:hidden">
+          <ProfileUserView />
+          <ProfileActions class="py-5" />
+        </div>
+        <ProfileArticles />
+      </NuxtLayout>
+    </span>
+    <span v-else>
+      <NuxtLayout name="profile">
+        <ProfileHome />
+      </NuxtLayout>
+    </span>
   </section>
 </template>
 
