@@ -11,6 +11,12 @@ export default defineNuxtPlugin(() => {
       console.log(`[Guard] ${to.path} not authenticated (no auth storage), re-routing`);
       return await navigateTo("/auth");
     }
+
+    // if the user has a connected wallet but an expired/invalid session reroute
+    if (useAuthStore().authLevel === AuthLevel.ExpiredSession) {
+      console.log(`[Guard] ${to.path} expired session, re-routing`);
+      return await navigateTo("/auth/session");
+    }
   });
 
   /**

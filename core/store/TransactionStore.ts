@@ -8,6 +8,7 @@ import { registerModuleHMR } from "~~/core/store";
 import { useAccountStore } from "~~/core/store/AccountStore";
 import { useBackendStore } from "~~/core/store/BackendStore";
 import { useDesmosStore } from "~~/core/store/DesmosStore";
+import { AuthLevel, useAuthStore } from "~~/core/store/AuthStore";
 
 export enum QueueStatus {
   WAITING = "waiting",
@@ -72,6 +73,18 @@ export const useTransactionStore = defineStore({
         this.resetQueueWithTimer(5, false);
         this.isSigning = false;
         return new Uint8Array();
+      }
+
+      // check if the user has a valid session, otherwise sign a new one
+      if (useAuthStore().authLevel === AuthLevel.ExpiredSession) {
+        const success = await useAuthStore().authorize();
+        if (!success) {
+          this.status = QueueStatus.FAILED;
+          this.errorText = "Error renewing session";
+          this.resetQueueWithTimer(5, false);
+          return new Uint8Array();
+        }
+        useAuthStore().login();
       }
 
       let txBytes: Uint8Array = new Uint8Array();
@@ -158,6 +171,19 @@ export const useTransactionStore = defineStore({
         this.isSigning = false;
         return false;
       }
+
+      // check if the user has a valid session, otherwise sign a new one
+      if (useAuthStore().authLevel === AuthLevel.ExpiredSession) {
+        const success = await useAuthStore().authorize();
+        if (!success) {
+          this.status = QueueStatus.FAILED;
+          this.errorText = "Error renewing session";
+          this.resetQueueWithTimer(5, false);
+          return false;
+        }
+        useAuthStore().login();
+      }
+
       this.assertBalance();
       try {
         let signedBytes = new Uint8Array();

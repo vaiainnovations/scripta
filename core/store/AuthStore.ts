@@ -53,7 +53,6 @@ export const useAuthStore = defineStore({
         // if expiration is in less then 3 minutes wait the queue to be empty, otherwise just wait that is not signing a tx
         if ((minutesDiff <= 3 && !$useTransaction().isSigning && $useTransaction().queue.length === 0) || (minutesDiff <= 1 && !$useTransaction().isSigning)) {
           $useNotification().push("Session expiring", "Please renew the authorization.", 5, "");
-          useRouter().push("/auth/session");
         }
       }, 10_000);
     },
@@ -77,7 +76,6 @@ export const useAuthStore = defineStore({
         this.authLevel = AuthLevel.Session;
       } else {
         this.authLevel = AuthLevel.ExpiredSession;
-        useRouter().push("/auth/session");
       }
 
       // If the stored auth is the same as the previous one, there is nothing to do
