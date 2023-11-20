@@ -9,9 +9,9 @@
     >
       <div class="flex select-none">
         <div class="flex-none p-1 rounded-full bg-background-alt">
-          <img class="h-6 w-6" :src="action.icon" loading="lazy">
+          <img class="h-6 w-6 lg:h-7 lg:w-7" :src="action.icon" loading="lazy">
         </div>
-        <div class="flex-grow my-auto pl-2">
+        <div class="flex-grow my-auto pl-2 xl:text-lg">
           {{ action.display }}
         </div>
       </div>
