@@ -13,7 +13,7 @@
       :preview="previewImage"
       :tags="tags"
     />
-    <div class="bg-background">
+    <div class="bg-background md:mx-10 lg:mx-16">
       <div class="mb-3">
         <a v-if="ipfsSourceUrl" :href="ipfsSourceUrl" target="_blank" class="text-xs pr-2 text-gray hover:text-primary-text">IPFS-1</a>
         <a v-if="ipfsSourceAlt" :href="ipfsSourceAlt" target="_blank" class="text-xs pr-2 text-gray hover:text-primary-text">IPFS-2</a>
@@ -26,9 +26,9 @@
           <ArticlesTipsButton :author="authorAddress" />
         </div>
         <div class="flex flex-row gap-x-3 lg:col-end-12 lg:place-self-end my-auto">
-          <NuxtLayout name="tooltip" :title="'Share on Twitter'" :position="'Bottom'">
-            <div @click="shareArticle(`https://twitter.com/intent/tweet?text=${props.article.text}&url=${sharingUrl}`)">
-              <img src="/brands/twitter/logo.svg" class="w-5 h-5 object-contain cursor-pointer">
+          <NuxtLayout name="tooltip" :title="'Share on X'" :position="'Bottom'">
+            <div @click="shareArticle(`https://x.com/intent/tweet?text=${props.article.text}&url=${sharingUrl}`)">
+              <img src="/brands/x/logo.svg" class="w-5 h-5 object-contain cursor-pointer">
             </div>
           </NuxtLayout>
           <NuxtLayout name="tooltip" :title="'Share on Facebook'" :position="'Bottom'">
