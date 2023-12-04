@@ -41,13 +41,13 @@
               </div>
             </span>
 
-            <!-- Buy DSM -->
+            <!-- Get DSM -->
             <div class="mt-5 w-full">
               <a
                 class="text-lg bg-primary-light/100 hover:bg-primary-light/90 text-background-alt py-0.5 flex justify-center rounded-md"
                 href="https://frontier.osmosis.zone/?from=ATOM&to=DSM"
                 target="_blank"
-              > Buy ${{ coinDenom }}</a>
+              > Get {{ coinDenom }}</a>
             </div>
 
             <!-- History -->
@@ -87,10 +87,10 @@
                 <div class="flex">
                   <div class="flex-grow">
                     <h3 class="text-lg font-semibold">
-                      How to buy $DSM on Osmosis
+                      How to get DSM on Osmosis
                     </h3>
                     <p class="text-sm text-gray">
-                      Find out how to buy and deposit on Scripta $DSM.
+                      Find out how to get DSM on Scripta.
                     </p>
                   </div>
                   <div class="flex-none my-auto">

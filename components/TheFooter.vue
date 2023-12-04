@@ -125,7 +125,7 @@ import { useConfigStore } from "~~/core/store/ConfigStore";
                     target="_blank"
                     href="https://frontier.osmosis.zone/?from=ATOM&to=DSM"
                   >
-                    Buy $DSM
+                    Get DSM
                   </a>
                 </li>
                 <!-- <li>
