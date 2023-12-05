@@ -3,9 +3,9 @@ import { SigningMode, PrivateKeySigner } from "@desmoslabs/desmjs";
 import { ModalConfig, Web3Auth } from "@web3auth/modal";
 import { WALLET_ADAPTERS } from "@web3auth/base";
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
-import { useConfigStore } from "../ConfigStore";
-import { registerModuleHMR } from "..";
-import { Web3AuthPrivateKeyProvider } from "./Web3AuthAdapter";
+import { registerModuleHMR } from "~/core/store";
+import { Web3AuthPrivateKeyProvider } from "~~/core/store/wallet/Web3AuthAdapter";
+import { useConfigStore } from "~~/core/store/ConfigStore";
 
 export const useWeb3AuthStore = defineStore({
   id: "Web3AuthStore",

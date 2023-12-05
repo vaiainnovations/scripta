@@ -3,7 +3,7 @@ import { tooltip, tooltipPlugin, createToggleIcon, Item } from "@milkdown/plugin
 import type { Icon } from "@milkdown/design-system";
 import { EditorView } from "@milkdown/prose/view";
 import { NodeType } from "@milkdown/prose/model";
-import { isTextSelection } from "./Utilities";
+import { isTextSelection } from "~~/types/MilkDown/Utilities";
 
 const createNodeIcon = (
   icon: Icon,

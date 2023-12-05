@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { useBackendStore } from "./BackendStore";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
+import { useBackendStore } from "~~/core/store/BackendStore";
 
 export const useLogStore = defineStore({
   id: "LogStore",

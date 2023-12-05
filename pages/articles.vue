@@ -1,7 +1,7 @@
 <template>
   <section>
-    <NuxtLayout name="profile" :title="'Edit Profile'" :to="'/profile'">
-      <ProfileUserEdit />
+    <NuxtLayout name="profile">
+      <ProfileArticles />
     </NuxtLayout>
   </section>
 </template>
@@ -10,8 +10,7 @@
 definePageMeta({
   middleware: ["authenticated"]
 });
-
 useHead({
-  title: "Scripta - Profile"
+  title: "Scripta - Your Articles"
 });
 </script>

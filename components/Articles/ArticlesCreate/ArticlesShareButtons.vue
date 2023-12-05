@@ -11,9 +11,9 @@
           <img src="/icons/linear/export.svg" class="w-5 h-5 object-contain cursor-pointer">
         </NuxtLink>
       </NuxtLayout>
-      <NuxtLayout name="tooltip" :title="'Share on Twitter'" :position="'Bottom'">
+      <NuxtLayout name="tooltip" :title="'Share on X'" :position="'Bottom'">
         <div @click="shareArticle(`https://twitter.com/intent/tweet?text=${title}&url=${sharingUrl}`)">
-          <img src="/brands/twitter/logo.svg" class="w-5 h-5 object-contain cursor-pointer">
+          <img src="/brands/x/logo.svg" class="w-5 h-5 object-contain cursor-pointer">
         </div>
       </NuxtLayout>
       <NuxtLayout name="tooltip" :title="'Share on Facebook'" :position="'Bottom'">

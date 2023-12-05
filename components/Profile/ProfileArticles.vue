@@ -38,7 +38,7 @@
           class="w-full bg-background-alt py-10 text-center rounded-2xl"
         >
           <h1 class="text-xl my-auto hover:underline">
-            Create your first article!
+            Write your first article!
           </h1>
         </NuxtLink>
       </div>

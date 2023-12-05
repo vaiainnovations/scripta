@@ -1,6 +1,6 @@
 <template>
   <section>
-    <NuxtLayout name="profile" :title="'Wallet'" :to="'/profile'">
+    <NuxtLayout name="profile" :title="'Wallet'" :to="'/home'">
       <WalletContainer />
     </NuxtLayout>
   </section>

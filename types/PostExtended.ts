@@ -1,4 +1,4 @@
-import { Author } from "./Author";
+import { Author } from "~~/types/Author";
 
 export interface PostExtended {
     id: Long;

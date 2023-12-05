@@ -3,10 +3,10 @@ import { EncodeObject } from "@cosmjs/proto-signing";
 import { MsgRevoke } from "cosmjs-types/cosmos/authz/v1beta1/tx";
 import { Profile } from "@desmoslabs/desmjs-types/desmos/profiles/v3/models_profile";
 import { generateUsername } from "unique-username-generator";
-import { useBackendStore } from "./BackendStore";
-import { usePostStore } from "./PostStore";
-import { useConfigStore } from "./ConfigStore";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
+import { useBackendStore } from "~~/core/store/BackendStore";
+import { usePostStore } from "~~/core/store//PostStore";
+import { useConfigStore } from "~~/core/store//ConfigStore";
 
 export interface MsgRevokeEncodeObject extends EncodeObject {
   typeUrl: "/cosmos.authz.v1beta1.MsgRevoke";
@@ -21,23 +21,28 @@ export const useAccountStore = defineStore({
     balance: 0,
     isNewProfile: false,
     sectionId: 0,
+    follows: [] as string[],
     settings: {
       hasAcceptedPrivacy: true,
       hasAcceptedAdvertisement: false,
       hasAcceptedCookies: false
     },
     authz: {
-      DEFAULT_SUBSPACE_AUTHORIZATIONS: ["/desmos.posts.v2.MsgCreatePost", "/desmos.posts.v2.MsgEditPost", "/desmos.posts.v2.MsgDeletePost", "/desmos.reactions.v1.MsgRemoveReaction", "/desmos.reactions.v1.MsgAddReaction", "/desmos.reports.v1.MsgCreateReport"],
+      DEFAULT_SUBSPACE_AUTHORIZATIONS: ["/desmos.posts.v3.MsgCreatePost", "/desmos.posts.v3.MsgEditPost", "/desmos.posts.v3.MsgDeletePost", "/desmos.reactions.v1.MsgRemoveReaction", "/desmos.reactions.v1.MsgAddReaction", "/desmos.relationships.v1.MsgCreateRelationship", "/desmos.relationships.v1.MsgDeleteRelationship"],
       DEFAULT_GENERIC_AUTHORIZATIONS: ["/desmos.profiles.v3.MsgSaveProfile"],
       hasAuthz: false,
       grantExpiration: null as Date || null,
       grantGrantee: ""
-    }
+    },
+    inited: false
   }),
   getters: {
   },
   actions: {
     async init () {
+      if (this.inited) {
+        return;
+      }
       const { $useAuth, $useWallet } = useNuxtApp();
 
       if ($useAuth().storeAuthAccount === null) {
@@ -84,6 +89,9 @@ export const useAccountStore = defineStore({
       }
 
       await useAccountStore().updateUserAccount();
+
+      await this.updateUserFollows(); // update the user follows
+      this.inited = true;
     },
     /**
      * Update User account
@@ -138,6 +146,23 @@ export const useAccountStore = defineStore({
       } catch (e) {
         console.log(e);
       }
+    },
+    async updateUserFollows () {
+      this.follows = await this.getUserRelationships();
+    },
+    async getUserRelationships (): Promise<string[]> {
+      const follows: string[] = [];
+      try {
+        const res = (await (await useBackendStore().fetch(`${useConfigStore().restApiUrl}relationship/${useAccountStore().address}`, "GET", {})).json() as any);
+        if (res) {
+          res.forEach((relationship: any) => {
+            follows.push(relationship.counterparty);
+          });
+        }
+      } catch (e) {
+        // profile not found
+      }
+      return follows;
     }
   }
 });

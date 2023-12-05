@@ -29,7 +29,7 @@ function deleteComment () {
   toggleOverlay();
 
   const msgDeletePost: MsgDeletePostEncodeObject = {
-    typeUrl: "/desmos.posts.v2.MsgDeletePost",
+    typeUrl: "/desmos.posts.v3.MsgDeletePost",
     value: {
       subspaceId: Long.fromNumber($useDesmosNetwork().subspaceId),
       postId: Long.fromNumber(props.comment.id),

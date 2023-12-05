@@ -2,9 +2,9 @@ import { defineStore } from "pinia";
 import Long from "long";
 import { RegisteredReactionValue } from "@desmoslabs/desmjs-types/desmos/reactions/v1/models";
 import { MsgAddReactionEncodeObject, MsgRemoveReactionEncodeObject } from "@desmoslabs/desmjs";
-import { useBackendStore } from "./BackendStore";
-import { useAccountStore } from "./AccountStore";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
+import { useBackendStore } from "~~/core/store/BackendStore";
+import { useAccountStore } from "~~/core/store/AccountStore";
 
 export interface ArticleReaction {
   code: string,

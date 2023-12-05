@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
 
 interface Notification {
     id: number;

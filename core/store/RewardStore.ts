@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
-import { useBackendStore } from "./BackendStore";
-import { useUserStore } from "./UserStore";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
+import { useBackendStore } from "~~/core/store/BackendStore";
+import { useUserStore } from "~~/core/store/UserStore";
 import { UserReward } from "~~/types/UserReward";
 
 export const useRewardStore = defineStore({

@@ -1,13 +1,14 @@
 import { defineStore } from "pinia";
 import { DesmosClient, NoOpSigner, Signer, SignerStatus } from "@desmoslabs/desmjs";
-import { registerModuleHMR } from "..";
-import { useAuthStore } from "../AuthStore";
-import { useAccountStore } from "../AccountStore";
-import { SupportedSigner } from "../../../types/SupportedSigner";
-import { useConfigStore } from "../ConfigStore";
-import { useWalletConnectStore } from "./WalletConnectStore";
-import { useKeplrStore } from "./KeplrStore";
-import { useWeb3AuthStore } from "./Web3AuthStore";
+import { registerModuleHMR } from "~/core/store";
+import { useKeplrStore } from "~~/core/store/wallet/KeplrStore";
+import { useLeapStore } from "~~/core/store/wallet/LeapStore";
+import { useWalletConnectStore } from "~~/core/store/wallet/WalletConnectStore";
+import { useWeb3AuthStore } from "~~/core/store/wallet/Web3AuthStore";
+import { useAuthStore } from "~~/core/store/AuthStore";
+import { useAccountStore } from "~~/core/store/AccountStore";
+import { useConfigStore } from "~~/core/store/ConfigStore";
+import { SupportedSigner } from "~~/types/SupportedSigner";
 
 class Wallet {
   public client = DesmosClient.connectWithSigner(useConfigStore().rpcUrl, new NoOpSigner());
@@ -28,7 +29,7 @@ export const useWalletStore = defineStore({
   },
   actions: {
     async initWalletConnection (id: string) {
-      const { $useAuth, $useKeplr, $useWalletConnect, $useWeb3Auth } = useNuxtApp();
+      const { $useAuth, $useKeplr, $useWalletConnect, $useWeb3Auth, $useLeap } = useNuxtApp();
 
       switch (id) {
       case SupportedSigner.Keplr:
@@ -39,6 +40,9 @@ export const useWalletStore = defineStore({
         break;
       case SupportedSigner.Web3Auth:
         await $useWeb3Auth().connect(true);
+        break;
+      case SupportedSigner.Leap:
+        await $useLeap().connect();
         break;
       }
 
@@ -71,6 +75,9 @@ export const useWalletStore = defineStore({
       switch (signerId) {
       case SupportedSigner.Keplr:
         await useKeplrStore().connect();
+        break;
+      case SupportedSigner.Leap:
+        await useLeapStore().connect();
         break;
       case SupportedSigner.WalletConnect:
         try {

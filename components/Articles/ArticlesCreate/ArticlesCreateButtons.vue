@@ -69,7 +69,7 @@ async function deleteDraft () {
   if (useDraftStore().externalId) {
     await useDraftStore().deleteDraft();
   }
-  useRouter().push("/profile");
+  useRouter().push("/home");
 }
 
 async function saveDraft () {
@@ -95,7 +95,7 @@ async function publish () {
     }
   } else {
     $useNotification().error("Ops, an error", "An error occurred while writing on chain", 7);
-    await useRouter().push("/profile");
+    await useRouter().push("/articles");
   }
   isPublishing.value = false;
   emit("isPublishing", false);

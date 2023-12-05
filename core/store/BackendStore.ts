@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
-import { useAccountStore } from "./AccountStore";
-import { useConfigStore } from "./ConfigStore";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
+import { useConfigStore } from "~~/core/store/ConfigStore";
 
 export const useBackendStore = defineStore({
   id: "BackendStore",

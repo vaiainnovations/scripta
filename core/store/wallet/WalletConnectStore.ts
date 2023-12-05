@@ -1,9 +1,9 @@
 import { SigningMode } from "@desmoslabs/desmjs";
 import { defineStore } from "pinia";
 import { WalletConnectSigner, QRCodeModal, SignClient } from "@desmoslabs/desmjs-walletconnect-v2";
-import { registerModuleHMR } from "..";
-import { useConfigStore } from "../ConfigStore";
-import { useDesmosStore } from "../DesmosStore";
+import { registerModuleHMR } from "~/core/store";
+import { useConfigStore } from "~~/core/store/ConfigStore";
+import { useDesmosStore } from "~~/core/store/DesmosStore";
 
 export const useWalletConnectStore = defineStore({
   id: "WalletConnectStore",

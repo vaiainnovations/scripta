@@ -6,12 +6,12 @@ import { Timestamp } from "cosmjs-types/google/protobuf/timestamp";
 import { GenericAuthorization } from "cosmjs-types/cosmos/authz/v1beta1/authz";
 import { defineStore } from "pinia";
 import { decodeTxRaw } from "@cosmjs/proto-signing";
-import { AuthStorage, StoreAuthAccount } from "../../types/AuthStorage";
-import { useAccountStore } from "./AccountStore";
-import { useBackendStore } from "./BackendStore";
-import { useDesmosStore } from "./DesmosStore";
-import { useConfigStore } from "./ConfigStore";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
+import { useAccountStore } from "~~/core/store/AccountStore";
+import { useBackendStore } from "~~/core/store/BackendStore";
+import { useDesmosStore } from "~~/core/store/DesmosStore";
+import { useConfigStore } from "~~/core/store//ConfigStore";
+import { AuthStorage, StoreAuthAccount } from "~~/types/AuthStorage";
 
 export enum AuthLevel {
   None = -1, // unauthenticated user
@@ -36,7 +36,7 @@ export const useAuthStore = defineStore({
   actions: {
     login () {
       this.initOfflineSession();
-      if (["keplr"].includes(this.storeAuthAccount?.signer || "")) {
+      if (["keplr", "leap"].includes(this.storeAuthAccount?.signer || "")) {
         this.initWalletSession();
       }
 
@@ -53,7 +53,6 @@ export const useAuthStore = defineStore({
         // if expiration is in less then 3 minutes wait the queue to be empty, otherwise just wait that is not signing a tx
         if ((minutesDiff <= 3 && !$useTransaction().isSigning && $useTransaction().queue.length === 0) || (minutesDiff <= 1 && !$useTransaction().isSigning)) {
           $useNotification().push("Session expiring", "Please renew the authorization.", 5, "");
-          useRouter().push("/auth/session");
         }
       }, 10_000);
     },
@@ -77,7 +76,6 @@ export const useAuthStore = defineStore({
         this.authLevel = AuthLevel.Session;
       } else {
         this.authLevel = AuthLevel.ExpiredSession;
-        useRouter().push("/auth/session");
       }
 
       // If the stored auth is the same as the previous one, there is nothing to do

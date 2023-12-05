@@ -1,5 +1,5 @@
 
-import { SupportedSigner } from "./SupportedSigner";
+import { SupportedSigner } from "~~/types/SupportedSigner";
 
 export interface StoreAuthAccount {
     address: string,

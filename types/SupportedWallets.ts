@@ -1,4 +1,4 @@
-import { AuthWallet } from "./AuthWalletType";
+import { AuthWallet } from "~~/types/AuthWalletType";
 
 interface SupportedAuthWalletType {
     type: string,
@@ -14,7 +14,8 @@ export const supportedAuthWallets: SupportedAuthWalletsType = {
     type: "",
     wallets: [
       new AuthWallet("web3auth", "Social Login", "svg/wallet/w3a/logo.png", "/auth/w3a", false),
-      new AuthWallet("keplr", "Keplr", "svg/wallet/keplr/logo.svg", "/auth/keplr", false)
+      new AuthWallet("keplr", "Keplr", "svg/wallet/keplr/logo.svg", "/auth/keplr", false),
+      new AuthWallet("leap", "Leap", "svg/wallet/leap/logo.svg", "/auth/leap", false)
     ]
   },
   mobile: {

@@ -4,10 +4,11 @@ import { defineStore } from "pinia";
 import { EncodeObject } from "@cosmjs/proto-signing";
 import { StdFee } from "@cosmjs/stargate";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
-import { useAccountStore } from "./AccountStore";
-import { useBackendStore } from "./BackendStore";
-import { useDesmosStore } from "./DesmosStore";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
+import { useAccountStore } from "~~/core/store/AccountStore";
+import { useBackendStore } from "~~/core/store/BackendStore";
+import { useDesmosStore } from "~~/core/store/DesmosStore";
+import { AuthLevel, useAuthStore } from "~~/core/store/AuthStore";
 
 export enum QueueStatus {
   WAITING = "waiting",
@@ -33,6 +34,11 @@ export const useTransactionStore = defineStore({
     isSigning: false
   }),
   actions: {
+    /**
+     * Push a Tx message inside the queue
+     * @param message Tx encoded message
+     * @param details Tx BE custom details
+     */
     push (message: EncodeObject, details: Record<string, unknown> = {}): void {
       if (!useAccountStore().address) {
         useRouter().push("/auth");
@@ -48,10 +54,12 @@ export const useTransactionStore = defineStore({
         return;
       }
 
-      this.assertBalance();
-
-      this.queue.push({ message, details });
+      this.assertBalance(); // assert a valid balance to prcess the tx in the future
+      this.queue.push({ message, details }); // add the tx to the queue
     },
+    /**
+     * Execute the transactions inside the queue
+     */
     async execute (): Promise<Uint8Array> {
       const { $useWallet } = useNuxtApp();
       this.status = QueueStatus.CONNECTING_WALLET;
@@ -65,6 +73,18 @@ export const useTransactionStore = defineStore({
         this.resetQueueWithTimer(5, false);
         this.isSigning = false;
         return new Uint8Array();
+      }
+
+      // check if the user has a valid session, otherwise sign a new one
+      if (useAuthStore().authLevel === AuthLevel.ExpiredSession) {
+        const success = await useAuthStore().authorize();
+        if (!success) {
+          this.status = QueueStatus.FAILED;
+          this.errorText = "Error renewing session";
+          this.resetQueueWithTimer(5, false);
+          return new Uint8Array();
+        }
+        useAuthStore().login();
       }
 
       let txBytes: Uint8Array = new Uint8Array();
@@ -135,6 +155,11 @@ export const useTransactionStore = defineStore({
      */
     async directTx (messages: EncodeObject[], details: Record<string, unknown>[] = [], skipAuthz = false): Promise<boolean> {
       const { $useDesmosNetwork, $useWallet } = useNuxtApp();
+
+      // if already processing a tx, wait the previous one to finish
+      while (this.status !== QueueStatus.WAITING) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
       this.status = QueueStatus.CONNECTING_WALLET;
       this.isSigning = true;
       try {
@@ -146,6 +171,19 @@ export const useTransactionStore = defineStore({
         this.isSigning = false;
         return false;
       }
+
+      // check if the user has a valid session, otherwise sign a new one
+      if (useAuthStore().authLevel === AuthLevel.ExpiredSession) {
+        const success = await useAuthStore().authorize();
+        if (!success) {
+          this.status = QueueStatus.FAILED;
+          this.errorText = "Error renewing session";
+          this.resetQueueWithTimer(5, false);
+          return false;
+        }
+        useAuthStore().login();
+      }
+
       this.assertBalance();
       try {
         let signedBytes = new Uint8Array();

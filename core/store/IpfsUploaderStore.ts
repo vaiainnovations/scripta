@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
 import { create } from "ipfs-http-client";
-import { useConfigStore } from "./ConfigStore";
-import { useBackendStore } from "./BackendStore";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
+import { useConfigStore } from "~~/core/store/ConfigStore";
+import { useBackendStore } from "~~/core/store/BackendStore";
 
 export const useIpfsUploaderStore = defineStore({
   id: "IpfsUploaderStore",

@@ -41,10 +41,10 @@
           target="_blank"
           class="text-teal-700 transition hover:text-teal-700/75"
         >
-          <span class="sr-only">Twitter</span>
+          <span class="sr-only">X</span>
           <img
-            src="/brands/twitter/logo.svg"
-            alt="twitter"
+            src="/brands/x/logo.svg"
+            alt="X"
             class="w-6 h-6"
           >
         </a>

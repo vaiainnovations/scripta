@@ -26,7 +26,7 @@ if (post.value && post.value.externalId !== externalId) {
 }
 
 // If SSR, fetch the post from KV with backend fallback
-if (!post.value && process.server && useDevice().isCrawler) {
+if (!post.value && process.server) {
   post.value = await usePostStore().getPost(externalId);
   isLoading.value = false;
 }

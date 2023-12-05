@@ -12,7 +12,7 @@ const nitro = {
   prerender: {
     crawlLinks: true,
     routes: ["/", "sitemap.xml"],
-    ignore: ["/profile", "/settings"]
+    ignore: ["/profile", "/settings", "/articles", "/home"]
   }
 } as any;
 if (mode === "production") {
@@ -63,7 +63,10 @@ export default defineNuxtConfig({
       web3AuthClientId: process.env.NUXT_WEB3AUTH_CLIENT_ID,
       walletConnectProjectId: process.env.NUXT_WALLETCONNECT_PROJECT_ID,
       gitHash: process.env.NUXT_CURRENT_GIT_SHA,
-      version: pjson.version
+      version: pjson.version,
+      features: {
+        follow: process.env.NUXT_FEATURES_FOLLOW
+      }
     }
   },
   alias: {
@@ -120,7 +123,11 @@ export default defineNuxtConfig({
           tty: "rollup-plugin-node-polyfills/polyfills/tty",
           domain: "rollup-plugin-node-polyfills/polyfills/domain",
           buffer: "rollup-plugin-node-polyfills/polyfills/buffer-es6",
-          process: "rollup-plugin-node-polyfills/polyfills/process-es6"
+          process: "rollup-plugin-node-polyfills/polyfills/process-es6",
+          "@desmoslabs/desmjs-types/helpers": "./node_modules/@desmoslabs/desmjs-types/helpers.js",
+          "@desmoslabs/desmjs-types/desmos/posts/v3/models": "./node_modules/@desmoslabs/desmjs-types/desmos/posts/v3/models.js",
+          "@desmoslabs/desmjs-types/desmos/posts/v3/msgs": "./node_modules/@desmoslabs/desmjs-types/desmos/posts/v3/msgs.js",
+          "@desmoslabs/desmjs-types/desmos/posts/v3/query": "./node_modules/@desmoslabs/desmjs-types/desmos/posts/v3/query.js"
         }
         : {
           process: "rollup-plugin-node-polyfills/polyfills/process-es6",

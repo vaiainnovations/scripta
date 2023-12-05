@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
 import { DesmosTestnet, DesmosMainnet } from "@desmoslabs/desmjs";
-import { useConfigStore } from "./ConfigStore";
-import { useBackendStore } from "./BackendStore";
-import { registerModuleHMR } from ".";
+import { registerModuleHMR } from "~~/core/store";
+import { useConfigStore } from "~~/core/store/ConfigStore";
+import { useBackendStore } from "~~/core/store/BackendStore";
 
 export interface NodeInfo {
   id: string;

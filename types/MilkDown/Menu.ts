@@ -15,10 +15,10 @@ import {
 } from "@milkdown/preset-gfm";
 
 import { TurnIntoDiagram } from "@milkdown/plugin-diagram";
-import { TurnIntoMathBlock, TurnIntoFootnoteDef } from "./CustomCommands";
-import { InsertVideo } from "./Video";
+import { TurnIntoMathBlock, TurnIntoFootnoteDef } from "~~/types/MilkDown/CustomCommands";
+import { InsertVideo } from "~~/types/MilkDown/Video";
 
-import { hasMark, isTextAndNotHasMark, notBlockType, notWrapped, headingBlock, mobileEditorSize } from "./Utilities";
+import { hasMark, isTextAndNotHasMark, notBlockType, notWrapped, headingBlock, mobileEditorSize } from "~~/types/MilkDown/Utilities";
 
 export const customMenu = menu.configure(menuPlugin, {
   domHandler: ({ menu, menuWrapper, milkdownDOM }) => {
