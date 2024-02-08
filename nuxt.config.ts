@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+import { polyfillNode } from "esbuild-plugin-polyfill-node";
 import eslintPlugin from "vite-plugin-eslint";
-import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
 import rollupNodePolyFill from "rollup-plugin-node-polyfills";
 import builtins from "rollup-plugin-node-builtins";
 const path = require("path");
 const pjson = require("./package.json");
 const mode = process.env.NODE_ENV === "production" ? "production" : "development";
-
 // Use a custom Nitro configuration on production mode for Cloudflare SSR, otherwise use the default
 const nitro = {
   prerender: {
@@ -100,7 +99,7 @@ export default defineNuxtConfig({
           "@": path.resolve(__dirname, "/src"),
           util: "rollup-plugin-node-polyfills/polyfills/util",
           sys: "util",
-          events: "rollup-plugin-node-polyfills/polyfills/events",
+          // events: "rollup-plugin-node-polyfills/polyfills/events",
           stream: "rollup-plugin-node-polyfills/polyfills/stream",
           path: "rollup-plugin-node-polyfills/polyfills/path",
           querystring: "rollup-plugin-node-polyfills/polyfills/qs",
@@ -142,12 +141,68 @@ export default defineNuxtConfig({
           global: "globalThis"
         },
         // Enable esbuild polyfill plugins
-        plugins: [
-          NodeGlobalsPolyfillPlugin({
-            process: false,
-            buffer: true
-          }),
-          NodeGlobalsPolyfillPlugin()
+        plugins: [// Enable esbuild polyfill plugins
+          polyfillNode({
+            globals: {
+              global: false,
+              __dirname: false,
+              __filename: false,
+              buffer: false,
+              process: false,
+              navigator: false,
+            },
+            polyfills: {
+              _stream_duplex: true,
+              _stream_passthrough: true,
+              _stream_readable: true,
+              _stream_transform: true,
+              _stream_writable: true,
+              assert: true,
+              'assert/strict': false,
+              async_hooks: false,
+              buffer: false,
+              child_process: 'empty',
+              cluster: 'empty',
+              console: false,
+              constants: true,
+              crypto: 'empty',
+              dgram: 'empty',
+              diagnostics_channel: false,
+              dns: 'empty',
+              domain: true,
+              events: true,
+              fs: 'empty',
+              'fs/promises': false,
+              http: true,
+              http2: false,
+              https: true,
+              module: 'empty',
+              net: 'empty',
+              os: true,
+              path: true,
+              perf_hooks: false,
+              process: true,
+              punycode: true,
+              querystring: true,
+              readline: 'empty',
+              repl: 'empty',
+              stream: true,
+              string_decoder: true,
+              sys: true,
+              timers: true,
+              'timers/promises': false,
+              tls: 'empty',
+              tty: true,
+              url: true,
+              util: true,
+              v8: false,
+              vm: true,
+              wasi: false,
+              worker_threads: false,
+              zlib: true
+            }
+          }
+          )
         ]
       }
     },
